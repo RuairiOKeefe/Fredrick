@@ -43,9 +43,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="src\Component.cs" />
+    <Compile Include="src\ComponentOwner.cs" />
     <Compile Include="src\Entity.cs" />
     <Compile Include="src\Game1.cs" />
     <Compile Include="src\Program.cs" />
+    <Compile Include="src\Renderable.cs" />
     <Compile Include="src\Transform.cs" />
   </ItemGroup>
   <ItemGroup>

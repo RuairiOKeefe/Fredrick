@@ -4,43 +4,42 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections;
+using Microsoft.Xna.Framework.Graphics;
 
-namespace Fredrick
+namespace Fredrick.src
 {
-
-
-	abstract class Component : Transform
-	{
-		protected bool active;
-		protected Entity parent;
-
-		public bool GetActive() { return active; }
-
-		public abstract void Update(double delta);
-		public abstract void Draw();
-	}
-
-	class Entity : Transform
+	class Entity : Transform, ComponentOwner
 	{
 		private bool active;
-		Dictionary<String, Component> components;
+
+		public string Id { get; }
+
+		IList<Component> components;
 
 		public bool GetActive() { return active; }
 
-		public void Update(double delta)
+		public T GetComponent<T>() where T : Component
 		{
-			foreach (Component c in components.Values)
+			var component = components.FirstOrDefault(c => c.GetType() == typeof(T));
+			return (T)component;
+		}
+
+		public void Update(double delta)//Add remove check here for if component is to be removed
+		{
+			foreach (var c in components)
 			{
 				c.Update(delta);
 			}
 		}
 
-		public void Draw()
+		public void Draw(SpriteBatch spriteBatch)
 		{
-			foreach (Component c in components.Values)
+			foreach (var c in components)
 			{
-				c.Draw();
+				c.Draw(spriteBatch);
 			}
 		}
+
+
 	}
 }

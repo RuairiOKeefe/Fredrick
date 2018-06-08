@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Fredrick
+namespace Fredrick.src
 {
     /// <summary>
     /// The main class.
