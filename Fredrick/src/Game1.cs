@@ -12,7 +12,7 @@ namespace Fredrick.src
 	{
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
-		List<Entity> entities;
+		List<Entity> entities = new List<Entity>();
 
 		public Game1()
 		{
@@ -41,7 +41,7 @@ namespace Fredrick.src
 		{
 			// Create a new SpriteBatch, which can be used to draw textures.
 			spriteBatch = new SpriteBatch(GraphicsDevice);
-
+			Texture2D a = Content.Load<Texture2D>("TestSheet");
 			// TODO: use this.Content to load your game content here
 		}
 

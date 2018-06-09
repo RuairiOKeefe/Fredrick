@@ -9,9 +9,9 @@ namespace Fredrick.src
 {
 	class Transform
 	{
-		private Vector2 position;
-		private float rotation;
-		private Vector2 scale;
+		protected Vector2 position;
+		protected float rotation;
+		protected float scale;
 
 		public Vector2 GetPosition()
 		{
@@ -33,12 +33,12 @@ namespace Fredrick.src
 			this.rotation = rotation;
 		}
 
-		public Vector2 GetScale()
+		public float GetScale()
 		{
 			return scale;
 		}
 
-		public void SetScale(Vector2 scale)
+		public void SetScale(float scale)
 		{
 			this.scale = scale;
 		}

@@ -10,11 +10,16 @@ namespace Fredrick.src
 {
 	class Entity : Transform, ComponentOwner
 	{
-		private bool active;
+		private bool active { get; set; }
 
 		public string Id { get; }
 
-		IList<Component> components;
+		public IList<Component> components = new List<Component>();
+
+		Entity()
+		{
+			active = true;
+		}
 
 		public bool GetActive() { return active; }
 
