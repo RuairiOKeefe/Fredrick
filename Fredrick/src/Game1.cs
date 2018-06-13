@@ -41,7 +41,11 @@ namespace Fredrick.src
 		{
 			// Create a new SpriteBatch, which can be used to draw textures.
 			spriteBatch = new SpriteBatch(GraphicsDevice);
-			Texture2D a = Content.Load<Texture2D>("TestSheet");
+			Texture2D testSheet = Content.Load<Texture2D>("TestSheet");//This texture includes a colour that matches the key colour, not important since its a test sprite but funny none the less
+			Entity entity = new Entity();
+			entities.Add(entity);
+			Renderable renderable = new Renderable(entity, testSheet);
+			entity.Components.Add(renderable);
 			// TODO: use this.Content to load your game content here
 		}
 
@@ -66,7 +70,11 @@ namespace Fredrick.src
 
 			// TODO: Add your update logic here
 
+			foreach (var e in entities)
+				e.Update(gameTime.ElapsedGameTime.TotalSeconds);
+
 			base.Update(gameTime);
+
 		}
 
 		/// <summary>

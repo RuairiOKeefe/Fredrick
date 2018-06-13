@@ -9,43 +9,43 @@ namespace Fredrick.src
 {
 	class Transform
 	{
-		protected Vector2 position;
-		protected float rotation;
-		protected float scale;
+		protected Vector2 _position;
+		protected float _rotation;
+		protected Vector2 _scale;
 
 		public Vector2 GetPosition()
 		{
-			return position;
+			return _position;
 		}
 
 		public void SetPosition(Vector2 position)
 		{
-			this.position = position;
+			this._position = position;
 		}
 
 		public float GetRotation()
 		{
-			return rotation;
+			return _rotation;
 		}
 
 		public void SetRotation(float rotation)
 		{
-			this.rotation = rotation;
+			this._rotation = rotation;
 		}
 
-		public float GetScale()
+		public Vector2 GetScale()
 		{
-			return scale;
+			return _scale;
 		}
 
-		public void SetScale(float scale)
+		public void SetScale(Vector2 scale)
 		{
-			this.scale = scale;
+			this._scale = scale;
 		}
 
 		public void Move(Vector2 offset)
 		{
-			position += offset;
+			_position += offset;
 		}
 	}
 }

@@ -9,18 +9,18 @@ namespace Fredrick.src
 {
 	abstract class Component : Transform
 	{
-		protected ComponentOwner owner;
-		protected bool active;
-		protected Entity parent;
+		protected ComponentOwner _owner;
+		protected bool _active;
+		protected Entity _parent;
 
 		protected Component(ComponentOwner owner)
 		{
-			this.owner = owner;
+			this._owner = owner;
 		}
 
-		public bool GetActive() { return active; }
+		public bool GetActive() { return _active; }
 
-		public abstract void Update(double delta);
+		public abstract void Update(double deltaTime);
 		public abstract void Draw(SpriteBatch spriteBatch);
 	}
 }

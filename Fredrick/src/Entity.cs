@@ -10,36 +10,36 @@ namespace Fredrick.src
 {
 	class Entity : Transform, ComponentOwner
 	{
-		private bool active { get; set; }
+		private bool _active { get; set; }
 
 		public string Id { get; }
 
-		public IList<Component> components = new List<Component>();
+		public IList<Component> Components = new List<Component>();
 
-		Entity()
+		public Entity()
 		{
-			active = true;
+			_active = true;
 		}
 
-		public bool GetActive() { return active; }
+		public bool GetActive() { return _active; }
 
 		public T GetComponent<T>() where T : Component
 		{
-			var component = components.FirstOrDefault(c => c.GetType() == typeof(T));
+			var component = Components.FirstOrDefault(c => c.GetType() == typeof(T));
 			return (T)component;
 		}
 
-		public void Update(double delta)//Add remove check here for if component is to be removed
+		public void Update(double deltaTime)//Add remove check here for if component is to be removed
 		{
-			foreach (var c in components)
+			foreach (var c in Components)
 			{
-				c.Update(delta);
+				c.Update(deltaTime);
 			}
 		}
 
 		public void Draw(SpriteBatch spriteBatch)
 		{
-			foreach (var c in components)
+			foreach (var c in Components)
 			{
 				c.Draw(spriteBatch);
 			}
