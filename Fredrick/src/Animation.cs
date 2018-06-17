@@ -18,11 +18,12 @@ namespace Fredrick.src
 		private int _currentX;
 		private int _currentY;
 
-		private int _frames;//number of frames in the animaion
-		private int _currentFrame;
+		private int _frames;//Number of frames in the animaion
+		private int _currentFrame;//Which frame is the animation is currently on
+
 		private double _framerate;
-		private double _frameTime;
-		private double _nextFrame;
+		private double _frameTime;//The time taken between each frame depending on the framerate
+		private double _nextFrame;//How much time has elapsed since this frame was switched to
 
 		public Animation()//Constructor shouldn't be used as there are no way to set fields currently, as animations shouldn't be dynamic
 		{
@@ -45,19 +46,19 @@ namespace Fredrick.src
 
 		public Animation(int spriteWidth, int spriteHeight, int startX, int startY, int width, int height, int frames, float framerate)
 		{
-			this._spriteWidth = spriteWidth;
-			this._spriteHeight = spriteHeight;
-			this._startX = startX;
-			this._startY = startY;
-			this._width = width;
-			this._height = height;
+			_spriteWidth = spriteWidth;
+			_spriteHeight = spriteHeight;
+			_startX = startX;
+			_startY = startY;
+			_width = width;
+			_height = height;
 
-			this._frames = frames;
-			this._framerate = framerate;
+			_frames = frames;
+			_framerate = framerate;
 
 
-			_currentX = this._startX;
-			_currentY = this._startY;
+			_currentX = _startX;
+			_currentY = _startY;
 			_currentFrame = 0;
 			_frameTime = 1.0 / _framerate;
 			_nextFrame = 0;
@@ -95,6 +96,22 @@ namespace Fredrick.src
 			}
 
 			return new Point(_currentX, _currentY);
+		}
+
+		public int GetCurrentFrame()
+		{
+			return _currentFrame;
+		}
+
+		public double GetNextFrame()
+		{
+			return _nextFrame;
+		}
+
+		public void TransitionInAnim(double nextFrame)
+		{
+			_currentFrame = 0;
+			_nextFrame = nextFrame;
 		}
 	}
 }

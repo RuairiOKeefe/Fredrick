@@ -9,11 +9,10 @@ namespace Fredrick.src
 {
 	abstract class Component : Transform
 	{
-		protected ComponentOwner _owner;
+		protected Entity _owner;
 		protected bool _active;
-		protected Entity _parent;
 
-		protected Component(ComponentOwner owner)
+		protected Component(Entity owner)
 		{
 			this._owner = owner;
 		}

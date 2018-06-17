@@ -28,8 +28,6 @@ namespace Fredrick.src
 		/// </summary>
 		protected override void Initialize()
 		{
-			// TODO: Add your initialization logic here
-
 			base.Initialize();
 		}
 
@@ -45,7 +43,11 @@ namespace Fredrick.src
 			Entity entity = new Entity();
 			entities.Add(entity);
 			Renderable renderable = new Renderable(entity, testSheet);
+			Character character = new Character(entity);
+			renderable.AddAnimation(0, 0, 0, 4, 30);
+			renderable.AddAnimation(1, 0, 32, 4, 30);
 			entity.Components.Add(renderable);
+			entity.Components.Add(character);
 			// TODO: use this.Content to load your game content here
 		}
 
@@ -68,13 +70,10 @@ namespace Fredrick.src
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
 
-			// TODO: Add your update logic here
-
 			foreach (var e in entities)
 				e.Update(gameTime.ElapsedGameTime.TotalSeconds);
 
 			base.Update(gameTime);
-
 		}
 
 		/// <summary>

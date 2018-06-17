@@ -20,8 +20,10 @@ namespace Fredrick.src
 		private int _height;
 		private Dictionary<int, Animation> _animations;//Stores an int key
 		private int _currentAnim;//which animation is currently being used
+		private bool _transition;//Does a transition need to occur
+		private int _nextAnim;//The animation to be transitioned to
 
-		public Renderable(ComponentOwner owner, Texture2D sprite) : base(owner)
+		public Renderable(Entity owner, Texture2D sprite) : base(owner)
 		{
 			this._sprite = sprite;
 
@@ -34,19 +36,57 @@ namespace Fredrick.src
 			_height = 32;
 			_sourceRectangle = new Rectangle(0, 0, _width, _height);
 			_animations = new Dictionary<int, Animation>();
-			_animations.Add(0, new Animation(this._sprite.Width, this._sprite.Height, 0, 0, _width, _height, 4, 30));
+			//_animations.Add(0, new Animation(this._sprite.Width, this._sprite.Height, 0, 0, _width, _height, 4, 1));
+			//_animations.Add(1, new Animation(this._sprite.Width, this._sprite.Height, 32, 0, _width, _height, 4, 2));
 			_currentAnim = 0;
+			_transition = false;
+			_nextAnim = 0;
+		}
+
+		public void AddAnimation(int key, int startX, int startY, int frames, float frameRate)
+		{
+			_animations.Add(key, new Animation(this._sprite.Width, this._sprite.Height, startX, startY, _width, _height, frames, frameRate));
+			if (_animations.Count == 1)
+			{
+				_currentAnim = 0;
+				_transition = false;
+				_nextAnim = 0;
+			}
+		}
+
+		public void TransitionAnim(int nextAnim)
+		{
+			if (nextAnim != _currentAnim)
+			{
+				_nextAnim = nextAnim;
+				_transition = true;
+			}
+		}
+
+		public void TryTransition()
+		{
+			if (_animations[_currentAnim].GetCurrentFrame() == 0)
+			{
+				_animations[_nextAnim].TransitionInAnim(_animations[_currentAnim].GetNextFrame());
+				_currentAnim = _nextAnim;
+				_transition = false;
+			}
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
-			spriteBatch.Draw(_sprite, _position, _sourceRectangle, _colour, _rotation, _origin, _scale, _spriteEffects, _layer);
+			spriteBatch.Draw(_sprite, _position + _owner.GetPosition(), _sourceRectangle, _colour, _rotation, _origin, _scale, _spriteEffects, _layer);
 		}
 
 		public override void Update(double deltaTime)
 		{
-			Point sourcePos = _animations[_currentAnim].UpdateAnimation(deltaTime);
-			_sourceRectangle.Location = sourcePos;
+			if (_animations.Count > 0)
+			{
+				Point sourcePos = _animations[_currentAnim].UpdateAnimation(deltaTime);
+				_sourceRectangle.Location = sourcePos;
+				if (_transition)
+					TryTransition();
+			}
 		}
 	}
 }
