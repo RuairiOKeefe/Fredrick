@@ -44,7 +44,7 @@ namespace Fredrick.src
 			entities.Add(entity);
 			Renderable renderable = new Renderable(entity, testSheet);
 			Character character = new Character(entity);
-			renderable.AddAnimation(0, 0, 0, 4, 30);
+			renderable.AddAnimation(0, 0, 0, 1, 30);
 			renderable.AddAnimation(1, 0, 32, 4, 30);
 			entity.Components.Add(renderable);
 			entity.Components.Add(character);
@@ -67,6 +67,7 @@ namespace Fredrick.src
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Update(GameTime gameTime)
 		{
+			InputHandler.Instance.Update();
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
 

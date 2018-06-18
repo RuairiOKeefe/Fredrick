@@ -36,8 +36,6 @@ namespace Fredrick.src
 			_height = 32;
 			_sourceRectangle = new Rectangle(0, 0, _width, _height);
 			_animations = new Dictionary<int, Animation>();
-			//_animations.Add(0, new Animation(this._sprite.Width, this._sprite.Height, 0, 0, _width, _height, 4, 1));
-			//_animations.Add(1, new Animation(this._sprite.Width, this._sprite.Height, 32, 0, _width, _height, 4, 2));
 			_currentAnim = 0;
 			_transition = false;
 			_nextAnim = 0;

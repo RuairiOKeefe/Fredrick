@@ -50,6 +50,7 @@
     <Compile Include="src\Entity.cs" />
     <Compile Include="src\Game1.cs" />
     <Compile Include="src\InputHandler.cs" />
+    <Compile Include="src\Motion.cs" />
     <Compile Include="src\Program.cs" />
     <Compile Include="src\Renderable.cs" />
     <Compile Include="src\Transform.cs" />
