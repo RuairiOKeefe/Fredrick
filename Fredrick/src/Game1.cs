@@ -13,10 +13,13 @@ namespace Fredrick.src
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
 		List<Entity> entities = new List<Entity>();
+		Camera cam;
 
 		public Game1()
 		{
 			graphics = new GraphicsDeviceManager(this);
+			graphics.PreferredBackBufferWidth = 1600;
+			graphics.PreferredBackBufferHeight = 900;
 			Content.RootDirectory = "Content";
 		}
 
@@ -37,6 +40,8 @@ namespace Fredrick.src
 		/// </summary>
 		protected override void LoadContent()
 		{
+
+			cam = new Camera(1600, 900);
 			// Create a new SpriteBatch, which can be used to draw textures.
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 			Texture2D testSheet = Content.Load<Texture2D>("TestSheet");//This texture includes a colour that matches the key colour, not important since its a test sprite but funny none the less
@@ -85,7 +90,7 @@ namespace Fredrick.src
 		{
 			GraphicsDevice.Clear(Color.CornflowerBlue);
 
-			spriteBatch.Begin();
+			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, cam.get_transformation(GraphicsDevice));
 			foreach (var e in entities)
 				e.Draw(spriteBatch);
 			spriteBatch.End();

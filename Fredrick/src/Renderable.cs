@@ -11,6 +11,7 @@ namespace Fredrick.src
 	internal class Renderable : Component
 	{
 		private Texture2D _sprite;
+		private int _spriteSize;
 		private Rectangle _sourceRectangle;//The region of the sprite sheet that will be used
 		private Vector2 _origin;//The centerpoint of the sprite
 		private SpriteEffects _spriteEffects; //just controls flipping from the look of it leave as 0 for none
@@ -26,9 +27,10 @@ namespace Fredrick.src
 		public Renderable(Entity owner, Texture2D sprite) : base(owner)
 		{
 			this._sprite = sprite;
+			_spriteSize = 32;
 
 			_origin = new Vector2(16, 16);
-			_position = new Vector2(32, 32);
+			_position = new Vector2(0, 0);
 			_scale = new Vector2(1, 1);
 			_layer = 1;
 			_colour = new Color(255, 255, 255, 255);
@@ -73,7 +75,7 @@ namespace Fredrick.src
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
-			spriteBatch.Draw(_sprite, _position + _owner.GetPosition(), _sourceRectangle, _colour, _rotation, _origin, _scale, _spriteEffects, _layer);
+			spriteBatch.Draw(_sprite, (_position + _owner.GetPosition()) * _spriteSize, _sourceRectangle, _colour, _rotation, _origin, _scale, _spriteEffects, _layer);
 		}
 
 		public override void Update(double deltaTime)

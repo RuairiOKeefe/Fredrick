@@ -22,11 +22,11 @@ namespace Fredrick.src
 		{
 			_velocity = new Vector2(0, 0);
 			_acceleration = new Vector2(0, 0);
-			_horAcc = 500;
-			_maxSpeed = 200;
-			//_acceleration.Y = 9.8f * 10;//scaled currently due to the coordinate system used
+			_horAcc = 50;
+			_maxSpeed = 100;
+			//_acceleration.Y = 9.8f;//scaled currently due to the coordinate system used
 
-			_friction = 500;
+			_friction = 100;
 		}
 
 		public void Move(double deltaTime)
