@@ -8,10 +8,16 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Fredrick.src
 {
-	class Collider
+	abstract class Collider : Component
 	{
-		float _radius;
+		protected float _radius;
+		protected int _spriteSize; //needs to be global define or something, simply defines scale of units(how many pixels is a meter or whatever);
 
+		public Collider(Entity owner) : base(owner)
+		{
+			_spriteSize = 32;
+		}
 
+		public abstract void CheckCollision(Collider other);
 	}
 }

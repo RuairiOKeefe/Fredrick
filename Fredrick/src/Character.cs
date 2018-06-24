@@ -9,21 +9,18 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Fredrick.src
 {
-	internal class Character : Component
+	internal class Character : Movable
 	{
-		Vector2 _velocity;
-		Vector2 _acceleration;
-		float _horAcc;
-		float _maxSpeed;
 
-		float _friction;
+
+
 
 		public Character(Entity owner) : base(owner)
 		{
 			_velocity = new Vector2(0, 0);
 			_acceleration = new Vector2(0, 0);
-			_horAcc = 50;
-			_maxSpeed = 100;
+			_horAcc = 100;
+			_maxSpeed = 10;
 			//_acceleration.Y = 9.8f;//scaled currently due to the coordinate system used
 
 			_friction = 100;
@@ -46,29 +43,7 @@ namespace Fredrick.src
 				_acceleration.X = 0;
 				_friction = 600;
 			}
-			float tempAccX = _acceleration.X - (_friction * _velocity.X * (float)deltaTime);
-
-			if (move == 0)
-				if (_velocity.X > 0)
-				{
-					if (_velocity.X + tempAccX * (float)deltaTime < 0)
-						_velocity.X = 0;
-					else
-						_velocity.X += tempAccX * (float)deltaTime;
-				}
-				else
-				{
-					if (_velocity.X < 0)
-						if (_velocity.X + tempAccX * (float)deltaTime > 0)
-							_velocity.X = 0;
-						else
-							_velocity.X += tempAccX * (float)deltaTime;
-				}
-			else
-				_velocity.X += tempAccX * (float)deltaTime;
-
-			_velocity.Y += _acceleration.Y * (float)deltaTime;
-			_owner.Move(Vector2.Multiply(_velocity, (float)deltaTime));
+			
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)
@@ -78,6 +53,7 @@ namespace Fredrick.src
 		public override void Update(double deltaTime)
 		{
 			Move(deltaTime);
+			ResolveMotion(deltaTime);
 		}
 	}
 }
