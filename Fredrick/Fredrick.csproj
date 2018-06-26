@@ -48,6 +48,7 @@
     <Compile Include="src\Camera.cs" />
     <Compile Include="src\Character.cs" />
     <Compile Include="src\Collider.cs" />
+    <Compile Include="src\ColliderManager.cs" />
     <Compile Include="src\Component.cs" />
     <Compile Include="src\ComponentOwner.cs" />
     <Compile Include="src\Entity.cs" />

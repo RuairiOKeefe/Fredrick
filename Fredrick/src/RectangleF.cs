@@ -7,17 +7,53 @@ using Microsoft.Xna.Framework;
 
 namespace Fredrick.src
 {
-	class RectangleF
+	public class RectangleF
 	{
-		Vector2 _position;
-		float _width;
-		float _height;
+		protected Vector2 _position;
+		protected float _width;
+		protected float _height;
 
-		float _offsetX;
-		float _offsetY;
+		protected float _offsetX;
+		protected float _offsetY;
 
-		Vector2 _min;
-		Vector2 _max;
+		protected Vector2 _min;
+		protected Vector2 _max;
+
+		public float Width
+		{
+			get
+			{
+				return _width;
+			}
+			set
+			{
+				_width = value;
+			}
+		}
+
+		public float Height
+		{
+			get
+			{
+				return _height;
+			}
+			set
+			{
+				_height = value;
+			}
+		}
+
+		public Vector2 Position
+		{
+			get
+			{
+				return _position;
+			}
+			set
+			{
+				_position = value;
+			}
+		}
 
 		public RectangleF(Vector2 position, float width, float height, float offsetX, float offsetY)
 		{
@@ -27,6 +63,9 @@ namespace Fredrick.src
 
 			_offsetX = offsetX;
 			_offsetY = offsetY;
+
+			_min = _position - new Vector2(_offsetX, _offsetY);
+			_max = _position + new Vector2(_offsetX, _offsetY);
 		}
 
 		public Vector2 GetMin()
@@ -41,9 +80,9 @@ namespace Fredrick.src
 
 		public void UpdatePosition(Vector2 position)
 		{
-			_position = position + new Vector2(_offsetX, _offsetY);
-			_min = _position;
-			_max = _position + new Vector2(_width, _height);
+			_position = position;
+			_min = _position - new Vector2(_offsetX, _offsetY);
+			_max = _position + new Vector2(_offsetX, _offsetY);
 		}
 
 		public bool Intersect(RectangleF other)

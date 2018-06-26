@@ -77,10 +77,6 @@ namespace Fredrick.src
 
 			if (_owner.GetComponent<BoxCollider>() == null)
 				_owner.Move(_move);//If this does not contain a collider just move it because nothing will stop it.
-			else
-			{
-				_owner.GetComponent<BoxCollider>().CheckCollision();
-			}
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)

@@ -8,69 +8,57 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Fredrick.src
 {
-	class BoxCollider : Collider
+	class BoxCollider : Component
 	{
+		int _index;//index in ColliderManager
 		RectangleF _rectangle;
+
+		Vector2 move;
+		Vector2 tempMove;
 
 		public BoxCollider(Entity owner) : base(owner)
 		{
-			_rectangle = new RectangleF(new Vector2(0), 1, 1, 1, 1);
+			_rectangle = new RectangleF(new Vector2(0), 1, 1, 0.5f, 0.5f);
+			_rectangle.UpdatePosition(_owner.GetPosition());
+			_index = ColliderManager.Instance.Colliders.Count;
+			ColliderManager.Instance.Colliders.Add(_rectangle);
 		}
 
-		public bool CheckCollision()
+		public void CheckCollision(RectangleF other)
 		{
-			return false;
-		}
-
-		public override void CheckCollision(Collider other)
-		{
-			if (other.GetType() == typeof(BoxCollider))
-			{
-				CheckCollision((BoxCollider)other);
-			}
-		}
-
-		public void CheckCollision(BoxCollider other)
-		{
-			Vector2 move = _owner.GetComponent<Character>().GetMove();
-			Vector2 tempMove = move;
-			//if i = 0 try horizontal collision,
-			Vector2 testMove = new Vector2(move.X, 0);
-			Vector2 newPos = ((_owner.GetPosition() + GetPosition() + testMove));
+			Vector2 testMove = new Vector2(tempMove.X, 0);
+			Vector2 newPos = ((_owner.GetPosition() + testMove));
 
 			_rectangle.UpdatePosition(newPos);
-			if (_rectangle.Intersect(other._rectangle))
+			if (_rectangle.Intersect(other))
 			{
-				if (_owner.GetComponent<Character>().Velocity.X > 0)
-				{
-					tempMove.X -= _rectangle.GetMax().X - other._rectangle.GetMin().X;
-				}
+				float distanceX = _rectangle.Position.X - other.Position.X;
+				float minDistanceX = (_rectangle.Width + other.Width) / 2;
+
+				if (distanceX > 0)
+					tempMove.X += (minDistanceX - distanceX) * 1.05f;
 				else
-					if (_owner.GetComponent<Character>().Velocity.X < 0)
-				{
-					tempMove.X -= _rectangle.GetMin().X - other._rectangle.GetMax().X;
-				}
+					tempMove.X += (-minDistanceX - distanceX) * 1.05f;
+
 				_owner.GetComponent<Character>().StopVelX();
 			}
 
-			testMove = new Vector2(0, move.Y);
-			newPos = ((_owner.GetPosition() + GetPosition() + testMove));
+			testMove = new Vector2(0, tempMove.Y);
+			newPos = ((_owner.GetPosition() + testMove));
 
 			_rectangle.UpdatePosition(newPos);
-			if (_rectangle.Intersect(other._rectangle))
+			if (_rectangle.Intersect(other))
 			{
-				if (_owner.GetComponent<Character>().Velocity.Y > 0)
-				{
-					tempMove.Y -= _rectangle.GetMin().Y - other._rectangle.GetMax().Y;
-				}
+				float distanceY = _rectangle.Position.Y - other.Position.Y;
+				float minDistanceY = (_rectangle.Height + other.Height) / 2;
+
+				if (distanceY > 0)
+					tempMove.Y += (minDistanceY - distanceY)* 1.05f;
 				else
-					if (_owner.GetComponent<Character>().Velocity.Y < 0)
-				{
-					tempMove.Y -= _rectangle.GetMax().Y - other._rectangle.GetMin().Y;
-				}
+					tempMove.Y += (-minDistanceY - distanceY) * 1.05f;
+
 				_owner.GetComponent<Character>().StopVelY();
 			}
-			_owner.Move(tempMove);
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)
@@ -80,10 +68,20 @@ namespace Fredrick.src
 
 		public override void Update(double deltaTime)
 		{
-			BoxCollider a = new BoxCollider(_owner);
-			a._rectangle = new RectangleF(new Vector2(3, 0), 1, 1, 0, 0);
-			a._rectangle.UpdatePosition(new Vector2(3, 0));
-			CheckCollision(a);
+			if (_owner.GetComponent<Character>() != null)
+			{
+				move = _owner.GetComponent<Character>().GetMove();
+				tempMove = move;
+
+				int n = 0;
+				foreach (RectangleF r in ColliderManager.Instance.Colliders)
+				{
+					if (_index != n)
+						CheckCollision(r);
+					n++;
+				}
+				_owner.Move(tempMove);
+			}
 		}
 	}
 }

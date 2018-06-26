@@ -21,7 +21,7 @@ namespace Fredrick.src
 			_acceleration = new Vector2(0, 0);
 			_horAcc = 100;
 			_maxSpeed = 10;
-			//_acceleration.Y = 9.8f;//scaled currently due to the coordinate system used
+			_acceleration.Y = -9.8f;
 
 			_friction = 100;
 		}
@@ -43,7 +43,12 @@ namespace Fredrick.src
 				_acceleration.X = 0;
 				_friction = 600;
 			}
-			
+
+
+			if (InputHandler.Instance.IsKeyPressed(InputHandler.Action.Jump))
+			{
+				_velocity.Y = 10;
+			}
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)

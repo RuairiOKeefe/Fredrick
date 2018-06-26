@@ -54,7 +54,7 @@ namespace Fredrick.src
 		{
 			get
 			{
-				return this._moveX;
+				return _moveX;
 			}
 		}
 

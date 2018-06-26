@@ -55,6 +55,20 @@ namespace Fredrick.src
 			entity.Components.Add(renderable);
 			entity.Components.Add(character);
 			entity.Components.Add(boxCollider);
+			for (int i = -20; i < 21; i++)
+			{
+				Entity e = new Entity();
+				if (i == -20 || i == 20)
+					e.SetPosition(new Vector2(i, -1));
+				else
+					e.SetPosition(new Vector2(i, -2));
+				entities.Add(e);
+				Renderable r = new Renderable(e, testSheet);
+				BoxCollider c = new BoxCollider(e);
+				r.AddAnimation(0, 0, 0, 1, 30);
+				entity.Components.Add(r);
+				entity.Components.Add(c);
+			}
 			// TODO: use this.Content to load your game content here
 		}
 
