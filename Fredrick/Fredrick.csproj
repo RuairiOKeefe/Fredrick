@@ -43,8 +43,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="src\AABBTrigger.cs" />
     <Compile Include="src\Animation.cs" />
-    <Compile Include="src\BoxCollider.cs" />
+    <Compile Include="src\AABBCollider.cs" />
     <Compile Include="src\Camera.cs" />
     <Compile Include="src\Character.cs" />
     <Compile Include="src\Collider.cs" />
@@ -59,7 +60,9 @@
     <Compile Include="src\Program.cs" />
     <Compile Include="src\RectangleF.cs" />
     <Compile Include="src\Renderable.cs" />
+    <Compile Include="src\Platform.cs" />
     <Compile Include="src\Transform.cs" />
+    <Compile Include="src\Trigger.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

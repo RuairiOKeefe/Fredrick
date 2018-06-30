@@ -75,7 +75,7 @@ namespace Fredrick.src
 			_velocity.Y += _acceleration.Y * (float)deltaTime;
 			_move = Vector2.Multiply(_velocity, (float)deltaTime);
 
-			if (_owner.GetComponent<BoxCollider>() == null)
+			if (_owner.GetComponent<AABBCollider>() == null)
 				_owner.Move(_move);//If this does not contain a collider just move it because nothing will stop it.
 		}
 

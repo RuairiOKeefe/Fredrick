@@ -49,7 +49,7 @@ namespace Fredrick.src
 			entities.Add(entity);
 			Renderable renderable = new Renderable(entity, testSheet);
 			Character character = new Character(entity);
-			BoxCollider boxCollider = new BoxCollider(entity);
+			AABBCollider boxCollider = new AABBCollider(entity);
 			renderable.AddAnimation(0, 0, 0, 1, 30);
 			renderable.AddAnimation(1, 0, 32, 4, 30);
 			entity.Components.Add(renderable);
@@ -64,8 +64,8 @@ namespace Fredrick.src
 					e.SetPosition(new Vector2(i, -2));
 				entities.Add(e);
 				Renderable r = new Renderable(e, testSheet);
-				BoxCollider c = new BoxCollider(e);
-				r.AddAnimation(0, 0, 0, 1, 30);
+				AABBCollider c = new AABBCollider(e);
+				r.AddAnimation(0, 0, 0, 12, 30);
 				entity.Components.Add(r);
 				entity.Components.Add(c);
 			}
