@@ -74,7 +74,8 @@ namespace Fredrick.src
 
 				if ((_rectangle.Position.Y - (_rectangle.Height / 2)) < y && (_rectangle.Position.Y - (_rectangle.Height / 2)) > (y - other.PlatformDepth))
 				{
-					tempMove.Y += (y-(_rectangle.Position.Y - (_rectangle.Height / 2))) * 1.05f;
+					tempMove.Y += (y - (_rectangle.Position.Y - (_rectangle.Height / 2))) * 1.05f;
+					_owner.GetComponent<Character>().StopVelY();
 				}
 			}
 
