@@ -73,20 +73,23 @@ namespace Fredrick.src
 			for (int i = 0; i < 20; i++)
 			{
 				Entity e = new Entity();
-				e.SetPosition(new Vector2(-10+i, 2));
-				if (i==0)
+				e.SetPosition(new Vector2(-10+i, -5));
+				if (i<6)
 				{
+					e.SetPosition(new Vector2(-10 + i, -1 + i));
 					Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, -0.5f, 0.5f, 0.2f);
 					entity.Components.Add(p);
 				}
 				else
-					if (i==19)
+					if (i>13)
 				{
+					e.SetPosition(new Vector2(-10 + i, 18 - i));
 					Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, -0.5f, 0.2f);
 					entity.Components.Add(p);
 				}
 				else
 				{
+					e.SetPosition(new Vector2(-10 + i, 4));
 					Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, 0.5f, 0.2f);
 					entity.Components.Add(p);
 				}

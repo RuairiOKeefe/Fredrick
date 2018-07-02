@@ -19,8 +19,8 @@ namespace Fredrick.src
 		{
 			_velocity = new Vector2(0, 0);
 			_acceleration = new Vector2(0, 0);
-			_horAcc = 100;
-			_maxSpeed = 10;
+			_horAcc = 30;
+			_maxSpeed = 5;
 			_acceleration.Y = -9.8f;
 
 			_friction = 100;
