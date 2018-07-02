@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace Fredrick.src
 {
-	class Transform
+	public class Transform
 	{
 		protected Vector2 _position;
 		protected float _rotation;

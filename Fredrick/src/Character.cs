@@ -32,7 +32,7 @@ namespace Fredrick.src
 			if (move != 0)
 			{
 				_acceleration.X = _horAcc * move;
-				_friction = 0;
+				_friction = 100;
 				if ((_velocity.X * _velocity.X) > (_maxSpeed * _maxSpeed))
 				{
 					_acceleration.X = 0;

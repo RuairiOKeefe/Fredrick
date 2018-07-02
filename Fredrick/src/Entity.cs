@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Fredrick.src
 {
-	class Entity : Transform, ComponentOwner
+	public class Entity : Transform, ComponentOwner
 	{
 		private bool _active { get; set; }
 

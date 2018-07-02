@@ -50,9 +50,9 @@ namespace Fredrick.src
 			}
 		}
 
-		public Platform(Vector2 position, float width, float height, float offsetX, float offsetY, float lHeight, float rHeight, float platformDepth)
+		public Platform(Entity owner, Vector2 position, float width, float height, float offsetX, float offsetY, float lHeight, float rHeight, float platformDepth) : base(owner)
 		{
-			_position = position;
+			_position = position + _owner.GetPosition();
 			_width = width;
 			_height = height;
 
@@ -62,6 +62,7 @@ namespace Fredrick.src
 			_lHeight = lHeight;
 			_rHeight = rHeight;
 			_platformDepth = platformDepth;
+			ColliderManager.Instance.Platforms.Add(this);
 		}
 	}
 }

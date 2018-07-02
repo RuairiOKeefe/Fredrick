@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Fredrick.src
 {
-	public class RectangleF
+	public class RectangleF : Component
 	{
 		protected Vector2 _position;
 		protected float _width;
@@ -52,11 +53,11 @@ namespace Fredrick.src
 			}
 		}
 
-		public RectangleF()
+		public RectangleF(Entity owner) : base(owner)
 		{
 		}
 
-		public RectangleF(Vector2 position, float width, float height, float offsetX, float offsetY)
+		public RectangleF(Entity owner, Vector2 position, float width, float height, float offsetX, float offsetY) : base(owner)
 		{
 			_position = position;
 			_width = width;
@@ -79,6 +80,14 @@ namespace Fredrick.src
 			if (_position.Y - (Height / 2) > other.Position.Y + (other.Height / 2)) return false; // a is below b
 
 			return true; // boxes overlap
+		}
+
+		public override void Update(double deltaTime)
+		{
+		}
+
+		public override void Draw(SpriteBatch spriteBatch)
+		{
 		}
 	}
 }

@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Fredrick.src
 {
-	abstract class Component : Transform
+	public abstract class Component : Transform
 	{
 		protected Entity _owner;
 		protected bool _active;

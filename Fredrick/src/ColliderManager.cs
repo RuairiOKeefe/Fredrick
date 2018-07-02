@@ -57,8 +57,6 @@ namespace Fredrick.src
 		{
 			_colliders = new List<RectangleF>();
 			_platforms = new List<Platform>();
-			Platform p = new Platform(new Microsoft.Xna.Framework.Vector2(5, -1), 1, 1, 0, 0, 0, 1, 0.5f);
-			_platforms.Add(p);
 		}
 	}
 }

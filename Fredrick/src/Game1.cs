@@ -50,7 +50,7 @@ namespace Fredrick.src
 			Renderable renderable = new Renderable(entity, testSheet);
 			Character character = new Character(entity);
 			AABBCollider boxCollider = new AABBCollider(entity);
-			renderable.AddAnimation(0, 0, 0, 1, 30);
+			renderable.AddAnimation(0, 0, 32, 1, 30);
 			renderable.AddAnimation(1, 0, 32, 4, 30);
 			entity.Components.Add(renderable);
 			entity.Components.Add(character);
@@ -65,9 +65,34 @@ namespace Fredrick.src
 				entities.Add(e);
 				Renderable r = new Renderable(e, testSheet);
 				AABBCollider c = new AABBCollider(e);
-				r.AddAnimation(0, 0, 0, 12, 30);
+				r.AddAnimation(0, 0, 0, 1, 30);
 				entity.Components.Add(r);
 				entity.Components.Add(c);
+			}
+
+			for (int i = 0; i < 20; i++)
+			{
+				Entity e = new Entity();
+				e.SetPosition(new Vector2(-10+i, 2));
+				if (i==0)
+				{
+					Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, -0.5f, 0.5f, 0.2f);
+					entity.Components.Add(p);
+				}
+				else
+					if (i==19)
+				{
+					Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, -0.5f, 0.2f);
+					entity.Components.Add(p);
+				}
+				else
+				{
+					Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, 0.5f, 0.2f);
+					entity.Components.Add(p);
+				}
+				Renderable r = new Renderable(e, testSheet);
+				r.AddAnimation(0, 0, 0, 1, 30);
+				entity.Components.Add(r);
 			}
 			// TODO: use this.Content to load your game content here
 		}
