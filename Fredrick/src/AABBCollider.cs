@@ -64,17 +64,20 @@ namespace Fredrick.src
 
 		public void CheckCollision(Platform other)
 		{
+			//Need to add case to stick player to floor when heading down slopes and not jumping
+
 			Vector2 testMove = new Vector2(tempMove.X, 0);
 			Vector2 newPos = ((_owner.GetPosition() + testMove));
 
 			_rectangle.UpdatePosition(newPos);
 			float f = (_rectangle.Position.X - (other.Position.X - (other.Width / 2))) / ((other.Position.X + (other.Width / 2)) - (other.Position.X - (other.Width / 2)));//(currentX - minX) / (maxX - minX)
-			Debug.Print(f.ToString());
+			//Debug.Print(f.ToString());
 			if (f > 0 && f < 1)
 			{
 				float y = ((other.LHeight * (1.0f - f)) + (other.RHeight * f)) + other.Position.Y;//desired y coordinate
 
-				if ((_rectangle.Position.Y - (_rectangle.Height / 2)) < y && (_rectangle.Position.Y - (_rectangle.Height / 2)) > (y - other.PlatformDepth))
+				//need to add check to make sure player isn't jumping for sticking to platform
+				if (((_rectangle.Position.Y - (_rectangle.Height / 2)) < y && (_rectangle.Position.Y - (_rectangle.Height / 2)) > (y - other.PlatformDepth)) || ((int)_owner.GetComponent<Character>().MotionState != 2 && ((_rectangle.Position.Y - (_rectangle.Height / 2)) > y && (_rectangle.Position.Y - (_rectangle.Height / 2)) < (y + other.PlatformDepth))))
 				{
 					tempMove.Y += (y - (_rectangle.Position.Y - (_rectangle.Height / 2))) * 1.05f;
 					if (_owner.GetComponent<Character>().Velocity.Y < 0)
@@ -109,7 +112,7 @@ namespace Fredrick.src
 		{
 			if (_owner.GetComponent<Character>() != null)
 			{
-				move = _owner.GetComponent<Character>().GetMove();
+				move = _owner.GetComponent<Character>().AttemptedPosition;
 				tempMove = move;
 
 				foreach (Platform p in ColliderManager.Instance.Platforms)

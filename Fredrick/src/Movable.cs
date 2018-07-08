@@ -8,19 +8,25 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Fredrick.src
 {
-	class Movable : Component
+	public class Movable : Component
 	{
+		protected Vector2 _attemptedPosition;//The location the entity wants to move to
 		protected Vector2 _velocity;
 		protected Vector2 _acceleration;
 		protected float _horAcc;
 		protected float _maxSpeed;
-		protected Vector2 _move;
 
 		protected float _friction;
 
-		protected Movable(Entity owner) : base(owner)
+		public Movable(Entity owner) : base(owner)
 		{
 
+		}
+
+		public Vector2 AttemptedPosition
+		{
+			get { return _attemptedPosition; }
+			set { _attemptedPosition = value; }
 		}
 
 		public Vector2 Velocity
@@ -43,11 +49,6 @@ namespace Fredrick.src
 		public void StopVelY()
 		{
 			_velocity.Y = 0;
-		}
-
-		public Vector2 GetMove()
-		{
-			return _move;
 		}
 
 		public void ResolveMotion(double deltaTime)
@@ -73,10 +74,10 @@ namespace Fredrick.src
 			}
 
 			_velocity.Y += _acceleration.Y * (float)deltaTime;
-			_move = Vector2.Multiply(_velocity, (float)deltaTime);
+			_attemptedPosition = Vector2.Multiply(_velocity, (float)deltaTime);
 
 			if (_owner.GetComponent<AABBCollider>() == null)
-				_owner.Move(_move);//If this does not contain a collider just move it because nothing will stop it.
+				_owner.Move(_attemptedPosition);//If this does not contain a collider just move it because nothing will stop it.
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)

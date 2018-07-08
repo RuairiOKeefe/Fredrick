@@ -12,7 +12,7 @@ namespace Fredrick.src
 		protected Entity _owner;
 		protected bool _active;
 
-		protected Component(Entity owner)
+		public Component(Entity owner)
 		{
 			this._owner = owner;
 		}
