@@ -4,15 +4,59 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Fredrick.src
 {
-	public class Platform : RectangleF
+	public class Platform : Component
 	{
+
+		protected Vector2 _currentPosition;//current position of collider to be tested
+		protected float _width;
+		protected float _height;
+
+		protected float _offsetX;
+		protected float _offsetY;
+
 		protected float _lHeight;//Height of the surface of the leftmost point on the platform, should not excede height
 		protected float _rHeight;//Height of the surface of the rightmost point on the platform, should not excede height
 		protected float _platformDepth;
-		
+
+		public float Width
+		{
+			get
+			{
+				return _width;
+			}
+			set
+			{
+				_width = value;
+			}
+		}
+
+		public float Height
+		{
+			get
+			{
+				return _height;
+			}
+			set
+			{
+				_height = value;
+			}
+		}
+
+		public Vector2 CurrentPosition
+		{
+			get
+			{
+				return _currentPosition;
+			}
+			set
+			{
+				_currentPosition = value;
+			}
+		}
 
 		public float LHeight
 		{
@@ -50,9 +94,9 @@ namespace Fredrick.src
 			}
 		}
 
-		public Platform(Entity owner, Vector2 position, float width, float height, float offsetX, float offsetY, float lHeight, float rHeight, float platformDepth) : base(owner)
+		public Platform(Entity owner, Vector2 currentPosition, float width, float height, float offsetX, float offsetY, float lHeight, float rHeight, float platformDepth) : base(owner)
 		{
-			_position = position + _owner.GetPosition();
+			_currentPosition = currentPosition + owner.GetPosition();
 			_width = width;
 			_height = height;
 
@@ -63,6 +107,14 @@ namespace Fredrick.src
 			_rHeight = rHeight;
 			_platformDepth = platformDepth;
 			ColliderManager.Instance.Platforms.Add(this);
+		}
+
+		public override void Update(double deltaTime)
+		{
+		}
+
+		public override void Draw(SpriteBatch spriteBatch)
+		{
 		}
 	}
 }

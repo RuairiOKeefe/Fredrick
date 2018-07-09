@@ -26,10 +26,10 @@ namespace Fredrick.src
 			}
 		}
 
-		private List<RectangleF> _colliders;
+		private List<AABBCollider> _colliders;
 		private List<Platform> _platforms;
 
-		public List<RectangleF> Colliders
+		public List<AABBCollider> Colliders
 		{
 			get
 			{
@@ -55,7 +55,7 @@ namespace Fredrick.src
 
 		public ColliderManager()
 		{
-			_colliders = new List<RectangleF>();
+			_colliders = new List<AABBCollider>();
 			_platforms = new List<Platform>();
 		}
 	}

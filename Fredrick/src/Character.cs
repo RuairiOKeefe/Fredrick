@@ -34,6 +34,20 @@ namespace Fredrick.src
 
 		private float _maxSprintSpeed;
 
+		private AABBTrigger _jumpTrigger;
+		private bool _grounded;
+		private int _maxJumps;
+		private int _jumpsLeft;
+		private bool _jumpWait;//
+		private double _jumpTime;//How much time between jumps
+		private double _jumpTimer;
+
+
+		public bool Grounded
+		{
+			get { return _grounded; }
+		}
+
 		public Character(Entity owner) : base(owner)
 		{
 			_velocity = new Vector2(0, 0);
@@ -46,6 +60,13 @@ namespace Fredrick.src
 
 			_motionState = State.Standing;
 			_maxSprintSpeed = 20;
+
+			_jumpTrigger = new AABBTrigger(_owner);
+			_jumpTrigger.Rectangle = new RectangleF(new Vector2(0, -0.55f), 1, 0.1f, 0, 0);
+			_maxJumps = 2;
+			_jumpWait = false;
+			_jumpTime = 0.2;
+
 		}
 
 		public void Walk(double deltaTime)
@@ -54,44 +75,32 @@ namespace Fredrick.src
 			{
 				_acceleration.X = _horAcc * _moveCommand;
 				_friction = 100;
-				if ((_velocity.X * _velocity.X) > (_maxSpeed * _maxSpeed))
-				{
-					_acceleration.X = 0;
-				}
+
+				if (!_sprintCommand)
+					if ((_velocity.X * _velocity.X) > (_maxSpeed * _maxSpeed))
+					{
+						_acceleration.X = 0;
+					}
+					else
+						if ((_velocity.X * _velocity.X) > (_maxSprintSpeed * _maxSprintSpeed))
+					{
+						_acceleration.X = 0;
+					}
 			}
 			else
 			{
 				_acceleration.X = 0;
 				_friction = 600;
 			}
-
-
-		}
-
-		public void Sprint(double deltaTime)
-		{
-			if (_moveCommand != 0)
-			{
-				_acceleration.X = _horAcc * _moveCommand*10;
-				_friction = 100;
-				if ((_velocity.X * _velocity.X) > (_maxSpeed * _maxSprintSpeed))
-				{
-					_acceleration.X = 0;
-				}
-			}
-			else
-			{
-				_acceleration.X = 0;
-				_friction = 600;
-			}
-		}
-
-		public void Jump(double deltaTime)
-		{
 
 			if (InputHandler.Instance.IsKeyPressed(InputHandler.Action.Jump))
 			{
-				_velocity.Y = 10;
+				if (_jumpsLeft > 0)
+				{
+					_velocity.Y = 10;
+					_jumpsLeft--;
+					_jumpWait = true;
+				}
 			}
 		}
 
@@ -105,12 +114,31 @@ namespace Fredrick.src
 			_jumpCommand = InputHandler.Instance.IsKeyPressed(InputHandler.Action.Jump);
 			_sprintCommand = InputHandler.Instance.IsKeyHeld(InputHandler.Action.Sprint);
 
-			switch (_motionState)//This should be managed by a "brain" component, which will tell all "body parts" what state they are in
+			if (_jumpWait)
+			{
+				_jumpTimer += deltaTime;
+				if (_jumpTimer >= _jumpTime)
+				{
+					_jumpWait = false;
+					_jumpTimer = 0;
+				}
+			}
+
+			if (_jumpTrigger.Update(_owner.GetPosition()) && !_jumpWait)
+			{
+				_grounded = true;
+				_jumpsLeft = _maxJumps;
+			}
+			else
+				_grounded = false;
+
+
+			switch (_motionState)
 			{
 				case State.Standing:
 					if (_moveCommand != 0)
 						_motionState = State.Walking;
-					if (_jumpCommand)
+					if (!_grounded || _jumpWait)
 						_motionState = State.Jumping;
 					break;
 				case State.Walking:
@@ -118,7 +146,7 @@ namespace Fredrick.src
 						_motionState = State.Sprinting;
 					if (_moveCommand == 0)
 						_motionState = State.Standing;
-					if (_jumpCommand)
+					if (!_grounded || _jumpWait)
 						_motionState = State.Jumping;
 					break;
 				case State.Sprinting:
@@ -126,7 +154,7 @@ namespace Fredrick.src
 						_motionState = State.Walking;
 					if (_moveCommand == 0)
 						_motionState = State.Standing;
-					if (_jumpCommand)
+					if (!_grounded || _jumpWait)
 						_motionState = State.Jumping;
 					break;
 				case State.Jumping:
@@ -140,22 +168,22 @@ namespace Fredrick.src
 			switch (_motionState)
 			{
 				case State.Standing:
-					//Twiddle thumbs?
+
 					break;
 				case State.Walking:
-					Walk(deltaTime);
+
 					break;
 				case State.Sprinting:
-					Sprint(deltaTime);
+
 					break;
 				case State.Jumping:
-					Jump(deltaTime);
+
 					break;
 				default:
 					throw new Exception("Unrecognised state reached");
 			}
 
-			//Walk(deltaTime);
+			Walk(deltaTime);
 			ResolveMotion(deltaTime);
 		}
 	}

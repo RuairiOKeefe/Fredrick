@@ -14,7 +14,12 @@ namespace Fredrick.src
 
 		public Component(Entity owner)
 		{
-			this._owner = owner;
+			_owner = owner;
+		}
+
+		public Entity GetOwner()
+		{
+			return _owner;
 		}
 
 		public bool GetActive() { return _active; }

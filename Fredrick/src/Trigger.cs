@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Fredrick.src
 {
-	class Trigger
+	public class Trigger
 	{
 	}
 }
