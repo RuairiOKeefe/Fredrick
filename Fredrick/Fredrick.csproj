@@ -52,6 +52,7 @@
     <Compile Include="src\ColliderManager.cs" />
     <Compile Include="src\Component.cs" />
     <Compile Include="src\ComponentOwner.cs" />
+    <Compile Include="src\DebugManager.cs" />
     <Compile Include="src\Entity.cs" />
     <Compile Include="src\Game1.cs" />
     <Compile Include="src\InputHandler.cs" />

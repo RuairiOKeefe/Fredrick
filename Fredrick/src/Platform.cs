@@ -22,6 +22,8 @@ namespace Fredrick.src
 		protected float _rHeight;//Height of the surface of the rightmost point on the platform, should not excede height
 		protected float _platformDepth;
 
+		protected Texture2D _lineTex;//A simple 1x1 texture to be used for line rendering in debug
+
 		public float Width
 		{
 			get
@@ -107,6 +109,7 @@ namespace Fredrick.src
 			_rHeight = rHeight;
 			_platformDepth = platformDepth;
 			ColliderManager.Instance.Platforms.Add(this);
+			_lineTex = DebugManager.Instance.LineTex;
 		}
 
 		public override void Update(double deltaTime)
@@ -115,6 +118,20 @@ namespace Fredrick.src
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
+			DebugManager.Instance.DrawLine(spriteBatch,
+			new Vector2(CurrentPosition.X - (Width / 2), (CurrentPosition.Y + LHeight)),
+			new Vector2(CurrentPosition.X + (Width / 2), (CurrentPosition.Y + RHeight))
+			);
+
+			DebugManager.Instance.DrawLine(spriteBatch,
+			new Vector2(CurrentPosition.X - (Width / 2), (CurrentPosition.Y + LHeight + PlatformDepth)),
+			new Vector2(CurrentPosition.X + (Width / 2), (CurrentPosition.Y + RHeight + PlatformDepth))
+			);
+
+			DebugManager.Instance.DrawLine(spriteBatch,
+			new Vector2(CurrentPosition.X - (Width / 2), (CurrentPosition.Y + LHeight - PlatformDepth)),
+			new Vector2(CurrentPosition.X + (Width / 2), (CurrentPosition.Y + RHeight - PlatformDepth))
+			);
 		}
 	}
 }

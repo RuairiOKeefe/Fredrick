@@ -44,6 +44,11 @@ namespace Fredrick.src
 			cam = new Camera(1600, 900);
 			// Create a new SpriteBatch, which can be used to draw textures.
 			spriteBatch = new SpriteBatch(GraphicsDevice);
+			// create 1x1 texture for line drawing
+			DebugManager.Instance.LineTex = new Texture2D(GraphicsDevice, 1, 1);
+			DebugManager.Instance.LineTex.SetData<Color>(
+			new Color[] { Color.White });// fill the texture with white
+
 			Texture2D testSheet = Content.Load<Texture2D>("TestSheet");//This texture includes a colour that matches the key colour, not important since its a test sprite but funny none the less
 			Entity entity = new Entity();
 			entities.Add(entity);
@@ -77,20 +82,20 @@ namespace Fredrick.src
 				if (i<6)
 				{
 					e.SetPosition(new Vector2(-10 + i, -1 + i));
-					Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, -0.5f, 0.5f, 0.2f);
+					Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, -0.5f, 0.5f, 0.5f);
 					entity.Components.Add(p);
 				}
 				else
 					if (i>13)
 				{
 					e.SetPosition(new Vector2(-10 + i, 18 - i));
-					Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, -0.5f, 0.2f);
+					Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, -0.5f, 0.5f);
 					entity.Components.Add(p);
 				}
 				else
 				{
 					e.SetPosition(new Vector2(-10 + i, 4));
-					Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, 0.5f, 0.2f);
+					Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, 0.5f, 0.5f);
 					entity.Components.Add(p);
 				}
 				Renderable r = new Renderable(e, testSheet);

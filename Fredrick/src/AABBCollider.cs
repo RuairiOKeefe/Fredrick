@@ -83,13 +83,12 @@ namespace Fredrick.src
 
 			_rectangle.UpdatePosition(newPos);
 			float f = (_rectangle.CurrentPosition.X - (other.CurrentPosition.X - (other.Width / 2))) / ((other.CurrentPosition.X + (other.Width / 2)) - (other.CurrentPosition.X - (other.Width / 2)));//(currentX - minX) / (maxX - minX)
-			//Debug.Print(f.ToString());
 			if (f > 0 && f < 1)
 			{
 				float y = ((other.LHeight * (1.0f - f)) + (other.RHeight * f)) + other.CurrentPosition.Y;//desired y coordinate
 
 				//need to add check to make sure player isn't jumping for sticking to platform
-				if (((_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)) < y && (_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)) > (y - other.PlatformDepth)) || (_owner.GetComponent<Character>().Grounded && ((_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)) > y && (_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)) < (y + other.PlatformDepth))))
+				if (((_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)) < y && (_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)) > (y - other.PlatformDepth)) || (_owner.GetComponent<Character>().Grounded && ((_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)) > y && (_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)) < (y + 20))))//ruh roh magic numbers
 				{
 					tempMove.Y += (y - (_rectangle.CurrentPosition.Y - (_rectangle.Height / 2))) * 1.05f;
 					if (_owner.GetComponent<Character>().Velocity.Y < 0)
@@ -102,7 +101,6 @@ namespace Fredrick.src
 
 			_rectangle.UpdatePosition(newPos);
 			f = (_rectangle.CurrentPosition.X - (other.CurrentPosition.X - (other.Width / 2))) / ((other.CurrentPosition.X + (other.Width / 2)) - (other.CurrentPosition.X - (other.Width / 2)));//(currentX - minX) / (maxX - minX)
-			Debug.Print(f.ToString());
 			if (f > 0 && f < 1)
 			{
 				float y = ((other.LHeight * (1.0f - f)) + (other.RHeight * f)) + other.CurrentPosition.Y;//desired y coordinate
