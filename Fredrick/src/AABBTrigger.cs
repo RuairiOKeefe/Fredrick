@@ -60,7 +60,7 @@ namespace Fredrick.src
 			{
 				float y = ((other.LHeight * (1.0f - f)) + (other.RHeight * f)) + other.CurrentPosition.Y;//desired y coordinate
 
-				if (((_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)) > (y - other.PlatformDepth)) && ((_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)) < (y + other.PlatformDepth)))
+				if (((_rectangle.CurrentPosition.Y + (_rectangle.Height / 2)) > (y + other.PlatformDepth)) && ((_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)) < y))
 				{
 					_platformHits.Add(other);
 					return true;

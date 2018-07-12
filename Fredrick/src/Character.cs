@@ -42,7 +42,6 @@ namespace Fredrick.src
 		private double _jumpTime;//How much time between jumps
 		private double _jumpTimer;
 
-
 		public bool Grounded
 		{
 			get { return _grounded; }
@@ -59,7 +58,7 @@ namespace Fredrick.src
 			_friction = 100;
 
 			_motionState = State.Standing;
-			_maxSprintSpeed = 20;
+			_maxSprintSpeed = 10;
 
 			_jumpTrigger = new AABBTrigger(_owner);
 			_jumpTrigger.Rectangle = new RectangleF(new Vector2(0, -0.55f), 1, 0.1f, 0, 0);
@@ -95,7 +94,13 @@ namespace Fredrick.src
 
 			if (InputHandler.Instance.IsKeyPressed(InputHandler.Action.Jump))
 			{
-				if (_jumpsLeft > 0)
+				if (_grounded)
+				{
+					_velocity.Y = 10;
+					_jumpWait = true;
+				}
+				else
+					if (_jumpsLeft > 0)
 				{
 					_velocity.Y = 10;
 					_jumpsLeft--;
@@ -106,6 +111,14 @@ namespace Fredrick.src
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
+			Vector2 tl = new Vector2(_jumpTrigger.Rectangle.GetPosition().X - _jumpTrigger.Rectangle.Width / 2, _jumpTrigger.Rectangle.GetPosition().Y + _jumpTrigger.Rectangle.Height / 2);
+			Vector2 tr = new Vector2(_jumpTrigger.Rectangle.GetPosition().X + _jumpTrigger.Rectangle.Width / 2, _jumpTrigger.Rectangle.GetPosition().Y + _jumpTrigger.Rectangle.Height / 2);
+			Vector2 bl = new Vector2(_jumpTrigger.Rectangle.GetPosition().X - _jumpTrigger.Rectangle.Width / 2, _jumpTrigger.Rectangle.GetPosition().Y - _jumpTrigger.Rectangle.Height / 2);
+			Vector2 br = new Vector2(_jumpTrigger.Rectangle.GetPosition().X + _jumpTrigger.Rectangle.Width / 2, _jumpTrigger.Rectangle.GetPosition().Y - _jumpTrigger.Rectangle.Height / 2);
+			DebugManager.Instance.DrawLine(spriteBatch, tl+_owner.GetPosition(), tr + _owner.GetPosition());
+			DebugManager.Instance.DrawLine(spriteBatch, tr + _owner.GetPosition(), br + _owner.GetPosition());
+			DebugManager.Instance.DrawLine(spriteBatch, br + _owner.GetPosition(), bl + _owner.GetPosition());
+			DebugManager.Instance.DrawLine(spriteBatch, bl + _owner.GetPosition(), tl + _owner.GetPosition());
 		}
 
 		public override void Update(double deltaTime)
@@ -131,7 +144,6 @@ namespace Fredrick.src
 			}
 			else
 				_grounded = false;
-
 
 			switch (_motionState)
 			{

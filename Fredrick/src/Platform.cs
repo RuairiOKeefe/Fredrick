@@ -127,11 +127,6 @@ namespace Fredrick.src
 			new Vector2(CurrentPosition.X - (Width / 2), (CurrentPosition.Y + LHeight + PlatformDepth)),
 			new Vector2(CurrentPosition.X + (Width / 2), (CurrentPosition.Y + RHeight + PlatformDepth))
 			);
-
-			DebugManager.Instance.DrawLine(spriteBatch,
-			new Vector2(CurrentPosition.X - (Width / 2), (CurrentPosition.Y + LHeight - PlatformDepth)),
-			new Vector2(CurrentPosition.X + (Width / 2), (CurrentPosition.Y + RHeight - PlatformDepth))
-			);
 		}
 	}
 }

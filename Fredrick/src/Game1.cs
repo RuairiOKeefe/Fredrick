@@ -82,25 +82,53 @@ namespace Fredrick.src
 				if (i<6)
 				{
 					e.SetPosition(new Vector2(-10 + i, -1 + i));
-					Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, -0.5f, 0.5f, 0.5f);
+					Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, -0.5f, 0.5f, -0.5f);
 					entity.Components.Add(p);
 				}
 				else
 					if (i>13)
 				{
 					e.SetPosition(new Vector2(-10 + i, 18 - i));
-					Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, -0.5f, 0.5f);
+					Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, -0.5f, -0.5f);
 					entity.Components.Add(p);
 				}
 				else
 				{
 					e.SetPosition(new Vector2(-10 + i, 4));
+					Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, 0.5f, -0.5f);
+					entity.Components.Add(p);
+				}
+				Renderable r = new Renderable(e, testSheet);
+				r.AddAnimation(0, 0, 0, 1, 30);
+				//entity.Components.Add(r);
+			}
+
+			for (int i = 0; i < 20; i++)
+			{
+				Entity e = new Entity();
+				e.SetPosition(new Vector2(-10 + i, -5));
+				if (i < 6)
+				{
+					e.SetPosition(new Vector2(-10 + i, 12 - i));
+					Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, -0.5f, 0.5f);
+					entity.Components.Add(p);
+				}
+				else
+					if (i > 13)
+				{
+					e.SetPosition(new Vector2(-10 + i, -7 + i));
+					Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, -0.5f, 0.5f, 0.5f);
+					entity.Components.Add(p);
+				}
+				else
+				{
+					e.SetPosition(new Vector2(-10 + i, 6));
 					Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, 0.5f, 0.5f);
 					entity.Components.Add(p);
 				}
 				Renderable r = new Renderable(e, testSheet);
 				r.AddAnimation(0, 0, 0, 1, 30);
-				entity.Components.Add(r);
+				//entity.Components.Add(r);
 			}
 			// TODO: use this.Content to load your game content here
 		}

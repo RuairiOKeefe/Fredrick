@@ -78,44 +78,57 @@ namespace Fredrick.src
 		{
 			//Need to add case to stick player to floor when heading down slopes and not jumping
 
-			Vector2 testMove = new Vector2(tempMove.X, 0);
+			Vector2 testMove = new Vector2(tempMove.X, tempMove.Y);
 			Vector2 newPos = ((_owner.GetPosition() + testMove));
 
-			_rectangle.UpdatePosition(newPos);
-			float f = (_rectangle.CurrentPosition.X - (other.CurrentPosition.X - (other.Width / 2))) / ((other.CurrentPosition.X + (other.Width / 2)) - (other.CurrentPosition.X - (other.Width / 2)));//(currentX - minX) / (maxX - minX)
-			if (f > 0 && f < 1)
+			if (other.PlatformDepth < 0)
 			{
-				float y = ((other.LHeight * (1.0f - f)) + (other.RHeight * f)) + other.CurrentPosition.Y;//desired y coordinate
-
-				//need to add check to make sure player isn't jumping for sticking to platform
-				if (((_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)) < y && (_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)) > (y - other.PlatformDepth)) || (_owner.GetComponent<Character>().Grounded && ((_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)) > y && (_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)) < (y + 20))))//ruh roh magic numbers
+				if (testMove.Y < 0)
 				{
-					tempMove.Y += (y - (_rectangle.CurrentPosition.Y - (_rectangle.Height / 2))) * 1.05f;
-					if (_owner.GetComponent<Character>().Velocity.Y < 0)
-						_owner.GetComponent<Character>().StopVelY();
+					_rectangle.UpdatePosition(newPos);
+					float f = (_rectangle.CurrentPosition.X - (other.CurrentPosition.X - (other.Width / 2))) / ((other.CurrentPosition.X + (other.Width / 2)) - (other.CurrentPosition.X - (other.Width / 2)));//(currentX - minX) / (maxX - minX)
+					if (f > 0 && f < 1)
+					{
+						float y = ((other.LHeight * (1.0f - f)) + (other.RHeight * f)) + other.CurrentPosition.Y;//desired y coordinate
+
+						//need to add check to make sure player isn't jumping for sticking to platform
+						if ((_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)) > (y + other.PlatformDepth) && _owner.GetComponent<Character>().Grounded)
+						{
+							tempMove.Y += (y - (_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)));
+							if (_owner.GetComponent<Character>().Velocity.Y < 0)
+								_owner.GetComponent<Character>().StopVelY();
+						}
+					}
 				}
 			}
-
-			testMove = new Vector2(0, tempMove.Y);
-			newPos = ((_owner.GetPosition() + testMove));
-
-			_rectangle.UpdatePosition(newPos);
-			f = (_rectangle.CurrentPosition.X - (other.CurrentPosition.X - (other.Width / 2))) / ((other.CurrentPosition.X + (other.Width / 2)) - (other.CurrentPosition.X - (other.Width / 2)));//(currentX - minX) / (maxX - minX)
-			if (f > 0 && f < 1)
+			else
 			{
-				float y = ((other.LHeight * (1.0f - f)) + (other.RHeight * f)) + other.CurrentPosition.Y;//desired y coordinate
-
-				if ((_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)) < y && (_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)) > (y - other.PlatformDepth))
 				{
-					tempMove.Y += (y - (_rectangle.CurrentPosition.Y - (_rectangle.Height / 2))) * 1.05f;
-					if (_owner.GetComponent<Character>().Velocity.Y < 0)
-						_owner.GetComponent<Character>().StopVelY();
+					_rectangle.UpdatePosition(newPos);
+					float f = (_rectangle.CurrentPosition.X - (other.CurrentPosition.X - (other.Width / 2))) / ((other.CurrentPosition.X + (other.Width / 2)) - (other.CurrentPosition.X - (other.Width / 2)));//(currentX - minX) / (maxX - minX)
+					if (f > 0 && f < 1)
+					{
+						float y = ((other.LHeight * (1.0f - f)) + (other.RHeight * f)) + other.CurrentPosition.Y;
+
+						if ((_rectangle.CurrentPosition.Y + (_rectangle.Height / 2)) > y && (_rectangle.CurrentPosition.Y + (_rectangle.Height / 2)) < y + other.PlatformDepth)
+						{
+							tempMove.Y -= ((_rectangle.CurrentPosition.Y + (_rectangle.Height / 2)) - y);
+							_owner.GetComponent<Character>().StopVelY();
+						}
+					}
 				}
 			}
 		}
 		public override void Draw(SpriteBatch spriteBatch)
 		{
-
+			Vector2 tl = new Vector2(_owner.GetPosition().X - _rectangle.Width / 2, _owner.GetPosition().Y + _rectangle.Height / 2);
+			Vector2 tr = new Vector2(_owner.GetPosition().X + _rectangle.Width / 2, _owner.GetPosition().Y + _rectangle.Height / 2);
+			Vector2 bl = new Vector2(_owner.GetPosition().X - _rectangle.Width / 2, _owner.GetPosition().Y - _rectangle.Height / 2);
+			Vector2 br = new Vector2(_owner.GetPosition().X + _rectangle.Width / 2, _owner.GetPosition().Y - _rectangle.Height / 2);
+			DebugManager.Instance.DrawLine(spriteBatch, tl, tr);
+			DebugManager.Instance.DrawLine(spriteBatch, tr, br);
+			DebugManager.Instance.DrawLine(spriteBatch, br, bl);
+			DebugManager.Instance.DrawLine(spriteBatch, bl, tl);
 		}
 
 		public override void Update(double deltaTime)
