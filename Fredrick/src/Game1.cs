@@ -50,6 +50,7 @@ namespace Fredrick.src
 			new Color[] { Color.White });// fill the texture with white
 
 			Texture2D testSheet = Content.Load<Texture2D>("TestSheet");//This texture includes a colour that matches the key colour, not important since its a test sprite but funny none the less
+			Texture2D tempSlope = Content.Load<Texture2D>("tempSlope");
 			Entity entity = new Entity();
 			entities.Add(entity);
 			Renderable renderable = new Renderable(entity, testSheet);
@@ -79,10 +80,13 @@ namespace Fredrick.src
 			{
 				Entity e = new Entity();
 				e.SetPosition(new Vector2(-10+i, -5));
+				Renderable r = new Renderable(e, testSheet);
 				if (i<6)
 				{
 					e.SetPosition(new Vector2(-10 + i, -1 + i));
 					Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, -0.5f, 0.5f, -0.5f);
+					r = new Renderable(e, tempSlope);
+					r.AddAnimation(0, 0, 0, 1, 30);
 					entity.Components.Add(p);
 				}
 				else
@@ -90,27 +94,32 @@ namespace Fredrick.src
 				{
 					e.SetPosition(new Vector2(-10 + i, 18 - i));
 					Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, -0.5f, -0.5f);
+					r = new Renderable(e, tempSlope);
+					r.AddAnimation(0, 32, 0, 1, 30);
 					entity.Components.Add(p);
 				}
 				else
 				{
 					e.SetPosition(new Vector2(-10 + i, 4));
 					Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, 0.5f, -0.5f);
+					r.AddAnimation(0, 0, 0, 1, 30);
 					entity.Components.Add(p);
 				}
-				Renderable r = new Renderable(e, testSheet);
-				r.AddAnimation(0, 0, 0, 1, 30);
-				//entity.Components.Add(r);
+				
+				entity.Components.Add(r);
 			}
 
 			for (int i = 0; i < 20; i++)
 			{
 				Entity e = new Entity();
 				e.SetPosition(new Vector2(-10 + i, -5));
+				Renderable r = new Renderable(e, testSheet);
 				if (i < 6)
 				{
 					e.SetPosition(new Vector2(-10 + i, 12 - i));
 					Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, -0.5f, 0.5f);
+					r = new Renderable(e, tempSlope);
+					r.AddAnimation(0, 64, 0, 1, 30);
 					entity.Components.Add(p);
 				}
 				else
@@ -118,17 +127,18 @@ namespace Fredrick.src
 				{
 					e.SetPosition(new Vector2(-10 + i, -7 + i));
 					Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, -0.5f, 0.5f, 0.5f);
+					r = new Renderable(e, tempSlope);
+					r.AddAnimation(0, 96, 0, 1, 30);
 					entity.Components.Add(p);
 				}
 				else
 				{
-					e.SetPosition(new Vector2(-10 + i, 6));
-					Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, 0.5f, 0.5f);
+					e.SetPosition(new Vector2(-10 + i, 7));
+					Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, -0.5f, -0.5f, 0.5f);
+					r.AddAnimation(0, 0, 0, 1, 30);
 					entity.Components.Add(p);
 				}
-				Renderable r = new Renderable(e, testSheet);
-				r.AddAnimation(0, 0, 0, 1, 30);
-				//entity.Components.Add(r);
+				entity.Components.Add(r);
 			}
 			// TODO: use this.Content to load your game content here
 		}

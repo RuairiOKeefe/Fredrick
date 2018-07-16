@@ -78,11 +78,12 @@ namespace Fredrick.src
 		{
 			//Need to add case to stick player to floor when heading down slopes and not jumping
 
-			Vector2 testMove = new Vector2(tempMove.X, tempMove.Y);
-			Vector2 newPos = ((_owner.GetPosition() + testMove));
 
 			if (other.PlatformDepth < 0)
 			{
+				Vector2 testMove = new Vector2(tempMove.X, tempMove.Y);
+				Vector2 newPos = ((_owner.GetPosition() + testMove));
+
 				if (testMove.Y < 0)
 				{
 					_rectangle.UpdatePosition(newPos);
@@ -103,6 +104,8 @@ namespace Fredrick.src
 			}
 			else
 			{
+				Vector2 testMove = new Vector2(tempMove.X, tempMove.Y);
+				Vector2 newPos = ((_owner.GetPosition() + testMove));
 				{
 					_rectangle.UpdatePosition(newPos);
 					float f = (_rectangle.CurrentPosition.X - (other.CurrentPosition.X - (other.Width / 2))) / ((other.CurrentPosition.X + (other.Width / 2)) - (other.CurrentPosition.X - (other.Width / 2)));//(currentX - minX) / (maxX - minX)
@@ -113,7 +116,7 @@ namespace Fredrick.src
 						if ((_rectangle.CurrentPosition.Y + (_rectangle.Height / 2)) > y && (_rectangle.CurrentPosition.Y + (_rectangle.Height / 2)) < y + other.PlatformDepth)
 						{
 							tempMove.Y -= ((_rectangle.CurrentPosition.Y + (_rectangle.Height / 2)) - y);
-							_owner.GetComponent<Character>().StopVelY();
+							_owner.GetComponent<Character>().Velocity = (_owner.GetComponent<Character>().Velocity - (2f * Vector2.Dot(_owner.GetComponent<Character>().Velocity, other.Normal)) * other.Normal)*0.5f;
 						}
 					}
 				}

@@ -21,6 +21,7 @@ namespace Fredrick.src
 		protected float _lHeight;//Height of the surface of the leftmost point on the platform, should not excede height
 		protected float _rHeight;//Height of the surface of the rightmost point on the platform, should not excede height
 		protected float _platformDepth;
+		protected Vector2 _normal;
 
 		protected Texture2D _lineTex;//A simple 1x1 texture to be used for line rendering in debug
 
@@ -96,6 +97,18 @@ namespace Fredrick.src
 			}
 		}
 
+		public Vector2 Normal
+		{
+			get
+			{
+				return _normal;
+			}
+			set
+			{
+				_normal = value;
+			}
+		}
+
 		public Platform(Entity owner, Vector2 currentPosition, float width, float height, float offsetX, float offsetY, float lHeight, float rHeight, float platformDepth) : base(owner)
 		{
 			_currentPosition = currentPosition + owner.GetPosition();
@@ -108,6 +121,23 @@ namespace Fredrick.src
 			_lHeight = lHeight;
 			_rHeight = rHeight;
 			_platformDepth = platformDepth;
+
+			Vector2 a = new Vector2();
+			Vector2 b = new Vector2();
+			if (platformDepth < 0)
+			{
+				a = new Vector2(-width / 2, rHeight);
+				b = new Vector2(width / 2, lHeight);
+			}
+			else
+			{
+				a = new Vector2(-width / 2, lHeight);
+				b = new Vector2(width / 2, rHeight);
+			}
+			Vector2 v = b - a;
+			_normal = new Vector2(v.Y, -v.X);
+			_normal.Normalize();
+
 			ColliderManager.Instance.Platforms.Add(this);
 			_lineTex = DebugManager.Instance.LineTex;
 		}
