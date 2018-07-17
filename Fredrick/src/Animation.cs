@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace Fredrick.src
 {
-	class Animation
+	public class Animation
 	{
 		private int _spriteWidth;
 		private int _spriteHeight;

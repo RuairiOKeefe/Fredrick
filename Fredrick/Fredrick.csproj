@@ -60,6 +60,7 @@
     <Compile Include="src\InputHandler.cs" />
     <Compile Include="src\Motion.cs" />
     <Compile Include="src\Movable.cs" />
+    <Compile Include="src\Particles\Emitter.cs" />
     <Compile Include="src\Particles\Particle.cs" />
     <Compile Include="src\Program.cs" />
     <Compile Include="src\RectangleF.cs" />

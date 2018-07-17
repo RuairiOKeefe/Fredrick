@@ -8,25 +8,25 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Fredrick.src
 {
-	internal class Renderable : Component
+	public class Renderable : Component
 	{
-		private Texture2D _sprite;
-		private int _spriteSize;
-		private Rectangle _sourceRectangle;//The region of the sprite sheet that will be used
-		private Vector2 _origin;//The centerpoint of the sprite
-		private SpriteEffects _spriteEffects; //just controls flipping from the look of it leave as 0 for none
-		private float _layer;
-		private Color _colour;
-		private int _width;
-		private int _height;
-		private Dictionary<int, Animation> _animations;//Stores an int key
-		private int _currentAnim;//which animation is currently being used
-		private bool _transition;//Does a transition need to occur
-		private int _nextAnim;//The animation to be transitioned to
+		protected Texture2D _sprite;
+		protected int _spriteSize;
+		protected Rectangle _sourceRectangle;//The region of the sprite sheet that will be used
+		protected Vector2 _origin;//The centerpoint of the sprite
+		protected SpriteEffects _spriteEffects; //just controls flipping from the look of it leave as 0 for none
+		protected float _layer;
+		protected Color _colour;
+		protected int _width;
+		protected int _height;
+		protected Dictionary<int, Animation> _animations;//Stores an int key
+		protected int _currentAnim;//which animation is currently being used
+		protected bool _transition;//Does a transition need to occur
+		protected int _nextAnim;//The animation to be transitioned to
 
 		public Renderable(Entity owner, Texture2D sprite) : base(owner)
 		{
-			this._sprite = sprite;
+			_sprite = sprite;
 			_spriteSize = 32;
 
 			_origin = new Vector2(16, 16);

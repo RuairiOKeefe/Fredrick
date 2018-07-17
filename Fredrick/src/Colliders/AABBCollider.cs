@@ -76,9 +76,6 @@ namespace Fredrick.src
 
 		public void CheckCollision(Platform other)
 		{
-			//Need to add case to stick player to floor when heading down slopes and not jumping
-
-
 			if (other.PlatformDepth < 0)
 			{
 				Vector2 testMove = new Vector2(tempMove.X, tempMove.Y);
@@ -92,12 +89,10 @@ namespace Fredrick.src
 					{
 						float y = ((other.LHeight * (1.0f - f)) + (other.RHeight * f)) + other.CurrentPosition.Y;//desired y coordinate
 
-						//need to add check to make sure player isn't jumping for sticking to platform
-						if ((_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)) > (y + other.PlatformDepth) && _owner.GetComponent<Character>().Grounded)
+						if ((_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)) > (y + other.PlatformDepth) && (_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)) < y+1 && _owner.GetComponent<Character>().Grounded)
 						{
 							tempMove.Y += (y - (_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)));
-							if (_owner.GetComponent<Character>().Velocity.Y < 0)
-								_owner.GetComponent<Character>().StopVelY();
+							_owner.GetComponent<Character>().StopVelY();
 						}
 					}
 				}

@@ -52,6 +52,7 @@ namespace Fredrick.src
 			Texture2D testSheet = Content.Load<Texture2D>("TestSheet");//This texture includes a colour that matches the key colour, not important since its a test sprite but funny none the less
 			Texture2D tempSlope = Content.Load<Texture2D>("tempSlope");
 			Entity entity = new Entity();
+			entity.SetPosition(new Vector2(8, 5));
 			entities.Add(entity);
 			Renderable renderable = new Renderable(entity, testSheet);
 			Character character = new Character(entity);
@@ -61,6 +62,9 @@ namespace Fredrick.src
 			entity.Components.Add(renderable);
 			entity.Components.Add(character);
 			entity.Components.Add(boxCollider);
+			Emitter emitter = new Emitter(entity, testSheet);
+			emitter.AddAnimation(0, 0, 32, 1, 30);
+			entity.Components.Add(emitter);
 			cam.SetSubject(entity);
 			for (int i = -20; i < 21; i++)
 			{
@@ -77,69 +81,84 @@ namespace Fredrick.src
 				entity.Components.Add(c);
 			}
 
-			for (int i = 0; i < 20; i++)
+			for (int i = -1; i < 5; i++)
 			{
-				Entity e = new Entity();
-				e.SetPosition(new Vector2(-10+i, -5));
-				Renderable r = new Renderable(e, testSheet);
-				if (i<6)
+				for (int j = i; j < 21 - i; j++)
 				{
-					e.SetPosition(new Vector2(-10 + i, -1 + i));
-					Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, -0.5f, 0.5f, -0.5f);
-					r = new Renderable(e, tempSlope);
-					r.AddAnimation(0, 0, 0, 1, 30);
-					entity.Components.Add(p);
+					Entity e = new Entity();
+					e.SetPosition(new Vector2(-10 + j, i));
+					Renderable r = new Renderable(e, testSheet);
+					if (j < i+1)
+					{
+						Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, -0.5f, 0.5f, -1.0f);
+						r = new Renderable(e, tempSlope);
+						r.AddAnimation(0, 0, 0, 1, 30);
+						entity.Components.Add(p);
+					}
+					else
+						if (j > 19 - i)
+					{
+						Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, -0.5f, -1.0f);
+						r = new Renderable(e, tempSlope);
+						r.AddAnimation(0, 32, 0, 1, 30);
+						entity.Components.Add(p);
+					}
+					else
+					{
+						if (i < 4)
+						{
+							r.AddAnimation(0, 0, 0, 1, 30);
+						}
+
+						else
+						{
+							Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, 0.5f, -1.0f);
+							r.AddAnimation(0, 0, 0, 1, 30);
+							entity.Components.Add(p);
+						}
+					}
+					entity.Components.Add(r);
 				}
-				else
-					if (i>13)
-				{
-					e.SetPosition(new Vector2(-10 + i, 18 - i));
-					Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, -0.5f, -0.5f);
-					r = new Renderable(e, tempSlope);
-					r.AddAnimation(0, 32, 0, 1, 30);
-					entity.Components.Add(p);
-				}
-				else
-				{
-					e.SetPosition(new Vector2(-10 + i, 4));
-					Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, 0.5f, -0.5f);
-					r.AddAnimation(0, 0, 0, 1, 30);
-					entity.Components.Add(p);
-				}
-				
-				entity.Components.Add(r);
 			}
 
-			for (int i = 0; i < 20; i++)
+			for (int i = 7; i < 12; i++)
 			{
-				Entity e = new Entity();
-				e.SetPosition(new Vector2(-10 + i, -5));
-				Renderable r = new Renderable(e, testSheet);
-				if (i < 6)
+				for (int j = 3-i; j < -2 + i; j++)
 				{
-					e.SetPosition(new Vector2(-10 + i, 12 - i));
-					Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, -0.5f, 0.5f);
-					r = new Renderable(e, tempSlope);
-					r.AddAnimation(0, 64, 0, 1, 30);
-					entity.Components.Add(p);
+					Entity e = new Entity();
+					e.SetPosition(new Vector2(j, i));
+					Renderable r = new Renderable(e, testSheet);
+					if (j < 4-i)
+					{
+						Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, -0.5f, 1.0f);
+						r = new Renderable(e, tempSlope);
+						r.AddAnimation(0, 64, 0, 1, 30);
+						entity.Components.Add(p);
+					}
+					else
+						if (j > -4 + i)
+					{
+						Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, -0.5f, 0.5f, 1.0f);
+						r = new Renderable(e, tempSlope);
+						r.AddAnimation(0, 96, 0, 1, 30);
+						entity.Components.Add(p);
+					}
+					else
+					{
+						if (i > 8)
+						{
+							r.AddAnimation(0, 0, 0, 1, 30);
+						}
+
+						else
+						{
+							Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, -0.5f, -0.5f, 1.0f);
+							r.AddAnimation(0, 0, 0, 1, 30);
+							entity.Components.Add(p);
+						}
+					}
+					entity.Components.Add(r);
 				}
-				else
-					if (i > 13)
-				{
-					e.SetPosition(new Vector2(-10 + i, -7 + i));
-					Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, -0.5f, 0.5f, 0.5f);
-					r = new Renderable(e, tempSlope);
-					r.AddAnimation(0, 96, 0, 1, 30);
-					entity.Components.Add(p);
-				}
-				else
-				{
-					e.SetPosition(new Vector2(-10 + i, 7));
-					Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, -0.5f, -0.5f, 0.5f);
-					r.AddAnimation(0, 0, 0, 1, 30);
-					entity.Components.Add(p);
-				}
-				entity.Components.Add(r);
 			}
 			// TODO: use this.Content to load your game content here
 		}
