@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Fredrick.src
 {
-	class Camera
+	public class Camera
 	{
 		protected float _viewportWidth;
 		protected float _viewportHeight;
@@ -58,12 +58,16 @@ namespace Fredrick.src
 			set { _position = value; }
 		}
 
+		public void Update(double deltaTime)
+		{
 
-		public Matrix get_transformation(GraphicsDevice graphicsDevice)
+		}
+
+		public Matrix Get_Transformation(GraphicsDevice graphicsDevice)
 		{
 			_transform = Matrix.CreateTranslation(new Vector3(-_position.X, -_position.Y, 0)) *
-													Matrix.CreateRotationZ(Rotation) *
-													Matrix.CreateScale(new Vector3(Zoom, Zoom, 1)) *
+													Matrix.CreateRotationZ(_rotation) *
+													Matrix.CreateScale(new Vector3(_zoom, _zoom, 1)) *
 													Matrix.CreateTranslation(new Vector3(_viewportWidth * 0.5f, _viewportHeight * 0.5f, 0));
 			return _transform;
 		}

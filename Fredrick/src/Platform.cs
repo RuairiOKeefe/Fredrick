@@ -18,8 +18,16 @@ namespace Fredrick.src
 		protected float _offsetX;
 		protected float _offsetY;
 
-		protected float _lHeight;//Height of the surface of the leftmost point on the platform, should not excede height
-		protected float _rHeight;//Height of the surface of the rightmost point on the platform, should not excede height
+		/// <summary>
+		/// Height of the surface of the leftmost point on the platform, should not excede height
+		/// </summary>
+		protected float _lHeight;
+
+		/// <summary>
+		/// Height of the surface of the rightmost point on the platform, should not excede height
+		/// </summary>
+		protected float _rHeight;
+
 		protected float _platformDepth;
 		protected Vector2 _normal;
 

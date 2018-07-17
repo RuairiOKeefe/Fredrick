@@ -13,7 +13,7 @@ namespace Fredrick.src
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
 		List<Entity> entities = new List<Entity>();
-		Camera cam;
+		FollowCamera cam;
 
 		public Game1()
 		{
@@ -41,7 +41,7 @@ namespace Fredrick.src
 		protected override void LoadContent()
 		{
 
-			cam = new Camera(1600, 900);
+			cam = new FollowCamera(1600, 900);
 			// Create a new SpriteBatch, which can be used to draw textures.
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 			// create 1x1 texture for line drawing
@@ -61,6 +61,7 @@ namespace Fredrick.src
 			entity.Components.Add(renderable);
 			entity.Components.Add(character);
 			entity.Components.Add(boxCollider);
+			cam.SetSubject(entity);
 			for (int i = -20; i < 21; i++)
 			{
 				Entity e = new Entity();
@@ -166,6 +167,8 @@ namespace Fredrick.src
 			foreach (var e in entities)
 				e.Update(gameTime.ElapsedGameTime.TotalSeconds);
 
+			//cam.Trauma = 1;
+			cam.Update(gameTime.ElapsedGameTime.TotalSeconds);
 			base.Update(gameTime);
 		}
 
@@ -177,7 +180,7 @@ namespace Fredrick.src
 		{
 			GraphicsDevice.Clear(Color.CornflowerBlue);
 
-			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, cam.get_transformation(GraphicsDevice));
+			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, cam.Get_Transformation(GraphicsDevice));
 			foreach (var e in entities)
 				e.Draw(spriteBatch);
 			spriteBatch.End();

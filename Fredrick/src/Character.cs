@@ -36,15 +36,36 @@ namespace Fredrick.src
 
 		private AABBTrigger _jumpTrigger;
 		private bool _grounded;
+		private bool _prevGrounded;
+		private double _fallVelocity;
+
 		private int _maxJumps;
 		private int _jumpsLeft;
 		private bool _jumpWait;//
 		private double _jumpTime;//How much time between jumps
 		private double _jumpTimer;
 
+		private Vector2 _followPosition;
+		private Vector2 _followOffset;
+
 		public bool Grounded
 		{
 			get { return _grounded; }
+		}
+
+		public bool PrevGrounded
+		{
+			get { return _prevGrounded; }
+		}
+
+		public double FallVelocity
+		{
+			get { return _fallVelocity; }
+		}
+
+		public Vector2 FollowPosition
+		{
+			get { return _followPosition; }
 		}
 
 		public Character(Entity owner) : base(owner)
@@ -65,6 +86,8 @@ namespace Fredrick.src
 			_maxJumps = 2;
 			_jumpWait = false;
 			_jumpTime = 0.2;
+
+			_followOffset = new Vector2(5, 0);
 
 		}
 
@@ -115,7 +138,7 @@ namespace Fredrick.src
 			Vector2 tr = new Vector2(_jumpTrigger.Rectangle.GetPosition().X + _jumpTrigger.Rectangle.Width / 2, _jumpTrigger.Rectangle.GetPosition().Y + _jumpTrigger.Rectangle.Height / 2);
 			Vector2 bl = new Vector2(_jumpTrigger.Rectangle.GetPosition().X - _jumpTrigger.Rectangle.Width / 2, _jumpTrigger.Rectangle.GetPosition().Y - _jumpTrigger.Rectangle.Height / 2);
 			Vector2 br = new Vector2(_jumpTrigger.Rectangle.GetPosition().X + _jumpTrigger.Rectangle.Width / 2, _jumpTrigger.Rectangle.GetPosition().Y - _jumpTrigger.Rectangle.Height / 2);
-			DebugManager.Instance.DrawLine(spriteBatch, tl+_owner.GetPosition(), tr + _owner.GetPosition());
+			DebugManager.Instance.DrawLine(spriteBatch, tl + _owner.GetPosition(), tr + _owner.GetPosition());
 			DebugManager.Instance.DrawLine(spriteBatch, tr + _owner.GetPosition(), br + _owner.GetPosition());
 			DebugManager.Instance.DrawLine(spriteBatch, br + _owner.GetPosition(), bl + _owner.GetPosition());
 			DebugManager.Instance.DrawLine(spriteBatch, bl + _owner.GetPosition(), tl + _owner.GetPosition());
@@ -137,6 +160,8 @@ namespace Fredrick.src
 				}
 			}
 
+			_prevGrounded = _grounded;
+
 			if (_jumpTrigger.Update(_owner.GetPosition()) && !_jumpWait)
 			{
 				_grounded = true;
@@ -144,6 +169,16 @@ namespace Fredrick.src
 			}
 			else
 				_grounded = false;
+
+			if (!_grounded)
+			{
+				_fallVelocity = Velocity.Y;
+			}
+			else
+			{
+				if(_prevGrounded)//Gives a frame to check fall trauma
+					_fallVelocity = 0;
+			}
 
 			switch (_motionState)
 			{
@@ -197,6 +232,20 @@ namespace Fredrick.src
 
 			Walk(deltaTime);
 			ResolveMotion(deltaTime);
+
+			if (_moveCommand > 0)
+			{
+				_followPosition = _owner.GetPosition() + _followOffset;
+			}
+			else
+				if (_moveCommand < 0)
+			{
+				_followPosition = _owner.GetPosition() - _followOffset;
+			}
+			else
+			{
+				_followPosition = _owner.GetPosition();
+			}
 		}
 	}
 }
