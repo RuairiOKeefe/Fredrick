@@ -32,7 +32,7 @@ namespace Fredrick.src
 			_origin = new Vector2(16, 16);
 			_position = new Vector2(0, 0);
 			_scale = new Vector2(1, 1);
-			_layer = 1;
+			_layer = 0.1f;
 			_colour = new Color(255, 255, 255, 255);
 			_width = 32;
 			_height = 32;

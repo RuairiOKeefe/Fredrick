@@ -6,24 +6,26 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+
+
 namespace Fredrick.src
 {
 	public sealed class DebugManager
 	{
-		private static DebugManager instance = null;
-		private static readonly object padlock = new object();
+		private static DebugManager _instance = null;
+		private static readonly object _padlock = new object();
 
 		public static DebugManager Instance
 		{
 			get
 			{
-				lock (padlock)
+				lock (_padlock)
 				{
-					if (instance == null)
+					if (_instance == null)
 					{
-						instance = new DebugManager();
+						_instance = new DebugManager();
 					}
-					return instance;
+					return _instance;
 				}
 			}
 		}

@@ -12,6 +12,7 @@ namespace Fredrick.src
 		Vector2 _position;
 		float _rotation;
 		Vector2 _velocity;
+		double _lifeTime;
 	
 		public Vector2 Position
 		{
@@ -19,16 +20,38 @@ namespace Fredrick.src
 			set { _position = value; }
 		}
 
-		public Particle(Vector2 position, Vector2 velocity)
+		public double LifeTime
+		{
+			get { return _lifeTime; }
+			set { _lifeTime = value; }
+		}
+
+		public Particle()
+		{
+			_position = new Vector2();
+			_velocity = new Vector2();
+		}
+
+		public Particle(Vector2 position, Vector2 velocity, double lifeTime)
 		{
 			_position = position;
 			_velocity = velocity;
+			_lifeTime = lifeTime;
+		}
+
+		public void Revive(Vector2 position, Vector2 velocity, double lifeTime)
+		{
+			_position = position;
+			_velocity = velocity;
+			_lifeTime = lifeTime;
 		}
 
 		public void Update(double deltaTime, Vector2 acceleration)
 		{
 			_velocity += acceleration * (float)deltaTime;
 			_position += _velocity * (float)deltaTime;
+
+			_lifeTime -= deltaTime;
 		}
 	}
 }

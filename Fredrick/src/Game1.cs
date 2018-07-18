@@ -51,6 +51,7 @@ namespace Fredrick.src
 
 			Texture2D testSheet = Content.Load<Texture2D>("TestSheet");//This texture includes a colour that matches the key colour, not important since its a test sprite but funny none the less
 			Texture2D tempSlope = Content.Load<Texture2D>("tempSlope");
+			Texture2D tempParticle = Content.Load<Texture2D>("tempParticle");
 			Entity entity = new Entity();
 			entity.SetPosition(new Vector2(8, 5));
 			entities.Add(entity);
@@ -62,7 +63,7 @@ namespace Fredrick.src
 			entity.Components.Add(renderable);
 			entity.Components.Add(character);
 			entity.Components.Add(boxCollider);
-			Emitter emitter = new Emitter(entity, testSheet);
+			Emitter emitter = new Emitter(entity, tempParticle);
 			emitter.AddAnimation(0, 0, 32, 1, 30);
 			entity.Components.Add(emitter);
 			cam.SetSubject(entity);

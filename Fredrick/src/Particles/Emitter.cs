@@ -13,6 +13,7 @@ namespace Fredrick.src
 		List<Particle> _particles;
 		float _spawnWidth;
 		float _spawnHeight;
+		float _maxParticles;
 
 		public Emitter(Entity owner, Texture2D sprite) : base(owner, sprite)
 		{
@@ -22,7 +23,7 @@ namespace Fredrick.src
 			_origin = new Vector2(16, 16);
 			_position = new Vector2(0, 0);
 			_scale = new Vector2(1, 1);
-			_layer = 1;
+			_layer = 0.2f;
 			_colour = new Color(255, 255, 255, 255);
 			_width = 32;
 			_height = 32;
@@ -37,9 +38,13 @@ namespace Fredrick.src
 			_particles = new List<Particle>();
 			for (int i = 0; i < 500; i++)
 			{
-				Vector2 p = new Vector2((float)rnd.NextDouble(), (float)rnd.NextDouble());
-				_particles.Add(new Particle(p + owner.GetPosition(), new Vector2((float)rnd.NextDouble(), 10)));
+				Vector2 spawnPos = new Vector2((float)rnd.NextDouble() * 10 - 5, (float)rnd.NextDouble() * 4 - 2 + 10);
+				Particle p = ParticleBuffer.Instance.InactiveParticles.Pop();
+				p.Revive(spawnPos + _owner.GetPosition(), new Vector2((float)rnd.NextDouble(), -10), 2);
+				_particles.Add(p);
 			}
+
+			_maxParticles = 3000;
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)
@@ -47,15 +52,33 @@ namespace Fredrick.src
 			Vector2 inv = new Vector2(1, -1);
 			foreach (Particle p in _particles)
 			{
-				spriteBatch.Draw(_sprite, p.Position * inv * _spriteSize, _sourceRectangle, _colour, _rotation, _origin, 0.05f, _spriteEffects, _layer);
+				spriteBatch.Draw(_sprite, p.Position * inv * _spriteSize, _sourceRectangle, Color.LightBlue, _rotation, _origin, 0.05f, _spriteEffects, _layer);
 			}
 		}
 
 		public override void Update(double deltaTime)
 		{
-			foreach (Particle p in _particles)
+			Random rnd = new Random();
+			for (int i = 0; i < 20; i++)
 			{
+				if (_particles.Count < _maxParticles)
+				{
+					Vector2 spawnPos = new Vector2((float)rnd.NextDouble() * 30 - 15, (float)rnd.NextDouble() * 4 - 2 + 10);
+					Particle p = ParticleBuffer.Instance.InactiveParticles.Pop();
+					p.Revive(spawnPos + _owner.GetPosition(), new Vector2((float)rnd.NextDouble(), -10), 2);
+					_particles.Add(p);
+				}
+			}
+
+			for (int i = (_particles.Count - 1); i >= 0; i--)
+			{
+				Particle p = _particles[i];
 				p.Update(deltaTime, new Vector2(0, -10));
+				if (p.LifeTime < 0)
+				{
+					ParticleBuffer.Instance.InactiveParticles.Push(p);
+					_particles.Remove(p);
+				}
 			}
 		}
 	}
