@@ -41,7 +41,7 @@ namespace Fredrick.src
 
 		private int _maxJumps;
 		private int _jumpsLeft;
-		private bool _jumpWait;//
+		private bool _jumpWait;
 		private double _jumpTime;//How much time between jumps
 		private double _jumpTimer;
 
@@ -56,6 +56,11 @@ namespace Fredrick.src
 		public bool PrevGrounded
 		{
 			get { return _prevGrounded; }
+		}
+
+		public double JumpTimer
+		{
+			get { return _jumpTimer; }
 		}
 
 		public double FallVelocity
@@ -82,10 +87,10 @@ namespace Fredrick.src
 			_maxSprintSpeed = 10;
 
 			_jumpTrigger = new AABBTrigger(_owner);
-			_jumpTrigger.Rectangle = new RectangleF(new Vector2(0, -0.55f), 1, 0.1f, 0, 0);
+			_jumpTrigger.Rectangle = new RectangleF(new Vector2(0, -0.5f), 1, 0.5f, 0, 0);
 			_maxJumps = 2;
 			_jumpWait = false;
-			_jumpTime = 0.2;
+			_jumpTime = 0.2;//may want to remove variable?
 
 			_followOffset = new Vector2(5, 0);
 

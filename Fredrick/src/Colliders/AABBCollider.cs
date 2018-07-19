@@ -78,22 +78,35 @@ namespace Fredrick.src
 		{
 			if (other.PlatformDepth < 0)
 			{
-				Vector2 testMove = new Vector2(tempMove.X, tempMove.Y);
+				Vector2 testMove = new Vector2(tempMove.X, 0);
 				Vector2 newPos = ((_owner.GetPosition() + testMove));
 
-				if (testMove.Y < 0)
+				_rectangle.UpdatePosition(newPos);
+				float f = (_rectangle.CurrentPosition.X - (other.CurrentPosition.X - (other.Width / 2))) / ((other.CurrentPosition.X + (other.Width / 2)) - (other.CurrentPosition.X - (other.Width / 2)));//(currentX - minX) / (maxX - minX)
+				if (f > 0 && f < 1)
 				{
-					_rectangle.UpdatePosition(newPos);
-					float f = (_rectangle.CurrentPosition.X - (other.CurrentPosition.X - (other.Width / 2))) / ((other.CurrentPosition.X + (other.Width / 2)) - (other.CurrentPosition.X - (other.Width / 2)));//(currentX - minX) / (maxX - minX)
-					if (f > 0 && f < 1)
-					{
-						float y = ((other.LHeight * (1.0f - f)) + (other.RHeight * f)) + other.CurrentPosition.Y;//desired y coordinate
+					float y = ((other.LHeight * (1.0f - f)) + (other.RHeight * f)) + other.CurrentPosition.Y;//desired y coordinate
 
-						if ((_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)) > (y + other.PlatformDepth) && (_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)) < y+1 && _owner.GetComponent<Character>().Grounded)
-						{
-							tempMove.Y += (y - (_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)));
-							_owner.GetComponent<Character>().StopVelY();
-						}
+					if ((_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)) > (y + other.PlatformDepth) && (_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)) < y && _owner.GetComponent<Character>().PrevGrounded)
+					{
+						//correct postion but leave y velocity intact (only for x move)
+						tempMove.Y += (y - (_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)));
+					}
+				}
+
+				testMove = new Vector2(tempMove.X, tempMove.Y);
+				newPos = ((_owner.GetPosition() + testMove));
+
+				_rectangle.UpdatePosition(newPos);
+				f = (_rectangle.CurrentPosition.X - (other.CurrentPosition.X - (other.Width / 2))) / ((other.CurrentPosition.X + (other.Width / 2)) - (other.CurrentPosition.X - (other.Width / 2)));//(currentX - minX) / (maxX - minX)
+				if (f > 0 && f < 1)
+				{
+					float y = ((other.LHeight * (1.0f - f)) + (other.RHeight * f)) + other.CurrentPosition.Y;//desired y coordinate
+
+					if ((_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)) > (y + other.PlatformDepth) && (_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)) < y + 1 && _owner.GetComponent<Character>().Grounded && _owner.GetComponent<Character>().Velocity.Y < 0)
+					{
+						tempMove.Y += (y - (_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)));
+						_owner.GetComponent<Character>().StopVelY();
 					}
 				}
 			}
@@ -111,7 +124,7 @@ namespace Fredrick.src
 						if ((_rectangle.CurrentPosition.Y + (_rectangle.Height / 2)) > y && (_rectangle.CurrentPosition.Y + (_rectangle.Height / 2)) < y + other.PlatformDepth)
 						{
 							tempMove.Y -= ((_rectangle.CurrentPosition.Y + (_rectangle.Height / 2)) - y);
-							_owner.GetComponent<Character>().Velocity = (_owner.GetComponent<Character>().Velocity - (2f * Vector2.Dot(_owner.GetComponent<Character>().Velocity, other.Normal)) * other.Normal)*0.5f;
+							_owner.GetComponent<Character>().Velocity = (_owner.GetComponent<Character>().Velocity - (2f * Vector2.Dot(_owner.GetComponent<Character>().Velocity, other.Normal)) * other.Normal) * 0.5f;
 						}
 					}
 				}

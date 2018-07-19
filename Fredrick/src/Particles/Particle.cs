@@ -9,6 +9,7 @@ namespace Fredrick.src
 {
 	public class Particle
 	{
+		//need to add collision logic and animation code
 		Vector2 _position;
 		float _rotation;
 		Vector2 _velocity;
