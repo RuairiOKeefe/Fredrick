@@ -52,20 +52,20 @@ namespace Fredrick.src
 			Vector2 inv = new Vector2(1, -1);
 			foreach (Particle p in _particles)
 			{
-				spriteBatch.Draw(_sprite, p.Position * inv * _spriteSize, _sourceRectangle, Color.LightBlue, _rotation, _origin, 0.05f, _spriteEffects, _layer);
+				spriteBatch.Draw(_sprite, p.Position * inv * _spriteSize, _sourceRectangle, Color.LightBlue, p.Rotation, _origin, 0.3f, _spriteEffects, _layer);
 			}
 		}
 
 		public override void Update(double deltaTime)
 		{
 			Random rnd = new Random();
-			for (int i = 0; i < 20; i++)
+			for (int i = 0; i < 1; i++)
 			{
 				if (_particles.Count < _maxParticles)
 				{
-					Vector2 spawnPos = new Vector2((float)rnd.NextDouble() * 30 - 15, (float)rnd.NextDouble() * 4 - 2 + 10);
+					Vector2 spawnPos = new Vector2((float)rnd.NextDouble() * 2 - 1, (float)rnd.NextDouble() * 2 - 1);
 					Particle p = ParticleBuffer.Instance.InactiveParticles.Pop();
-					p.Revive(spawnPos + _owner.GetPosition(), new Vector2((float)rnd.NextDouble(), -10), 2);
+					p.Revive(spawnPos + _owner.GetPosition(), new Vector2((float)rnd.NextDouble()*2-1, (float)rnd.NextDouble()*2-1), 2);
 					_particles.Add(p);
 				}
 			}
@@ -73,7 +73,7 @@ namespace Fredrick.src
 			for (int i = (_particles.Count - 1); i >= 0; i--)
 			{
 				Particle p = _particles[i];
-				p.Update(deltaTime, new Vector2(0, -10));
+				p.Update(deltaTime, new Vector2(0, 0));
 				if (p.LifeTime < 0)
 				{
 					ParticleBuffer.Instance.InactiveParticles.Push(p);

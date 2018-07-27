@@ -21,6 +21,11 @@ namespace Fredrick.src
 			set { _position = value; }
 		}
 
+		public float Rotation
+		{
+			get { return _rotation; }
+		}
+
 		public double LifeTime
 		{
 			get { return _lifeTime; }
@@ -51,7 +56,16 @@ namespace Fredrick.src
 		{
 			_velocity += acceleration * (float)deltaTime;
 			_position += _velocity * (float)deltaTime;
-
+			if (_velocity.Length() > 0)
+			{
+				Vector2 v = _velocity;
+				v.Normalize();
+				_rotation = (float)Math.Atan2(-v.Y, v.X);
+			}
+			else
+			{
+				_rotation = 0;
+			}
 			_lifeTime -= deltaTime;
 		}
 	}
