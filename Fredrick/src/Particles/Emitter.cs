@@ -14,6 +14,13 @@ namespace Fredrick.src
 		float _spawnWidth;
 		float _spawnHeight;
 		float _maxParticles;
+		bool _continuous;
+		float _emissionTime;
+
+		/// <summary>
+		/// How many particles are emitted per emission if not continuous
+		/// </summary>
+		int _emissionCount;
 
 		public Emitter(Entity owner, Texture2D sprite) : base(owner, sprite)
 		{
@@ -23,7 +30,7 @@ namespace Fredrick.src
 			_origin = new Vector2(16, 16);
 			_position = new Vector2(0, 0);
 			_scale = new Vector2(1, 1);
-			_layer = 0.2f;
+			_layer = 0.1f;
 			_colour = new Color(255, 255, 255, 255);
 			_width = 32;
 			_height = 32;
@@ -36,15 +43,13 @@ namespace Fredrick.src
 			Random rnd = new Random();
 
 			_particles = new List<Particle>();
-			for (int i = 0; i < 500; i++)
-			{
-				Vector2 spawnPos = new Vector2((float)rnd.NextDouble() * 10 - 5, (float)rnd.NextDouble() * 4 - 2 + 10);
-				Particle p = ParticleBuffer.Instance.InactiveParticles.Pop();
-				p.Revive(spawnPos + _owner.GetPosition(), new Vector2((float)rnd.NextDouble(), -10), 2);
-				_particles.Add(p);
-			}
+
+			_spawnWidth = 0;
+			_spawnHeight = 0;
 
 			_maxParticles = 3000;
+			_continuous = true;
+			_emissionCount = 1;
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)
@@ -52,24 +57,31 @@ namespace Fredrick.src
 			Vector2 inv = new Vector2(1, -1);
 			foreach (Particle p in _particles)
 			{
-				spriteBatch.Draw(_sprite, p.Position * inv * _spriteSize, _sourceRectangle, Color.LightBlue, p.Rotation, _origin, 0.3f, _spriteEffects, _layer);
+				Color c = Color.LightGoldenrodYellow;
+				c *= p.Opacity;
+				spriteBatch.Draw(_sprite, p.Position * inv * _spriteSize, _sourceRectangle, c, p.Rotation, _origin, 0.3f, _spriteEffects, _layer);
 			}
 		}
 
 		public override void Update(double deltaTime)
 		{
 			Random rnd = new Random();
-			for (int i = 0; i < 1; i++)
+			if (_continuous)
 			{
 				if (_particles.Count < _maxParticles)
 				{
-					Vector2 spawnPos = new Vector2((float)rnd.NextDouble() * 2 - 1, (float)rnd.NextDouble() * 2 - 1);
-					Particle p = ParticleBuffer.Instance.InactiveParticles.Pop();
-					p.Revive(spawnPos + _owner.GetPosition(), new Vector2((float)rnd.NextDouble()*2-1, (float)rnd.NextDouble()*2-1), 2);
-					_particles.Add(p);
+					for (int i = 0; i < _emissionCount; i++)
+					{
+						Vector2 spawnPos = new Vector2((float)rnd.NextDouble() * _spawnWidth - (_spawnWidth / 2), (float)rnd.NextDouble() * _spawnHeight - (_spawnHeight / 2));
+						Vector2 spawnVel = new Vector2((float)rnd.NextDouble() * 4 - 2, (float)rnd.NextDouble() * 4 - 2);
+						Particle p = ParticleBuffer.Instance.InactiveParticles.Pop();
+						p.Revive(spawnPos + _owner.GetPosition(), spawnVel, 3);
+						_particles.Add(p);
+					}
 				}
 			}
 
+			//remove dead particles
 			for (int i = (_particles.Count - 1); i >= 0; i--)
 			{
 				Particle p = _particles[i];

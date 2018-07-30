@@ -100,13 +100,17 @@ namespace Fredrick.src
 				_position += (_subject.GetComponent<Character>().FollowPosition - _position) * 5.0f * (float)deltaTime;
 				if (_subject.GetComponent<Character>().Grounded && !_subject.GetComponent<Character>().PrevGrounded)
 				{
-					_trauma = (-0.5-_subject.GetComponent<Character>().FallVelocity / 10);
-					if (_trauma > 1)
-						_trauma = 1;
+					_trauma = (-0.5 - _subject.GetComponent<Character>().FallVelocity / 5);
 				}
 			}
+
 			_time += (float)deltaTime * 1000;
+
 			_trauma -= deltaTime;
+
+			if (_trauma > 1)
+				_trauma = 1;
+
 			if (_trauma < 0)
 				_trauma = 0;
 
