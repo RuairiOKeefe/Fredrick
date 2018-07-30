@@ -29,8 +29,8 @@ namespace Fredrick.src
 
 			_origin = new Vector2(16, 16);
 			_position = new Vector2(0, 0);
-			_scale = new Vector2(1, 1);
-			_layer = 0.1f;
+			_scale = new Vector2(0.5f);
+			_layer = 0.0f;
 			_colour = new Color(255, 255, 255, 255);
 			_width = 32;
 			_height = 32;
@@ -49,7 +49,7 @@ namespace Fredrick.src
 
 			_maxParticles = 3000;
 			_continuous = true;
-			_emissionCount = 1;
+			_emissionCount = 5;
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)
@@ -59,7 +59,7 @@ namespace Fredrick.src
 			{
 				Color c = Color.LightGoldenrodYellow;
 				c *= p.Opacity;
-				spriteBatch.Draw(_sprite, p.Position * inv * _spriteSize, _sourceRectangle, c, p.Rotation, _origin, 0.3f, _spriteEffects, _layer);
+				spriteBatch.Draw(_sprite, p.Position * inv * _spriteSize, _sourceRectangle, c, p.Rotation, _origin, _scale, _spriteEffects, _layer);
 			}
 		}
 
@@ -74,6 +74,8 @@ namespace Fredrick.src
 					{
 						Vector2 spawnPos = new Vector2((float)rnd.NextDouble() * _spawnWidth - (_spawnWidth / 2), (float)rnd.NextDouble() * _spawnHeight - (_spawnHeight / 2));
 						Vector2 spawnVel = new Vector2((float)rnd.NextDouble() * 4 - 2, (float)rnd.NextDouble() * 4 - 2);
+						spawnVel.Normalize();
+						spawnVel *= 2;
 						Particle p = ParticleBuffer.Instance.InactiveParticles.Pop();
 						p.Revive(spawnPos + _owner.GetPosition(), spawnVel, 3);
 						_particles.Add(p);

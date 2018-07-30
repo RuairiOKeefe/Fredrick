@@ -19,6 +19,7 @@ namespace Fredrick.src
 		float _offsetRotScale;
 
 		protected double _trauma;
+		double _traumaDecay;
 		protected double _shake;
 
 		float _time;
@@ -53,6 +54,7 @@ namespace Fredrick.src
 
 			_offsetPosScale = 1;
 			_offsetRotScale = 0.2f;
+			_traumaDecay = 2.0f;
 
 			_time = 0;
 
@@ -78,6 +80,7 @@ namespace Fredrick.src
 
 			_offsetPosScale = 1;
 			_offsetRotScale = 0.2f;
+			_traumaDecay = 2.0f;
 
 			_time = 0;
 
@@ -106,7 +109,7 @@ namespace Fredrick.src
 
 			_time += (float)deltaTime * 1000;
 
-			_trauma -= deltaTime;
+			_trauma -= deltaTime / _traumaDecay;
 
 			if (_trauma > 1)
 				_trauma = 1;
