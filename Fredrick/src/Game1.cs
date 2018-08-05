@@ -20,6 +20,7 @@ namespace Fredrick.src
 			graphics = new GraphicsDeviceManager(this);
 			graphics.PreferredBackBufferWidth = 1600;
 			graphics.PreferredBackBufferHeight = 900;
+			this.IsMouseVisible = true;
 			Content.RootDirectory = "Content";
 		}
 
@@ -46,8 +47,7 @@ namespace Fredrick.src
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 			// create 1x1 texture for line drawing
 			DebugManager.Instance.LineTex = new Texture2D(GraphicsDevice, 1, 1);
-			DebugManager.Instance.LineTex.SetData<Color>(
-			new Color[] { Color.White });// fill the texture with white
+			DebugManager.Instance.LineTex.SetData<Color>(new Color[] { Color.White });// fill the texture with white
 
 			Texture2D testSheet = Content.Load<Texture2D>("TestSheet");//This texture includes a colour that matches the key colour, not important since its a test sprite but funny none the less
 			Texture2D tempSlope = Content.Load<Texture2D>("tempSlope");
@@ -58,14 +58,18 @@ namespace Fredrick.src
 			Renderable renderable = new Renderable(entity, testSheet);
 			Character character = new Character(entity);
 			AABBCollider boxCollider = new AABBCollider(entity);
-			renderable.AddAnimation(0, 0, 32, 1, 30);
-			renderable.AddAnimation(1, 0, 32, 4, 30);
+			renderable.Drawable.AddAnimation(0, 0, 32, 1, 30);
+			renderable.Drawable.AddAnimation(1, 0, 32, 4, 30);
 			entity.Components.Add(renderable);
 			entity.Components.Add(character);
 			entity.Components.Add(boxCollider);
 			Emitter emitter = new Emitter(entity, tempParticle);
-			emitter.AddAnimation(0, 0, 32, 1, 30);
+			emitter.ParticleDrawable.AddAnimation(0, 0, 32, 1, 30);
 			entity.Components.Add(emitter);
+			Weapon weapon = new Weapon(entity);
+			weapon._d = new Drawable(tempParticle);
+			entity.Components.Add(weapon);
+
 			cam.SetSubject(entity);
 			for (int i = -20; i < 21; i++)
 			{
@@ -77,7 +81,7 @@ namespace Fredrick.src
 				entities.Add(e);
 				Renderable r = new Renderable(e, testSheet);
 				AABBCollider c = new AABBCollider(e);
-				r.AddAnimation(0, 0, 0, 1, 30);
+				r.Drawable.AddAnimation(0, 0, 0, 1, 30);
 				entity.Components.Add(r);
 				entity.Components.Add(c);
 			}
@@ -93,7 +97,7 @@ namespace Fredrick.src
 					{
 						Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, -0.5f, 0.5f, -1.0f);
 						r = new Renderable(e, tempSlope);
-						r.AddAnimation(0, 0, 0, 1, 30);
+						r.Drawable.AddAnimation(0, 0, 0, 1, 30);
 						entity.Components.Add(p);
 					}
 					else
@@ -101,20 +105,20 @@ namespace Fredrick.src
 					{
 						Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, -0.5f, -1.0f);
 						r = new Renderable(e, tempSlope);
-						r.AddAnimation(0, 32, 0, 1, 30);
+						r.Drawable.AddAnimation(0, 32, 0, 1, 30);
 						entity.Components.Add(p);
 					}
 					else
 					{
 						if (i < 4)
 						{
-							r.AddAnimation(0, 0, 0, 1, 30);
+							r.Drawable.AddAnimation(0, 0, 0, 1, 30);
 						}
 
 						else
 						{
 							Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, 0.5f, -1.0f);
-							r.AddAnimation(0, 0, 0, 1, 30);
+							r.Drawable.AddAnimation(0, 0, 0, 1, 30);
 							entity.Components.Add(p);
 						}
 					}
@@ -133,7 +137,7 @@ namespace Fredrick.src
 					{
 						Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, -0.5f, 1.0f);
 						r = new Renderable(e, tempSlope);
-						r.AddAnimation(0, 64, 0, 1, 30);
+						r.Drawable.AddAnimation(0, 64, 0, 1, 30);
 						entity.Components.Add(p);
 					}
 					else
@@ -141,20 +145,20 @@ namespace Fredrick.src
 					{
 						Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, -0.5f, 0.5f, 1.0f);
 						r = new Renderable(e, tempSlope);
-						r.AddAnimation(0, 96, 0, 1, 30);
+						r.Drawable.AddAnimation(0, 96, 0, 1, 30);
 						entity.Components.Add(p);
 					}
 					else
 					{
 						if (i > 8)
 						{
-							r.AddAnimation(0, 0, 0, 1, 30);
+							r.Drawable.AddAnimation(0, 0, 0, 1, 30);
 						}
 
 						else
 						{
 							Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, -0.5f, -0.5f, 1.0f);
-							r.AddAnimation(0, 0, 0, 1, 30);
+							r.Drawable.AddAnimation(0, 0, 0, 1, 30);
 							entity.Components.Add(p);
 						}
 					}
@@ -180,7 +184,7 @@ namespace Fredrick.src
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Update(GameTime gameTime)
 		{
-			InputHandler.Instance.Update();
+			InputHandler.Instance.Update(cam.Get_Transformation(GraphicsDevice));
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
 

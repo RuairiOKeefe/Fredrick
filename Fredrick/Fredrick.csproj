@@ -45,7 +45,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\Cameras\FollowCamera.cs" />
     <Compile Include="src\Colliders\AABBTrigger.cs" />
-    <Compile Include="src\Animation.cs" />
+    <Compile Include="src\Colliders\CircleCollider.cs" />
+    <Compile Include="src\Drawing\Animation.cs" />
     <Compile Include="src\Colliders\AABBCollider.cs" />
     <Compile Include="src\Cameras\Camera.cs" />
     <Compile Include="src\Character.cs" />
@@ -53,11 +54,12 @@
     <Compile Include="src\Colliders\ColliderManager.cs" />
     <Compile Include="src\Component.cs" />
     <Compile Include="src\ComponentOwner.cs" />
+    <Compile Include="src\Drawing\Drawable.cs" />
     <Compile Include="src\Utilities\DebugManager.cs" />
     <Compile Include="src\Entity.cs" />
     <Compile Include="src\Utilities\FastNoise.cs" />
     <Compile Include="src\Game1.cs" />
-    <Compile Include="src\InputHandler.cs" />
+    <Compile Include="src\Utilities\InputHandler.cs" />
     <Compile Include="src\Motion.cs" />
     <Compile Include="src\Movable.cs" />
     <Compile Include="src\Particles\Emitter.cs" />
@@ -65,7 +67,7 @@
     <Compile Include="src\Particles\ParticleBuffer.cs" />
     <Compile Include="src\Program.cs" />
     <Compile Include="src\RectangleF.cs" />
-    <Compile Include="src\Renderable.cs" />
+    <Compile Include="src\Drawing\Renderable.cs" />
     <Compile Include="src\Platform.cs" />
     <Compile Include="src\Transform.cs" />
     <Compile Include="src\Colliders\Trigger.cs" />

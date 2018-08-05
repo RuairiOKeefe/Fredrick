@@ -26,14 +26,8 @@ namespace Fredrick.src
 
 		public const int NUM_PROJECTILES = 2000000;
 
-		private List<Projectile> _activeProjectiles;
 		private Stack<Projectile> _inactiveProjectiles;
 
-		public List<Projectile> ActiveProjectiles
-		{
-			get { return _activeProjectiles; }
-			set { _activeProjectiles = value; }
-		}
 
 		public Stack<Projectile> InactiveProjectiles
 		{
@@ -41,23 +35,12 @@ namespace Fredrick.src
 			set { _inactiveProjectiles = value; }
 		}
 
-		public void CreateProjectile()
-		{
-			Projectile p = _inactiveProjectiles.Pop();
-			_activeProjectiles.Add(p);
-		}
-
-		public void Update()
-		{
-
-		}
-
 		public ProjectileBuffer()
 		{
 			_inactiveProjectiles = new Stack<Projectile>(NUM_PROJECTILES);
 			for (int i = 0; i < NUM_PROJECTILES; i++)
 			{
-				_inactiveProjectiles.Push(new Projectile());
+				_inactiveProjectiles.Push(new Projectile(new Entity()));//need to improve
 			}
 		}
 	}

@@ -8,30 +8,29 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Fredrick.src
 {
-	public class Renderable : Component
+	public class Drawable
 	{
-		protected Texture2D _sprite;
-		protected int _spriteSize;
-		protected Rectangle _sourceRectangle;//The region of the sprite sheet that will be used
-		protected Vector2 _origin;//The centerpoint of the sprite
-		protected SpriteEffects _spriteEffects; //just controls flipping from the look of it leave as 0 for none
-		protected float _layer;
-		protected Color _colour;
-		protected int _width;
-		protected int _height;
-		protected Dictionary<int, Animation> _animations;//Stores an int key
-		protected int _currentAnim;//which animation is currently being used
-		protected bool _transition;//Does a transition need to occur
-		protected int _nextAnim;//The animation to be transitioned to
+		public Texture2D _sprite;
+		public int _spriteSize;
+		public Rectangle _sourceRectangle;//The region of the sprite sheet that will be used
+		public Vector2 _origin;//The centerpoint of the sprite
+		public SpriteEffects _spriteEffects; //just controls flipping from the look of it leave as 0 for none
+		public float _layer;
+		public Color _colour;
+		public int _width;
+		public int _height;
 
-		public Renderable(Entity owner, Texture2D sprite) : base(owner)
+		public Dictionary<int, Animation> _animations;//Stores an int key
+		public int _currentAnim;//which animation is currently being used
+		public bool _transition;//Does a transition need to occur
+		public int _nextAnim;//The animation to be transitioned to
+
+		public Drawable(Texture2D sprite)
 		{
 			_sprite = sprite;
 			_spriteSize = 32;
 
 			_origin = new Vector2(16, 16);
-			_position = new Vector2(0, 0);
-			_scale = new Vector2(1, 1);
 			_layer = 0.1f;
 			_colour = new Color(255, 255, 255, 255);
 			_width = 32;
@@ -73,18 +72,11 @@ namespace Fredrick.src
 			}
 		}
 
-		public override void Draw(SpriteBatch spriteBatch)
-		{
-			Vector2 inv = new Vector2(1, -1);
-			spriteBatch.Draw(_sprite, (_position + _owner.GetPosition()) * inv * _spriteSize, _sourceRectangle, _colour, _rotation, _origin, _scale, _spriteEffects, _layer);
-		}
-
-		public override void Update(double deltaTime)
+		public void Animate(double deltaTime)
 		{
 			if (_animations.Count > 0)
 			{
-				Point sourcePos = _animations[_currentAnim].UpdateAnimation(deltaTime);
-				_sourceRectangle.Location = sourcePos;
+				_sourceRectangle.Location = _animations[_currentAnim].UpdateAnimation(deltaTime);
 				if (_transition)
 					TryTransition();
 			}

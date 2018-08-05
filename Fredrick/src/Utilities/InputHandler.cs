@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using System.Diagnostics;
 
 namespace Fredrick.src
 {
@@ -46,11 +47,18 @@ namespace Fredrick.src
 		private MouseState _currentMouseState;
 		private MouseState _previousMouseState;
 
-		private Point _currentMousePos;
+		private Point _screenMousePosition;
+		private Vector2 _worldMousePosition;
 
 		private Dictionary<Action, Keys> _keyBindings;
 
 		private float _moveX;
+
+		public Vector2 WorldMousePosition
+		{
+			get { return _worldMousePosition; }
+		}
+
 		public float MoveX
 		{
 			get
@@ -160,6 +168,11 @@ namespace Fredrick.src
 			}
 		}
 
+		public Point GetMouseScreenPos()
+		{
+			return _screenMousePosition;
+		}
+
 		public void GetMoveX()
 		{
 			float move = 0;
@@ -174,7 +187,7 @@ namespace Fredrick.src
 			_moveX = move;
 		}
 
-		public void Update()
+		public void Update(Matrix viewMatrix)
 		{
 			_previousKeyState = _currentKeyState;
 			_currentKeyState = Keyboard.GetState();
@@ -182,8 +195,13 @@ namespace Fredrick.src
 			_previousMouseState = _currentMouseState;
 			_currentMouseState = Mouse.GetState();
 
-			_currentMousePos = _currentMouseState.Position;
+			_screenMousePosition = _currentMouseState.Position;
 
+			Vector2 mousePosition = new Vector2(_screenMousePosition.X, _screenMousePosition.Y);
+			_worldMousePosition = Vector2.Transform(mousePosition, Matrix.Invert(viewMatrix));
+			_worldMousePosition.X = _worldMousePosition.X / 32;
+			_worldMousePosition.Y = -_worldMousePosition.Y / 32;
+			Debug.Write(_worldMousePosition + "\n");
 			GetMoveX();
 		}
 	}
