@@ -8,12 +8,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Fredrick.src
 {
-	public class Projectile : Component
+	public class Projectile : Movable
 	{
-		Vector2 _velocity;
-		double _lifeTime;
-		double _halfpoint;
-		float _opacity;
+		private double _lifeTime;
 
 		public double LifeTime
 		{
@@ -21,10 +18,6 @@ namespace Fredrick.src
 			set { _lifeTime = value; }
 		}
 
-		public float Opacity
-		{
-			get { return _opacity; }
-		}
 
 		public Projectile(Entity owner) : base(owner)
 		{
@@ -34,53 +27,45 @@ namespace Fredrick.src
 
 		public Projectile(Entity owner, Vector2 position, Vector2 velocity, double lifeTime) : base(owner)
 		{
-			_position = position;
+			_owner.SetPosition(position);
 			_velocity = velocity;
 			_lifeTime = lifeTime;
 		}
 
 		public void Revive(Vector2 position, Vector2 velocity, double lifeTime)
 		{
-			_position = position;
+			_owner.SetPosition(position);
 			_velocity = velocity;
 			_lifeTime = lifeTime;
-			_halfpoint = lifeTime / 2;
-			_opacity = 1;
-		}
-
-		public void Update(double deltaTime, Vector2 acceleration)
-		{
-			_velocity += acceleration * (float)deltaTime;
-			_position += _velocity * (float)deltaTime;
-			if (_velocity.Length() > 0)
-			{
-				Vector2 v = _velocity;
-				v.Normalize();
-				_rotation = (float)Math.Atan2(-v.Y, v.X);
-			}
-			else
-			{
-				_rotation = 0;
-			}
-			_lifeTime -= deltaTime;
-			if (_lifeTime < _halfpoint)
-			{
-				_opacity = (float)(_lifeTime / _halfpoint);
-			}
-			else
-			{
-				_opacity = 1;
-			}
 		}
 
 		public override void Update(double deltaTime)
 		{
-			
+			_lifeTime -= deltaTime;
+
+			ResolveMotion(deltaTime);
+
+			if (_owner.GetComponent<CircleCollider>() == null)
+			{
+				if (_velocity.Length() > 0)
+				{
+					Vector2 v = _velocity;
+					v.Normalize();
+					_rotation = (float)Math.Atan2(-v.Y, v.X);
+				}
+				else
+				{
+					_rotation = 0;
+				}
+
+				_owner.SetRotation(_rotation);
+			}
+
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
-			
+
 		}
 	}
 }

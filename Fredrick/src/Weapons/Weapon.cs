@@ -23,7 +23,7 @@ namespace Fredrick.src
 
 		public Drawable _d;
 
-		List<Projectile> _projectiles;
+		List<Entity> _projectiles;
 
 		public double FireRate
 		{
@@ -43,7 +43,7 @@ namespace Fredrick.src
 			_spotSpawn = new Vector2(0, 0);
 			_shotVector = new Vector2(1, 0);
 			_shotSpeed = 50.0f;
-			_projectiles = new List<Projectile>();
+			_projectiles = new List<Entity>();
 			_scale = new Vector2(1);
 
 			_continuous = true;
@@ -51,13 +51,13 @@ namespace Fredrick.src
 
 		public void Fire()
 		{
-			Projectile p = ProjectileBuffer.Instance.InactiveProjectiles.Pop();
+			Entity e = ProjectileBuffer.Instance.InactiveProjectiles.Pop();
 			_shotVector = InputHandler.Instance.WorldMousePosition - _owner.GetPosition();// - _owner.GetPosition();
 			_shotVector.Normalize();
 			Vector2 shotVelocity = _shotVector * _shotSpeed;
 			//Debug.Write(_owner.GetPosition()+"\n");
-			p.Revive(_spotSpawn + _owner.GetPosition(), shotVelocity, 10.0);
-			_projectiles.Add(p);
+			e.GetComponent<Projectile>().Revive(_spotSpawn + _owner.GetPosition(), shotVelocity, 10.0);
+			_projectiles.Add(e);
 
 			_nextfire = _fireRate;
 		}
@@ -65,11 +65,15 @@ namespace Fredrick.src
 		public override void Draw(SpriteBatch spriteBatch)
 		{
 			Vector2 inv = new Vector2(1, -1);
-			foreach (Projectile p in _projectiles)
+			foreach (Entity e in _projectiles)
 			{
-				Color c = Color.LightGoldenrodYellow;
-				//c *= p.Opacity;
-				spriteBatch.Draw(_d._sprite, p.GetPosition() * inv * _d._spriteSize, _d._sourceRectangle, c, p.GetRotation(), _d._origin, _scale, _d._spriteEffects, _d._layer);
+				//Projectile p = e.GetComponent<Projectile>();
+				//Color c = Color.LightGoldenrodYellow;
+				////c *= p.Opacity;
+				//spriteBatch.Draw(_d._sprite, p.GetPosition() * inv * _d._spriteSize, _d._sourceRectangle, c, p.GetRotation(), _d._origin, _scale, _d._spriteEffects, _d._layer);
+				//but also don't do this, just call the fucking draw method
+
+				e.Draw(spriteBatch);
 			}
 		}
 
@@ -99,12 +103,12 @@ namespace Fredrick.src
 
 			for (int i = (_projectiles.Count - 1); i >= 0; i--)
 			{
-				Projectile p = _projectiles[i];
-				p.Update(deltaTime, new Vector2(0, 0));
-				if (p.LifeTime < 0)
+				Entity e = _projectiles[i];
+				e.Update(deltaTime);
+				if (e.GetComponent<Projectile>().LifeTime < 0)
 				{
-					ProjectileBuffer.Instance.InactiveProjectiles.Push(p);
-					_projectiles.Remove(p);
+					ProjectileBuffer.Instance.InactiveProjectiles.Push(e);
+					_projectiles.Remove(e);
 				}
 			}
 		}

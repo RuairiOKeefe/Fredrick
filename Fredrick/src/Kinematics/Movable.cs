@@ -10,6 +10,8 @@ namespace Fredrick.src
 {
 	public class Movable : Component
 	{
+		//If this component is used with a collider of any kind, this component should be added to the entity before the collider or invalid moves will be possible
+
 		protected Vector2 _attemptedPosition;//The location the entity wants to move to
 		protected Vector2 _velocity;
 		protected Vector2 _acceleration;
@@ -76,7 +78,7 @@ namespace Fredrick.src
 			_velocity.Y += _acceleration.Y * (float)deltaTime;
 			_attemptedPosition = Vector2.Multiply(_velocity, (float)deltaTime);
 
-			if (_owner.GetComponent<AABBCollider>() == null)
+			if (_owner.GetComponent<AABBCollider>() == null && _owner.GetComponent<CircleCollider>() == null)
 				_owner.Move(_attemptedPosition);//If this does not contain a collider just move it because nothing will stop it.
 		}
 

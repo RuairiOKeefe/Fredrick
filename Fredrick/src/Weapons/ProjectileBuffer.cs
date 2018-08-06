@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Fredrick.src
 {
-	public class ProjectileBuffer
+	public sealed class ProjectileBuffer
 	{
 		private static ProjectileBuffer _instance = null;
 		private static readonly object _padlock = new object();
@@ -26,22 +27,36 @@ namespace Fredrick.src
 
 		public const int NUM_PROJECTILES = 2000000;
 
-		private Stack<Projectile> _inactiveProjectiles;
+		private Stack<Entity> _inactiveProjectiles;
 
 
-		public Stack<Projectile> InactiveProjectiles
+		public Stack<Entity> InactiveProjectiles
 		{
 			get { return _inactiveProjectiles; }
 			set { _inactiveProjectiles = value; }
 		}
 
-		public ProjectileBuffer()
+		public void Load(Texture2D t)
 		{
-			_inactiveProjectiles = new Stack<Projectile>(NUM_PROJECTILES);
 			for (int i = 0; i < NUM_PROJECTILES; i++)
 			{
-				_inactiveProjectiles.Push(new Projectile(new Entity()));//need to improve
+				Entity e = new Entity();
+				Projectile p = new Projectile(e);
+				CircleCollider cc = new CircleCollider(e);
+				Renderable r = new Renderable(e, t);
+
+				e.Components.Add(p);
+				e.Components.Add(cc);
+				e.Components.Add(r);
+
+				_inactiveProjectiles.Push(e);//need to improve
 			}
+		}
+
+		public ProjectileBuffer()
+		{
+			_inactiveProjectiles = new Stack<Entity>(NUM_PROJECTILES);
+
 		}
 	}
 }

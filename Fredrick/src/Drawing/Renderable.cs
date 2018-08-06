@@ -41,7 +41,7 @@ namespace Fredrick.src
 		public override void Draw(SpriteBatch spriteBatch)
 		{
 			Vector2 inv = new Vector2(1, -1);
-			spriteBatch.Draw(_d._sprite, (_position + _owner.GetPosition()) * inv * _d._spriteSize, _d._sourceRectangle, _d._colour, _rotation, _d._origin, _scale, _d._spriteEffects, _d._layer);
+			spriteBatch.Draw(_d._sprite, (_position + _owner.GetPosition()) * inv * _d._spriteSize, _d._sourceRectangle, _d._colour, _owner.GetRotation() + _rotation, _d._origin, _scale, _d._spriteEffects, _d._layer);
 		}
 
 		public override void Update(double deltaTime)

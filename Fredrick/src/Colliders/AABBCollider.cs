@@ -14,7 +14,6 @@ namespace Fredrick.src
 		int _index;//index in ColliderManager
 		RectangleF _rectangle;
 
-		Vector2 move;
 		Vector2 tempMove;
 
 		public RectangleF Rectangle
@@ -130,6 +129,7 @@ namespace Fredrick.src
 				}
 			}
 		}
+
 		public override void Draw(SpriteBatch spriteBatch)
 		{
 			Vector2 tl = new Vector2(_owner.GetPosition().X - _rectangle.Width / 2, _owner.GetPosition().Y + _rectangle.Height / 2);
@@ -146,8 +146,7 @@ namespace Fredrick.src
 		{
 			if (_owner.GetComponent<Character>() != null)
 			{
-				move = _owner.GetComponent<Character>().AttemptedPosition;
-				tempMove = move;
+				tempMove = _owner.GetComponent<Character>().AttemptedPosition;
 
 				foreach (Platform p in ColliderManager.Instance.Platforms)
 				{

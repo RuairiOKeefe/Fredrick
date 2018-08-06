@@ -49,9 +49,14 @@ namespace Fredrick.src
 			DebugManager.Instance.LineTex = new Texture2D(GraphicsDevice, 1, 1);
 			DebugManager.Instance.LineTex.SetData<Color>(new Color[] { Color.White });// fill the texture with white
 
+			
+
 			Texture2D testSheet = Content.Load<Texture2D>("TestSheet");//This texture includes a colour that matches the key colour, not important since its a test sprite but funny none the less
 			Texture2D tempSlope = Content.Load<Texture2D>("tempSlope");
 			Texture2D tempParticle = Content.Load<Texture2D>("arrow");
+
+			ProjectileBuffer.Instance.Load(tempParticle);
+
 			Entity entity = new Entity();
 			entity.SetPosition(new Vector2(8, 5));
 			entities.Add(entity);

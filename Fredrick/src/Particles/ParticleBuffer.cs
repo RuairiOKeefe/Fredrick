@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Fredrick.src
 {
-	public class ParticleBuffer
+	public sealed class ParticleBuffer
 	{
 		private static ParticleBuffer _instance = null;
 		private static readonly object _padlock = new object();
