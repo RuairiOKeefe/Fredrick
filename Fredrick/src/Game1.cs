@@ -2,6 +2,9 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
+using FarseerPhysics.Common;
+using FarseerPhysics.Dynamics;
+using FarseerPhysics.Collision;
 
 namespace Fredrick.src
 {
@@ -14,6 +17,7 @@ namespace Fredrick.src
 		SpriteBatch spriteBatch;
 		List<Entity> entities = new List<Entity>();
 		FollowCamera cam;
+		World world;
 
 		public Game1()
 		{
@@ -22,6 +26,8 @@ namespace Fredrick.src
 			graphics.PreferredBackBufferHeight = 900;
 			this.IsMouseVisible = true;
 			Content.RootDirectory = "Content";
+
+			world = new World(new Vector2(0));
 		}
 
 		/// <summary>

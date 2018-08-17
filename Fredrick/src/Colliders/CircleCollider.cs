@@ -18,7 +18,23 @@ namespace Fredrick.src
 
 		public CircleCollider(Entity owner) : base(owner)
 		{
+			_radius = 0.5f;
+		}
 
+		static Vector2 LineIntersection(Vector2 startA, Vector2 endA, Vector2 startB, Vector2 endB)
+		{
+			float aA = endA.Y - startA.Y;
+			float bA = startA.X - endA.X;
+			float cA = aA * startA.X + bA * startA.Y;
+
+			float aB = endB.Y - startB.Y;
+			float bB = startB.X - endB.X;
+			float cB = aB * startB.X + bB * startB.Y;
+
+			float delta = aA * bB - aB * bA;
+
+			//If lines are parallel, the result will be (NaN, NaN)
+			return delta == 0 ? new Vector2(float.NaN, float.NaN) : new Vector2((bB * cA - bA * cB) / delta, (aA * cB - aB * cA) / delta);
 		}
 
 		public void CheckCollision(RectangleF other)
@@ -27,17 +43,49 @@ namespace Fredrick.src
 			Vector2 newPos = ((_owner.GetPosition() + testMove));
 			bool a = true;
 
-			if (newPos.X < other.CurrentPosition.X - (other.Width / 2))
+
+
+			if (newPos.X - other.CurrentPosition.X < (other.Width / 2) + _radius)
 				a = false;
-			if (newPos.X > other.CurrentPosition.X + (other.Width / 2))
+			if (newPos.Y - other.CurrentPosition.Y < (other.Height / 2) + _radius)
 				a = false;
-			if (newPos.Y < other.CurrentPosition.Y - (other.Height / 2))
-				a = false;
-			if (newPos.Y > other.CurrentPosition.Y + (other.Height / 2))
-				a = false;
+
+			if (newPos.X - other.CurrentPosition.X <= (other.Width / 2))
+				a = true;
+			if (newPos.Y - other.CurrentPosition.Y <= (other.Height / 2))
+				a = true;
+
+			float cornerDistance_sq = (newPos.X - other.CurrentPosition.X - other.Width / 2) * (newPos.X - other.CurrentPosition.X - other.Width / 2) + (newPos.Y - other.CurrentPosition.Y - other.Height / 2) * (newPos.Y - other.CurrentPosition.Y - other.Height / 2);
+
+			a = (cornerDistance_sq <= (_radius * _radius));
+
 
 			if (a == false)
 				return;
+
+
+			Vector2 closestInter;
+			float shortest = float.MaxValue;
+
+			//get side to set position to place at then bounce off side of face
+			for (int i = 0; i < 4; i++)
+			{
+				//make not from center, but instead at oriented offset
+				Vector2 intersection = LineIntersection(_owner.GetPosition() + _position, newPos, other.Corners[i % 4], other.Corners[(i + 1) % 4]);
+				if (intersection != new Vector2(float.NaN))
+				{
+					if (Vector2.Distance(_owner.GetPosition() + _position, intersection) < shortest)
+					{
+						shortest = Vector2.Distance(_owner.GetPosition() + _position, intersection);
+						closestInter = intersection;
+					}
+				}
+			}
+			//find side of collision
+			//find pos of coll on side
+			//get remaining dist of motion
+			//get reflection
+			//
 
 			_owner.GetComponent<Projectile>().StopVelX();
 			_owner.GetComponent<Projectile>().StopVelY();

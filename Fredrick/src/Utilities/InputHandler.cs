@@ -201,7 +201,6 @@ namespace Fredrick.src
 			_worldMousePosition = Vector2.Transform(mousePosition, Matrix.Invert(viewMatrix));
 			_worldMousePosition.X = _worldMousePosition.X / 32;
 			_worldMousePosition.Y = -_worldMousePosition.Y / 32;
-			Debug.Write(_worldMousePosition + "\n");
 			GetMoveX();
 		}
 	}
