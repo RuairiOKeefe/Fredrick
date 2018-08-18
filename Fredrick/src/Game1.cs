@@ -17,7 +17,6 @@ namespace Fredrick.src
 		SpriteBatch spriteBatch;
 		List<Entity> entities = new List<Entity>();
 		FollowCamera cam;
-		World world;
 
 		public Game1()
 		{
@@ -26,8 +25,6 @@ namespace Fredrick.src
 			graphics.PreferredBackBufferHeight = 900;
 			this.IsMouseVisible = true;
 			Content.RootDirectory = "Content";
-
-			world = new World(new Vector2(0));
 		}
 
 		/// <summary>
@@ -201,6 +198,8 @@ namespace Fredrick.src
 
 			foreach (var e in entities)
 				e.Update(gameTime.ElapsedGameTime.TotalSeconds);
+
+			ColliderManager.Instance.Update(gameTime.ElapsedGameTime.TotalSeconds);
 
 			//cam.Trauma = 1;
 			cam.Update(gameTime.ElapsedGameTime.TotalSeconds);

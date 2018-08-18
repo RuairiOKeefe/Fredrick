@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
+using FarseerPhysics.Common;
+using FarseerPhysics.Dynamics;
+using FarseerPhysics.Collision;
 
 namespace Fredrick.src
 {
@@ -26,8 +30,15 @@ namespace Fredrick.src
 			}
 		}
 
+		private World _world;
+
 		private List<AABBCollider> _colliders;
 		private List<Platform> _platforms;
+
+		public World World
+		{
+			get { return _world; }
+		}
 
 		public List<AABBCollider> Colliders
 		{
@@ -57,6 +68,12 @@ namespace Fredrick.src
 		{
 			_colliders = new List<AABBCollider>();
 			_platforms = new List<Platform>();
+			_world = new World(new Vector2(0));
+		}
+
+		public void Update(double deltaTime)
+		{
+			_world.Step((float)deltaTime);
 		}
 	}
 }
