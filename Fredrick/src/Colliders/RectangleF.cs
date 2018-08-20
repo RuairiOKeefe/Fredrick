@@ -74,20 +74,16 @@ namespace Fredrick.src
 			_offsetY = offsetY;
 
 			_corners = new Vector2[4];
-			_corners[0] = new Vector2(-width / 2, height / 2) + position;
-			_corners[1] = new Vector2(width / 2, height / 2) + position;
-			_corners[2] = new Vector2(width / 2, -height / 2) + position;
-			_corners[3] = new Vector2(-width / 2, -height / 2) + position;
+			_corners[0] = new Vector2(-width / 2, height / 2);
+			_corners[1] = new Vector2(width / 2, height / 2);
+			_corners[2] = new Vector2(width / 2, -height / 2);
+			_corners[3] = new Vector2(-width / 2, -height / 2);
 
 		}
 
 		public void UpdatePosition(Vector2 currentPosition)
 		{
 			_currentPosition = currentPosition + _position + new Vector2(_offsetX, _offsetY);
-			_corners[0] = new Vector2(-_width / 2, _height / 2) + currentPosition;
-			_corners[1] = new Vector2(_width / 2, _height / 2) + currentPosition;
-			_corners[2] = new Vector2(_width / 2, -_height / 2) + currentPosition;
-			_corners[3] = new Vector2(-_width / 2, -_height / 2) + currentPosition;
 		}
 
 		public bool Intersect(RectangleF other)

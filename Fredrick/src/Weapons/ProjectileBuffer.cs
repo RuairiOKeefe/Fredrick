@@ -25,7 +25,7 @@ namespace Fredrick.src
 			}
 		}
 
-		public const int NUM_PROJECTILES = 2000000;
+		public const int NUM_PROJECTILES = 10000;
 
 		private Stack<Entity> _inactiveProjectiles;
 

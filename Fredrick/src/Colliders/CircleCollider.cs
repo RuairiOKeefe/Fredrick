@@ -23,13 +23,48 @@ namespace Fredrick.src
 
 		public CircleCollider(Entity owner) : base(owner)
 		{
-			_body = new Body(ColliderManager.Instance.World, _owner.GetPosition() + _position, 0, BodyType.Dynamic);//can I attach entities
-			_circle = new CircleShape(0.5f, 1.0f);
-			_circle.Position = owner.GetPosition() + _position;
-			_fixture = _body.CreateFixture(_circle);
+			//_body = new Body(ColliderManager.Instance.World, _owner.GetPosition(), 0, BodyType.Dynamic);
+			//_body.BodyType = BodyType.Dynamic;
+			//_body.Mass = 1;
+			//_body.UserData = _owner;
+			//_body.Awake = true;
+			//_circle = new CircleShape(0.5f, 1.0f);
+			//_circle.Position = _position;
+			//_fixture = _body.CreateFixture(_circle);
 		}
 
+		public void Revive()
+		{
+			_body = new Body(ColliderManager.Instance.World, _owner.GetPosition(), 0, BodyType.Dynamic);
+			_circle = new CircleShape(0.25f, 1.0f);
+			_circle.Position = _position;
+			_fixture = _body.CreateFixture(_circle);
 
+			_body.BodyType = BodyType.Dynamic;
+			//_body.Mass = 0.1f;
+			_body.UserData = _owner;
+			_body.Awake = true;
+			_body.Position = _owner.GetPosition();
+			
+
+			_body.Restitution = 0.37f;
+		}
+
+		public void ApplyForce(Vector2 force)
+		{
+			_body.ApplyLinearImpulse(force);
+		}
+
+		public void UpdatePosition()
+		{
+			_owner.SetPosition(_body.Position);
+			_owner.SetRotation(_body.Rotation);
+		}
+
+		public void Kill()
+		{
+			ColliderManager.Instance.World.RemoveBody(_body);
+		}
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
@@ -38,7 +73,6 @@ namespace Fredrick.src
 
 		public override void Update(double deltaTime)
 		{
-
 		}
 	}
 }

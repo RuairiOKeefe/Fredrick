@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using FarseerPhysics.Collision.Shapes;
+using FarseerPhysics.Dynamics;
+using FarseerPhysics.Common;
 
 namespace Fredrick.src
 {
@@ -30,6 +33,10 @@ namespace Fredrick.src
 
 		protected float _platformDepth;
 		protected Vector2 _normal;
+
+		Body _body;
+		EdgeShape _shape;
+		Fixture _fixture;
 
 		protected Texture2D _lineTex;//A simple 1x1 texture to be used for line rendering in debug
 
@@ -129,6 +136,11 @@ namespace Fredrick.src
 			_lHeight = lHeight;
 			_rHeight = rHeight;
 			_platformDepth = platformDepth;
+
+			_body = new Body(ColliderManager.Instance.World, _owner.GetPosition() + _position, 0, BodyType.Static);
+			_body.UserData = _owner;
+			_shape = new EdgeShape(new Vector2(-width / 2, _lHeight), new Vector2(width / 2, _rHeight));
+			_fixture = _body.CreateFixture(_shape);
 
 			Vector2 a = new Vector2();
 			Vector2 b = new Vector2();

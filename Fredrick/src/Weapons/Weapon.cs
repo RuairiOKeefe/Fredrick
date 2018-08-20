@@ -39,10 +39,10 @@ namespace Fredrick.src
 
 		public Weapon(Entity owner) : base(owner)
 		{
-			_fireRate = 0.2;
+			_fireRate = 0.8;
 			_spotSpawn = new Vector2(0, 0);
 			_shotVector = new Vector2(1, 0);
-			_shotSpeed = 50.0f;
+			_shotSpeed = 8.0f;
 			_projectiles = new List<Entity>();
 			_scale = new Vector2(1);
 
@@ -54,12 +54,26 @@ namespace Fredrick.src
 			Entity e = ProjectileBuffer.Instance.InactiveProjectiles.Pop();
 			_shotVector = InputHandler.Instance.WorldMousePosition - _owner.GetPosition();// - _owner.GetPosition();
 			_shotVector.Normalize();
+
+			e.SetPosition(_spotSpawn + _owner.GetPosition() + _shotVector * 0.8f);
+
 			Vector2 shotVelocity = _shotVector * _shotSpeed;
 			//Debug.Write(_owner.GetPosition()+"\n");
-			e.GetComponent<Projectile>().Revive(_spotSpawn + _owner.GetPosition(), shotVelocity, 10.0);
+			e.GetComponent<Projectile>().Revive(shotVelocity, 10.0);
 			_projectiles.Add(e);
 
 			_nextfire = _fireRate;
+		}
+
+		public void UpdateProjectilePos()
+		{
+			foreach (Entity e in _projectiles)
+			{
+				if (e.GetComponent<CircleCollider>() != null)
+				{
+					e.GetComponent<CircleCollider>().UpdatePosition();
+				}
+			}
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)
@@ -67,12 +81,6 @@ namespace Fredrick.src
 			Vector2 inv = new Vector2(1, -1);
 			foreach (Entity e in _projectiles)
 			{
-				//Projectile p = e.GetComponent<Projectile>();
-				//Color c = Color.LightGoldenrodYellow;
-				////c *= p.Opacity;
-				//spriteBatch.Draw(_d._sprite, p.GetPosition() * inv * _d._spriteSize, _d._sourceRectangle, c, p.GetRotation(), _d._origin, _scale, _d._spriteEffects, _d._layer);
-				//but also don't do this, just call the fucking draw method
-
 				e.Draw(spriteBatch);
 			}
 		}

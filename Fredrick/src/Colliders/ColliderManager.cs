@@ -38,6 +38,7 @@ namespace Fredrick.src
 		public World World
 		{
 			get { return _world; }
+			set { value = _world; }
 		}
 
 		public List<AABBCollider> Colliders
@@ -68,9 +69,13 @@ namespace Fredrick.src
 		{
 			_colliders = new List<AABBCollider>();
 			_platforms = new List<Platform>();
-			_world = new World(new Vector2(0));
+			_world = new World(new Vector2(0,-9.8f));
 		}
 
+		public void Load()
+		{
+
+		}
 		public void Update(double deltaTime)
 		{
 			_world.Step((float)deltaTime);

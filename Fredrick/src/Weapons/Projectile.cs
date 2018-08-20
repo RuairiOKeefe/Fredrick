@@ -25,18 +25,27 @@ namespace Fredrick.src
 			_velocity = new Vector2();
 		}
 
-		public Projectile(Entity owner, Vector2 position, Vector2 velocity, double lifeTime) : base(owner)
+		public Projectile(Entity owner, Vector2 velocity, double lifeTime) : base(owner)
 		{
-			_owner.SetPosition(position);
 			_velocity = velocity;
 			_lifeTime = lifeTime;
 		}
 
-		public void Revive(Vector2 position, Vector2 velocity, double lifeTime)
+		public void Revive(Vector2 velocity, double lifeTime)
 		{
-			_owner.SetPosition(position);
-			_velocity = velocity;
+
 			_lifeTime = lifeTime;
+
+			if (_owner.GetComponent<CircleCollider>() != null)
+			{
+				_owner.GetComponent<CircleCollider>().Revive();
+				_owner.GetComponent<CircleCollider>().ApplyForce(velocity);
+
+			}
+			else
+			{
+				_velocity = velocity;
+			}
 		}
 
 		public override void Update(double deltaTime)
@@ -57,10 +66,18 @@ namespace Fredrick.src
 				{
 					_rotation = 0;
 				}
-
 				_owner.SetRotation(_rotation);
 			}
 
+
+			if (_lifeTime < 0)
+			{
+
+				if (_owner.GetComponent<CircleCollider>() != null)
+				{
+					_owner.GetComponent<CircleCollider>().Kill();
+				}
+			}
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)

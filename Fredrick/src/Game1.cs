@@ -57,8 +57,10 @@ namespace Fredrick.src
 			Texture2D testSheet = Content.Load<Texture2D>("TestSheet");//This texture includes a colour that matches the key colour, not important since its a test sprite but funny none the less
 			Texture2D tempSlope = Content.Load<Texture2D>("tempSlope");
 			Texture2D tempParticle = Content.Load<Texture2D>("arrow");
+			Texture2D grenade = Content.Load<Texture2D>("fragNade");
 
-			ProjectileBuffer.Instance.Load(tempParticle);
+			ColliderManager.Instance.Load();
+			ProjectileBuffer.Instance.Load(grenade);
 
 			Entity entity = new Entity();
 			entity.SetPosition(new Vector2(8, 5));
@@ -200,6 +202,12 @@ namespace Fredrick.src
 				e.Update(gameTime.ElapsedGameTime.TotalSeconds);
 
 			ColliderManager.Instance.Update(gameTime.ElapsedGameTime.TotalSeconds);
+
+			foreach (var e in entities)
+			{
+				if (e.GetComponent<Weapon>() != null)
+					e.GetComponent<Weapon>().UpdateProjectilePos();
+			}
 
 			//cam.Trauma = 1;
 			cam.Update(gameTime.ElapsedGameTime.TotalSeconds);

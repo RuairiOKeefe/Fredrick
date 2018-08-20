@@ -6,6 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using FarseerPhysics.Collision.Shapes;
+using FarseerPhysics.Dynamics;
+using FarseerPhysics.Common;
 
 namespace Fredrick.src
 {
@@ -16,17 +19,23 @@ namespace Fredrick.src
 
 		Vector2 tempMove;
 
+
+		Body _body;
+		PolygonShape _box;
+		Fixture _fixture;
+
 		public RectangleF Rectangle
 		{
-			get
-			{
-				return _rectangle;
-			}
-			set
-			{
-				_rectangle = value;
-			}
+			get { return _rectangle; }
+			set { _rectangle = value; }
 		}
+
+		public Body Body
+		{
+			get { return _body; }
+			set { _body = value; }
+		}
+
 
 		public AABBCollider(Entity owner) : base(owner)
 		{
@@ -34,6 +43,20 @@ namespace Fredrick.src
 			_rectangle.UpdatePosition(_owner.GetPosition());
 			_index = ColliderManager.Instance.Colliders.Count;
 			ColliderManager.Instance.Colliders.Add(this);
+
+			_body = new Body(ColliderManager.Instance.World, _owner.GetPosition() + _position, 0, BodyType.Static);
+			if (_owner.GetComponent<Character>() != null)
+			{
+				_body.BodyType = BodyType.Kinematic;
+			}
+			_body.UserData = _owner;
+			Vertices verts = new Vertices();
+			verts.Add(_rectangle.Corners[0]);
+			verts.Add(_rectangle.Corners[1]);
+			verts.Add(_rectangle.Corners[2]);
+			verts.Add(_rectangle.Corners[3]);
+			_box = new PolygonShape(verts, 1.0f);
+			_fixture = _body.CreateFixture(_box);
 		}
 
 		public void CheckCollision(RectangleF other)
@@ -160,6 +183,7 @@ namespace Fredrick.src
 						CheckCollision(c.Rectangle);
 				}
 				_owner.Move(tempMove);
+				_body.Position = _owner.GetPosition() + _position;
 			}
 		}
 	}
