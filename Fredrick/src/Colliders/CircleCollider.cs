@@ -36,7 +36,7 @@ namespace Fredrick.src
 		public void Revive()
 		{
 			_body = new Body(ColliderManager.Instance.World, _owner.GetPosition(), 0, BodyType.Dynamic);
-			_circle = new CircleShape(0.25f, 1.0f);
+			_circle = new CircleShape(0.25f, 0.4f);
 			_circle.Position = _position;
 			_fixture = _body.CreateFixture(_circle);
 
@@ -47,18 +47,18 @@ namespace Fredrick.src
 			_body.Position = _owner.GetPosition();
 			
 
-			_body.Restitution = 0.37f;
+			_body.Restitution = 0.7f;
 		}
 
 		public void ApplyForce(Vector2 force)
 		{
-			_body.ApplyLinearImpulse(force);
+			_body.ApplyLinearImpulse(force/6);
 		}
 
 		public void UpdatePosition()
 		{
 			_owner.SetPosition(_body.Position);
-			_owner.SetRotation(_body.Rotation);
+			_owner.SetRotation(-_body.Rotation);//Needs to be negative
 		}
 
 		public void Kill()

@@ -11,6 +11,19 @@ namespace Fredrick.src
 	public class Projectile : Movable
 	{
 		private double _lifeTime;
+		/// <summary>
+		/// Does the projectile deal aoe damage when it terminates?
+		/// </summary>
+		private bool _explosive;
+		/// <summary>
+		/// Will the projectile terminate upon contact?
+		/// </summary>
+		private bool _contactTermination;
+		/// <summary>
+		/// Is the projectile finished
+		/// </summary>
+		private bool _dead;
+		private bool _detonated;
 
 		public double LifeTime
 		{
@@ -18,6 +31,11 @@ namespace Fredrick.src
 			set { _lifeTime = value; }
 		}
 
+		public bool Dead
+		{
+			get { return _dead; }
+			set { _dead = value; }		
+		}
 
 		public Projectile(Entity owner) : base(owner)
 		{
@@ -25,16 +43,20 @@ namespace Fredrick.src
 			_velocity = new Vector2();
 		}
 
-		public Projectile(Entity owner, Vector2 velocity, double lifeTime) : base(owner)
+		public Projectile(Entity owner, Vector2 velocity, double lifeTime, bool explosive = false, bool contactTermination = true) : base(owner)
 		{
 			_velocity = velocity;
 			_lifeTime = lifeTime;
+			_explosive = explosive;
+			_contactTermination = contactTermination;
 		}
 
-		public void Revive(Vector2 velocity, double lifeTime)
+		public void Revive(Vector2 velocity, double lifeTime, bool explosive = false, bool contactTermination = true)
 		{
 
 			_lifeTime = lifeTime;
+			_explosive = explosive;
+			_contactTermination = contactTermination;
 
 			if (_owner.GetComponent<CircleCollider>() != null)
 			{
@@ -46,6 +68,9 @@ namespace Fredrick.src
 			{
 				_velocity = velocity;
 			}
+
+			_dead = false;
+			_detonated = false;
 		}
 
 		public override void Update(double deltaTime)
@@ -72,10 +97,29 @@ namespace Fredrick.src
 
 			if (_lifeTime < 0)
 			{
-
-				if (_owner.GetComponent<CircleCollider>() != null)
+				if (!_detonated)
 				{
-					_owner.GetComponent<CircleCollider>().Kill();
+					if (_owner.GetComponent<CircleCollider>() != null)
+					{
+						_owner.GetComponent<CircleCollider>().Kill();
+					}
+					if (_owner.GetComponent<Emitter>() != null)
+					{
+						_owner.GetComponent<Emitter>().Emit();
+					}
+					_detonated = true;
+				}
+
+				if (_owner.GetComponent<Emitter>() != null)
+				{
+					if (_owner.GetComponent<Emitter>().Particles.Count == 0)
+					{
+						_dead = true;
+					}
+				}
+				else
+				{
+					_dead = true;
 				}
 			}
 		}

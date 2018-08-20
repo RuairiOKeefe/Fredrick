@@ -20,10 +20,20 @@ namespace Fredrick.src
 		protected bool _continuous;
 		protected float _emissionTime;
 
+		protected float _spawnVelocity;
+		protected double _lifeTime;
+
+		protected Random rnd;
 		/// <summary>
 		/// How many particles are emitted per emission if not continuous
 		/// </summary>
 		int _emissionCount;
+
+		public List<Particle> Particles
+		{
+			get { return _particles; }
+			set { _particles = value; }
+		}
 
 		public Drawable ParticleDrawable
 		{
@@ -50,7 +60,7 @@ namespace Fredrick.src
 			_pD._transition = false;
 			_pD._nextAnim = 0;
 
-			Random rnd = new Random();
+			rnd = new Random();
 
 			_particles = new List<Particle>();
 
@@ -60,6 +70,55 @@ namespace Fredrick.src
 			_maxParticles = 300;
 			_continuous = true;
 			_emissionCount = 5;
+			_spawnVelocity = 3.0f;
+			_lifeTime = 3.0;
+		}
+
+		public Emitter(Entity owner, Texture2D sprite, bool continuous, int maxParticles, int emissionCount, float spawnWidth = 0, float spawnHeight = 0, float spawnVelocity = 3.0f, double lifeTime = 3.0) : base(owner)
+		{
+			_pD = new Drawable(sprite);
+			_pD._sprite = sprite;
+			_pD._spriteSize = 32;
+
+			_pD._origin = new Vector2(16, 16);
+			_position = new Vector2(0, 0);
+			_scale = new Vector2(0.2f);
+			_pD._layer = 0.0f;
+			_pD._colour = new Color(255, 255, 255, 255);
+			_pD._width = 32;
+			_pD._height = 32;
+			_pD._sourceRectangle = new Rectangle(0, 0, _pD._width, _pD._height);
+			_pD._animations = new Dictionary<int, Animation>();
+			_pD._currentAnim = 0;
+			_pD._transition = false;
+			_pD._nextAnim = 0;
+
+			rnd = new Random();
+
+			_particles = new List<Particle>();
+
+			_spawnWidth = spawnWidth;
+			_spawnHeight = spawnHeight;
+
+			_maxParticles = maxParticles;
+			_continuous = continuous;
+			_emissionCount = emissionCount;
+			_spawnVelocity = spawnVelocity;
+			_lifeTime = lifeTime;
+		}
+
+		public void Emit()
+		{
+			for (int i = 0; i < _emissionCount; i++)
+			{
+				Vector2 spawnPos = new Vector2((float)rnd.NextDouble() * _spawnWidth - (_spawnWidth / 2), (float)rnd.NextDouble() * _spawnHeight - (_spawnHeight / 2));
+				Vector2 spawnVel = new Vector2((float)rnd.NextDouble() * 2 - 1, (float)rnd.NextDouble() * 2 - 1);
+				spawnVel.Normalize();
+				spawnVel *= _spawnVelocity;
+				Particle p = ParticleBuffer.Instance.InactiveParticles.Pop();
+				p.Revive(spawnPos + _owner.GetPosition(), spawnVel, _lifeTime);
+				_particles.Add(p);
+			}
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)
@@ -75,7 +134,6 @@ namespace Fredrick.src
 
 		public override void Update(double deltaTime)
 		{
-			Random rnd = new Random();
 			if (_continuous)
 			{
 				if (_particles.Count < _maxParticles)
@@ -83,11 +141,11 @@ namespace Fredrick.src
 					for (int i = 0; i < _emissionCount; i++)
 					{
 						Vector2 spawnPos = new Vector2((float)rnd.NextDouble() * _spawnWidth - (_spawnWidth / 2), (float)rnd.NextDouble() * _spawnHeight - (_spawnHeight / 2));
-						Vector2 spawnVel = new Vector2((float)rnd.NextDouble() * 4 - 2, (float)rnd.NextDouble() * 4 - 2);
+						Vector2 spawnVel = new Vector2((float)rnd.NextDouble() * 2 - 1, (float)rnd.NextDouble() * 2 - 1);
 						spawnVel.Normalize();
-						spawnVel *= 2;
+						spawnVel *= _spawnVelocity;
 						Particle p = ParticleBuffer.Instance.InactiveParticles.Pop();
-						p.Revive(spawnPos + _owner.GetPosition(), spawnVel, 3);
+						p.Revive(spawnPos + _owner.GetPosition(), spawnVel, _lifeTime);
 						_particles.Add(p);
 					}
 				}

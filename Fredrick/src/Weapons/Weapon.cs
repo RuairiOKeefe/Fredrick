@@ -42,7 +42,7 @@ namespace Fredrick.src
 			_fireRate = 0.8;
 			_spotSpawn = new Vector2(0, 0);
 			_shotVector = new Vector2(1, 0);
-			_shotSpeed = 8.0f;
+			_shotSpeed = 4.0f;
 			_projectiles = new List<Entity>();
 			_scale = new Vector2(1);
 
@@ -59,7 +59,7 @@ namespace Fredrick.src
 
 			Vector2 shotVelocity = _shotVector * _shotSpeed;
 			//Debug.Write(_owner.GetPosition()+"\n");
-			e.GetComponent<Projectile>().Revive(shotVelocity, 10.0);
+			e.GetComponent<Projectile>().Revive(shotVelocity, 5.0, true, false);
 			_projectiles.Add(e);
 
 			_nextfire = _fireRate;
@@ -113,7 +113,7 @@ namespace Fredrick.src
 			{
 				Entity e = _projectiles[i];
 				e.Update(deltaTime);
-				if (e.GetComponent<Projectile>().LifeTime < 0)
+				if (e.GetComponent<Projectile>().Dead)
 				{
 					ProjectileBuffer.Instance.InactiveProjectiles.Push(e);
 					_projectiles.Remove(e);

@@ -44,10 +44,12 @@ namespace Fredrick.src
 				Projectile p = new Projectile(e);
 				CircleCollider cc = new CircleCollider(e);
 				Renderable r = new Renderable(e, t);
+				Emitter emitter = new Emitter(e, t, false, 1000, 300, 0, 0, 8.0f, 0.5);
 
 				e.Components.Add(p);
 				e.Components.Add(cc);
 				e.Components.Add(r);
+				e.Components.Add(emitter);
 
 				_inactiveProjectiles.Push(e);//need to improve
 			}
