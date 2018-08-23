@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using FarseerPhysics.Collision;
 using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Dynamics;
 
@@ -36,7 +35,7 @@ namespace Fredrick.src
 		public void Revive()
 		{
 			_body = new Body(ColliderManager.Instance.World, _owner.GetPosition(), 0, BodyType.Dynamic);
-			_circle = new CircleShape(0.25f, 0.4f);
+			_circle = new CircleShape(0.25f, 1.0f);
 			_circle.Position = _position;
 			_fixture = _body.CreateFixture(_circle);
 
@@ -45,14 +44,19 @@ namespace Fredrick.src
 			_body.UserData = _owner;
 			_body.Awake = true;
 			_body.Position = _owner.GetPosition();
-			
+
 
 			_body.Restitution = 0.7f;
 		}
 
 		public void ApplyForce(Vector2 force)
 		{
-			_body.ApplyLinearImpulse(force/6);
+			_body.ApplyLinearImpulse(force/2);
+		}
+
+		public void ApplyForce(Vector2 force, Vector2 source)
+		{
+			_body.ApplyLinearImpulse(force, source);
 		}
 
 		public void UpdatePosition()

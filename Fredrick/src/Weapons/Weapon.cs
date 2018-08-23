@@ -39,7 +39,7 @@ namespace Fredrick.src
 
 		public Weapon(Entity owner) : base(owner)
 		{
-			_fireRate = 0.8;
+			_fireRate = 0.1;
 			_spotSpawn = new Vector2(0, 0);
 			_shotVector = new Vector2(1, 0);
 			_shotSpeed = 4.0f;
@@ -59,7 +59,7 @@ namespace Fredrick.src
 
 			Vector2 shotVelocity = _shotVector * _shotSpeed;
 			//Debug.Write(_owner.GetPosition()+"\n");
-			e.GetComponent<Projectile>().Revive(shotVelocity, 5.0, true, false);
+			e.GetComponent<Projectile>().Revive(shotVelocity, 2.0, true, false, 10.0f, 2.0f, 1.0f);
 			_projectiles.Add(e);
 
 			_nextfire = _fireRate;

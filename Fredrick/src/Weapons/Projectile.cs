@@ -5,6 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using FarseerPhysics.Collision.Shapes;
+using FarseerPhysics.Dynamics;
+using FarseerPhysics.Dynamics.Contacts;
+
+using System.Diagnostics;
 
 namespace Fredrick.src
 {
@@ -25,6 +30,16 @@ namespace Fredrick.src
 		private bool _dead;
 		private bool _detonated;
 
+		float _damage;
+
+		//For explosion aoe
+		Body _body;
+		CircleShape _circle;
+		Fixture _fixture;
+
+		float _radius;
+		float _knockback;
+
 		public double LifeTime
 		{
 			get { return _lifeTime; }
@@ -34,7 +49,7 @@ namespace Fredrick.src
 		public bool Dead
 		{
 			get { return _dead; }
-			set { _dead = value; }		
+			set { _dead = value; }
 		}
 
 		public Projectile(Entity owner) : base(owner)
@@ -43,20 +58,28 @@ namespace Fredrick.src
 			_velocity = new Vector2();
 		}
 
-		public Projectile(Entity owner, Vector2 velocity, double lifeTime, bool explosive = false, bool contactTermination = true) : base(owner)
+		public Projectile(Entity owner, Vector2 velocity, double lifeTime, bool explosive = false, bool contactTermination = true, float damage = 5.0f, float radius = 1.0f, float knockback = 1.0f) : base(owner)
 		{
 			_velocity = velocity;
 			_lifeTime = lifeTime;
 			_explosive = explosive;
 			_contactTermination = contactTermination;
+
+			_damage = damage;
+			_radius = radius;
+			_knockback = knockback;
 		}
 
-		public void Revive(Vector2 velocity, double lifeTime, bool explosive = false, bool contactTermination = true)
+		public void Revive(Vector2 velocity, double lifeTime, bool explosive = false, bool contactTermination = true, float damage = 5.0f, float radius = 1.0f, float knockback = 1)
 		{
 
 			_lifeTime = lifeTime;
 			_explosive = explosive;
 			_contactTermination = contactTermination;
+
+			_damage = damage;
+			_radius = radius;
+			_knockback = knockback;
 
 			if (_owner.GetComponent<CircleCollider>() != null)
 			{
@@ -71,11 +94,24 @@ namespace Fredrick.src
 
 			_dead = false;
 			_detonated = false;
+
+			_body = new Body(ColliderManager.Instance.World, _owner.GetPosition(), 0, BodyType.Dynamic);
+			_circle = new CircleShape(_radius, 1.0f);
+			_circle.Position = _position;
+			_fixture = _body.CreateFixture(_circle);
+
+			_body.BodyType = BodyType.Dynamic;
+			_body.UserData = _owner;
+			_body.Awake = true;
+			_body.Position = _owner.GetPosition();
+
+			_fixture.IsSensor = true;
 		}
 
 		public override void Update(double deltaTime)
 		{
 			_lifeTime -= deltaTime;
+			_body.Position = _owner.GetPosition();
 
 			ResolveMotion(deltaTime);
 
@@ -101,6 +137,23 @@ namespace Fredrick.src
 				{
 					if (_owner.GetComponent<CircleCollider>() != null)
 					{
+						ContactEdge c = _body.ContactList;
+						while (c != null && c.Next != null)
+						{
+							if (c.Contact.IsTouching)
+							{
+								Entity e = (Entity)c.Other.UserData;
+								if (e.GetComponent<CircleCollider>() != null)
+								{
+									Vector2 force = e.GetPosition() - _owner.GetPosition();
+									Debug.Write(force.Length() + "\n");
+									force.Normalize();
+									force *= _knockback;
+									e.GetComponent<CircleCollider>().ApplyForce(force, _owner.GetPosition());
+								}
+							}
+							c = c.Next;
+						}
 						_owner.GetComponent<CircleCollider>().Kill();
 					}
 					if (_owner.GetComponent<Emitter>() != null)

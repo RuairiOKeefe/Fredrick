@@ -25,6 +25,7 @@ namespace Fredrick.src
 			graphics.PreferredBackBufferHeight = 900;
 			this.IsMouseVisible = true;
 			Content.RootDirectory = "Content";
+			//graphics.IsFullScreen = true;
 		}
 
 		/// <summary>

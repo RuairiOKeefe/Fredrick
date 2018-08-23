@@ -67,11 +67,11 @@ namespace Fredrick.src
 			_spawnWidth = 0;
 			_spawnHeight = 0;
 
-			_maxParticles = 300;
+			_maxParticles = 3000;
 			_continuous = true;
-			_emissionCount = 5;
+			_emissionCount = 50;
 			_spawnVelocity = 3.0f;
-			_lifeTime = 3.0;
+			_lifeTime = 1.0;
 		}
 
 		public Emitter(Entity owner, Texture2D sprite, bool continuous, int maxParticles, int emissionCount, float spawnWidth = 0, float spawnHeight = 0, float spawnVelocity = 3.0f, double lifeTime = 3.0) : base(owner)
@@ -114,9 +114,9 @@ namespace Fredrick.src
 				Vector2 spawnPos = new Vector2((float)rnd.NextDouble() * _spawnWidth - (_spawnWidth / 2), (float)rnd.NextDouble() * _spawnHeight - (_spawnHeight / 2));
 				Vector2 spawnVel = new Vector2((float)rnd.NextDouble() * 2 - 1, (float)rnd.NextDouble() * 2 - 1);
 				spawnVel.Normalize();
-				spawnVel *= _spawnVelocity;
+				spawnVel *= (_spawnVelocity * (float)rnd.NextDouble());
 				Particle p = ParticleBuffer.Instance.InactiveParticles.Pop();
-				p.Revive(spawnPos + _owner.GetPosition(), spawnVel, _lifeTime);
+				p.Revive(spawnPos + _owner.GetPosition(), spawnVel, _lifeTime* rnd.NextDouble());
 				_particles.Add(p);
 			}
 		}
@@ -143,9 +143,9 @@ namespace Fredrick.src
 						Vector2 spawnPos = new Vector2((float)rnd.NextDouble() * _spawnWidth - (_spawnWidth / 2), (float)rnd.NextDouble() * _spawnHeight - (_spawnHeight / 2));
 						Vector2 spawnVel = new Vector2((float)rnd.NextDouble() * 2 - 1, (float)rnd.NextDouble() * 2 - 1);
 						spawnVel.Normalize();
-						spawnVel *= _spawnVelocity;
+						spawnVel *= (_spawnVelocity * (float)rnd.NextDouble());
 						Particle p = ParticleBuffer.Instance.InactiveParticles.Pop();
-						p.Revive(spawnPos + _owner.GetPosition(), spawnVel, _lifeTime);
+						p.Revive(spawnPos + _owner.GetPosition(), spawnVel, _lifeTime * rnd.NextDouble());
 						_particles.Add(p);
 					}
 				}
