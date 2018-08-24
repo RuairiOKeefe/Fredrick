@@ -53,7 +53,7 @@ namespace Fredrick.src
 			DebugManager.Instance.LineTex = new Texture2D(GraphicsDevice, 1, 1);
 			DebugManager.Instance.LineTex.SetData<Color>(new Color[] { Color.White });// fill the texture with white
 
-			
+
 
 			Texture2D testSheet = Content.Load<Texture2D>("TestSheet");//This texture includes a colour that matches the key colour, not important since its a test sprite but funny none the less
 			Texture2D tempSlope = Content.Load<Texture2D>("tempSlope");
@@ -64,7 +64,7 @@ namespace Fredrick.src
 			ProjectileBuffer.Instance.Load(grenade);
 
 			Entity entity = new Entity();
-			entity.SetPosition(new Vector2(8, 5));
+			entity.SetPosition(new Vector2(8, 8));
 			entities.Add(entity);
 			Renderable renderable = new Renderable(entity, testSheet);
 			Character character = new Character(entity);
@@ -74,109 +74,64 @@ namespace Fredrick.src
 			entity.Components.Add(renderable);
 			entity.Components.Add(character);
 			entity.Components.Add(boxCollider);
-			Emitter emitter = new Emitter(entity, tempParticle);
-			emitter.ParticleDrawable.AddAnimation(0, 0, 32, 1, 30);
-			entity.Components.Add(emitter);
+			//Emitter emitter = new Emitter(entity, tempParticle, true, 3000, 50, new Vector2(0, -10), 0, 0, 3, 10);
+			//emitter.ParticleDrawable.AddAnimation(0, 0, 32, 1, 30);
+			//entity.Components.Add(emitter);
 			Weapon weapon = new Weapon(entity);
 			weapon._d = new Drawable(tempParticle);
 			entity.Components.Add(weapon);
 
 			cam.SetSubject(entity);
-			for (int i = -20; i < 21; i++)
+			for (int i = 0; i < 101; i++)
 			{
-				Entity e = new Entity();
-				if (i == -20 || i == 20)
-					e.SetPosition(new Vector2(i, -1));
-				else
-					e.SetPosition(new Vector2(i, -2));
-				entities.Add(e);
-				Renderable r = new Renderable(e, testSheet);
-				AABBCollider c = new AABBCollider(e);
-				r.Drawable.AddAnimation(0, 0, 0, 1, 30);
-				entity.Components.Add(r);
-				entity.Components.Add(c);
-			}
-
-			for (int i = -1; i < 5; i++)
-			{
-				for (int j = i; j < 21 - i; j++)
+				for (int j = 0; j < 101; j++)
 				{
-					Entity e = new Entity();
-					e.SetPosition(new Vector2(-10 + j, i));
-					Renderable r = new Renderable(e, testSheet);
-					if (j < i+1)
+					if (i < 2 || i > 98 || j < 2 || j > 98)
 					{
-						Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, -0.5f, 0.5f, -1.0f);
-						r = new Renderable(e, tempSlope);
+						Entity e = new Entity();
+						e.SetPosition(new Vector2(i, j));
+						entities.Add(e);
+						Renderable r = new Renderable(e, testSheet);
+						AABBCollider c = new AABBCollider(e);
 						r.Drawable.AddAnimation(0, 0, 0, 1, 30);
-						entity.Components.Add(p);
+						e.Components.Add(r);
+						e.Components.Add(c);
 					}
-					else
-						if (j > 19 - i)
-					{
-						Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, -0.5f, -1.0f);
-						r = new Renderable(e, tempSlope);
-						r.Drawable.AddAnimation(0, 32, 0, 1, 30);
-						entity.Components.Add(p);
-					}
-					else
-					{
-						if (i < 4)
-						{
-							r.Drawable.AddAnimation(0, 0, 0, 1, 30);
-						}
-
-						else
-						{
-							Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, 0.5f, -1.0f);
-							r.Drawable.AddAnimation(0, 0, 0, 1, 30);
-							entity.Components.Add(p);
-						}
-					}
-					entity.Components.Add(r);
 				}
 			}
 
-			for (int i = 7; i < 12; i++)
+			for (int i = 10; i < 21; i++)
 			{
-				for (int j = 3-i; j < -2 + i; j++)
+				for (int j = 5; j < 6; j++)
 				{
 					Entity e = new Entity();
-					e.SetPosition(new Vector2(j, i));
+					e.SetPosition(new Vector2(i, j));
+					entities.Add(e);
 					Renderable r = new Renderable(e, testSheet);
-					if (j < 4-i)
-					{
-						Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, -0.5f, 1.0f);
-						r = new Renderable(e, tempSlope);
-						r.Drawable.AddAnimation(0, 64, 0, 1, 30);
-						entity.Components.Add(p);
-					}
-					else
-						if (j > -4 + i)
-					{
-						Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, -0.5f, 0.5f, 1.0f);
-						r = new Renderable(e, tempSlope);
-						r.Drawable.AddAnimation(0, 96, 0, 1, 30);
-						entity.Components.Add(p);
-					}
-					else
-					{
-						if (i > 8)
-						{
-							r.Drawable.AddAnimation(0, 0, 0, 1, 30);
-						}
-
-						else
-						{
-							Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, -0.5f, -0.5f, 1.0f);
-							r.Drawable.AddAnimation(0, 0, 0, 1, 30);
-							entity.Components.Add(p);
-						}
-					}
-					entity.Components.Add(r);
+					AABBCollider c = new AABBCollider(e);
+					r.Drawable.AddAnimation(0, 0, 0, 1, 30);
+					e.Components.Add(r);
+					e.Components.Add(c);
 				}
 			}
-			// TODO: use this.Content to load your game content here
+
+			for (int i = 0; i < 4; i++)
+			{
+				for (int j = 0; j < 4; j++)
+				{
+					if (i == j)
+					{
+						Entity e = new Entity();
+						e.SetPosition(new Vector2(i + 3, j + 2));
+						entities.Add(e);
+						Renderable r = new Renderable(e, testSheet);
+						AABBCollider c = new AABBCollider(e);
+						r.Drawable.AddAnimation(0, 0, 0, 1, 30);
+						e.Components.Add(r);
+						e.Components.Add(c);
+					}
+				}
+			}
 		}
 
 		/// <summary>

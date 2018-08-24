@@ -30,8 +30,12 @@ namespace Fredrick.src
 			}
 		}
 
+		const int WIDTH = 1000;
+		const int HEIGHT = 1000;
+
 		private World _world;
 
+		private List<Entity>[,] _terrain;
 		private List<AABBCollider> _colliders;
 		private List<Platform> _platforms;
 
@@ -43,33 +47,33 @@ namespace Fredrick.src
 
 		public List<AABBCollider> Colliders
 		{
-			get
-			{
-				return _colliders;
-			}
-			set
-			{
-				_colliders = value;
-			}
+			get { return _colliders; }
+			set { _colliders = value; }
 		}
 
 		public List<Platform> Platforms
 		{
-			get
-			{
-				return _platforms;
-			}
-			set
-			{
-				_platforms = value;
-			}
+			get { return _platforms; }
+			set { _platforms = value; }
+		}
+
+		public List<Entity>[,] Terrain
+		{
+			get { return _terrain; }
+			set { _terrain = value; }
 		}
 
 		public ColliderManager()
 		{
+			_terrain = new List<Entity>[WIDTH, HEIGHT];
+
+			for (int x = 0; x < WIDTH; x++)
+				for (int y = 0; y < HEIGHT; y++)
+					_terrain[x, y] = new List<Entity>();
+
 			_colliders = new List<AABBCollider>();
 			_platforms = new List<Platform>();
-			_world = new World(new Vector2(0,-9.8f));
+			_world = new World(new Vector2(0, -9.8f));
 		}
 
 		public void Load()

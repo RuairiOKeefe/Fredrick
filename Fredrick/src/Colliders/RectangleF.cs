@@ -95,5 +95,15 @@ namespace Fredrick.src
 
 			return true; // boxes overlap
 		}
+
+		public bool Intersect(Vector2 other)
+		{
+			if (other.X > _currentPosition.X + (Width / 2)) return false;
+			if (other.X <  _currentPosition.X - (Width / 2)) return false; 
+			if (other.Y >  _currentPosition.Y + (Height / 2)) return false;
+			if (other.Y <  _currentPosition.Y - (Height / 2)) return false;
+
+			return true;
+		}
 	}
 }

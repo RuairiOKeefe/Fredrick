@@ -14,15 +14,17 @@ namespace Fredrick.src
 {
 	public class AABBCollider : Component
 	{
-		int _index;//index in ColliderManager
-		RectangleF _rectangle;
+		private int _index;//index in ColliderManager
+		private RectangleF _rectangle;
 
-		Vector2 tempMove;
+		private Vector2 _tempMove;
 
 
-		Body _body;
-		PolygonShape _box;
-		Fixture _fixture;
+		private Body _body;
+		private PolygonShape _box;
+		private Fixture _fixture;
+
+		private List<int[]> cells;
 
 		public RectangleF Rectangle
 		{
@@ -57,11 +59,27 @@ namespace Fredrick.src
 			verts.Add(_rectangle.Corners[3]);
 			_box = new PolygonShape(verts, 1.0f);
 			_fixture = _body.CreateFixture(_box);
+
+			cells = new List<int[]>();
+			int minX = (int)Math.Floor(_rectangle.CurrentPosition.X - (_rectangle.Width / 2) + 0.5);
+			int maxX = (int)Math.Floor(_rectangle.CurrentPosition.X + (_rectangle.Width / 2) + 0.5);
+			int minY = (int)Math.Floor(_rectangle.CurrentPosition.Y - (_rectangle.Height / 2) + 0.5);
+			int maxY = (int)Math.Floor(_rectangle.CurrentPosition.Y + (_rectangle.Height / 2) + 0.5);
+			for (int i = minX; i < maxX + 1; i++)
+			{
+				for (int j = minY; j < maxY + 1; j++)
+				{
+					ColliderManager.Instance.Terrain[i, j].Add(_owner);
+					cells.Add(new int[2] { i, j });
+				}
+			}
 		}
 
-		public void CheckCollision(RectangleF other)
+		public bool CheckCollision(RectangleF other)
 		{
-			Vector2 testMove = new Vector2(tempMove.X, 0);
+			bool collided = false;
+
+			Vector2 testMove = new Vector2(_tempMove.X, 0);
 			Vector2 newPos = ((_owner.GetPosition() + testMove));
 
 			_rectangle.UpdatePosition(newPos);
@@ -71,14 +89,15 @@ namespace Fredrick.src
 				float minDistanceX = (_rectangle.Width + other.Width) / 2;
 
 				if (distanceX > 0)
-					tempMove.X += (minDistanceX - distanceX) * 1.05f;//For the record I hate this but without it weird stuff happens because numbers are the worst and binary was a mistake
+					_tempMove.X += (minDistanceX - distanceX) * 1.05f;//For the record I hate this but without it weird stuff happens because numbers are the worst and binary was a mistake
 				else
-					tempMove.X += (-minDistanceX - distanceX) * 1.05f;
+					_tempMove.X += (-minDistanceX - distanceX) * 1.05f;
 
 				_owner.GetComponent<Character>().StopVelX();
+				collided = true;
 			}
 
-			testMove = new Vector2(0, tempMove.Y);
+			testMove = new Vector2(0, _tempMove.Y);
 			newPos = ((_owner.GetPosition() + testMove));
 
 			_rectangle.UpdatePosition(newPos);
@@ -88,19 +107,23 @@ namespace Fredrick.src
 				float minDistanceY = (_rectangle.Height + other.Height) / 2;
 
 				if (distanceY > 0)
-					tempMove.Y += (minDistanceY - distanceY) * 1.05f;
+					_tempMove.Y += (minDistanceY - distanceY) * 1.05f;
 				else
-					tempMove.Y += (-minDistanceY - distanceY) * 1.05f;
+					_tempMove.Y += (-minDistanceY - distanceY) * 1.05f;
 
 				_owner.GetComponent<Character>().StopVelY();
+				collided = true;
 			}
+
+			return collided;
 		}
 
-		public void CheckCollision(Platform other)
+		public bool CheckCollision(Platform other)
 		{
+			bool collided = false;
 			if (other.PlatformDepth < 0)
 			{
-				Vector2 testMove = new Vector2(tempMove.X, 0);
+				Vector2 testMove = new Vector2(_tempMove.X, 0);
 				Vector2 newPos = ((_owner.GetPosition() + testMove));
 
 				_rectangle.UpdatePosition(newPos);
@@ -112,11 +135,12 @@ namespace Fredrick.src
 					if ((_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)) > (y + other.PlatformDepth) && (_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)) < y && _owner.GetComponent<Character>().PrevGrounded)
 					{
 						//correct postion but leave y velocity intact (only for x move)
-						tempMove.Y += (y - (_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)));
+						_tempMove.Y += (y - (_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)));
+						collided = true;
 					}
 				}
 
-				testMove = new Vector2(tempMove.X, tempMove.Y);
+				testMove = new Vector2(_tempMove.X, _tempMove.Y);
 				newPos = ((_owner.GetPosition() + testMove));
 
 				_rectangle.UpdatePosition(newPos);
@@ -127,14 +151,15 @@ namespace Fredrick.src
 
 					if ((_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)) > (y + other.PlatformDepth) && (_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)) < y + 1 && _owner.GetComponent<Character>().Grounded && _owner.GetComponent<Character>().Velocity.Y < 0)
 					{
-						tempMove.Y += (y - (_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)));
+						_tempMove.Y += (y - (_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)));
 						_owner.GetComponent<Character>().StopVelY();
+						collided = true;
 					}
 				}
 			}
 			else
 			{
-				Vector2 testMove = new Vector2(tempMove.X, tempMove.Y);
+				Vector2 testMove = new Vector2(_tempMove.X, _tempMove.Y);
 				Vector2 newPos = ((_owner.GetPosition() + testMove));
 				{
 					_rectangle.UpdatePosition(newPos);
@@ -145,12 +170,15 @@ namespace Fredrick.src
 
 						if ((_rectangle.CurrentPosition.Y + (_rectangle.Height / 2)) > y && (_rectangle.CurrentPosition.Y + (_rectangle.Height / 2)) < y + other.PlatformDepth)
 						{
-							tempMove.Y -= ((_rectangle.CurrentPosition.Y + (_rectangle.Height / 2)) - y);
+							_tempMove.Y -= ((_rectangle.CurrentPosition.Y + (_rectangle.Height / 2)) - y);
 							_owner.GetComponent<Character>().Velocity = (_owner.GetComponent<Character>().Velocity - (2f * Vector2.Dot(_owner.GetComponent<Character>().Velocity, other.Normal)) * other.Normal) * 0.5f;
+							collided = true;
 						}
 					}
 				}
 			}
+
+			return collided;
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)
@@ -169,20 +197,79 @@ namespace Fredrick.src
 		{
 			if (_owner.GetComponent<Character>() != null)
 			{
-				tempMove = _owner.GetComponent<Character>().AttemptedPosition;
+				//ColliderManager.Instance.World.b
+				_tempMove = _owner.GetComponent<Character>().AttemptedPosition;
+				_rectangle.UpdatePosition(_owner.GetPosition() + _tempMove);
 
-				foreach (Platform p in ColliderManager.Instance.Platforms)
+				foreach (int[] c in cells)
 				{
-					if (p.GetOwner() != _owner)
-						CheckCollision(p);
+					ColliderManager.Instance.Terrain[c[0], c[1]].Remove(_owner);
 				}
 
-				foreach (AABBCollider c in ColliderManager.Instance.Colliders)
+				bool validMove = false;
+
+				while (!validMove)
 				{
-					if (c.GetOwner() != _owner)
-						CheckCollision(c.Rectangle);
+					validMove = true;
+
+					cells.Clear();
+					_rectangle.UpdatePosition(_owner.GetPosition() + _tempMove);
+
+					int minX = (int)Math.Floor(_rectangle.CurrentPosition.X - (_rectangle.Width / 2) + 0.5);
+					int maxX = (int)Math.Floor(_rectangle.CurrentPosition.X + (_rectangle.Width / 2) + 0.5);
+					int minY = (int)Math.Floor(_rectangle.CurrentPosition.Y - (_rectangle.Height / 2) + 0.5);
+					int maxY = (int)Math.Floor(_rectangle.CurrentPosition.Y + (_rectangle.Height / 2) + 0.5);
+					for (int i = minX; i < maxX + 1; i++)
+					{
+						for (int j = minY; j < maxY + 1; j++)
+						{
+							cells.Add(new int[2] { i, j });
+						}
+					}
+
+					foreach (int[] c in cells)
+					{
+						if (ColliderManager.Instance.Terrain[c[0], c[1]].Count != 0)
+						{
+							foreach (Entity e in ColliderManager.Instance.Terrain[c[0], c[1]])
+							{
+								if (e.GetComponent<AABBCollider>() != null)
+									if (CheckCollision(e.GetComponent<AABBCollider>().Rectangle))
+									{
+										validMove = false;
+										break;
+									}
+								if (e.GetComponent<Platform>() != null)
+									if (CheckCollision(e.GetComponent<Platform>()))
+									{
+										validMove = false;
+										break;
+									}
+							}
+						}
+						if (!validMove)
+							break;
+					}
 				}
-				_owner.Move(tempMove);
+
+				foreach (int[] c in cells)
+				{
+					ColliderManager.Instance.Terrain[c[0], c[1]].Add(_owner);
+				}
+
+				//foreach (Platform p in ColliderManager.Instance.Platforms)
+				//{
+				//	if (p.GetOwner() != _owner)
+				//		CheckCollision(p);
+				//}
+
+				//foreach (AABBCollider c in ColliderManager.Instance.Colliders)
+				//{
+				//	if (c.GetOwner() != _owner)
+				//		CheckCollision(c.Rectangle);
+				//}
+
+				_owner.Move(_tempMove);
 				_body.Position = _owner.GetPosition() + _position;
 			}
 		}

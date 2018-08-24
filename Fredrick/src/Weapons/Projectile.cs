@@ -106,6 +106,11 @@ namespace Fredrick.src
 			_body.Position = _owner.GetPosition();
 
 			_fixture.IsSensor = true;
+
+			if (_owner.GetComponent<Renderable>() != null)
+			{
+				_owner.GetComponent<Renderable>().Drawable.TransitionAnim(0);
+			}
 		}
 
 		public override void Update(double deltaTime)
@@ -154,11 +159,16 @@ namespace Fredrick.src
 							}
 							c = c.Next;
 						}
+
 						_owner.GetComponent<CircleCollider>().Kill();
 					}
 					if (_owner.GetComponent<Emitter>() != null)
 					{
 						_owner.GetComponent<Emitter>().Emit();
+					}
+					if (_owner.GetComponent<Renderable>() != null)
+					{
+						_owner.GetComponent<Renderable>().Drawable.TransitionAnim(1);
 					}
 					_detonated = true;
 				}

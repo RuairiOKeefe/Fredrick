@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 
 namespace Fredrick.src
 {
@@ -44,7 +45,9 @@ namespace Fredrick.src
 				Projectile p = new Projectile(e);
 				CircleCollider cc = new CircleCollider(e);
 				Renderable r = new Renderable(e, t);
-				Emitter emitter = new Emitter(e, t, false, 1000, 300, 0, 0, 8.0f, 0.5);
+				r.Drawable.AddAnimation(0, 0, 0, 1, 1);
+				r.Drawable.AddAnimation(1, 32, 0, 1, 1);
+				Emitter emitter = new Emitter(e, t, false, 1000, 300, new Vector2(0, 0), 0, 0, 8.0f, 0.5);
 
 				e.Components.Add(p);
 				e.Components.Add(cc);

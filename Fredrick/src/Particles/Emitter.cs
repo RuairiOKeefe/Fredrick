@@ -19,6 +19,7 @@ namespace Fredrick.src
 		protected float _maxParticles;
 		protected bool _continuous;
 		protected float _emissionTime;
+		protected Vector2 _acceleration;
 
 		protected float _spawnVelocity;
 		protected double _lifeTime;
@@ -64,6 +65,8 @@ namespace Fredrick.src
 
 			_particles = new List<Particle>();
 
+			_acceleration = new Vector2(0.0f);
+
 			_spawnWidth = 0;
 			_spawnHeight = 0;
 
@@ -74,7 +77,7 @@ namespace Fredrick.src
 			_lifeTime = 1.0;
 		}
 
-		public Emitter(Entity owner, Texture2D sprite, bool continuous, int maxParticles, int emissionCount, float spawnWidth = 0, float spawnHeight = 0, float spawnVelocity = 3.0f, double lifeTime = 3.0) : base(owner)
+		public Emitter(Entity owner, Texture2D sprite, bool continuous, int maxParticles, int emissionCount, Vector2 acceleration, float spawnWidth = 0, float spawnHeight = 0, float spawnVelocity = 3.0f, double lifeTime = 3.0) : base(owner)
 		{
 			_pD = new Drawable(sprite);
 			_pD._sprite = sprite;
@@ -97,6 +100,8 @@ namespace Fredrick.src
 
 			_particles = new List<Particle>();
 
+			_acceleration = acceleration;
+
 			_spawnWidth = spawnWidth;
 			_spawnHeight = spawnHeight;
 
@@ -116,7 +121,7 @@ namespace Fredrick.src
 				spawnVel.Normalize();
 				spawnVel *= (_spawnVelocity * (float)rnd.NextDouble());
 				Particle p = ParticleBuffer.Instance.InactiveParticles.Pop();
-				p.Revive(spawnPos + _owner.GetPosition(), spawnVel, _lifeTime* rnd.NextDouble());
+				p.Revive(spawnPos + _owner.GetPosition(), spawnVel, _lifeTime * rnd.NextDouble());
 				_particles.Add(p);
 			}
 		}
@@ -126,7 +131,7 @@ namespace Fredrick.src
 			Vector2 inv = new Vector2(1, -1);
 			foreach (Particle p in _particles)
 			{
-				Color c = Color.LightGoldenrodYellow;
+				Color c = Color.White;
 				c *= p.Opacity;
 				spriteBatch.Draw(_pD._sprite, p.Position * inv * _pD._spriteSize, _pD._sourceRectangle, c, p.Rotation, _pD._origin, _scale, _pD._spriteEffects, _pD._layer);
 			}
@@ -155,7 +160,7 @@ namespace Fredrick.src
 			for (int i = (_particles.Count - 1); i >= 0; i--)
 			{
 				Particle p = _particles[i];
-				p.Update(deltaTime, new Vector2(0, 0));
+				p.Update(deltaTime, _acceleration);
 				if (p.LifeTime < 0)
 				{
 					ParticleBuffer.Instance.InactiveParticles.Push(p);
