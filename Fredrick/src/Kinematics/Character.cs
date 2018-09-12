@@ -33,7 +33,9 @@ namespace Fredrick.src
 		private float _groundFriction;
 		private float _airFriction;
 		private float _movingFriction;
-		private float _airMove;
+		private float _airMoveSlow;
+		private float _airMoveFast;
+		private bool _fastJump;
 
 		private AABBTrigger _jumpTrigger;
 		private bool _grounded;
@@ -84,25 +86,26 @@ namespace Fredrick.src
 		{
 			_velocity = new Vector2(0, 0);
 			_acceleration = new Vector2(0, 0);
-			_horAcc = 30;
+			_horAcc = 20;
 			_maxSpeed = 8;
 			_acceleration.Y = -9.8f;
 
 			_groundFriction = 600;
 			_airFriction = 10;
 			_movingFriction = 100;
-			_airMove = 0.05f;
+			_airMoveSlow = 0.1f;
+			_airMoveFast = 0.5f;
 
 			_motionState = State.Standing;
 
 			_jumpTrigger = new AABBTrigger(_owner);
 			_jumpTrigger.Rectangle = new RectangleF(new Vector2(0, -0.5f), 1, 0.5f, 0, 0);
 
-			_jumpDuration = 0.3f;
+			_jumpDuration = 0.2f;
 			_jumpClock = 0;
-			_jumpSpeed = 12.0f;
-			_fallAcceleration = -20.0f;
-			_terminalVelocity = -300.0f;
+			_jumpSpeed = 20.0f;
+			_fallAcceleration = -40.0f;
+			_terminalVelocity = -30.0f;
 			_maxJumps = 2;
 			_jumpWait = false;
 			_jumpDelay = 0.2;//may want to remove variable?
@@ -115,6 +118,11 @@ namespace Fredrick.src
 		{
 			if (_grounded)
 			{
+				if ((_velocity.X * _velocity.X) / (_maxSpeed * _maxSpeed) > 0.5f)
+					_fastJump = true;
+				if ((_velocity.X * _velocity.X) / (_maxSpeed * _maxSpeed) < 0.2f)
+					_fastJump = false;
+
 				if (_moveCommand != 0)
 				{
 					_acceleration.X = _horAcc * _moveCommand;
@@ -137,7 +145,10 @@ namespace Fredrick.src
 
 				if (_moveCommand != 0)
 				{
-					_acceleration.X = _horAcc * _moveCommand * _airMove;
+					if (_fastJump)
+						_acceleration.X = _horAcc * _moveCommand * _airMoveFast;
+					else
+						_acceleration.X = _horAcc * _moveCommand * _airMoveSlow;
 
 					if ((_velocity.X * _velocity.X) > (_maxSpeed * _maxSpeed) && _velocity.X * _moveCommand > 0)
 					{
