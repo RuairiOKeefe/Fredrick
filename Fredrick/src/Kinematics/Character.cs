@@ -16,7 +16,6 @@ namespace Fredrick.src
 		{
 			Standing,
 			Walking,
-			Sprinting,
 			Jumping
 		}
 
@@ -30,19 +29,27 @@ namespace Fredrick.src
 		//Commands are simply what the related controller wants to do at a given instance, in case of player this represents button inputs
 		protected float _moveCommand;//Horizontal movement command
 		protected bool _jumpCommand;//Jumping command
-		protected bool _sprintCommand;
 
-		private float _maxSprintSpeed;
+		private float _groundFriction;
+		private float _airFriction;
+		private float _movingFriction;
+		private float _airMove;
 
 		private AABBTrigger _jumpTrigger;
 		private bool _grounded;
 		private bool _prevGrounded;
 		private double _fallVelocity;
 
+
+		private double _jumpDuration;
+		private double _jumpClock;
+		private float _jumpSpeed;
+		private float _fallAcceleration;
+		private float _terminalVelocity;
 		private int _maxJumps;
 		private int _jumpsLeft;
 		private bool _jumpWait;
-		private double _jumpTime;//How much time between jumps
+		private double _jumpDelay;//How much time between jumps
 		private double _jumpTimer;
 
 		private Vector2 _followPosition;
@@ -78,19 +85,27 @@ namespace Fredrick.src
 			_velocity = new Vector2(0, 0);
 			_acceleration = new Vector2(0, 0);
 			_horAcc = 30;
-			_maxSpeed = 5;
+			_maxSpeed = 8;
 			_acceleration.Y = -9.8f;
 
-			_friction = 100;
+			_groundFriction = 600;
+			_airFriction = 10;
+			_movingFriction = 100;
+			_airMove = 0.05f;
 
 			_motionState = State.Standing;
-			_maxSprintSpeed = 10;
 
 			_jumpTrigger = new AABBTrigger(_owner);
 			_jumpTrigger.Rectangle = new RectangleF(new Vector2(0, -0.5f), 1, 0.5f, 0, 0);
+
+			_jumpDuration = 0.3f;
+			_jumpClock = 0;
+			_jumpSpeed = 12.0f;
+			_fallAcceleration = -20.0f;
+			_terminalVelocity = -300.0f;
 			_maxJumps = 2;
 			_jumpWait = false;
-			_jumpTime = 0.2;//may want to remove variable?
+			_jumpDelay = 0.2;//may want to remove variable?
 
 			_followOffset = new Vector2(5, 0);
 
@@ -98,43 +113,66 @@ namespace Fredrick.src
 
 		public void Walk(double deltaTime)
 		{
-			if (_moveCommand != 0)
+			if (_grounded)
 			{
-				_acceleration.X = _horAcc * _moveCommand;
-				_friction = 100;
+				if (_moveCommand != 0)
+				{
+					_acceleration.X = _horAcc * _moveCommand;
+					_friction = _movingFriction;
 
-				if (!_sprintCommand)
-					if ((_velocity.X * _velocity.X) > (_maxSpeed * _maxSpeed))
+					if ((_velocity.X * _velocity.X) > (_maxSpeed * _maxSpeed) && _velocity.X * _moveCommand > 0)
 					{
 						_acceleration.X = 0;
 					}
-					else
-						if ((_velocity.X * _velocity.X) > (_maxSprintSpeed * _maxSprintSpeed))
-					{
-						_acceleration.X = 0;
-					}
+				}
+				else
+				{
+					_acceleration.X = 0;
+					_friction = _groundFriction;
+				}
 			}
 			else
 			{
-				_acceleration.X = 0;
-				_friction = 600;
+				_friction = _airFriction;
+
+				if (_moveCommand != 0)
+				{
+					_acceleration.X = _horAcc * _moveCommand * _airMove;
+
+					if ((_velocity.X * _velocity.X) > (_maxSpeed * _maxSpeed) && _velocity.X * _moveCommand > 0)
+					{
+						_acceleration.X = 0;
+					}
+				}
 			}
 
-			if (InputHandler.Instance.IsKeyPressed(InputHandler.Action.Jump))
+			if (_jumpCommand)
 			{
 				if (_grounded)
 				{
-					_velocity.Y = 10;
+					_velocity.Y = _jumpSpeed;
 					_jumpWait = true;
+					_jumpClock = _jumpDuration;
+					_acceleration.Y = 0;
 				}
 				else
 					if (_jumpsLeft > 0)
 				{
-					_velocity.Y = 10;
+					_velocity.Y = _jumpSpeed;
 					_jumpsLeft--;
 					_jumpWait = true;
+					_jumpClock = _jumpDuration;
+					_acceleration.Y = 0;
 				}
 			}
+
+			if (_acceleration.Y == 0 && _jumpClock < 0)
+			{
+				_acceleration.Y = _fallAcceleration;
+			}
+
+			if (_velocity.Y < _terminalVelocity)
+				_velocity.Y = _terminalVelocity;
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)
@@ -153,18 +191,18 @@ namespace Fredrick.src
 		{
 			_moveCommand = InputHandler.Instance.MoveX;
 			_jumpCommand = InputHandler.Instance.IsKeyPressed(InputHandler.Action.Jump);
-			_sprintCommand = InputHandler.Instance.IsKeyHeld(InputHandler.Action.Sprint);
 
 			if (_jumpWait)
 			{
 				_jumpTimer += deltaTime;
-				if (_jumpTimer >= _jumpTime)
+				if (_jumpTimer >= _jumpDelay)
 				{
 					_jumpWait = false;
 					_jumpTimer = 0;
 				}
 			}
 
+			_jumpClock -= deltaTime;
 			_prevGrounded = _grounded;
 
 			if (_jumpTrigger.Update(_owner.GetPosition()) && !_jumpWait)
@@ -181,7 +219,7 @@ namespace Fredrick.src
 			}
 			else
 			{
-				if(_prevGrounded)//Gives a frame to check fall trauma
+				if (_prevGrounded)//Gives a frame to check fall trauma
 					_fallVelocity = 0;
 			}
 
@@ -194,16 +232,6 @@ namespace Fredrick.src
 						_motionState = State.Jumping;
 					break;
 				case State.Walking:
-					if (_sprintCommand)
-						_motionState = State.Sprinting;
-					if (_moveCommand == 0)
-						_motionState = State.Standing;
-					if (!_grounded || _jumpWait)
-						_motionState = State.Jumping;
-					break;
-				case State.Sprinting:
-					if (!_sprintCommand)
-						_motionState = State.Walking;
 					if (_moveCommand == 0)
 						_motionState = State.Standing;
 					if (!_grounded || _jumpWait)
@@ -223,9 +251,6 @@ namespace Fredrick.src
 
 					break;
 				case State.Walking:
-
-					break;
-				case State.Sprinting:
 
 					break;
 				case State.Jumping:

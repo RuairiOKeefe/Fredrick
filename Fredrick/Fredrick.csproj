@@ -49,6 +49,7 @@
     <Compile Include="src\Drawing\Animation.cs" />
     <Compile Include="src\Colliders\AABBCollider.cs" />
     <Compile Include="src\Cameras\Camera.cs" />
+    <Compile Include="src\Drawing\PostProcessing.cs" />
     <Compile Include="src\Kinematics\Character.cs" />
     <Compile Include="src\Colliders\Collider.cs" />
     <Compile Include="src\Colliders\ColliderManager.cs" />

@@ -19,7 +19,7 @@ namespace Fredrick.src
 		double _halfpoint;
 		float _opacity;
 
-		float _restitution = 1.0f;
+		float _restitution = 0.8f;
 
 		public Vector2 Position
 		{

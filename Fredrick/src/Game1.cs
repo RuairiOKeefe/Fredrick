@@ -17,6 +17,11 @@ namespace Fredrick.src
 		SpriteBatch spriteBatch;
 		List<Entity> entities = new List<Entity>();
 		FollowCamera cam;
+		Effect lighting;
+		Effect bloom;
+
+		RenderTarget2D sceneTarget;
+		RenderTarget2D bloomTarget;
 
 		public Game1()
 		{
@@ -26,6 +31,8 @@ namespace Fredrick.src
 			this.IsMouseVisible = true;
 			Content.RootDirectory = "Content";
 			//graphics.IsFullScreen = true;
+
+
 		}
 
 		/// <summary>
@@ -49,11 +56,15 @@ namespace Fredrick.src
 			cam = new FollowCamera(1600, 900);
 			// Create a new SpriteBatch, which can be used to draw textures.
 			spriteBatch = new SpriteBatch(GraphicsDevice);
+
+			sceneTarget = new RenderTarget2D(GraphicsDevice, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+			bloomTarget = new RenderTarget2D(GraphicsDevice, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
 			// create 1x1 texture for line drawing
 			DebugManager.Instance.LineTex = new Texture2D(GraphicsDevice, 1, 1);
 			DebugManager.Instance.LineTex.SetData<Color>(new Color[] { Color.White });// fill the texture with white
 
-
+			lighting = Content.Load<Effect>("Lighting");
+			bloom = Content.Load<Effect>("Bloom");
 
 			Texture2D testSheet = Content.Load<Texture2D>("TestSheet");//This texture includes a colour that matches the key colour, not important since its a test sprite but funny none the less
 			Texture2D tempSlope = Content.Load<Texture2D>("tempSlope");
@@ -74,9 +85,9 @@ namespace Fredrick.src
 			entity.Components.Add(renderable);
 			entity.Components.Add(character);
 			entity.Components.Add(boxCollider);
-			//Emitter emitter = new Emitter(entity, tempParticle, true, 3000, 50, new Vector2(0, -10), 0, 0, 3, 10);
-			//emitter.ParticleDrawable.AddAnimation(0, 0, 32, 1, 30);
-			//entity.Components.Add(emitter);
+			Emitter emitter = new Emitter(entity, tempParticle, true, 3000, 5, new Vector2(0, -0), 0, 0, 0, 6);
+			emitter.ParticleDrawable.AddAnimation(0, 0, 32, 1, 30);
+			entity.Components.Add(emitter);
 			Weapon weapon = new Weapon(entity);
 			weapon._d = new Drawable(tempParticle);
 			entity.Components.Add(weapon);
@@ -170,19 +181,27 @@ namespace Fredrick.src
 			base.Update(gameTime);
 		}
 
-		/// <summary>
-		/// This is called when the game should draw itself.
-		/// </summary>
-		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Draw(GameTime gameTime)
 		{
+			//aaaaaaaaaaaaa
+			PostProcessing p = new PostProcessing();
+			p.Draw(spriteBatch, GraphicsDevice, entities);
+			//aaaaaaaaaaaaaaaaaa
+
+			GraphicsDevice.SetRenderTarget(sceneTarget);
+
 			GraphicsDevice.Clear(Color.CornflowerBlue);
 
-			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, cam.Get_Transformation(GraphicsDevice));
+			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, lighting, cam.Get_Transformation(GraphicsDevice));
 			foreach (var e in entities)
 				e.Draw(spriteBatch);
 			spriteBatch.End();
 
+			GraphicsDevice.SetRenderTarget(null);
+
+			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, null);
+			spriteBatch.Draw(sceneTarget, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
+			spriteBatch.End();
 
 			base.Draw(gameTime);
 		}
