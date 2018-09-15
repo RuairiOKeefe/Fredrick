@@ -181,17 +181,7 @@ namespace Fredrick.src
 			return collided;
 		}
 
-		public override void Draw(SpriteBatch spriteBatch)
-		{
-			Vector2 tl = new Vector2(_owner.GetPosition().X - _rectangle.Width / 2, _owner.GetPosition().Y + _rectangle.Height / 2);
-			Vector2 tr = new Vector2(_owner.GetPosition().X + _rectangle.Width / 2, _owner.GetPosition().Y + _rectangle.Height / 2);
-			Vector2 bl = new Vector2(_owner.GetPosition().X - _rectangle.Width / 2, _owner.GetPosition().Y - _rectangle.Height / 2);
-			Vector2 br = new Vector2(_owner.GetPosition().X + _rectangle.Width / 2, _owner.GetPosition().Y - _rectangle.Height / 2);
-			DebugManager.Instance.DrawLine(spriteBatch, tl, tr);
-			DebugManager.Instance.DrawLine(spriteBatch, tr, br);
-			DebugManager.Instance.DrawLine(spriteBatch, br, bl);
-			DebugManager.Instance.DrawLine(spriteBatch, bl, tl);
-		}
+
 
 		public override void Update(double deltaTime)
 		{
@@ -272,6 +262,23 @@ namespace Fredrick.src
 				_owner.Move(_tempMove);
 				_body.Position = _owner.GetPosition() + _position;
 			}
+		}
+
+		public override void Draw(SpriteBatch spriteBatch)
+		{
+
+		}
+
+		public override void DebugDraw(SpriteBatch spriteBatch)
+		{
+			Vector2 tl = new Vector2(_owner.GetPosition().X - _rectangle.Width / 2, _owner.GetPosition().Y + _rectangle.Height / 2);
+			Vector2 tr = new Vector2(_owner.GetPosition().X + _rectangle.Width / 2, _owner.GetPosition().Y + _rectangle.Height / 2);
+			Vector2 bl = new Vector2(_owner.GetPosition().X - _rectangle.Width / 2, _owner.GetPosition().Y - _rectangle.Height / 2);
+			Vector2 br = new Vector2(_owner.GetPosition().X + _rectangle.Width / 2, _owner.GetPosition().Y - _rectangle.Height / 2);
+			DebugManager.Instance.DrawLine(spriteBatch, tl, tr);
+			DebugManager.Instance.DrawLine(spriteBatch, tr, br);
+			DebugManager.Instance.DrawLine(spriteBatch, br, bl);
+			DebugManager.Instance.DrawLine(spriteBatch, bl, tl);
 		}
 	}
 }

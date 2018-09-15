@@ -82,14 +82,19 @@ namespace Fredrick.src
 				_owner.Move(_attemptedPosition);//If this does not contain a collider just move it because nothing will stop it.
 		}
 
+		public override void Update(double deltaTime)
+		{
+
+		}
+
 		public override void Draw(SpriteBatch spriteBatch)
 		{
 
 		}
 
-		public override void Update(double deltaTime)
+		public override void DebugDraw(SpriteBatch spriteBatch)
 		{
-
+			
 		}
 	}
 }

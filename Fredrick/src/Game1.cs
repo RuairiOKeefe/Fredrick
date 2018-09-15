@@ -111,18 +111,21 @@ namespace Fredrick.src
 				}
 			}
 
-			for (int i = 10; i < 21; i++)
+			for (int i = 10; i < 41; i++)
 			{
 				for (int j = 5; j < 6; j++)
 				{
-					Entity e = new Entity();
-					e.SetPosition(new Vector2(i, j));
-					entities.Add(e);
-					Renderable r = new Renderable(e, testSheet);
-					AABBCollider c = new AABBCollider(e);
-					r.Drawable.AddAnimation(0, 0, 0, 1, 30);
-					e.Components.Add(r);
-					e.Components.Add(c);
+					if (i % 3 == 0)
+					{
+						Entity e = new Entity();
+						e.SetPosition(new Vector2(i, j));
+						entities.Add(e);
+						Renderable r = new Renderable(e, testSheet);
+						AABBCollider c = new AABBCollider(e);
+						r.Drawable.AddAnimation(0, 0, 0, 1, 30);
+						e.Components.Add(r);
+						e.Components.Add(c);
+					}
 				}
 			}
 
@@ -178,6 +181,9 @@ namespace Fredrick.src
 
 			//cam.Trauma = 1;
 			cam.Update(gameTime.ElapsedGameTime.TotalSeconds);
+
+			if (InputHandler.Instance.IsKeyPressed(InputHandler.Action.Debug))
+				DebugManager.Instance.Debug = !DebugManager.Instance.Debug;
 			base.Update(gameTime);
 		}
 
@@ -202,6 +208,14 @@ namespace Fredrick.src
 			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, null);
 			spriteBatch.Draw(sceneTarget, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
 			spriteBatch.End();
+
+			if (DebugManager.Instance.Debug)
+			{
+				spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, cam.Get_Transformation(GraphicsDevice));
+				foreach (var e in entities)
+					e.DebugDraw(spriteBatch);
+				spriteBatch.End();
+			}
 
 			base.Draw(gameTime);
 		}

@@ -37,7 +37,8 @@ namespace Fredrick.src
 			Right,
 			Jump,
 			Interact,
-			Sprint
+			Sprint,
+			Debug
 
 		}
 
@@ -81,6 +82,7 @@ namespace Fredrick.src
 			_keyBindings.Add(Action.Jump, Keys.Space);
 			_keyBindings.Add(Action.Interact, Keys.E);
 			_keyBindings.Add(Action.Sprint, Keys.LeftShift);
+			_keyBindings.Add(Action.Debug, Keys.Z);
 		}
 
 		public Keys GetKey(Action action)

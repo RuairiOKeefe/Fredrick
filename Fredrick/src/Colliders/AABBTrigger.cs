@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Fredrick.src
 {
@@ -92,6 +93,18 @@ namespace Fredrick.src
 			}
 
 			return trigger;
+		}
+
+		public void DebugDraw(SpriteBatch spriteBatch)
+		{
+			Vector2 tl = new Vector2(Rectangle.GetPosition().X - Rectangle.Width / 2, Rectangle.GetPosition().Y + Rectangle.Height / 2);
+			Vector2 tr = new Vector2(Rectangle.GetPosition().X + Rectangle.Width / 2, Rectangle.GetPosition().Y + Rectangle.Height / 2);
+			Vector2 bl = new Vector2(Rectangle.GetPosition().X - Rectangle.Width / 2, Rectangle.GetPosition().Y - Rectangle.Height / 2);
+			Vector2 br = new Vector2(Rectangle.GetPosition().X + Rectangle.Width / 2, Rectangle.GetPosition().Y - Rectangle.Height / 2);
+			DebugManager.Instance.DrawLine(spriteBatch, tl + _owner.GetPosition(), tr + _owner.GetPosition());
+			DebugManager.Instance.DrawLine(spriteBatch, tr + _owner.GetPosition(), br + _owner.GetPosition());
+			DebugManager.Instance.DrawLine(spriteBatch, br + _owner.GetPosition(), bl + _owner.GetPosition());
+			DebugManager.Instance.DrawLine(spriteBatch, bl + _owner.GetPosition(), tl + _owner.GetPosition());
 		}
 	}
 }

@@ -45,6 +45,14 @@ namespace Fredrick.src
 			}
 		}
 
-
+		public void DebugDraw(SpriteBatch spriteBatch)
+		{
+			{
+				foreach (var c in Components)
+				{
+					c.DebugDraw(spriteBatch);
+				}
+			}
+		}
 	}
 }

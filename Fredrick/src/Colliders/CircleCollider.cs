@@ -51,7 +51,7 @@ namespace Fredrick.src
 
 		public void ApplyForce(Vector2 force)
 		{
-			_body.ApplyLinearImpulse(force/2);
+			_body.ApplyLinearImpulse(force / 2);
 		}
 
 		public void ApplyForce(Vector2 force, Vector2 source)
@@ -70,13 +70,18 @@ namespace Fredrick.src
 			ColliderManager.Instance.World.RemoveBody(_body);
 		}
 
+		public override void Update(double deltaTime)
+		{
+		}
+
 		public override void Draw(SpriteBatch spriteBatch)
 		{
 
 		}
 
-		public override void Update(double deltaTime)
+		public override void DebugDraw(SpriteBatch spriteBatch)
 		{
+
 		}
 	}
 }

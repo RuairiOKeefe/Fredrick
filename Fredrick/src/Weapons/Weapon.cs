@@ -76,15 +76,6 @@ namespace Fredrick.src
 			}
 		}
 
-		public override void Draw(SpriteBatch spriteBatch)
-		{
-			Vector2 inv = new Vector2(1, -1);
-			foreach (Entity e in _projectiles)
-			{
-				e.Draw(spriteBatch);
-			}
-		}
-
 		public override void Update(double deltaTime)
 		{
 			if (_nextfire <= 0)
@@ -119,6 +110,20 @@ namespace Fredrick.src
 					_projectiles.Remove(e);
 				}
 			}
+		}
+
+		public override void Draw(SpriteBatch spriteBatch)
+		{
+			Vector2 inv = new Vector2(1, -1);
+			foreach (Entity e in _projectiles)
+			{
+				e.Draw(spriteBatch);
+			}
+		}
+
+		public override void DebugDraw(SpriteBatch spriteBatch)
+		{
+
 		}
 	}
 }

@@ -126,16 +126,7 @@ namespace Fredrick.src
 			}
 		}
 
-		public override void Draw(SpriteBatch spriteBatch)
-		{
-			Vector2 inv = new Vector2(1, -1);
-			foreach (Particle p in _particles)
-			{
-				Color c = Color.White;
-				c *= p.Opacity;
-				spriteBatch.Draw(_pD._sprite, p.Position * inv * _pD._spriteSize, _pD._sourceRectangle, c, p.Rotation, _pD._origin, _scale, _pD._spriteEffects, _pD._layer);
-			}
-		}
+
 
 		public override void Update(double deltaTime)
 		{
@@ -167,6 +158,22 @@ namespace Fredrick.src
 					_particles.Remove(p);
 				}
 			}
+		}
+
+		public override void Draw(SpriteBatch spriteBatch)
+		{
+			Vector2 inv = new Vector2(1, -1);
+			foreach (Particle p in _particles)
+			{
+				Color c = Color.White;
+				c *= p.Opacity;
+				spriteBatch.Draw(_pD._sprite, p.Position * inv * _pD._spriteSize, _pD._sourceRectangle, c, p.Rotation, _pD._origin, _scale, _pD._spriteEffects, _pD._layer);
+			}
+		}
+
+		public override void DebugDraw(SpriteBatch spriteBatch)
+		{
+			
 		}
 	}
 }

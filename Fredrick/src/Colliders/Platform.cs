@@ -164,9 +164,15 @@ namespace Fredrick.src
 
 		public override void Update(double deltaTime)
 		{
+
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)
+		{
+
+		}
+
+		public override void DebugDraw(SpriteBatch spriteBatch)
 		{
 			DebugManager.Instance.DrawLine(spriteBatch,
 			new Vector2(CurrentPosition.X - (Width / 2), (CurrentPosition.Y + LHeight)),

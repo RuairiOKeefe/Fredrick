@@ -33,9 +33,7 @@ namespace Fredrick.src
 		private float _groundFriction;
 		private float _airFriction;
 		private float _movingFriction;
-		private float _airMoveSlow;
-		private float _airMoveFast;
-		private bool _fastJump;
+		private float _airMove;
 
 		private AABBTrigger _jumpTrigger;
 		private bool _grounded;
@@ -86,15 +84,14 @@ namespace Fredrick.src
 		{
 			_velocity = new Vector2(0, 0);
 			_acceleration = new Vector2(0, 0);
-			_horAcc = 20;
-			_maxSpeed = 8;
+			_horAcc = 10;
+			_maxSpeed = 5;
 			_acceleration.Y = -9.8f;
 
 			_groundFriction = 600;
 			_airFriction = 10;
 			_movingFriction = 100;
-			_airMoveSlow = 0.1f;
-			_airMoveFast = 0.5f;
+			_airMove = 0.9f;
 
 			_motionState = State.Standing;
 
@@ -118,11 +115,6 @@ namespace Fredrick.src
 		{
 			if (_grounded)
 			{
-				if ((_velocity.X * _velocity.X) / (_maxSpeed * _maxSpeed) > 0.5f)
-					_fastJump = true;
-				if ((_velocity.X * _velocity.X) / (_maxSpeed * _maxSpeed) < 0.2f)
-					_fastJump = false;
-
 				if (_moveCommand != 0)
 				{
 					_acceleration.X = _horAcc * _moveCommand;
@@ -145,10 +137,7 @@ namespace Fredrick.src
 
 				if (_moveCommand != 0)
 				{
-					if (_fastJump)
-						_acceleration.X = _horAcc * _moveCommand * _airMoveFast;
-					else
-						_acceleration.X = _horAcc * _moveCommand * _airMoveSlow;
+					_acceleration.X = _horAcc * _moveCommand * _airMove;
 
 					if ((_velocity.X * _velocity.X) > (_maxSpeed * _maxSpeed) && _velocity.X * _moveCommand > 0)
 					{
@@ -184,18 +173,6 @@ namespace Fredrick.src
 
 			if (_velocity.Y < _terminalVelocity)
 				_velocity.Y = _terminalVelocity;
-		}
-
-		public override void Draw(SpriteBatch spriteBatch)
-		{
-			Vector2 tl = new Vector2(_jumpTrigger.Rectangle.GetPosition().X - _jumpTrigger.Rectangle.Width / 2, _jumpTrigger.Rectangle.GetPosition().Y + _jumpTrigger.Rectangle.Height / 2);
-			Vector2 tr = new Vector2(_jumpTrigger.Rectangle.GetPosition().X + _jumpTrigger.Rectangle.Width / 2, _jumpTrigger.Rectangle.GetPosition().Y + _jumpTrigger.Rectangle.Height / 2);
-			Vector2 bl = new Vector2(_jumpTrigger.Rectangle.GetPosition().X - _jumpTrigger.Rectangle.Width / 2, _jumpTrigger.Rectangle.GetPosition().Y - _jumpTrigger.Rectangle.Height / 2);
-			Vector2 br = new Vector2(_jumpTrigger.Rectangle.GetPosition().X + _jumpTrigger.Rectangle.Width / 2, _jumpTrigger.Rectangle.GetPosition().Y - _jumpTrigger.Rectangle.Height / 2);
-			DebugManager.Instance.DrawLine(spriteBatch, tl + _owner.GetPosition(), tr + _owner.GetPosition());
-			DebugManager.Instance.DrawLine(spriteBatch, tr + _owner.GetPosition(), br + _owner.GetPosition());
-			DebugManager.Instance.DrawLine(spriteBatch, br + _owner.GetPosition(), bl + _owner.GetPosition());
-			DebugManager.Instance.DrawLine(spriteBatch, bl + _owner.GetPosition(), tl + _owner.GetPosition());
 		}
 
 		public override void Update(double deltaTime)
@@ -287,6 +264,16 @@ namespace Fredrick.src
 			{
 				_followPosition = _owner.GetPosition();
 			}
+		}
+
+		public override void Draw(SpriteBatch spriteBatch)
+		{
+
+		}
+
+		public override void DebugDraw(SpriteBatch spriteBatch)
+		{
+			_jumpTrigger.DebugDraw(spriteBatch);
 		}
 	}
 }
