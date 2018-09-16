@@ -111,11 +111,11 @@ namespace Fredrick.src
 				}
 			}
 
-			for (int i = 10; i < 41; i++)
+			for (int i = 10; i < 68; i++)
 			{
 				for (int j = 5; j < 6; j++)
 				{
-					if (i % 3 == 0)
+					if (i % 8 == 0 || i % 8 == 1 || i % 8 == 2 || i % 8 == 3)
 					{
 						Entity e = new Entity();
 						e.SetPosition(new Vector2(i, j));

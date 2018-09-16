@@ -187,7 +187,6 @@ namespace Fredrick.src
 		{
 			if (_owner.GetComponent<Character>() != null)
 			{
-				//ColliderManager.Instance.World.b
 				_tempMove = _owner.GetComponent<Character>().AttemptedPosition;
 				_rectangle.UpdatePosition(_owner.GetPosition() + _tempMove);
 
@@ -196,49 +195,54 @@ namespace Fredrick.src
 					ColliderManager.Instance.Terrain[c[0], c[1]].Remove(_owner);
 				}
 
-				bool validMove = false;
+				cells.Clear();
+				_rectangle.UpdatePosition(_owner.GetPosition() + _tempMove);
 
-				while (!validMove)
+				int minX = (int)Math.Floor(_rectangle.CurrentPosition.X - (_rectangle.Width / 2) + 0.5);
+				int maxX = (int)Math.Floor(_rectangle.CurrentPosition.X + (_rectangle.Width / 2) + 0.5);
+				int minY = (int)Math.Floor(_rectangle.CurrentPosition.Y - (_rectangle.Height / 2) + 0.5);
+				int maxY = (int)Math.Floor(_rectangle.CurrentPosition.Y + (_rectangle.Height / 2) + 0.5);
+				for (int i = minX; i < maxX + 1; i++)
 				{
-					validMove = true;
-
-					cells.Clear();
-					_rectangle.UpdatePosition(_owner.GetPosition() + _tempMove);
-
-					int minX = (int)Math.Floor(_rectangle.CurrentPosition.X - (_rectangle.Width / 2) + 0.5);
-					int maxX = (int)Math.Floor(_rectangle.CurrentPosition.X + (_rectangle.Width / 2) + 0.5);
-					int minY = (int)Math.Floor(_rectangle.CurrentPosition.Y - (_rectangle.Height / 2) + 0.5);
-					int maxY = (int)Math.Floor(_rectangle.CurrentPosition.Y + (_rectangle.Height / 2) + 0.5);
-					for (int i = minX; i < maxX + 1; i++)
+					for (int j = minY; j < maxY + 1; j++)
 					{
-						for (int j = minY; j < maxY + 1; j++)
+						cells.Add(new int[2] { i, j });
+					}
+				}
+
+				foreach (int[] c in cells)
+				{
+					if (ColliderManager.Instance.Terrain[c[0], c[1]].Count != 0)
+					{
+						foreach (Entity e in ColliderManager.Instance.Terrain[c[0], c[1]])
 						{
-							cells.Add(new int[2] { i, j });
+							if (e.GetComponent<AABBCollider>() != null)
+								if (CheckCollision(e.GetComponent<AABBCollider>().Rectangle))
+								{
+								}
+							if (e.GetComponent<Platform>() != null)
+								if (CheckCollision(e.GetComponent<Platform>()))
+								{
+								}
 						}
 					}
+				}
 
-					foreach (int[] c in cells)
+				_owner.Move(_tempMove);
+				_body.Position = _owner.GetPosition() + _position;
+
+				cells.Clear();
+				_rectangle.UpdatePosition(_owner.GetPosition() + _tempMove);
+
+				minX = (int)Math.Floor(_rectangle.CurrentPosition.X - (_rectangle.Width / 2) + 0.5);
+				maxX = (int)Math.Floor(_rectangle.CurrentPosition.X + (_rectangle.Width / 2) + 0.5);
+				minY = (int)Math.Floor(_rectangle.CurrentPosition.Y - (_rectangle.Height / 2) + 0.5);
+				maxY = (int)Math.Floor(_rectangle.CurrentPosition.Y + (_rectangle.Height / 2) + 0.5);
+				for (int i = minX; i < maxX + 1; i++)
+				{
+					for (int j = minY; j < maxY + 1; j++)
 					{
-						if (ColliderManager.Instance.Terrain[c[0], c[1]].Count != 0)
-						{
-							foreach (Entity e in ColliderManager.Instance.Terrain[c[0], c[1]])
-							{
-								if (e.GetComponent<AABBCollider>() != null)
-									if (CheckCollision(e.GetComponent<AABBCollider>().Rectangle))
-									{
-										validMove = false;
-										break;
-									}
-								if (e.GetComponent<Platform>() != null)
-									if (CheckCollision(e.GetComponent<Platform>()))
-									{
-										validMove = false;
-										break;
-									}
-							}
-						}
-						if (!validMove)
-							break;
+						cells.Add(new int[2] { i, j });
 					}
 				}
 
@@ -246,21 +250,6 @@ namespace Fredrick.src
 				{
 					ColliderManager.Instance.Terrain[c[0], c[1]].Add(_owner);
 				}
-
-				//foreach (Platform p in ColliderManager.Instance.Platforms)
-				//{
-				//	if (p.GetOwner() != _owner)
-				//		CheckCollision(p);
-				//}
-
-				//foreach (AABBCollider c in ColliderManager.Instance.Colliders)
-				//{
-				//	if (c.GetOwner() != _owner)
-				//		CheckCollision(c.Rectangle);
-				//}
-
-				_owner.Move(_tempMove);
-				_body.Position = _owner.GetPosition() + _position;
 			}
 		}
 

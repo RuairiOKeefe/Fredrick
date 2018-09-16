@@ -84,8 +84,8 @@ namespace Fredrick.src
 		{
 			_velocity = new Vector2(0, 0);
 			_acceleration = new Vector2(0, 0);
-			_horAcc = 10;
-			_maxSpeed = 5;
+			_horAcc = 16;
+			_maxSpeed = 8;
 			_acceleration.Y = -9.8f;
 
 			_groundFriction = 600;
@@ -98,9 +98,9 @@ namespace Fredrick.src
 			_jumpTrigger = new AABBTrigger(_owner);
 			_jumpTrigger.Rectangle = new RectangleF(new Vector2(0, -0.5f), 1, 0.5f, 0, 0);
 
-			_jumpDuration = 0.2f;
+			_jumpDuration = 0.3f;
 			_jumpClock = 0;
-			_jumpSpeed = 20.0f;
+			_jumpSpeed = 14.0f;
 			_fallAcceleration = -40.0f;
 			_terminalVelocity = -30.0f;
 			_maxJumps = 2;
@@ -166,7 +166,7 @@ namespace Fredrick.src
 				}
 			}
 
-			if (_acceleration.Y == 0 && _jumpClock < 0)
+			if (_acceleration.Y == 0 && _jumpClock < 0 || _velocity.Y == 0)
 			{
 				_acceleration.Y = _fallAcceleration;
 			}
