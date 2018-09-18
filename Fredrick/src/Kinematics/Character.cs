@@ -96,7 +96,7 @@ namespace Fredrick.src
 			_motionState = State.Standing;
 
 			_jumpTrigger = new AABBTrigger(_owner);
-			_jumpTrigger.Rectangle = new RectangleF(new Vector2(0, -0.5f), 1, 0.5f, 0, 0);
+			_jumpTrigger.Rectangle = new RectangleF(new Vector2(0, -1.0f), 1, 0.5f);
 
 			_jumpDuration = 0.3f;
 			_jumpClock = 0;
@@ -122,6 +122,7 @@ namespace Fredrick.src
 
 					if ((_velocity.X * _velocity.X) > (_maxSpeed * _maxSpeed) && _velocity.X * _moveCommand > 0)
 					{
+						_velocity.X = _maxSpeed * Math.Sign(_moveCommand);
 						_acceleration.X = 0;
 					}
 				}
@@ -141,6 +142,7 @@ namespace Fredrick.src
 
 					if ((_velocity.X * _velocity.X) > (_maxSpeed * _maxSpeed) && _velocity.X * _moveCommand > 0)
 					{
+						_velocity.X = _maxSpeed * Math.Sign(_moveCommand);
 						_acceleration.X = 0;
 					}
 				}

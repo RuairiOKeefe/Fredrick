@@ -39,9 +39,9 @@ namespace Fredrick.src
 		}
 
 
-		public AABBCollider(Entity owner) : base(owner)
+		public AABBCollider(Entity owner, Vector2 position, float width = 1.0f, float height = 1.0f) : base(owner)
 		{
-			_rectangle = new RectangleF(new Vector2(0), 1, 1, 0.0f, 0.0f);
+			_rectangle = new RectangleF(position, width, height);
 			_rectangle.UpdatePosition(_owner.GetPosition());
 			_index = ColliderManager.Instance.Colliders.Count;
 			ColliderManager.Instance.Colliders.Add(this);

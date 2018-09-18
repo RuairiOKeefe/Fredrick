@@ -14,9 +14,6 @@ namespace Fredrick.src
 		protected float _width;
 		protected float _height;
 
-		protected float _offsetX;
-		protected float _offsetY;
-
 		protected Vector2[] _corners;
 
 		public float Width
@@ -64,14 +61,11 @@ namespace Fredrick.src
 		{
 		}
 
-		public RectangleF(Vector2 position, float width, float height, float offsetX, float offsetY)
+		public RectangleF(Vector2 position, float width, float height)
 		{
 			_position = position;
 			_width = width;
 			_height = height;
-
-			_offsetX = offsetX;
-			_offsetY = offsetY;
 
 			_corners = new Vector2[4];
 			_corners[0] = new Vector2(-width / 2, height / 2);
@@ -83,7 +77,7 @@ namespace Fredrick.src
 
 		public void UpdatePosition(Vector2 currentPosition)
 		{
-			_currentPosition = currentPosition + _position + new Vector2(_offsetX, _offsetY);
+			_currentPosition = currentPosition + _position;
 		}
 
 		public bool Intersect(RectangleF other)

@@ -18,19 +18,19 @@ namespace Fredrick.src
 			set { _d = value; }
 		}
 
-		public Renderable(Entity owner, Texture2D sprite) : base(owner)
+		public Renderable(Entity owner, Texture2D sprite, Vector2 origin, Vector2 position, Vector2 scale, int width = 32, int height = 32, float layer = 0.1f) : base(owner)
 		{
 			_d = new Drawable(sprite);
 			_d._sprite = sprite;
 			_d._spriteSize = 32;
 
-			_d._origin = new Vector2(16, 16);
-			_position = new Vector2(0, 0);
-			_scale = new Vector2(1, 1);
-			_d._layer = 0.1f;
+			_d._origin = origin;
+			_position = position;
+			_scale = scale;
+			_d._width = width;
+			_d._height = height;
+			_d._layer = layer;
 			_d._colour = new Color(255, 255, 255, 255);
-			_d._width = 32;
-			_d._height = 32;
 			_d._sourceRectangle = new Rectangle(0, 0, _d._width, _d._height);
 			_d._animations = new Dictionary<int, Animation>();
 			_d._currentAnim = 0;
