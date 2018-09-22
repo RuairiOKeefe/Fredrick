@@ -16,12 +16,15 @@ namespace Fredrick.src
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
 		List<Entity> entities = new List<Entity>();
+		List<Entity> terrain = new List<Entity>();
 		FollowCamera cam;
 		Effect lighting;
 		Effect bloom;
 
 		RenderTarget2D sceneTarget;
 		RenderTarget2D bloomTarget;
+
+		LevelEditor levelEditor;
 
 		public Game1()
 		{
@@ -32,7 +35,7 @@ namespace Fredrick.src
 			Content.RootDirectory = "Content";
 			//graphics.IsFullScreen = true;
 
-
+			levelEditor = new LevelEditor();
 		}
 
 		/// <summary>
@@ -66,30 +69,25 @@ namespace Fredrick.src
 			lighting = Content.Load<Effect>("Lighting");
 			bloom = Content.Load<Effect>("Bloom");
 
-			Texture2D testSheet = Content.Load<Texture2D>("TestSheet");//This texture includes a colour that matches the key colour, not important since its a test sprite but funny none the less
-			Texture2D tempSlope = Content.Load<Texture2D>("tempSlope");
-			Texture2D tempParticle = Content.Load<Texture2D>("arrow");
-			Texture2D grenade = Content.Load<Texture2D>("fragNade");
-
 			ColliderManager.Instance.Load();
-			ProjectileBuffer.Instance.Load(grenade);
+			ProjectileBuffer.Instance.Load("fragNade", Content);
 
 			Entity entity = new Entity();
 			entity.SetPosition(new Vector2(8, 8));
 			entities.Add(entity);
-			Renderable renderable = new Renderable(entity, testSheet, new Vector2(8, 16), new Vector2(0), new Vector2(2), 16, 32, 0.1f);
+			Renderable renderable = new Renderable(entity, Content, "TestSheet", new Vector2(8, 16), new Vector2(0), new Vector2(2), 16, 32, 0.1f);
 			Character character = new Character(entity);
 			AABBCollider boxCollider = new AABBCollider(entity, new Vector2(0), 1.0f, 1.9f);
-			renderable.Drawable.AddAnimation(0, 0, 32, 1, 30);
-			renderable.Drawable.AddAnimation(1, 0, 32, 4, 30);
+			renderable.Drawable.AddAnimation(0, 32, 1, 30);
+			renderable.Drawable.AddAnimation(0, 32, 4, 30);
 			entity.Components.Add(renderable);
 			entity.Components.Add(character);
 			entity.Components.Add(boxCollider);
-			Emitter emitter = new Emitter(entity, tempParticle, true, 3000, 50, new Vector2(0, -10), 0, 0, 8, 1.5);
-			emitter.ParticleDrawable.AddAnimation(0, 0, 32, 1, 30);
+			Emitter emitter = new Emitter(entity, Content, "arrow", true, 3000, 50, new Vector2(0, -10), 0, 0, 8, 1.5);
+			emitter.ParticleDrawable.AddAnimation(0, 32, 1, 30);
 			entity.Components.Add(emitter);
 			Weapon weapon = new Weapon(entity);
-			weapon._d = new Drawable(tempParticle);
+			weapon._d = new Drawable(Content, "fragNade", new Vector2(0), 32, 32, 0.1f);
 			entity.Components.Add(weapon);
 
 			cam.SetSubject(entity);
@@ -101,10 +99,10 @@ namespace Fredrick.src
 					{
 						Entity e = new Entity();
 						e.SetPosition(new Vector2(i, j));
-						entities.Add(e);
-						Renderable r = new Renderable(e, testSheet, new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+						terrain.Add(e);
+						Renderable r = new Renderable(e, Content, "TestSheet", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
 						AABBCollider c = new AABBCollider(e, new Vector2(0));
-						r.Drawable.AddAnimation(0, 0, 0, 1, 30);
+						r.Drawable.AddAnimation(0, 0, 1, 30);
 						e.Components.Add(r);
 						e.Components.Add(c);
 					}
@@ -119,10 +117,10 @@ namespace Fredrick.src
 					{
 						Entity e = new Entity();
 						e.SetPosition(new Vector2(i, j));
-						entities.Add(e);
-						Renderable r = new Renderable(e, testSheet, new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+						terrain.Add(e);
+						Renderable r = new Renderable(e, Content, "TestSheet", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
 						AABBCollider c = new AABBCollider(e, new Vector2(0));
-						r.Drawable.AddAnimation(0, 0, 0, 1, 30);
+						r.Drawable.AddAnimation(0, 0, 1, 30);
 						e.Components.Add(r);
 						e.Components.Add(c);
 					}
@@ -137,15 +135,21 @@ namespace Fredrick.src
 					{
 						Entity e = new Entity();
 						e.SetPosition(new Vector2(i + 3, j + 2));
-						entities.Add(e);
-						Renderable r = new Renderable(e, testSheet, new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+						terrain.Add(e);
+						Renderable r = new Renderable(e, Content, "TestSheet", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
 						AABBCollider c = new AABBCollider(e, new Vector2(0));
-						r.Drawable.AddAnimation(0, 0, 0, 1, 30);
+						r.Drawable.AddAnimation(0, 0, 1, 30);
 						e.Components.Add(r);
 						e.Components.Add(c);
 					}
 				}
 			}
+			foreach (Entity e in entities)
+			{
+				e.Load(Content);
+			}
+			levelEditor.Save(terrain);
+			//terrain = levelEditor.LoadTerrain(Content);
 		}
 
 		/// <summary>
@@ -178,6 +182,11 @@ namespace Fredrick.src
 				if (e.GetComponent<Weapon>() != null)
 					e.GetComponent<Weapon>().UpdateProjectilePos();
 			}
+			foreach (var e in terrain)
+			{
+				if (e.GetComponent<Weapon>() != null)
+					e.GetComponent<Weapon>().UpdateProjectilePos();
+			}
 
 			//cam.Trauma = 1;
 			cam.Update(gameTime.ElapsedGameTime.TotalSeconds);
@@ -200,6 +209,8 @@ namespace Fredrick.src
 
 			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, lighting, cam.Get_Transformation(GraphicsDevice));
 			foreach (var e in entities)
+				e.Draw(spriteBatch);
+			foreach (var e in terrain)
 				e.Draw(spriteBatch);
 			spriteBatch.End();
 

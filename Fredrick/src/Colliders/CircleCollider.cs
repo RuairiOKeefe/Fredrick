@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Dynamics;
+using Microsoft.Xna.Framework.Content;
 
 namespace Fredrick.src
 {
@@ -18,7 +19,9 @@ namespace Fredrick.src
 		CircleShape _circle;
 		Fixture _fixture;
 
-		//Vector2 tempMove;
+		public CircleCollider()
+		{
+		}
 
 		public CircleCollider(Entity owner) : base(owner)
 		{
@@ -40,7 +43,6 @@ namespace Fredrick.src
 			_fixture = _body.CreateFixture(_circle);
 
 			_body.BodyType = BodyType.Dynamic;
-			//_body.Mass = 0.1f;
 			_body.UserData = _owner;
 			_body.Awake = true;
 			_body.Position = _owner.GetPosition();
@@ -68,6 +70,11 @@ namespace Fredrick.src
 		public void Kill()
 		{
 			ColliderManager.Instance.World.RemoveBody(_body);
+		}
+
+		public override void Load(ContentManager content)
+		{
+
 		}
 
 		public override void Update(double deltaTime)

@@ -51,10 +51,8 @@
     <Compile Include="src\Cameras\Camera.cs" />
     <Compile Include="src\Drawing\PostProcessing.cs" />
     <Compile Include="src\Kinematics\Character.cs" />
-    <Compile Include="src\Colliders\Collider.cs" />
     <Compile Include="src\Colliders\ColliderManager.cs" />
     <Compile Include="src\Entity System\Component.cs" />
-    <Compile Include="src\Entity System\ComponentOwner.cs" />
     <Compile Include="src\Drawing\Drawable.cs" />
     <Compile Include="src\Drawing\ResourceManager.cs" />
     <Compile Include="src\Utilities\DebugManager.cs" />

@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Common;
+using Microsoft.Xna.Framework.Content;
 
 namespace Fredrick.src
 {
@@ -19,11 +20,6 @@ namespace Fredrick.src
 
 		private Vector2 _tempMove;
 
-
-		private Body _body;
-		private PolygonShape _box;
-		private Fixture _fixture;
-
 		private List<int[]> cells;
 
 		public RectangleF Rectangle
@@ -32,33 +28,36 @@ namespace Fredrick.src
 			set { _rectangle = value; }
 		}
 
-		public Body Body
+		public AABBCollider()
 		{
-			get { return _body; }
-			set { _body = value; }
+			_owner = null;
+			_position = new Vector2(0);
 		}
-
 
 		public AABBCollider(Entity owner, Vector2 position, float width = 1.0f, float height = 1.0f) : base(owner)
 		{
+			Body body;
+			PolygonShape box;
+			Fixture fixture;
+
 			_rectangle = new RectangleF(position, width, height);
 			_rectangle.UpdatePosition(_owner.GetPosition());
 			_index = ColliderManager.Instance.Colliders.Count;
 			ColliderManager.Instance.Colliders.Add(this);
 
-			_body = new Body(ColliderManager.Instance.World, _owner.GetPosition() + _position, 0, BodyType.Static);
+			body = new Body(ColliderManager.Instance.World, _owner.GetPosition() + _position, 0, BodyType.Static);
 			if (_owner.GetComponent<Character>() != null)
 			{
-				_body.BodyType = BodyType.Kinematic;
+				body.BodyType = BodyType.Kinematic;
 			}
-			_body.UserData = _owner;
+			body.UserData = _owner;
 			Vertices verts = new Vertices();
 			verts.Add(_rectangle.Corners[0]);
 			verts.Add(_rectangle.Corners[1]);
 			verts.Add(_rectangle.Corners[2]);
 			verts.Add(_rectangle.Corners[3]);
-			_box = new PolygonShape(verts, 1.0f);
-			_fixture = _body.CreateFixture(_box);
+			box = new PolygonShape(verts, 1.0f);
+			fixture = body.CreateFixture(box);
 
 			cells = new List<int[]>();
 			int minX = (int)Math.Floor(_rectangle.CurrentPosition.X - (_rectangle.Width / 2) + 0.5);
@@ -181,7 +180,10 @@ namespace Fredrick.src
 			return collided;
 		}
 
+		public override void Load(ContentManager content)
+		{
 
+		}
 
 		public override void Update(double deltaTime)
 		{
@@ -229,8 +231,13 @@ namespace Fredrick.src
 				}
 
 				_owner.Move(_tempMove);
-				_body.Position = _owner.GetPosition() + _position;
-
+				foreach (Body b in ColliderManager.Instance.World.BodyList)
+				{
+					if (b.UserData == (object)_owner)
+					{
+						b.Position = _owner.GetPosition() + _position;
+					}
+				}
 				cells.Clear();
 				_rectangle.UpdatePosition(_owner.GetPosition() + _tempMove);
 

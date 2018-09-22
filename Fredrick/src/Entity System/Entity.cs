@@ -5,16 +5,17 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Content;
 
 namespace Fredrick.src
 {
-	public class Entity : Transform, ComponentOwner
+	public class Entity : Transform
 	{
 		private bool _active { get; set; }
 
 		public string Id { get; }
 
-		public IList<Component> Components = new List<Component>();
+		public List<Component> Components = new List<Component>();
 
 		public Entity()
 		{
@@ -27,6 +28,14 @@ namespace Fredrick.src
 		{
 			var component = Components.FirstOrDefault(c => c.GetType() == typeof(T));
 			return (T)component;
+		}
+
+		public void Load(ContentManager content)
+		{
+			foreach (var c in Components)
+			{
+				c.Load(content);
+			}
 		}
 
 		public void Update(double deltaTime)//Add remove check here for if component is to be removed

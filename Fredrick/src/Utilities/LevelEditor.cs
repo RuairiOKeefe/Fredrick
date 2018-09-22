@@ -48,12 +48,12 @@ namespace Fredrick.src
 
 		}
 
-		public void Save()
+		public void Save(List<Entity> entities)
 		{
-			var serializer = new XmlSerializer(_terrainData.GetType());
+			var terrainSerializer = new XmlSerializer(entities.GetType());
 			using (var writer = XmlWriter.Create("TerrainData.xml"))
 			{
-				serializer.Serialize(writer, _terrainData);
+				terrainSerializer.Serialize(writer, entities);
 			}
 		}
 
@@ -61,32 +61,12 @@ namespace Fredrick.src
 		{
 			List<Entity> _terrain = new List<Entity>();
 
-			var serializer = new XmlSerializer(typeof(List<Tuple<Tuple<int, int>, Vector2>>));
+			var terrainSerializer = new XmlSerializer(typeof(List<Entity>));
 			using (var reader = XmlReader.Create("TerrainData.xml"))
 			{
-				_terrainData = (List<Tuple<Tuple<int, int>, Vector2>>)serializer.Deserialize(reader);
+				_terrain = (List<Entity>)terrainSerializer.Deserialize(reader);
 			}
 
-			foreach (Tuple<Tuple<int, int>, Vector2> t in _terrainData)
-			{
-				Block b = _blocks[t.Item1];
-				Entity e = new Entity();
-				e.SetPosition(t.Item2);
-				if (b.renderableData != null)
-				{
-					RenderableData rd = b.renderableData;
-					Texture2D tex = Content.Load<Texture2D>(rd.texture);
-					Renderable r = new Renderable(e, tex, rd.origin, rd.position, rd.scale, rd.width, rd.height, rd.layer);
-					e.Components.Add(r);
-				}
-				if (b.aabbData != null)
-				{
-					AABBData cd = b.aabbData;
-					AABBCollider c = new AABBCollider(e, cd.position, cd.width, cd.height);
-					e.Components.Add(c);
-				}
-				_terrain.Add(e);
-			}
 			return _terrain;
 		}
 

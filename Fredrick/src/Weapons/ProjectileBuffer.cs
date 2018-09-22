@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 
 namespace Fredrick.src
 {
@@ -37,17 +38,17 @@ namespace Fredrick.src
 			set { _inactiveProjectiles = value; }
 		}
 
-		public void Load(Texture2D t)
+		public void Load(String spriteName, ContentManager content)
 		{
 			for (int i = 0; i < NUM_PROJECTILES; i++)
 			{
 				Entity e = new Entity();
 				Projectile p = new Projectile(e);
 				CircleCollider cc = new CircleCollider(e);
-				Renderable r = new Renderable(e, t, new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
-				r.Drawable.AddAnimation(0, 0, 0, 1, 1);
-				r.Drawable.AddAnimation(1, 32, 0, 1, 1);
-				Emitter emitter = new Emitter(e, t, false, 1000, 300, new Vector2(0, 0), 0, 0, 8.0f, 0.5);
+				Renderable r = new Renderable(e, content, spriteName, new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+				r.Drawable.AddAnimation(0, 0, 1, 1);
+				r.Drawable.AddAnimation(32, 0, 1, 1);
+				Emitter emitter = new Emitter(e, content, spriteName, false, 1000, 300, new Vector2(0, 0), 0, 0, 8.0f, 0.5);
 
 				e.Components.Add(p);
 				e.Components.Add(cc);

@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Fredrick.src
 {
 	public class Drawable
 	{
-		public Texture2D _sprite;
+		public String _spriteName;
 		public int _spriteSize;
 		public Rectangle _sourceRectangle;//The region of the sprite sheet that will be used
 		public Vector2 _origin;//The centerpoint of the sprite
@@ -19,32 +20,46 @@ namespace Fredrick.src
 		public Color _colour;
 		public int _width;
 		public int _height;
+		public int _spriteWidth;
+		public int _spriteHeight;
 
-		public Dictionary<int, Animation> _animations;//Stores an int key
+		public List<Animation> _animations;//Stores an int key
 		public int _currentAnim;//which animation is currently being used
 		public bool _transition;//Does a transition need to occur
 		public int _nextAnim;//The animation to be transitioned to
 
-		public Drawable(Texture2D sprite)
+		public Drawable()
 		{
-			_sprite = sprite;
-			_spriteSize = 32;
+		}
 
-			_origin = new Vector2(16, 16);
-			_layer = 0.1f;
+		public Drawable(ContentManager content, string spriteName, Vector2 origin, int width = 32, int height = 32, float layer = 0.1f)
+		{
+			_spriteName = spriteName;
+			Load(content);
+			_spriteSize = 32;
+			_origin = origin;
+			_width = width;
+			_height = height;
+			_layer = layer;
 			_colour = new Color(255, 255, 255, 255);
-			_width = 32;
-			_height = 32;
+
 			_sourceRectangle = new Rectangle(0, 0, _width, _height);
-			_animations = new Dictionary<int, Animation>();
+			_animations = new List<Animation>();
 			_currentAnim = 0;
 			_transition = false;
 			_nextAnim = 0;
 		}
 
-		public void AddAnimation(int key, int startX, int startY, int frames, float frameRate)
+		public void Load(ContentManager content)
 		{
-			_animations.Add(key, new Animation(this._sprite.Width, this._sprite.Height, startX, startY, _width, _height, frames, frameRate));
+			ResourceManager.Instance.AddTexture(content, _spriteName);
+			_spriteWidth = ResourceManager.Instance.Textures[_spriteName].Width;
+			_spriteHeight = ResourceManager.Instance.Textures[_spriteName].Height;
+		}
+
+		public void AddAnimation(int startX, int startY, int frames, float frameRate)
+		{
+			_animations.Add(new Animation(_spriteWidth, _spriteHeight, startX, startY, _width, _height, frames, frameRate));
 			if (_animations.Count == 1)
 			{
 				_currentAnim = 0;

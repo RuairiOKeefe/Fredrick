@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Fredrick.src
@@ -42,59 +43,11 @@ namespace Fredrick.src
 			set { _pD = value; }
 		}
 
-		public Emitter(Entity owner, Texture2D sprite) : base(owner)
+		public Emitter(Entity owner, ContentManager content, String spriteName, bool continuous, int maxParticles, int emissionCount, Vector2 acceleration, float spawnWidth = 0, float spawnHeight = 0, float spawnVelocity = 3.0f, double lifeTime = 3.0) : base(owner)
 		{
-			_pD = new Drawable(sprite);
-			_pD._sprite = sprite;
-			_pD._spriteSize = 32;
-
-			_pD._origin = new Vector2(16, 16);
+			_pD = new Drawable(content, spriteName, new Vector2(16, 16), 32, 32, 0.1f);
 			_position = new Vector2(0, 0);
 			_scale = new Vector2(0.2f);
-			_pD._layer = 0.0f;
-			_pD._colour = new Color(255, 255, 255, 255);
-			_pD._width = 32;
-			_pD._height = 32;
-			_pD._sourceRectangle = new Rectangle(0, 0, _pD._width, _pD._height);
-			_pD._animations = new Dictionary<int, Animation>();
-			_pD._currentAnim = 0;
-			_pD._transition = false;
-			_pD._nextAnim = 0;
-
-			rnd = new Random();
-
-			_particles = new List<Particle>();
-
-			_acceleration = new Vector2(0.0f);
-
-			_spawnWidth = 0;
-			_spawnHeight = 0;
-
-			_maxParticles = 3000;
-			_continuous = true;
-			_emissionCount = 50;
-			_spawnVelocity = 3.0f;
-			_lifeTime = 1.0;
-		}
-
-		public Emitter(Entity owner, Texture2D sprite, bool continuous, int maxParticles, int emissionCount, Vector2 acceleration, float spawnWidth = 0, float spawnHeight = 0, float spawnVelocity = 3.0f, double lifeTime = 3.0) : base(owner)
-		{
-			_pD = new Drawable(sprite);
-			_pD._sprite = sprite;
-			_pD._spriteSize = 32;
-
-			_pD._origin = new Vector2(16, 16);
-			_position = new Vector2(0, 0);
-			_scale = new Vector2(0.2f);
-			_pD._layer = 0.0f;
-			_pD._colour = new Color(255, 255, 255, 255);
-			_pD._width = 32;
-			_pD._height = 32;
-			_pD._sourceRectangle = new Rectangle(0, 0, _pD._width, _pD._height);
-			_pD._animations = new Dictionary<int, Animation>();
-			_pD._currentAnim = 0;
-			_pD._transition = false;
-			_pD._nextAnim = 0;
 
 			rnd = new Random();
 
@@ -126,7 +79,10 @@ namespace Fredrick.src
 			}
 		}
 
+		public override void Load(ContentManager content)
+		{
 
+		}
 
 		public override void Update(double deltaTime)
 		{
@@ -167,13 +123,13 @@ namespace Fredrick.src
 			{
 				Color c = Color.White;
 				c *= p.Opacity;
-				spriteBatch.Draw(_pD._sprite, p.Position * inv * _pD._spriteSize, _pD._sourceRectangle, c, p.Rotation, _pD._origin, _scale, _pD._spriteEffects, _pD._layer);
+				spriteBatch.Draw(ResourceManager.Instance.Textures[_pD._spriteName], p.Position * inv * _pD._spriteSize, _pD._sourceRectangle, c, p.Rotation, _pD._origin, _scale, _pD._spriteEffects, _pD._layer);
 			}
 		}
 
 		public override void DebugDraw(SpriteBatch spriteBatch)
 		{
-			
+
 		}
 	}
 }

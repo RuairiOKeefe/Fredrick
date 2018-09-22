@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Diagnostics;
+using Microsoft.Xna.Framework.Content;
 
 namespace Fredrick.src
 {
@@ -74,6 +75,11 @@ namespace Fredrick.src
 					e.GetComponent<CircleCollider>().UpdatePosition();
 				}
 			}
+		}
+
+		public override void Load(ContentManager content)
+		{
+
 		}
 
 		public override void Update(double deltaTime)

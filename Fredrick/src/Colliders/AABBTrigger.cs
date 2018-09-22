@@ -36,6 +36,10 @@ namespace Fredrick.src
 			set { _platformHits = value; }
 		}
 
+		public AABBTrigger()
+		{
+		}
+
 		public AABBTrigger(Entity owner)
 		{
 			_owner = owner;

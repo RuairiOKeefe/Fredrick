@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Common;
+using Microsoft.Xna.Framework.Content;
 
 namespace Fredrick.src
 {
@@ -124,6 +125,10 @@ namespace Fredrick.src
 			}
 		}
 
+		public Platform()
+		{
+		}
+
 		public Platform(Entity owner, Vector2 currentPosition, float width, float height, float offsetX, float offsetY, float lHeight, float rHeight, float platformDepth) : base(owner)
 		{
 			_currentPosition = currentPosition + owner.GetPosition();
@@ -160,6 +165,11 @@ namespace Fredrick.src
 
 			ColliderManager.Instance.Platforms.Add(this);
 			_lineTex = DebugManager.Instance.LineTex;
+		}
+
+		public override void Load(ContentManager content)
+		{
+
 		}
 
 		public override void Update(double deltaTime)

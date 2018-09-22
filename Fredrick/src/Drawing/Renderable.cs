@@ -4,56 +4,54 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Fredrick.src
 {
 	public class Renderable : Component
 	{
-		protected Drawable _d;
+		protected Drawable _drawable;
 
 		public Drawable Drawable
 		{
-			get { return _d; }
-			set { _d = value; }
+			get { return _drawable; }
+			set { _drawable = value; }
 		}
 
-		public Renderable(Entity owner, Texture2D sprite, Vector2 origin, Vector2 position, Vector2 scale, int width = 32, int height = 32, float layer = 0.1f) : base(owner)
+		public Renderable()
 		{
-			_d = new Drawable(sprite);
-			_d._sprite = sprite;
-			_d._spriteSize = 32;
+			_owner = null;
+			_position = new Vector2(0);
+			_scale = new Vector2(1);
+		}
 
-			_d._origin = origin;
+		public Renderable(Entity owner, ContentManager content, String spriteName, Vector2 origin, Vector2 position, Vector2 scale, int width = 32, int height = 32, float layer = 0.1f) : base(owner)
+		{
+			_drawable = new Drawable(content, spriteName, origin, width, height, layer);
 			_position = position;
 			_scale = scale;
-			_d._width = width;
-			_d._height = height;
-			_d._layer = layer;
-			_d._colour = new Color(255, 255, 255, 255);
-			_d._sourceRectangle = new Rectangle(0, 0, _d._width, _d._height);
-			_d._animations = new Dictionary<int, Animation>();
-			_d._currentAnim = 0;
-			_d._transition = false;
-			_d._nextAnim = 0;
 		}
 
-
+		public override void Load(ContentManager content)
+		{
+			_drawable.Load(content);
+		}
 
 		public override void Update(double deltaTime)
 		{
-			_d.Animate(deltaTime);
+			_drawable.Animate(deltaTime);
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
 			Vector2 inv = new Vector2(1, -1);
-			spriteBatch.Draw(_d._sprite, (_position + _owner.GetPosition()) * inv * _d._spriteSize, _d._sourceRectangle, _d._colour, _owner.GetRotation() + _rotation, _d._origin, _scale, _d._spriteEffects, _d._layer);
+			spriteBatch.Draw(ResourceManager.Instance.Textures[_drawable._spriteName], (_position + _owner.GetPosition()) * inv * _drawable._spriteSize, _drawable._sourceRectangle, _drawable._colour, _owner.GetRotation() + _rotation, _drawable._origin, _scale, _drawable._spriteEffects, _drawable._layer);
 		}
 
 		public override void DebugDraw(SpriteBatch spriteBatch)
 		{
-			
+
 		}
 	}
 }

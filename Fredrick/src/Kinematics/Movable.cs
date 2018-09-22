@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Fredrick.src
@@ -80,6 +81,11 @@ namespace Fredrick.src
 
 			if (_owner.GetComponent<AABBCollider>() == null && _owner.GetComponent<CircleCollider>() == null)
 				_owner.Move(_attemptedPosition);//If this does not contain a collider just move it because nothing will stop it.
+		}
+
+		public override void Load(ContentManager content)
+		{
+
 		}
 
 		public override void Update(double deltaTime)
