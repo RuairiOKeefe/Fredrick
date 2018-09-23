@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Fredrick.src
 {
+	[Serializable]
 	public class Entity : Transform
 	{
 		private bool _active { get; set; }

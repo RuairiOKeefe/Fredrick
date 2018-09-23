@@ -8,52 +8,34 @@ using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization;
 
 namespace Fredrick.src
 {
 	class LevelEditor
 	{
-		public class RenderableData
-		{
-			public String texture;
-			public Vector2 origin;
-			public Vector2 position;
-			public Vector2 scale;
-			public int width;
-			public int height;
-			public float layer;
-		}
-
-		public class AABBData
-		{
-			public Vector2 position;
-			public float width;
-			public float height;
-		}
-
-		public class Block
-		{
-			public String name;
-			public RenderableData renderableData;
-			public AABBData aabbData;
-		}
-
-		private Dictionary<Tuple<int, int>, Block> _blocks;
-		private List<Tuple<Tuple<int, int>, Vector2>> _terrainData;
-
 		public LevelEditor()
 		{
-			_blocks = new Dictionary<Tuple<int, int>, Block>();
-			_blocks.Add(new Tuple<int, int>(1, 1), new Block());
 
 		}
 
 		public void Save(List<Entity> entities)
 		{
-			var terrainSerializer = new XmlSerializer(entities.GetType());
-			using (var writer = XmlWriter.Create("TerrainData.xml"))
+			using (Stream stream = File.Open("terrainData", FileMode.Create))
 			{
-				terrainSerializer.Serialize(writer, entities);
+				SurrogateSelector surrogateSelector = new SurrogateSelector();
+				Vector2SurrogateSelector vector2SS = new Vector2SurrogateSelector();
+				RectangleSurrogateSelector rectangleSS = new RectangleSurrogateSelector();
+				ColorSurrogateSelector colorSS = new ColorSurrogateSelector();
+				surrogateSelector.AddSurrogate(typeof(Vector2), new StreamingContext(StreamingContextStates.All), vector2SS);
+				surrogateSelector.AddSurrogate(typeof(Rectangle), new StreamingContext(StreamingContextStates.All), rectangleSS);
+				surrogateSelector.AddSurrogate(typeof(Color), new StreamingContext(StreamingContextStates.All), colorSS);
+
+				var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+				binaryFormatter.SurrogateSelector = surrogateSelector;
+				binaryFormatter.Serialize(stream, entities);
 			}
 		}
 
@@ -61,10 +43,19 @@ namespace Fredrick.src
 		{
 			List<Entity> _terrain = new List<Entity>();
 
-			var terrainSerializer = new XmlSerializer(typeof(List<Entity>));
-			using (var reader = XmlReader.Create("TerrainData.xml"))
+			using (Stream stream = File.Open("terrainData", FileMode.Open))
 			{
-				_terrain = (List<Entity>)terrainSerializer.Deserialize(reader);
+				SurrogateSelector surrogateSelector = new SurrogateSelector();
+				Vector2SurrogateSelector vector2SS = new Vector2SurrogateSelector();
+				RectangleSurrogateSelector rectangleSS = new RectangleSurrogateSelector();
+				ColorSurrogateSelector colorSS = new ColorSurrogateSelector();
+				surrogateSelector.AddSurrogate(typeof(Vector2), new StreamingContext(StreamingContextStates.All), vector2SS);
+				surrogateSelector.AddSurrogate(typeof(Rectangle), new StreamingContext(StreamingContextStates.All), rectangleSS);
+				surrogateSelector.AddSurrogate(typeof(Color), new StreamingContext(StreamingContextStates.All), colorSS);
+
+				var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+				binaryFormatter.SurrogateSelector = surrogateSelector;
+				_terrain = (List<Entity>)binaryFormatter.Deserialize(stream);
 			}
 
 			return _terrain;
@@ -72,7 +63,6 @@ namespace Fredrick.src
 
 		public void AddObject(Vector2 position, int blockID)
 		{
-			Block b = _blocks[new Tuple<int, int>(blockID, blockID)];
 		}
 
 		public void RemoveObject(Vector2 position)

@@ -91,65 +91,67 @@ namespace Fredrick.src
 			entity.Components.Add(weapon);
 
 			cam.SetSubject(entity);
-			for (int i = 0; i < 101; i++)
-			{
-				for (int j = 0; j < 101; j++)
-				{
-					if (i < 2 || i > 98 || j < 2 || j > 98)
-					{
-						Entity e = new Entity();
-						e.SetPosition(new Vector2(i, j));
-						terrain.Add(e);
-						Renderable r = new Renderable(e, Content, "TestSheet", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
-						AABBCollider c = new AABBCollider(e, new Vector2(0));
-						r.Drawable.AddAnimation(0, 0, 1, 30);
-						e.Components.Add(r);
-						e.Components.Add(c);
-					}
-				}
-			}
+			//for (int i = 0; i < 101; i++)
+			//{
+			//	for (int j = 0; j < 101; j++)
+			//	{
+			//		if (i < 2 || i > 98 || j < 2 || j > 98)
+			//		{
+			//			Entity e = new Entity();
+			//			e.SetPosition(new Vector2(i, j));
+			//			terrain.Add(e);
+			//			Renderable r = new Renderable(e, Content, "TestSheet", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+			//			AABBCollider c = new AABBCollider(e, new Vector2(0));
+			//			r.Drawable.AddAnimation(0, 0, 1, 30);
+			//			e.Components.Add(r);
+			//			e.Components.Add(c);
+			//		}
+			//	}
+			//}
 
-			for (int i = 10; i < 68; i++)
-			{
-				for (int j = 5; j < 6; j++)
-				{
-					if (i % 8 == 0 || i % 8 == 1 || i % 8 == 2 || i % 8 == 3)
-					{
-						Entity e = new Entity();
-						e.SetPosition(new Vector2(i, j));
-						terrain.Add(e);
-						Renderable r = new Renderable(e, Content, "TestSheet", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
-						AABBCollider c = new AABBCollider(e, new Vector2(0));
-						r.Drawable.AddAnimation(0, 0, 1, 30);
-						e.Components.Add(r);
-						e.Components.Add(c);
-					}
-				}
-			}
+			//for (int i = 10; i < 68; i++)
+			//{
+			//	for (int j = 5; j < 6; j++)
+			//	{
+			//		if (i % 8 == 0 || i % 8 == 1 || i % 8 == 2 || i % 8 == 3)
+			//		{
+			//			Entity e = new Entity();
+			//			e.SetPosition(new Vector2(i, j));
+			//			terrain.Add(e);
+			//			Renderable r = new Renderable(e, Content, "TestSheet", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+			//			AABBCollider c = new AABBCollider(e, new Vector2(0));
+			//			r.Drawable.AddAnimation(0, 0, 1, 30);
+			//			e.Components.Add(r);
+			//			e.Components.Add(c);
+			//		}
+			//	}
+			//}
 
-			for (int i = 0; i < 4; i++)
-			{
-				for (int j = 0; j < 4; j++)
-				{
-					if (i == j)
-					{
-						Entity e = new Entity();
-						e.SetPosition(new Vector2(i + 3, j + 2));
-						terrain.Add(e);
-						Renderable r = new Renderable(e, Content, "TestSheet", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
-						AABBCollider c = new AABBCollider(e, new Vector2(0));
-						r.Drawable.AddAnimation(0, 0, 1, 30);
-						e.Components.Add(r);
-						e.Components.Add(c);
-					}
-				}
-			}
-			foreach (Entity e in entities)
+			//for (int i = 0; i < 4; i++)
+			//{
+			//	for (int j = 0; j < 4; j++)
+			//	{
+			//		if (i == j)
+			//		{
+			//			Entity e = new Entity();
+			//			e.SetPosition(new Vector2(i + 3, j + 2));
+			//			terrain.Add(e);
+			//			Renderable r = new Renderable(e, Content, "TestSheet", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+			//			AABBCollider c = new AABBCollider(e, new Vector2(0));
+			//			r.Drawable.AddAnimation(0, 0, 1, 30);
+			//			e.Components.Add(r);
+			//			e.Components.Add(c);
+			//		}
+			//	}
+			//}
+
+			//levelEditor.Save(terrain);
+			terrain = levelEditor.LoadTerrain(Content);
+
+			foreach (Entity e in terrain)
 			{
 				e.Load(Content);
 			}
-			levelEditor.Save(terrain);
-			//terrain = levelEditor.LoadTerrain(Content);
 		}
 
 		/// <summary>

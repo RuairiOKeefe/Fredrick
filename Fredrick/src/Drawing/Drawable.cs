@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Fredrick.src
 {
+	[Serializable]
 	public class Drawable
 	{
 		public String _spriteName;

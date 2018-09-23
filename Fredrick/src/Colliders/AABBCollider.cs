@@ -13,6 +13,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Fredrick.src
 {
+	[Serializable]
 	public class AABBCollider : Component
 	{
 		private int _index;//index in ColliderManager
@@ -36,42 +37,8 @@ namespace Fredrick.src
 
 		public AABBCollider(Entity owner, Vector2 position, float width = 1.0f, float height = 1.0f) : base(owner)
 		{
-			Body body;
-			PolygonShape box;
-			Fixture fixture;
-
 			_rectangle = new RectangleF(position, width, height);
-			_rectangle.UpdatePosition(_owner.GetPosition());
-			_index = ColliderManager.Instance.Colliders.Count;
-			ColliderManager.Instance.Colliders.Add(this);
-
-			body = new Body(ColliderManager.Instance.World, _owner.GetPosition() + _position, 0, BodyType.Static);
-			if (_owner.GetComponent<Character>() != null)
-			{
-				body.BodyType = BodyType.Kinematic;
-			}
-			body.UserData = _owner;
-			Vertices verts = new Vertices();
-			verts.Add(_rectangle.Corners[0]);
-			verts.Add(_rectangle.Corners[1]);
-			verts.Add(_rectangle.Corners[2]);
-			verts.Add(_rectangle.Corners[3]);
-			box = new PolygonShape(verts, 1.0f);
-			fixture = body.CreateFixture(box);
-
-			cells = new List<int[]>();
-			int minX = (int)Math.Floor(_rectangle.CurrentPosition.X - (_rectangle.Width / 2) + 0.5);
-			int maxX = (int)Math.Floor(_rectangle.CurrentPosition.X + (_rectangle.Width / 2) + 0.5);
-			int minY = (int)Math.Floor(_rectangle.CurrentPosition.Y - (_rectangle.Height / 2) + 0.5);
-			int maxY = (int)Math.Floor(_rectangle.CurrentPosition.Y + (_rectangle.Height / 2) + 0.5);
-			for (int i = minX; i < maxX + 1; i++)
-			{
-				for (int j = minY; j < maxY + 1; j++)
-				{
-					ColliderManager.Instance.Terrain[i, j].Add(_owner);
-					cells.Add(new int[2] { i, j });
-				}
-			}
+			Load(null);
 		}
 
 		public bool CheckCollision(RectangleF other)
@@ -182,7 +149,41 @@ namespace Fredrick.src
 
 		public override void Load(ContentManager content)
 		{
+			_rectangle.UpdatePosition(_owner.GetPosition() + _position);
+			_index = ColliderManager.Instance.Colliders.Count;
+			ColliderManager.Instance.Colliders.Add(this);
 
+			Body body;
+			PolygonShape box;
+			Fixture fixture;
+
+			body = new Body(ColliderManager.Instance.World, _owner.GetPosition() + _position, 0, BodyType.Static);
+			if (_owner.GetComponent<Character>() != null)
+			{
+				body.BodyType = BodyType.Kinematic;
+			}
+			body.UserData = _owner;
+			Vertices verts = new Vertices();
+			verts.Add(_rectangle.Corners[0]);
+			verts.Add(_rectangle.Corners[1]);
+			verts.Add(_rectangle.Corners[2]);
+			verts.Add(_rectangle.Corners[3]);
+			box = new PolygonShape(verts, 1.0f);
+			fixture = body.CreateFixture(box);
+
+			cells = new List<int[]>();
+			int minX = (int)Math.Floor(_rectangle.CurrentPosition.X - (_rectangle.Width / 2) + 0.5);
+			int maxX = (int)Math.Floor(_rectangle.CurrentPosition.X + (_rectangle.Width / 2) + 0.5);
+			int minY = (int)Math.Floor(_rectangle.CurrentPosition.Y - (_rectangle.Height / 2) + 0.5);
+			int maxY = (int)Math.Floor(_rectangle.CurrentPosition.Y + (_rectangle.Height / 2) + 0.5);
+			for (int i = minX; i < maxX + 1; i++)
+			{
+				for (int j = minY; j < maxY + 1; j++)
+				{
+					ColliderManager.Instance.Terrain[i, j].Add(_owner);
+					cells.Add(new int[2] { i, j });
+				}
+			}
 		}
 
 		public override void Update(double deltaTime)
@@ -200,10 +201,10 @@ namespace Fredrick.src
 				cells.Clear();
 				_rectangle.UpdatePosition(_owner.GetPosition() + _tempMove);
 
-				int minX = (int)Math.Floor(_rectangle.CurrentPosition.X - (_rectangle.Width / 2) + 0.5);
-				int maxX = (int)Math.Floor(_rectangle.CurrentPosition.X + (_rectangle.Width / 2) + 0.5);
-				int minY = (int)Math.Floor(_rectangle.CurrentPosition.Y - (_rectangle.Height / 2) + 0.5);
-				int maxY = (int)Math.Floor(_rectangle.CurrentPosition.Y + (_rectangle.Height / 2) + 0.5);
+				int minX = Math.Max((int)Math.Floor(_rectangle.CurrentPosition.X - (_rectangle.Width / 2) + 0.5), 0);
+				int maxX = Math.Min((int)Math.Floor(_rectangle.CurrentPosition.X + (_rectangle.Width / 2) + 0.5), 1000);
+				int minY = Math.Max((int)Math.Floor(_rectangle.CurrentPosition.Y - (_rectangle.Height / 2) + 0.5), 0);
+				int maxY = Math.Min((int)Math.Floor(_rectangle.CurrentPosition.Y + (_rectangle.Height / 2) + 0.5), 1000);
 				for (int i = minX; i < maxX + 1; i++)
 				{
 					for (int j = minY; j < maxY + 1; j++)
@@ -241,10 +242,10 @@ namespace Fredrick.src
 				cells.Clear();
 				_rectangle.UpdatePosition(_owner.GetPosition() + _tempMove);
 
-				minX = (int)Math.Floor(_rectangle.CurrentPosition.X - (_rectangle.Width / 2) + 0.5);
-				maxX = (int)Math.Floor(_rectangle.CurrentPosition.X + (_rectangle.Width / 2) + 0.5);
-				minY = (int)Math.Floor(_rectangle.CurrentPosition.Y - (_rectangle.Height / 2) + 0.5);
-				maxY = (int)Math.Floor(_rectangle.CurrentPosition.Y + (_rectangle.Height / 2) + 0.5);
+				minX = Math.Max((int)Math.Floor(_rectangle.CurrentPosition.X - (_rectangle.Width / 2) + 0.5), 0);
+				maxX = Math.Min((int)Math.Floor(_rectangle.CurrentPosition.X + (_rectangle.Width / 2) + 0.5), 1000);
+				minY = Math.Max((int)Math.Floor(_rectangle.CurrentPosition.Y - (_rectangle.Height / 2) + 0.5),0);
+				maxY = Math.Min((int)Math.Floor(_rectangle.CurrentPosition.Y + (_rectangle.Height / 2) + 0.5), 1000);
 				for (int i = minX; i < maxX + 1; i++)
 				{
 					for (int j = minY; j < maxY + 1; j++)

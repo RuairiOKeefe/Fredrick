@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Fredrick.src
 {
+	[Serializable]
 	public class RectangleF : Transform
 	{
 		protected Vector2 _currentPosition;//current position of collider to be tested

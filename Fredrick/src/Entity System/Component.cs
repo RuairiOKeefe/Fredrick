@@ -9,6 +9,7 @@ using System.Xml.Serialization;
 
 namespace Fredrick.src
 {
+	[Serializable]
 	[XmlRoot(Namespace = "Fredrick.src")]
 	[XmlInclude(typeof(Renderable))]
 	[XmlInclude(typeof(AABBCollider))]

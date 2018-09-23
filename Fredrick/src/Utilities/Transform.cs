@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 
 namespace Fredrick.src
 {
+	[Serializable]
 	public class Transform
 	{
 		protected Vector2 _position;

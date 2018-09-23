@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace Fredrick.src
 {
+	[Serializable]
 	public class Animation
 	{
 		private int _spriteWidth;
