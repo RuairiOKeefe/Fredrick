@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Fredrick.src
 {
+	[Serializable]
 	public class Particle
 	{
 		//need to add collision logic and animation code

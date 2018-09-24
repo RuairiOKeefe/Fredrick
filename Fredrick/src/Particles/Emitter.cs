@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Fredrick.src
 {
+	[Serializable]
 	public class Emitter : Component
 	{
 		protected List<Particle> _particles;
@@ -81,7 +82,7 @@ namespace Fredrick.src
 
 		public override void Load(ContentManager content)
 		{
-
+			_pD.Load(content);
 		}
 
 		public override void Update(double deltaTime)

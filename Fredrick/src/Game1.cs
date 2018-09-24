@@ -15,7 +15,7 @@ namespace Fredrick.src
 	{
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
-		List<Entity> entities = new List<Entity>();
+		List<Entity> actors = new List<Entity>();
 		List<Entity> terrain = new List<Entity>();
 		FollowCamera cam;
 		Effect lighting;
@@ -72,25 +72,25 @@ namespace Fredrick.src
 			ColliderManager.Instance.Load();
 			ProjectileBuffer.Instance.Load("fragNade", Content);
 
-			Entity entity = new Entity();
-			entity.SetPosition(new Vector2(8, 8));
-			entities.Add(entity);
-			Renderable renderable = new Renderable(entity, Content, "TestSheet", new Vector2(8, 16), new Vector2(0), new Vector2(2), 16, 32, 0.1f);
-			Character character = new Character(entity);
-			AABBCollider boxCollider = new AABBCollider(entity, new Vector2(0), 1.0f, 1.9f);
-			renderable.Drawable.AddAnimation(0, 32, 1, 30);
-			renderable.Drawable.AddAnimation(0, 32, 4, 30);
-			entity.Components.Add(renderable);
-			entity.Components.Add(character);
-			entity.Components.Add(boxCollider);
-			Emitter emitter = new Emitter(entity, Content, "arrow", true, 3000, 50, new Vector2(0, -10), 0, 0, 8, 1.5);
-			emitter.ParticleDrawable.AddAnimation(0, 32, 1, 30);
-			entity.Components.Add(emitter);
-			Weapon weapon = new Weapon(entity);
-			weapon._d = new Drawable(Content, "fragNade", new Vector2(0), 32, 32, 0.1f);
-			entity.Components.Add(weapon);
+			{
+			//Entity entity = new Entity();
+			//entity.SetPosition(new Vector2(8, 8));
+			//actors.Add(entity);
+			//Renderable renderable = new Renderable(entity, Content, "TestSheet", new Vector2(8, 16), new Vector2(0), new Vector2(2), 16, 32, 0.1f);
+			//Character character = new Character(entity);
+			//AABBCollider boxCollider = new AABBCollider(entity, new Vector2(0), 1.0f, 1.9f);
+			//renderable.Drawable.AddAnimation(0, 32, 1, 30);
+			//renderable.Drawable.AddAnimation(0, 32, 4, 30);
+			//entity.Components.Add(renderable);
+			//entity.Components.Add(character);
+			//entity.Components.Add(boxCollider);
+			//Emitter emitter = new Emitter(entity, Content, "arrow", true, 3000, 50, new Vector2(0, -10), 0, 0, 8, 1.5);
+			//emitter.ParticleDrawable.AddAnimation(0, 32, 1, 30);
+			//entity.Components.Add(emitter);
+			//Weapon weapon = new Weapon(entity);
+			//weapon._d = new Drawable(Content, "fragNade", new Vector2(0), 32, 32, 0.1f);
+			//entity.Components.Add(weapon);
 
-			cam.SetSubject(entity);
 			//for (int i = 0; i < 101; i++)
 			//{
 			//	for (int j = 0; j < 101; j++)
@@ -144,13 +144,21 @@ namespace Fredrick.src
 			//		}
 			//	}
 			//}
+		}
+			
+			terrain = levelEditor.Load("terrainData");
+			actors = levelEditor.Load("actorsData");
 
-			//levelEditor.Save(terrain);
-			terrain = levelEditor.LoadTerrain(Content);
-
-			foreach (Entity e in terrain)
+			foreach(Entity e in terrain)
 			{
 				e.Load(Content);
+			}
+
+			foreach (Entity e in actors)
+			{
+				e.Load(Content);
+				if (e.GetComponent<Character>() != null)
+					cam.SetSubject(e);
 			}
 		}
 
@@ -174,12 +182,12 @@ namespace Fredrick.src
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
 
-			foreach (var e in entities)
+			foreach (var e in actors)
 				e.Update(gameTime.ElapsedGameTime.TotalSeconds);
 
 			ColliderManager.Instance.Update(gameTime.ElapsedGameTime.TotalSeconds);
 
-			foreach (var e in entities)
+			foreach (var e in actors)
 			{
 				if (e.GetComponent<Weapon>() != null)
 					e.GetComponent<Weapon>().UpdateProjectilePos();
@@ -202,7 +210,7 @@ namespace Fredrick.src
 		{
 			//aaaaaaaaaaaaa
 			PostProcessing p = new PostProcessing();
-			p.Draw(spriteBatch, GraphicsDevice, entities);
+			p.Draw(spriteBatch, GraphicsDevice, actors);
 			//aaaaaaaaaaaaaaaaaa
 
 			GraphicsDevice.SetRenderTarget(sceneTarget);
@@ -210,7 +218,7 @@ namespace Fredrick.src
 			GraphicsDevice.Clear(Color.CornflowerBlue);
 
 			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, lighting, cam.Get_Transformation(GraphicsDevice));
-			foreach (var e in entities)
+			foreach (var e in actors)
 				e.Draw(spriteBatch);
 			foreach (var e in terrain)
 				e.Draw(spriteBatch);
@@ -225,7 +233,7 @@ namespace Fredrick.src
 			if (DebugManager.Instance.Debug)
 			{
 				spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, cam.Get_Transformation(GraphicsDevice));
-				foreach (var e in entities)
+				foreach (var e in actors)
 					e.DebugDraw(spriteBatch);
 				spriteBatch.End();
 			}

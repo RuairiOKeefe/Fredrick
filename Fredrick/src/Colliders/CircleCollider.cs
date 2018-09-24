@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Fredrick.src
 {
+	[Serializable]
 	public class CircleCollider : Component
 	{
 		Vector2 _position;

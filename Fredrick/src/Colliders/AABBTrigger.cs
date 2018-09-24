@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Fredrick.src
 {
-	public class AABBTrigger : Trigger
+	[Serializable]
+	public class AABBTrigger : Component
 	{
 		private int _index;//index in ColliderManager
 		private RectangleF _rectangle;
@@ -99,7 +101,22 @@ namespace Fredrick.src
 			return trigger;
 		}
 
-		public void DebugDraw(SpriteBatch spriteBatch)
+		public override void Load(ContentManager content)
+		{
+			
+		}
+
+		public override void Update(double deltaTime)
+		{
+			
+		}
+
+		public override void Draw(SpriteBatch spriteBatch)
+		{
+			
+		}
+
+		public override void DebugDraw(SpriteBatch spriteBatch)
 		{
 			Vector2 tl = new Vector2(Rectangle.GetPosition().X - Rectangle.Width / 2, Rectangle.GetPosition().Y + Rectangle.Height / 2);
 			Vector2 tr = new Vector2(Rectangle.GetPosition().X + Rectangle.Width / 2, Rectangle.GetPosition().Y + Rectangle.Height / 2);

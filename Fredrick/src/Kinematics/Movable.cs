@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Fredrick.src
 {
+	[Serializable]
 	public class Movable : Component
 	{
 		//If this component is used with a collider of any kind, this component should be added to the entity before the collider or invalid moves will be possible

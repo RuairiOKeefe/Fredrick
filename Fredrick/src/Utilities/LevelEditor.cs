@@ -16,49 +16,42 @@ namespace Fredrick.src
 {
 	class LevelEditor
 	{
+		SurrogateSelector _surrogateSelector;
 		public LevelEditor()
 		{
-
+			_surrogateSelector = new SurrogateSelector();
+			Vector2SurrogateSelector vector2SS = new Vector2SurrogateSelector();
+			RectangleSurrogateSelector rectangleSS = new RectangleSurrogateSelector();
+			ColorSurrogateSelector colorSS = new ColorSurrogateSelector();
+			_surrogateSelector.AddSurrogate(typeof(Vector2), new StreamingContext(StreamingContextStates.All), vector2SS);
+			_surrogateSelector.AddSurrogate(typeof(Rectangle), new StreamingContext(StreamingContextStates.All), rectangleSS);
+			_surrogateSelector.AddSurrogate(typeof(Color), new StreamingContext(StreamingContextStates.All), colorSS);
 		}
 
-		public void Save(List<Entity> entities)
+		public void Save(string filename, List<Entity> entities)
 		{
-			using (Stream stream = File.Open("terrainData", FileMode.Create))
+			using (Stream stream = File.Open(filename, FileMode.Create))
 			{
-				SurrogateSelector surrogateSelector = new SurrogateSelector();
-				Vector2SurrogateSelector vector2SS = new Vector2SurrogateSelector();
-				RectangleSurrogateSelector rectangleSS = new RectangleSurrogateSelector();
-				ColorSurrogateSelector colorSS = new ColorSurrogateSelector();
-				surrogateSelector.AddSurrogate(typeof(Vector2), new StreamingContext(StreamingContextStates.All), vector2SS);
-				surrogateSelector.AddSurrogate(typeof(Rectangle), new StreamingContext(StreamingContextStates.All), rectangleSS);
-				surrogateSelector.AddSurrogate(typeof(Color), new StreamingContext(StreamingContextStates.All), colorSS);
+				
 
 				var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-				binaryFormatter.SurrogateSelector = surrogateSelector;
+				binaryFormatter.SurrogateSelector = _surrogateSelector;
 				binaryFormatter.Serialize(stream, entities);
 			}
 		}
 
-		public List<Entity> LoadTerrain(ContentManager Content)
+		public List<Entity> Load(string filename)
 		{
-			List<Entity> _terrain = new List<Entity>();
+			List<Entity> entities = new List<Entity>();
 
-			using (Stream stream = File.Open("terrainData", FileMode.Open))
+			using (Stream stream = File.Open(filename, FileMode.Open))
 			{
-				SurrogateSelector surrogateSelector = new SurrogateSelector();
-				Vector2SurrogateSelector vector2SS = new Vector2SurrogateSelector();
-				RectangleSurrogateSelector rectangleSS = new RectangleSurrogateSelector();
-				ColorSurrogateSelector colorSS = new ColorSurrogateSelector();
-				surrogateSelector.AddSurrogate(typeof(Vector2), new StreamingContext(StreamingContextStates.All), vector2SS);
-				surrogateSelector.AddSurrogate(typeof(Rectangle), new StreamingContext(StreamingContextStates.All), rectangleSS);
-				surrogateSelector.AddSurrogate(typeof(Color), new StreamingContext(StreamingContextStates.All), colorSS);
-
 				var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-				binaryFormatter.SurrogateSelector = surrogateSelector;
-				_terrain = (List<Entity>)binaryFormatter.Deserialize(stream);
+				binaryFormatter.SurrogateSelector = _surrogateSelector;
+				entities = (List<Entity>)binaryFormatter.Deserialize(stream);
 			}
 
-			return _terrain;
+			return entities;
 		}
 
 		public void AddObject(Vector2 position, int blockID)

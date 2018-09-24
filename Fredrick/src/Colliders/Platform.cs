@@ -12,6 +12,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Fredrick.src
 {
+	[Serializable]
 	public class Platform : Component
 	{
 

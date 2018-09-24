@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Fredrick.src
 {
+	[Serializable]
 	public class Character : Movable
 	{
 

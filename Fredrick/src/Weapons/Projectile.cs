@@ -13,6 +13,7 @@ using System.Diagnostics;
 
 namespace Fredrick.src
 {
+	[Serializable]
 	public class Projectile : Movable
 	{
 		private double _lifeTime;

@@ -38,7 +38,6 @@ namespace Fredrick.src
 		public AABBCollider(Entity owner, Vector2 position, float width = 1.0f, float height = 1.0f) : base(owner)
 		{
 			_rectangle = new RectangleF(position, width, height);
-			Load(null);
 		}
 
 		public bool CheckCollision(RectangleF other)
