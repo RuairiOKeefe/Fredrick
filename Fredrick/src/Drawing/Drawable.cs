@@ -33,10 +33,9 @@ namespace Fredrick.src
 		{
 		}
 
-		public Drawable(ContentManager content, string spriteName, Vector2 origin, int width = 32, int height = 32, float layer = 0.1f)
+		public Drawable(string spriteName, Vector2 origin, int width = 32, int height = 32, float layer = 0.1f)
 		{
 			_spriteName = spriteName;
-			Load(content);
 			_spriteSize = 32;
 			_origin = origin;
 			_width = width;

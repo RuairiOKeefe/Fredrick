@@ -44,9 +44,9 @@ namespace Fredrick.src
 			set { _pD = value; }
 		}
 
-		public Emitter(Entity owner, ContentManager content, String spriteName, bool continuous, int maxParticles, int emissionCount, Vector2 acceleration, float spawnWidth = 0, float spawnHeight = 0, float spawnVelocity = 3.0f, double lifeTime = 3.0) : base(owner)
+		public Emitter(Entity owner, String spriteName, bool continuous, int maxParticles, int emissionCount, Vector2 acceleration, float spawnWidth = 0, float spawnHeight = 0, float spawnVelocity = 3.0f, double lifeTime = 3.0) : base(owner)
 		{
-			_pD = new Drawable(content, spriteName, new Vector2(16, 16), 32, 32, 0.1f);
+			_pD = new Drawable(spriteName, new Vector2(16, 16), 32, 32, 0.1f);
 			_position = new Vector2(0, 0);
 			_scale = new Vector2(0.2f);
 

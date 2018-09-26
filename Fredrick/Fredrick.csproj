@@ -70,6 +70,7 @@
     <Compile Include="src\Drawing\Renderable.cs" />
     <Compile Include="src\Colliders\Platform.cs" />
     <Compile Include="src\Utilities\LevelEditor.cs" />
+    <Compile Include="src\Utilities\Serializer.cs" />
     <Compile Include="src\Utilities\SurrogateSelectors.cs" />
     <Compile Include="src\Utilities\Transform.cs" />
     <Compile Include="src\Colliders\Trigger.cs" />

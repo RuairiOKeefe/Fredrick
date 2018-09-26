@@ -24,6 +24,7 @@ namespace Fredrick.src
 		RenderTarget2D sceneTarget;
 		RenderTarget2D bloomTarget;
 
+		Serializer serializer;
 		LevelEditor levelEditor;
 
 		public Game1()
@@ -35,6 +36,7 @@ namespace Fredrick.src
 			Content.RootDirectory = "Content";
 			//graphics.IsFullScreen = true;
 
+			serializer = new Serializer();
 			levelEditor = new LevelEditor();
 		}
 
@@ -146,8 +148,8 @@ namespace Fredrick.src
 			//}
 		}
 			
-			terrain = levelEditor.Load("terrainData");
-			actors = levelEditor.Load("actorsData");
+			terrain = serializer.Load("terrainData");
+			actors = serializer.Load("actorsData");
 
 			foreach(Entity e in terrain)
 			{
@@ -160,6 +162,8 @@ namespace Fredrick.src
 				if (e.GetComponent<Character>() != null)
 					cam.SetSubject(e);
 			}
+
+			levelEditor.Load(Content);
 		}
 
 		/// <summary>

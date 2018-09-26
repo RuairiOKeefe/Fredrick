@@ -1,64 +1,84 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml;
-using System.Xml.Serialization;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Content;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Runtime.Serialization;
 
 namespace Fredrick.src
 {
-	class LevelEditor
+	public class LevelEditor
 	{
-		SurrogateSelector _surrogateSelector;
+		Entity indicator;
+		List<Entity> entities;
+
 		public LevelEditor()
 		{
-			_surrogateSelector = new SurrogateSelector();
-			Vector2SurrogateSelector vector2SS = new Vector2SurrogateSelector();
-			RectangleSurrogateSelector rectangleSS = new RectangleSurrogateSelector();
-			ColorSurrogateSelector colorSS = new ColorSurrogateSelector();
-			_surrogateSelector.AddSurrogate(typeof(Vector2), new StreamingContext(StreamingContextStates.All), vector2SS);
-			_surrogateSelector.AddSurrogate(typeof(Rectangle), new StreamingContext(StreamingContextStates.All), rectangleSS);
-			_surrogateSelector.AddSurrogate(typeof(Color), new StreamingContext(StreamingContextStates.All), colorSS);
+			indicator = new Entity();
+			entities = new List<Entity>();
+
+			Entity e = new Entity("block");
+			e.Tags.Add("block");
+			Renderable r = new Renderable(e, "testSheet", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+			r.Drawable.AddAnimation(0, 0, 1, 30);
+			AABBCollider c = new AABBCollider(e, new Vector2(0), 1, 1);
+			e.Components.Add(r);
+			e.Components.Add(c);
+			entities.Add(e);
+
+			e = new Entity("slope");
+			e.Tags.Add("block");
+			r = new Renderable(e, "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+			r.Drawable.AddAnimation(0, 0, 1, 30);
+			Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, -0.5f, 0.5f, -0.3f);
+			e.Components.Add(r);
+			e.Components.Add(p);
+			entities.Add(e);
+
+			e = new Entity("slope");
+			e.Tags.Add("block");
+			r = new Renderable(e, "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+			r.Drawable.AddAnimation(32, 0, 1, 30);
+			 p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, -0.5f, -0.3f);
+			e.Components.Add(r);
+			e.Components.Add(p);
+			entities.Add(e);
+
+			e = new Entity("slope");
+			e.Tags.Add("block");
+			r = new Renderable(e, "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+			r.Drawable.AddAnimation(64, 0, 1, 30);
+			 p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, -0.5f, 0.3f);
+			e.Components.Add(r);
+			e.Components.Add(p);
+			entities.Add(e);
+
+			e = new Entity("slope");
+			e.Tags.Add("block");
+			r = new Renderable(e, "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+			r.Drawable.AddAnimation(96, 0, 1, 30);
+			 p = new Platform(e, new Vector2(0), 1, 1, 0, 0, -0.5f, 0.5f, 0.3f);
+			e.Components.Add(r);
+			e.Components.Add(p);
+			entities.Add(e);
 		}
 
-		public void Save(string filename, List<Entity> entities)
+		public void Load(ContentManager content)
 		{
-			using (Stream stream = File.Open(filename, FileMode.Create))
+			foreach (Entity e in entities)
 			{
-				
-
-				var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-				binaryFormatter.SurrogateSelector = _surrogateSelector;
-				binaryFormatter.Serialize(stream, entities);
+				e.Load(content);
 			}
 		}
 
-		public List<Entity> Load(string filename)
+		public void Update(double deltaTime)
 		{
-			List<Entity> entities = new List<Entity>();
 
-			using (Stream stream = File.Open(filename, FileMode.Open))
-			{
-				var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-				binaryFormatter.SurrogateSelector = _surrogateSelector;
-				entities = (List<Entity>)binaryFormatter.Deserialize(stream);
-			}
-
-			return entities;
 		}
 
-		public void AddObject(Vector2 position, int blockID)
-		{
-		}
-
-		public void RemoveObject(Vector2 position)
+		public void Draw(SpriteBatch spriteBatch)
 		{
 
 		}

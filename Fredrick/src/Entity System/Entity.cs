@@ -14,13 +14,23 @@ namespace Fredrick.src
 	{
 		private bool _active { get; set; }
 
-		public string Id { get; }
+		public string Id { get; set; }
+
+		public List<string> Tags { get; set; }
 
 		public List<Component> Components = new List<Component>();
 
 		public Entity()
 		{
 			_active = true;
+			Tags = new List<string>();
+		}
+
+		public Entity(string id)
+		{
+			_active = true;
+			Id = id;
+			Tags = new List<string>();
 		}
 
 		public bool GetActive() { return _active; }
