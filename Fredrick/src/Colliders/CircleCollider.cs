@@ -38,7 +38,7 @@ namespace Fredrick.src
 
 		public void Revive()
 		{
-			_body = new Body(ColliderManager.Instance.World, _owner.GetPosition(), 0, BodyType.Dynamic);
+			_body = new Body(ColliderManager.Instance.World, _owner.Position, 0, BodyType.Dynamic);
 			_circle = new CircleShape(0.25f, 1.0f);
 			_circle.Position = _position;
 			_fixture = _body.CreateFixture(_circle);
@@ -46,7 +46,7 @@ namespace Fredrick.src
 			_body.BodyType = BodyType.Dynamic;
 			_body.UserData = _owner;
 			_body.Awake = true;
-			_body.Position = _owner.GetPosition();
+			_body.Position = _owner.Position;
 
 
 			_body.Restitution = 0.7f;
@@ -64,8 +64,8 @@ namespace Fredrick.src
 
 		public void UpdatePosition()
 		{
-			_owner.SetPosition(_body.Position);
-			_owner.SetRotation(-_body.Rotation);//Needs to be negative
+			_owner.Position = _body.Position;
+			_owner.Rotation = -_body.Rotation;//Needs to be negative
 		}
 
 		public void Kill()

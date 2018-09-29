@@ -86,14 +86,14 @@ namespace Fredrick.src
 
 			foreach (Platform p in ColliderManager.Instance.Platforms)
 			{
-				if (p.GetOwner() != _owner)
+				if (p.Owner != _owner)
 					if (CheckCollision(p))
 						trigger = true;
 			}
 
 			foreach (AABBCollider c in ColliderManager.Instance.Colliders)
 			{
-				if (c.GetOwner() != _owner)
+				if (c.Owner != _owner)
 					if (CheckCollision(c))
 						trigger = true;
 			}
@@ -118,14 +118,14 @@ namespace Fredrick.src
 
 		public override void DebugDraw(SpriteBatch spriteBatch)
 		{
-			Vector2 tl = new Vector2(Rectangle.GetPosition().X - Rectangle.Width / 2, Rectangle.GetPosition().Y + Rectangle.Height / 2);
-			Vector2 tr = new Vector2(Rectangle.GetPosition().X + Rectangle.Width / 2, Rectangle.GetPosition().Y + Rectangle.Height / 2);
-			Vector2 bl = new Vector2(Rectangle.GetPosition().X - Rectangle.Width / 2, Rectangle.GetPosition().Y - Rectangle.Height / 2);
-			Vector2 br = new Vector2(Rectangle.GetPosition().X + Rectangle.Width / 2, Rectangle.GetPosition().Y - Rectangle.Height / 2);
-			DebugManager.Instance.DrawLine(spriteBatch, tl + _owner.GetPosition(), tr + _owner.GetPosition());
-			DebugManager.Instance.DrawLine(spriteBatch, tr + _owner.GetPosition(), br + _owner.GetPosition());
-			DebugManager.Instance.DrawLine(spriteBatch, br + _owner.GetPosition(), bl + _owner.GetPosition());
-			DebugManager.Instance.DrawLine(spriteBatch, bl + _owner.GetPosition(), tl + _owner.GetPosition());
+			Vector2 tl = new Vector2(Rectangle.Position.X - Rectangle.Width / 2, Rectangle.Position.Y + Rectangle.Height / 2);
+			Vector2 tr = new Vector2(Rectangle.Position.X + Rectangle.Width / 2, Rectangle.Position.Y + Rectangle.Height / 2);
+			Vector2 bl = new Vector2(Rectangle.Position.X - Rectangle.Width / 2, Rectangle.Position.Y - Rectangle.Height / 2);
+			Vector2 br = new Vector2(Rectangle.Position.X + Rectangle.Width / 2, Rectangle.Position.Y - Rectangle.Height / 2);
+			DebugManager.Instance.DrawLine(spriteBatch, tl + _owner.Position, tr + _owner.Position);
+			DebugManager.Instance.DrawLine(spriteBatch, tr + _owner.Position, br + _owner.Position);
+			DebugManager.Instance.DrawLine(spriteBatch, br + _owner.Position, bl + _owner.Position);
+			DebugManager.Instance.DrawLine(spriteBatch, bl + _owner.Position, tl + _owner.Position);
 		}
 	}
 }

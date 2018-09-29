@@ -12,28 +12,29 @@ namespace Fredrick.src
 	[Serializable]
 	public class Entity : Transform
 	{
-		private bool _active { get; set; }
+		public bool Active { get; set; }
 
 		public string Id { get; set; }
 
 		public List<string> Tags { get; set; }
 
-		public List<Component> Components = new List<Component>();
+		public List<Component> Components { get; set; }
 
 		public Entity()
 		{
-			_active = true;
+			Active = true;
+			Id = null;
 			Tags = new List<string>();
+			Components = new List<Component>();
 		}
 
-		public Entity(string id)
+		public Entity(bool active, string id)
 		{
-			_active = true;
+			Active = active;
 			Id = id;
 			Tags = new List<string>();
+			Components = new List<Component>();
 		}
-
-		public bool GetActive() { return _active; }
 
 		public T GetComponent<T>() where T : Component
 		{
@@ -51,22 +52,31 @@ namespace Fredrick.src
 
 		public void Update(double deltaTime)//Add remove check here for if component is to be removed
 		{
-			foreach (var c in Components)
+			if (Active)
 			{
-				c.Update(deltaTime);
+				foreach (var c in Components)
+				{
+					if (c.Active)
+						c.Update(deltaTime);
+				}
 			}
 		}
 
 		public void Draw(SpriteBatch spriteBatch)
 		{
-			foreach (var c in Components)
+			if (Active)
 			{
-				c.Draw(spriteBatch);
+				foreach (var c in Components)
+				{
+					if (c.Active)
+						c.Draw(spriteBatch);
+				}
 			}
 		}
 
 		public void DebugDraw(SpriteBatch spriteBatch)
 		{
+			if (Active)
 			{
 				foreach (var c in Components)
 				{

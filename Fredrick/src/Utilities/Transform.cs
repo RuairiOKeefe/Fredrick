@@ -15,34 +15,22 @@ namespace Fredrick.src
 		protected float _rotation;
 		protected Vector2 _scale;
 
-		public Vector2 GetPosition()
+		public Vector2 Position
 		{
-			return _position;
+			get { return _position; }
+			set { _position = value; }
 		}
 
-		public void SetPosition(Vector2 position)
+		public float Rotation
 		{
-			this._position = position;
+			get { return _rotation; }
+			set { _rotation = value; }
 		}
 
-		public float GetRotation()
+		public Vector2 Scale
 		{
-			return _rotation;
-		}
-
-		public void SetRotation(float rotation)
-		{
-			this._rotation = rotation;
-		}
-
-		public Vector2 GetScale()
-		{
-			return _scale;
-		}
-
-		public void SetScale(Vector2 scale)
-		{
-			this._scale = scale;
+			get { return _scale; }
+			set { _scale = value; }
 		}
 
 		public void Move(Vector2 offset)

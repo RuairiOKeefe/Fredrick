@@ -48,7 +48,7 @@ namespace Fredrick.src
 		{
 			_pD = new Drawable(spriteName, new Vector2(16, 16), 32, 32, 0.1f);
 			_position = new Vector2(0, 0);
-			_scale = new Vector2(0.2f);
+			_scale = new Vector2(1.0f);
 
 			rnd = new Random();
 
@@ -75,7 +75,7 @@ namespace Fredrick.src
 				spawnVel.Normalize();
 				spawnVel *= (_spawnVelocity * (float)rnd.NextDouble());
 				Particle p = ParticleBuffer.Instance.InactiveParticles.Pop();
-				p.Revive(spawnPos + _owner.GetPosition(), spawnVel, _lifeTime * rnd.NextDouble());
+				p.Revive(spawnPos + _owner.Position, spawnVel, _lifeTime * rnd.NextDouble());
 				_particles.Add(p);
 			}
 		}
@@ -91,16 +91,7 @@ namespace Fredrick.src
 			{
 				if (_particles.Count < _maxParticles)
 				{
-					for (int i = 0; i < _emissionCount; i++)
-					{
-						Vector2 spawnPos = new Vector2((float)rnd.NextDouble() * _spawnWidth - (_spawnWidth / 2), (float)rnd.NextDouble() * _spawnHeight - (_spawnHeight / 2));
-						Vector2 spawnVel = new Vector2((float)rnd.NextDouble() * 2 - 1, (float)rnd.NextDouble() * 2 - 1);
-						spawnVel.Normalize();
-						spawnVel *= (_spawnVelocity * (float)rnd.NextDouble());
-						Particle p = ParticleBuffer.Instance.InactiveParticles.Pop();
-						p.Revive(spawnPos + _owner.GetPosition(), spawnVel, _lifeTime * rnd.NextDouble());
-						_particles.Add(p);
-					}
+					Emit();
 				}
 			}
 

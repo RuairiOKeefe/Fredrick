@@ -96,7 +96,7 @@ namespace Fredrick.src
 			_dead = false;
 			_detonated = false;
 
-			_body = new Body(ColliderManager.Instance.World, _owner.GetPosition(), 0, BodyType.Dynamic);
+			_body = new Body(ColliderManager.Instance.World, _owner.Position, 0, BodyType.Dynamic);
 			_circle = new CircleShape(_radius, 1.0f);
 			_circle.Position = _position;
 			_fixture = _body.CreateFixture(_circle);
@@ -104,7 +104,7 @@ namespace Fredrick.src
 			_body.BodyType = BodyType.Dynamic;
 			_body.UserData = _owner;
 			_body.Awake = true;
-			_body.Position = _owner.GetPosition();
+			_body.Position = _owner.Position;
 
 			_fixture.IsSensor = true;
 
@@ -117,7 +117,7 @@ namespace Fredrick.src
 		public override void Update(double deltaTime)
 		{
 			_lifeTime -= deltaTime;
-			_body.Position = _owner.GetPosition();
+			_body.Position = _owner.Position;
 
 			ResolveMotion(deltaTime);
 
@@ -133,7 +133,7 @@ namespace Fredrick.src
 				{
 					_rotation = 0;
 				}
-				_owner.SetRotation(_rotation);
+				_owner.Rotation = _rotation;
 			}
 
 
@@ -151,11 +151,11 @@ namespace Fredrick.src
 								Entity e = (Entity)c.Other.UserData;
 								if (e.GetComponent<CircleCollider>() != null)
 								{
-									Vector2 force = e.GetPosition() - _owner.GetPosition();
+									Vector2 force = e.Position - _owner.Position;
 									Debug.Write(force.Length() + "\n");
 									force.Normalize();
 									force *= _knockback;
-									e.GetComponent<CircleCollider>().ApplyForce(force, _owner.GetPosition());
+									e.GetComponent<CircleCollider>().ApplyForce(force, _owner.Position);
 								}
 							}
 							c = c.Next;

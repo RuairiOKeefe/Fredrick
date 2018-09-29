@@ -141,11 +141,12 @@ namespace Fredrick.src
 				{
 					_acceleration.X = _horAcc * _moveCommand * _airMove;
 
-					if ((_velocity.X * _velocity.X) > (_maxSpeed * _maxSpeed) && _velocity.X * _moveCommand > 0)
-					{
-						_velocity.X = _maxSpeed * Math.Sign(_moveCommand);
-						_acceleration.X = 0;
-					}
+
+				}
+				if ((_velocity.X * _velocity.X) > (_maxSpeed * _maxSpeed) && _velocity.X * _moveCommand > 0)
+				{
+					_velocity.X = _maxSpeed * Math.Sign(_moveCommand);
+					_acceleration.X = 0;
 				}
 			}
 
@@ -196,7 +197,7 @@ namespace Fredrick.src
 			_jumpClock -= deltaTime;
 			_prevGrounded = _grounded;
 
-			if (_jumpTrigger.Update(_owner.GetPosition()) && !_jumpWait)
+			if (_jumpTrigger.Update(_owner.Position) && !_jumpWait)
 			{
 				_grounded = true;
 				_jumpsLeft = _maxJumps;
@@ -256,16 +257,16 @@ namespace Fredrick.src
 
 			if (_moveCommand > 0)
 			{
-				_followPosition = _owner.GetPosition() + _followOffset;
+				_followPosition = _owner.Position + _followOffset;
 			}
 			else
 				if (_moveCommand < 0)
 			{
-				_followPosition = _owner.GetPosition() - _followOffset;
+				_followPosition = _owner.Position - _followOffset;
 			}
 			else
 			{
-				_followPosition = _owner.GetPosition();
+				_followPosition = _owner.Position;
 			}
 		}
 

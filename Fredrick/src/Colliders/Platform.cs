@@ -36,11 +36,9 @@ namespace Fredrick.src
 		protected float _platformDepth;
 		protected Vector2 _normal;
 
-		Body _body;
-		EdgeShape _shape;
-		Fixture _fixture;
-
 		protected Texture2D _lineTex;//A simple 1x1 texture to be used for line rendering in debug
+
+		private List<int[]> cells;
 
 		public float Width
 		{
@@ -132,7 +130,7 @@ namespace Fredrick.src
 
 		public Platform(Entity owner, Vector2 currentPosition, float width, float height, float offsetX, float offsetY, float lHeight, float rHeight, float platformDepth) : base(owner)
 		{
-			_currentPosition = currentPosition + owner.GetPosition();
+			_currentPosition = currentPosition + owner.Position;
 			_width = width;
 			_height = height;
 
@@ -141,24 +139,33 @@ namespace Fredrick.src
 
 			_lHeight = lHeight;
 			_rHeight = rHeight;
-			_platformDepth = platformDepth;
+			_platformDepth = platformDepth;	
+		}
 
-			_body = new Body(ColliderManager.Instance.World, _owner.GetPosition() + _position, 0, BodyType.Static);
-			_body.UserData = _owner;
-			_shape = new EdgeShape(new Vector2(-width / 2, _lHeight), new Vector2(width / 2, _rHeight));
-			_fixture = _body.CreateFixture(_shape);
+		public override void Load(ContentManager content)
+		{
+			_currentPosition = _owner.Position + _position;
+
+			Body body;
+			EdgeShape shape;
+			Fixture fixture;
+
+			body = new Body(ColliderManager.Instance.World, _owner.Position + _position, 0, BodyType.Static);
+			body.UserData = _owner;
+			shape = new EdgeShape(new Vector2(-_width / 2, _lHeight), new Vector2(_width / 2, _rHeight));
+			fixture = body.CreateFixture(shape);
 
 			Vector2 a = new Vector2();
 			Vector2 b = new Vector2();
-			if (platformDepth < 0)
+			if (_platformDepth < 0)
 			{
-				a = new Vector2(-width / 2, rHeight);
-				b = new Vector2(width / 2, lHeight);
+				a = new Vector2(-_width / 2, _rHeight);
+				b = new Vector2(_width / 2, _lHeight);
 			}
 			else
 			{
-				a = new Vector2(-width / 2, lHeight);
-				b = new Vector2(width / 2, rHeight);
+				a = new Vector2(-_width / 2, _lHeight);
+				b = new Vector2(_width / 2, _rHeight);
 			}
 			Vector2 v = b - a;
 			_normal = new Vector2(v.Y, -v.X);
@@ -166,11 +173,20 @@ namespace Fredrick.src
 
 			ColliderManager.Instance.Platforms.Add(this);
 			_lineTex = DebugManager.Instance.LineTex;
-		}
 
-		public override void Load(ContentManager content)
-		{
-
+			cells = new List<int[]>();
+			int minX = Math.Max((int)Math.Floor(_currentPosition.X - (_width / 2) + 0.5), 0);
+			int maxX = Math.Min((int)Math.Floor(_currentPosition.X + (_width / 2) + 0.5), 1000);
+			int minY = Math.Max((int)Math.Floor(_currentPosition.Y - (_height / 2) + 0.5), 0);
+			int maxY = Math.Min((int)Math.Floor(_currentPosition.Y + (_height / 2) + 0.5), 1000);
+			for (int i = minX; i < maxX + 1; i++)
+			{
+				for (int j = minY; j < maxY + 1; j++)
+				{
+					ColliderManager.Instance.Terrain[i, j].Add(_owner);
+					cells.Add(new int[2] { i, j });
+				}
+			}
 		}
 
 		public override void Update(double deltaTime)

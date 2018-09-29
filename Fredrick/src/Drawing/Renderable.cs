@@ -47,7 +47,7 @@ namespace Fredrick.src
 		public override void Draw(SpriteBatch spriteBatch)
 		{
 			Vector2 inv = new Vector2(1, -1);
-			spriteBatch.Draw(ResourceManager.Instance.Textures[_drawable._spriteName], (_position + _owner.GetPosition()) * inv * _drawable._spriteSize, _drawable._sourceRectangle, _drawable._colour, _owner.GetRotation() + _rotation, _drawable._origin, _scale, _drawable._spriteEffects, _drawable._layer);
+			spriteBatch.Draw(ResourceManager.Instance.Textures[_drawable._spriteName], (_position + _owner.Position) * inv * _drawable._spriteSize, _drawable._sourceRectangle, _drawable._colour, _owner.Rotation + _rotation, _drawable._origin, _scale, _drawable._spriteEffects, _drawable._layer);
 		}
 
 		public override void DebugDraw(SpriteBatch spriteBatch)

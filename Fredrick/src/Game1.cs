@@ -74,84 +74,90 @@ namespace Fredrick.src
 			ColliderManager.Instance.Load();
 			ProjectileBuffer.Instance.Load("fragNade", Content);
 
+			if (false)
 			{
-			//Entity entity = new Entity();
-			//entity.SetPosition(new Vector2(8, 8));
-			//actors.Add(entity);
-			//Renderable renderable = new Renderable(entity, Content, "TestSheet", new Vector2(8, 16), new Vector2(0), new Vector2(2), 16, 32, 0.1f);
-			//Character character = new Character(entity);
-			//AABBCollider boxCollider = new AABBCollider(entity, new Vector2(0), 1.0f, 1.9f);
-			//renderable.Drawable.AddAnimation(0, 32, 1, 30);
-			//renderable.Drawable.AddAnimation(0, 32, 4, 30);
-			//entity.Components.Add(renderable);
-			//entity.Components.Add(character);
-			//entity.Components.Add(boxCollider);
-			//Emitter emitter = new Emitter(entity, Content, "arrow", true, 3000, 50, new Vector2(0, -10), 0, 0, 8, 1.5);
-			//emitter.ParticleDrawable.AddAnimation(0, 32, 1, 30);
-			//entity.Components.Add(emitter);
-			//Weapon weapon = new Weapon(entity);
-			//weapon._d = new Drawable(Content, "fragNade", new Vector2(0), 32, 32, 0.1f);
-			//entity.Components.Add(weapon);
+				Entity entity = new Entity(true, "Player");
+				entity.Position = new Vector2(8, 8);
+				actors.Add(entity);
+				Renderable renderable = new Renderable(entity, "TestSheet", new Vector2(8, 8), new Vector2(0), new Vector2(2), 16, 16, 0.1f);
+				Character character = new Character(entity);
+				AABBCollider boxCollider = new AABBCollider(entity, new Vector2(0), 1.0f, 1.0f);
+				renderable.Drawable.AddAnimation(0, 32, 1, 30);
+				renderable.Drawable.AddAnimation(0, 32, 4, 30);
+				entity.Components.Add(renderable);
+				entity.Components.Add(character);
+				entity.Components.Add(boxCollider);
+				Emitter emitter = new Emitter(entity, "arrow", true, 3000, 50, new Vector2(0, -10), 0, 0, 8, 0.0);
+				emitter.ParticleDrawable.AddAnimation(0, 32, 1, 30);
+				entity.Components.Add(emitter);
+				Weapon weapon = new Weapon(entity);
+				weapon._d = new Drawable("fragNade", new Vector2(0), 32, 32, 0.1f);
+				entity.Components.Add(weapon);
 
-			//for (int i = 0; i < 101; i++)
-			//{
-			//	for (int j = 0; j < 101; j++)
-			//	{
-			//		if (i < 2 || i > 98 || j < 2 || j > 98)
-			//		{
-			//			Entity e = new Entity();
-			//			e.SetPosition(new Vector2(i, j));
-			//			terrain.Add(e);
-			//			Renderable r = new Renderable(e, Content, "TestSheet", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
-			//			AABBCollider c = new AABBCollider(e, new Vector2(0));
-			//			r.Drawable.AddAnimation(0, 0, 1, 30);
-			//			e.Components.Add(r);
-			//			e.Components.Add(c);
-			//		}
-			//	}
-			//}
+				for (int i = 0; i < 101; i++)
+				{
+					for (int j = 0; j < 101; j++)
+					{
+						if (i < 2 || i > 98 || j < 2 || j > 98)
+						{
+							Entity e = new Entity(true, "Block");
+							e.Position = new Vector2(i, j);
+							terrain.Add(e);
+							Renderable r = new Renderable(e, "TestSheet", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+							AABBCollider c = new AABBCollider(e, new Vector2(0));
+							r.Drawable.AddAnimation(0, 0, 1, 30);
+							e.Components.Add(r);
+							e.Components.Add(c);
+						}
+					}
+				}
 
-			//for (int i = 10; i < 68; i++)
-			//{
-			//	for (int j = 5; j < 6; j++)
-			//	{
-			//		if (i % 8 == 0 || i % 8 == 1 || i % 8 == 2 || i % 8 == 3)
-			//		{
-			//			Entity e = new Entity();
-			//			e.SetPosition(new Vector2(i, j));
-			//			terrain.Add(e);
-			//			Renderable r = new Renderable(e, Content, "TestSheet", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
-			//			AABBCollider c = new AABBCollider(e, new Vector2(0));
-			//			r.Drawable.AddAnimation(0, 0, 1, 30);
-			//			e.Components.Add(r);
-			//			e.Components.Add(c);
-			//		}
-			//	}
-			//}
+				for (int i = 10; i < 68; i++)
+				{
+					for (int j = 5; j < 6; j++)
+					{
+						if (i % 8 == 0 || i % 8 == 1 || i % 8 == 2 || i % 8 == 3)
+						{
+							Entity e = new Entity(true, "Block");
+							e.Position = new Vector2(i, j);
+							terrain.Add(e);
+							Renderable r = new Renderable(e, "TestSheet", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+							AABBCollider c = new AABBCollider(e, new Vector2(0));
+							r.Drawable.AddAnimation(0, 0, 1, 30);
+							e.Components.Add(r);
+							e.Components.Add(c);
+						}
+					}
+				}
 
-			//for (int i = 0; i < 4; i++)
-			//{
-			//	for (int j = 0; j < 4; j++)
-			//	{
-			//		if (i == j)
-			//		{
-			//			Entity e = new Entity();
-			//			e.SetPosition(new Vector2(i + 3, j + 2));
-			//			terrain.Add(e);
-			//			Renderable r = new Renderable(e, Content, "TestSheet", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
-			//			AABBCollider c = new AABBCollider(e, new Vector2(0));
-			//			r.Drawable.AddAnimation(0, 0, 1, 30);
-			//			e.Components.Add(r);
-			//			e.Components.Add(c);
-			//		}
-			//	}
-			//}
-		}
-			
-			terrain = serializer.Load("terrainData");
-			actors = serializer.Load("actorsData");
+				for (int i = 0; i < 4; i++)
+				{
+					for (int j = 0; j < 4; j++)
+					{
+						if (i == j)
+						{
+							Entity e = new Entity(true, "Block");
+							e.Position = new Vector2(i + 3, j + 2);
+							terrain.Add(e);
+							Renderable r = new Renderable(e, "TestSheet", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+							AABBCollider c = new AABBCollider(e, new Vector2(0));
+							r.Drawable.AddAnimation(0, 0, 1, 30);
+							e.Components.Add(r);
+							e.Components.Add(c);
+						}
+					}
+				}
 
-			foreach(Entity e in terrain)
+				serializer.Save("terrainData", terrain);
+				serializer.Save("actorsData", actors);
+			}
+			else
+			{
+				terrain = serializer.Load("terrainData");
+				actors = serializer.Load("actorsData");
+			}
+
+			foreach (Entity e in terrain)
 			{
 				e.Load(Content);
 			}
@@ -188,6 +194,8 @@ namespace Fredrick.src
 
 			foreach (var e in actors)
 				e.Update(gameTime.ElapsedGameTime.TotalSeconds);
+			foreach (var e in terrain)
+				e.Update(gameTime.ElapsedGameTime.TotalSeconds);
 
 			ColliderManager.Instance.Update(gameTime.ElapsedGameTime.TotalSeconds);
 
@@ -201,7 +209,8 @@ namespace Fredrick.src
 				if (e.GetComponent<Weapon>() != null)
 					e.GetComponent<Weapon>().UpdateProjectilePos();
 			}
-
+			levelEditor.Update(gameTime.ElapsedGameTime.TotalSeconds, ref terrain, Content);
+			//terrain[terrain.Count - 1].Load(Content);
 			//cam.Trauma = 1;
 			cam.Update(gameTime.ElapsedGameTime.TotalSeconds);
 
@@ -226,6 +235,7 @@ namespace Fredrick.src
 				e.Draw(spriteBatch);
 			foreach (var e in terrain)
 				e.Draw(spriteBatch);
+			levelEditor.Draw(spriteBatch);
 			spriteBatch.End();
 
 			GraphicsDevice.SetRenderTarget(null);

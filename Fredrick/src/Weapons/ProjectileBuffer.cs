@@ -40,6 +40,8 @@ namespace Fredrick.src
 
 		public void Load(String spriteName, ContentManager content)
 		{
+			ResourceManager.Instance.AddTexture(content, spriteName);
+			ResourceManager.Instance.AddTexture(content, "explosion");
 			for (int i = 0; i < NUM_PROJECTILES; i++)
 			{
 				Entity e = new Entity();
@@ -48,7 +50,7 @@ namespace Fredrick.src
 				Renderable r = new Renderable(e, spriteName, new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
 				r.Drawable.AddAnimation(0, 0, 1, 1);
 				r.Drawable.AddAnimation(32, 0, 1, 1);
-				Emitter emitter = new Emitter(e, spriteName, false, 1000, 300, new Vector2(0, 0), 0, 0, 8.0f, 0.5);
+				Emitter emitter = new Emitter(e, "explosion", false, 1000, 300, new Vector2(0, 0), 0, 0, 8.0f, 0.5);
 
 				e.Components.Add(p);
 				e.Components.Add(cc);

@@ -38,8 +38,11 @@ namespace Fredrick.src
 			Jump,
 			Interact,
 			Sprint,
-			Debug
-
+			Debug,
+			Editor,
+			NextEnt,
+			PrevEnt,
+			GridLock
 		}
 
 		private KeyboardState _currentKeyState;
@@ -83,6 +86,10 @@ namespace Fredrick.src
 			_keyBindings.Add(Action.Interact, Keys.E);
 			_keyBindings.Add(Action.Sprint, Keys.LeftShift);
 			_keyBindings.Add(Action.Debug, Keys.Z);
+			_keyBindings.Add(Action.Editor, Keys.X);
+			_keyBindings.Add(Action.NextEnt, Keys.P);
+			_keyBindings.Add(Action.PrevEnt, Keys.O);
+			_keyBindings.Add(Action.GridLock, Keys.L);
 		}
 
 		public Keys GetKey(Action action)

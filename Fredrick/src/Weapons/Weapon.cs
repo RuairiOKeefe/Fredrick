@@ -54,10 +54,10 @@ namespace Fredrick.src
 		public void Fire()
 		{
 			Entity e = ProjectileBuffer.Instance.InactiveProjectiles.Pop();
-			_shotVector = InputHandler.Instance.WorldMousePosition - _owner.GetPosition();// - _owner.GetPosition();
+			_shotVector = InputHandler.Instance.WorldMousePosition - _owner.Position;// - _owner.GetPosition();
 			_shotVector.Normalize();
 
-			e.SetPosition(_spotSpawn + _owner.GetPosition() + _shotVector * 0.8f);
+			e.Position = _spotSpawn + _owner.Position + _shotVector * 0.8f;
 
 			Vector2 shotVelocity = _shotVector * _shotSpeed;
 			//Debug.Write(_owner.GetPosition()+"\n");

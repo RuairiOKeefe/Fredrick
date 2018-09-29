@@ -45,7 +45,7 @@ namespace Fredrick.src
 			bool collided = false;
 
 			Vector2 testMove = new Vector2(_tempMove.X, 0);
-			Vector2 newPos = ((_owner.GetPosition() + testMove));
+			Vector2 newPos = (_owner.Position + testMove);
 
 			_rectangle.UpdatePosition(newPos);
 			if (_rectangle.Intersect(other))
@@ -63,7 +63,7 @@ namespace Fredrick.src
 			}
 
 			testMove = new Vector2(0, _tempMove.Y);
-			newPos = ((_owner.GetPosition() + testMove));
+			newPos = (_owner.Position + testMove);
 
 			_rectangle.UpdatePosition(newPos);
 			if (_rectangle.Intersect(other))
@@ -89,7 +89,7 @@ namespace Fredrick.src
 			if (other.PlatformDepth < 0)
 			{
 				Vector2 testMove = new Vector2(_tempMove.X, 0);
-				Vector2 newPos = ((_owner.GetPosition() + testMove));
+				Vector2 newPos = (_owner.Position + testMove);
 
 				_rectangle.UpdatePosition(newPos);
 				float f = (_rectangle.CurrentPosition.X - (other.CurrentPosition.X - (other.Width / 2))) / ((other.CurrentPosition.X + (other.Width / 2)) - (other.CurrentPosition.X - (other.Width / 2)));//(currentX - minX) / (maxX - minX)
@@ -106,7 +106,7 @@ namespace Fredrick.src
 				}
 
 				testMove = new Vector2(_tempMove.X, _tempMove.Y);
-				newPos = ((_owner.GetPosition() + testMove));
+				newPos = (_owner.Position + testMove);
 
 				_rectangle.UpdatePosition(newPos);
 				f = (_rectangle.CurrentPosition.X - (other.CurrentPosition.X - (other.Width / 2))) / ((other.CurrentPosition.X + (other.Width / 2)) - (other.CurrentPosition.X - (other.Width / 2)));//(currentX - minX) / (maxX - minX)
@@ -125,7 +125,7 @@ namespace Fredrick.src
 			else
 			{
 				Vector2 testMove = new Vector2(_tempMove.X, _tempMove.Y);
-				Vector2 newPos = ((_owner.GetPosition() + testMove));
+				Vector2 newPos = (_owner.Position + testMove);
 				{
 					_rectangle.UpdatePosition(newPos);
 					float f = (_rectangle.CurrentPosition.X - (other.CurrentPosition.X - (other.Width / 2))) / ((other.CurrentPosition.X + (other.Width / 2)) - (other.CurrentPosition.X - (other.Width / 2)));//(currentX - minX) / (maxX - minX)
@@ -148,7 +148,7 @@ namespace Fredrick.src
 
 		public override void Load(ContentManager content)
 		{
-			_rectangle.UpdatePosition(_owner.GetPosition() + _position);
+			_rectangle.UpdatePosition(_owner.Position + _position);
 			_index = ColliderManager.Instance.Colliders.Count;
 			ColliderManager.Instance.Colliders.Add(this);
 
@@ -156,7 +156,7 @@ namespace Fredrick.src
 			PolygonShape box;
 			Fixture fixture;
 
-			body = new Body(ColliderManager.Instance.World, _owner.GetPosition() + _position, 0, BodyType.Static);
+			body = new Body(ColliderManager.Instance.World, _owner.Position + _position, 0, BodyType.Static);
 			if (_owner.GetComponent<Character>() != null)
 			{
 				body.BodyType = BodyType.Kinematic;
@@ -171,10 +171,10 @@ namespace Fredrick.src
 			fixture = body.CreateFixture(box);
 
 			cells = new List<int[]>();
-			int minX = (int)Math.Floor(_rectangle.CurrentPosition.X - (_rectangle.Width / 2) + 0.5);
-			int maxX = (int)Math.Floor(_rectangle.CurrentPosition.X + (_rectangle.Width / 2) + 0.5);
-			int minY = (int)Math.Floor(_rectangle.CurrentPosition.Y - (_rectangle.Height / 2) + 0.5);
-			int maxY = (int)Math.Floor(_rectangle.CurrentPosition.Y + (_rectangle.Height / 2) + 0.5);
+			int minX = Math.Max((int)Math.Floor(_rectangle.CurrentPosition.X - (_rectangle.Width / 2) + 0.5), 0);
+			int maxX = Math.Min((int)Math.Floor(_rectangle.CurrentPosition.X + (_rectangle.Width / 2) + 0.5), 1000);
+			int minY = Math.Max((int)Math.Floor(_rectangle.CurrentPosition.Y - (_rectangle.Height / 2) + 0.5), 0);
+			int maxY = Math.Min((int)Math.Floor(_rectangle.CurrentPosition.Y + (_rectangle.Height / 2) + 0.5), 1000);
 			for (int i = minX; i < maxX + 1; i++)
 			{
 				for (int j = minY; j < maxY + 1; j++)
@@ -190,7 +190,7 @@ namespace Fredrick.src
 			if (_owner.GetComponent<Character>() != null)
 			{
 				_tempMove = _owner.GetComponent<Character>().AttemptedPosition;
-				_rectangle.UpdatePosition(_owner.GetPosition() + _tempMove);
+				_rectangle.UpdatePosition(_owner.Position + _tempMove);
 
 				foreach (int[] c in cells)
 				{
@@ -198,7 +198,7 @@ namespace Fredrick.src
 				}
 
 				cells.Clear();
-				_rectangle.UpdatePosition(_owner.GetPosition() + _tempMove);
+				_rectangle.UpdatePosition(_owner.Position + _tempMove);
 
 				int minX = Math.Max((int)Math.Floor(_rectangle.CurrentPosition.X - (_rectangle.Width / 2) + 0.5), 0);
 				int maxX = Math.Min((int)Math.Floor(_rectangle.CurrentPosition.X + (_rectangle.Width / 2) + 0.5), 1000);
@@ -235,11 +235,11 @@ namespace Fredrick.src
 				{
 					if (b.UserData == (object)_owner)
 					{
-						b.Position = _owner.GetPosition() + _position;
+						b.Position = _owner.Position + _position;
 					}
 				}
 				cells.Clear();
-				_rectangle.UpdatePosition(_owner.GetPosition() + _tempMove);
+				_rectangle.UpdatePosition(_owner.Position + _tempMove);
 
 				minX = Math.Max((int)Math.Floor(_rectangle.CurrentPosition.X - (_rectangle.Width / 2) + 0.5), 0);
 				maxX = Math.Min((int)Math.Floor(_rectangle.CurrentPosition.X + (_rectangle.Width / 2) + 0.5), 1000);
@@ -267,10 +267,10 @@ namespace Fredrick.src
 
 		public override void DebugDraw(SpriteBatch spriteBatch)
 		{
-			Vector2 tl = new Vector2(_owner.GetPosition().X - _rectangle.Width / 2, _owner.GetPosition().Y + _rectangle.Height / 2);
-			Vector2 tr = new Vector2(_owner.GetPosition().X + _rectangle.Width / 2, _owner.GetPosition().Y + _rectangle.Height / 2);
-			Vector2 bl = new Vector2(_owner.GetPosition().X - _rectangle.Width / 2, _owner.GetPosition().Y - _rectangle.Height / 2);
-			Vector2 br = new Vector2(_owner.GetPosition().X + _rectangle.Width / 2, _owner.GetPosition().Y - _rectangle.Height / 2);
+			Vector2 tl = new Vector2(_owner.Position.X - _rectangle.Width / 2, _owner.Position.Y + _rectangle.Height / 2);
+			Vector2 tr = new Vector2(_owner.Position.X + _rectangle.Width / 2, _owner.Position.Y + _rectangle.Height / 2);
+			Vector2 bl = new Vector2(_owner.Position.X - _rectangle.Width / 2, _owner.Position.Y - _rectangle.Height / 2);
+			Vector2 br = new Vector2(_owner.Position.X + _rectangle.Width / 2, _owner.Position.Y - _rectangle.Height / 2);
 			DebugManager.Instance.DrawLine(spriteBatch, tl, tr);
 			DebugManager.Instance.DrawLine(spriteBatch, tr, br);
 			DebugManager.Instance.DrawLine(spriteBatch, br, bl);

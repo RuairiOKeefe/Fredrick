@@ -16,23 +16,23 @@ namespace Fredrick.src
 	public abstract class Component : Transform
 	{
 		protected Entity _owner;
-		protected bool _active;
+		public bool Active { get; set; }
 
 		public Component()
 		{
 		}
 
-		public Component(Entity owner)
+		public Component(Entity owner, bool active = true)
 		{
 			_owner = owner;
+			Active = true;
 		}
 
-		public Entity GetOwner()
+		public Entity Owner
 		{
-			return _owner;
+			get { return _owner; }
+			set { _owner = value; }
 		}
-
-		public bool GetActive() { return _active; }
 
 		public abstract void Load(ContentManager content);
 		public abstract void Update(double deltaTime);
