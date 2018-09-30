@@ -26,45 +26,45 @@ namespace Fredrick.src
 			editing = false;
 			gridLock = false;
 
-			Entity e = new Entity(true, "block");
-			e.Tags.Add("block");
-			Renderable r = new Renderable(e, "testSheet", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+			Entity e = new Entity(true, "Block");
+			e.Tags.Add("Terrain");
+			Renderable r = new Renderable(e, "Block", "testSheet", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
 			r.Drawable.AddAnimation(0, 0, 1, 30);
 			AABBCollider c = new AABBCollider(e, new Vector2(0), 1, 1);
 			e.Components.Add(r);
 			e.Components.Add(c);
 			entities.Add(e);
 
-			e = new Entity(true, "slope");
-			e.Tags.Add("block");
-			r = new Renderable(e, "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+			e = new Entity(true, "Slope");
+			e.Tags.Add("Terrain");
+			r = new Renderable(e, "Slock", "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
 			r.Drawable.AddAnimation(0, 0, 1, 30);
 			Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, -0.5f, 0.5f, -0.3f);
 			e.Components.Add(r);
 			e.Components.Add(p);
 			entities.Add(e);
 
-			e = new Entity(true, "slope");
-			e.Tags.Add("block");
-			r = new Renderable(e, "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+			e = new Entity(true, "Slope");
+			e.Tags.Add("Terrain");
+			r = new Renderable(e, "Slope", "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
 			r.Drawable.AddAnimation(32, 0, 1, 30);
 			p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, -0.5f, -0.3f);
 			e.Components.Add(r);
 			e.Components.Add(p);
 			entities.Add(e);
 
-			e = new Entity(true, "slope");
-			e.Tags.Add("block");
-			r = new Renderable(e, "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+			e = new Entity(true, "Slope");
+			e.Tags.Add("Terrain");
+			r = new Renderable(e, "Slope", "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
 			r.Drawable.AddAnimation(64, 0, 1, 30);
 			p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, -0.5f, 0.3f);
 			e.Components.Add(r);
 			e.Components.Add(p);
 			entities.Add(e);
 
-			e = new Entity(true, "slope");
-			e.Tags.Add("block");
-			r = new Renderable(e, "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+			e = new Entity(true, "Slope");
+			e.Tags.Add("Terrain");
+			r = new Renderable(e, "Slope", "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
 			r.Drawable.AddAnimation(96, 0, 1, 30);
 			p = new Platform(e, new Vector2(0), 1, 1, 0, 0, -0.5f, 0.5f, 0.3f);
 			e.Components.Add(r);
@@ -78,9 +78,9 @@ namespace Fredrick.src
 			switch (i)
 			{
 				case (0):
-					e = new Entity(true, "block");
-					e.Tags.Add("block");
-					Renderable r = new Renderable(e, "TestSheet", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+					e = new Entity(true, "Block");
+					e.Tags.Add("Terrain");
+					Renderable r = new Renderable(e, "Block", "TestSheet", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
 					r.Drawable.AddAnimation(0, 0, 1, 30);
 					AABBCollider c = new AABBCollider(e, new Vector2(0), 1, 1);
 					e.Components.Add(r);
@@ -88,9 +88,9 @@ namespace Fredrick.src
 					entities.Add(e);
 					break;
 				case (1):
-					e = new Entity(true, "slope");
-					e.Tags.Add("block");
-					r = new Renderable(e, "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+					e = new Entity(true, "Slope");
+					e.Tags.Add("Terrain");
+					r = new Renderable(e, "Slope", "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
 					r.Drawable.AddAnimation(0, 0, 1, 30);
 					Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, -0.5f, 0.5f, -0.3f);
 					e.Components.Add(r);
@@ -98,9 +98,9 @@ namespace Fredrick.src
 					entities.Add(e);
 					break;
 				case (2):
-					e = new Entity(true, "slope");
-					e.Tags.Add("block");
-					r = new Renderable(e, "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+					e = new Entity(true, "Slope");
+					e.Tags.Add("Terrain");
+					r = new Renderable(e, "Slope", "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
 					r.Drawable.AddAnimation(32, 0, 1, 30);
 					p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, -0.5f, -0.5f);
 					e.Components.Add(r);
@@ -108,9 +108,9 @@ namespace Fredrick.src
 					entities.Add(e);
 					break;
 				case (3):
-					e = new Entity(true, "slope");
-					e.Tags.Add("block");
-					r = new Renderable(e, "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+					e = new Entity(true, "Slope");
+					e.Tags.Add("Terrain");
+					r = new Renderable(e, "Slope", "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
 					r.Drawable.AddAnimation(64, 0, 1, 30);
 					p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, -0.5f, 0.5f);
 					e.Components.Add(r);
@@ -118,9 +118,9 @@ namespace Fredrick.src
 					entities.Add(e);
 					break;
 				case (4):
-					e = new Entity(true, "slope");
-					e.Tags.Add("block");
-					r = new Renderable(e, "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+					e = new Entity(true, "Slope");
+					e.Tags.Add("Terrain");
+					r = new Renderable(e, "Slope", "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
 					r.Drawable.AddAnimation(96, 0, 1, 30);
 					p = new Platform(e, new Vector2(0), 1, 1, 0, 0, -0.5f, 0.5f, 0.5f);
 					e.Components.Add(r);

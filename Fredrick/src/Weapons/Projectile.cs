@@ -9,8 +9,6 @@ using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Dynamics.Contacts;
 
-using System.Diagnostics;
-
 namespace Fredrick.src
 {
 	[Serializable]
@@ -31,7 +29,8 @@ namespace Fredrick.src
 		private bool _dead;
 		private bool _detonated;
 
-		float _damage;
+		private float _damage;
+		private float _aoeDamage;
 
 		//For explosion aoe
 		Body _body;
@@ -59,7 +58,7 @@ namespace Fredrick.src
 			_velocity = new Vector2();
 		}
 
-		public Projectile(Entity owner, Vector2 velocity, double lifeTime, bool explosive = false, bool contactTermination = true, float damage = 5.0f, float radius = 1.0f, float knockback = 1.0f) : base(owner)
+		public Projectile(Entity owner, Vector2 velocity, double lifeTime, bool explosive = false, bool contactTermination = true, float damage = 5.0f, float aoeDamage = 5.0f, float radius = 1.0f, float knockback = 1.0f) : base(owner)
 		{
 			_velocity = velocity;
 			_lifeTime = lifeTime;
@@ -67,11 +66,12 @@ namespace Fredrick.src
 			_contactTermination = contactTermination;
 
 			_damage = damage;
+			_aoeDamage = aoeDamage;
 			_radius = radius;
 			_knockback = knockback;
 		}
 
-		public void Revive(Vector2 velocity, double lifeTime, bool explosive = false, bool contactTermination = true, float damage = 5.0f, float radius = 1.0f, float knockback = 1)
+		public void Revive(Vector2 velocity, double lifeTime, bool explosive = false, bool contactTermination = true, float damage = 5.0f, float aoeDamage = 5.0f, float radius = 1.0f, float knockback = 1.0f)
 		{
 
 			_lifeTime = lifeTime;
@@ -79,6 +79,7 @@ namespace Fredrick.src
 			_contactTermination = contactTermination;
 
 			_damage = damage;
+			_aoeDamage = aoeDamage;
 			_radius = radius;
 			_knockback = knockback;
 
@@ -152,7 +153,6 @@ namespace Fredrick.src
 								if (e.GetComponent<CircleCollider>() != null)
 								{
 									Vector2 force = e.Position - _owner.Position;
-									Debug.Write(force.Length() + "\n");
 									force.Normalize();
 									force *= _knockback;
 									e.GetComponent<CircleCollider>().ApplyForce(force, _owner.Position);
@@ -163,9 +163,13 @@ namespace Fredrick.src
 
 						_owner.GetComponent<CircleCollider>().Kill();
 					}
-					if (_owner.GetComponent<Emitter>() != null)
+					foreach(Component c in _owner.Components)
 					{
-						_owner.GetComponent<Emitter>().Emit();
+						if (c is Emitter)
+						{
+							Emitter e = c as Emitter;
+							e.Emit();
+						}
 					}
 					if (_owner.GetComponent<Renderable>() != null)
 					{

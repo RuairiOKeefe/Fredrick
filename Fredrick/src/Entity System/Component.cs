@@ -16,16 +16,18 @@ namespace Fredrick.src
 	public abstract class Component : Transform
 	{
 		protected Entity _owner;
+		public string Id { get; set; }
 		public bool Active { get; set; }
 
 		public Component()
 		{
 		}
 
-		public Component(Entity owner, bool active = true)
+		public Component(Entity owner, string id = null, bool active = true)
 		{
 			_owner = owner;
-			Active = true;
+			Id = id;
+			Active = active;
 		}
 
 		public Entity Owner
