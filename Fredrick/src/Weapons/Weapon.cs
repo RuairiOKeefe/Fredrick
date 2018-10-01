@@ -13,6 +13,8 @@ namespace Fredrick.src
 	public class Weapon : Component
 	{
 		protected Vector2 _spotSpawn;
+		protected Vector2 _weaponPosition;//The arm has uses the base transform
+		protected Vector2 _transformedWeaponPosition;
 
 		protected double _fireRate;//How long between shots
 		protected double _nextfire;//Counter till next shot can be fired
@@ -23,9 +25,10 @@ namespace Fredrick.src
 
 		protected bool _continuous;
 
+		protected string projectile;
 
-
-		public Drawable _drawable;
+		public Drawable ArmDrawable { get; set; }
+		public Drawable WeaponDrawable { get; set; }
 
 		List<Entity> _projectiles;
 
@@ -53,9 +56,10 @@ namespace Fredrick.src
 			set { _shotSpeed = value; }
 		}
 
-		public Weapon(Entity owner, string id, Vector2 shotSpawn, double fireRate = 0.5, float damage = 10.0f, float aoeDamage = 20.0f, float shotSpeed = 5.0f, bool continuous = true) : base(owner, id)
+		public Weapon(Entity owner, string id, Vector2 shotSpawn, Vector2 weaponPosition, double fireRate = 0.5, float damage = 10.0f, float aoeDamage = 20.0f, float shotSpeed = 5.0f, bool continuous = true) : base(owner, id)
 		{
 			_spotSpawn = shotSpawn;
+			_weaponPosition = weaponPosition;
 			_fireRate = fireRate;
 			_damage = damage;
 			_aoeDamage = aoeDamage;
@@ -64,18 +68,22 @@ namespace Fredrick.src
 			_continuous = continuous;
 
 			_projectiles = new List<Entity>();
+
+			_scale = new Vector2(1);
 		}
 
-		public void Fire()
+		public void Fire(Vector2 direction, float sin, float cos)
 		{
 			Entity e = ProjectileBuffer.Instance.InactiveProjectiles.Pop();
 
-			Vector2 shotVector = InputHandler.Instance.WorldMousePosition - _owner.Position;
-			shotVector.Normalize();
+			float tssx = _spotSpawn.X;
+			float tssy = _spotSpawn.Y;
 
-			e.Position = _spotSpawn + _owner.Position + shotVector * 0.8f;
+			Vector2 transformedShotSpawn = new Vector2((cos * tssx) - (sin * tssy), (sin * tssx) + (cos * tssy));
 
-			Vector2 shotVelocity = shotVector * _shotSpeed;
+			e.Position = _owner.Position + transformedShotSpawn;
+
+			Vector2 shotVelocity = direction * _shotSpeed;
 			e.GetComponent<Projectile>().Revive(shotVelocity, 2.0, true, false, 10.0f, 20.0f, 2.0f, 1.0f);
 			_projectiles.Add(e);
 
@@ -95,25 +103,39 @@ namespace Fredrick.src
 
 		public override void Load(ContentManager content)
 		{
-
+			WeaponDrawable.Load(content);
+			ArmDrawable.Load(content);
 		}
 
 		public override void Update(double deltaTime)
 		{
+			Vector2 direction = InputHandler.Instance.WorldMousePosition - _owner.Position;
+			direction.Normalize();
+
+			_rotation = (float)Math.Atan2(-direction.Y, direction.X);
+
+			float sin = (float)Math.Sin(-_rotation);
+			float cos = (float)Math.Cos(-_rotation);
+
+			float twpx = _weaponPosition.X;
+			float twpy = _weaponPosition.Y;
+
+			_transformedWeaponPosition = new Vector2((cos * twpx) - (sin * twpy), (sin * twpx) + (cos * twpy));
+
 			if (_nextfire <= 0)
 			{
 				if (_continuous)
 				{
 					if (InputHandler.Instance.IsLeftMouseHeld())
 					{
-						Fire();
+						Fire(direction, sin, cos);
 					}
 				}
 				else
 				{
 					if (InputHandler.Instance.IsLeftMousePressed())
 					{
-						Fire();
+						Fire(direction, sin, cos);
 					}
 				}
 			}
@@ -137,6 +159,9 @@ namespace Fredrick.src
 		public override void Draw(SpriteBatch spriteBatch)
 		{
 			Vector2 inv = new Vector2(1, -1);
+			spriteBatch.Draw(ResourceManager.Instance.Textures[WeaponDrawable._spriteName], (_transformedWeaponPosition + _position + _owner.Position) * inv * WeaponDrawable._spriteSize, WeaponDrawable._sourceRectangle, WeaponDrawable._colour, _owner.Rotation + _rotation, WeaponDrawable._origin, _scale, WeaponDrawable._spriteEffects, WeaponDrawable._layer);
+			spriteBatch.Draw(ResourceManager.Instance.Textures[ArmDrawable._spriteName], ( _position + _owner.Position) * inv * ArmDrawable._spriteSize, ArmDrawable._sourceRectangle, ArmDrawable._colour, _owner.Rotation + _rotation, ArmDrawable._origin, _scale, ArmDrawable._spriteEffects, ArmDrawable._layer);
+
 			foreach (Entity e in _projectiles)
 			{
 				e.Draw(spriteBatch);

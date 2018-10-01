@@ -58,7 +58,7 @@ namespace Fredrick.src
 			_velocity = new Vector2();
 		}
 
-		public Projectile(Entity owner, Vector2 velocity, double lifeTime, bool explosive = false, bool contactTermination = true, float damage = 5.0f, float aoeDamage = 5.0f, float radius = 1.0f, float knockback = 1.0f) : base(owner)
+		public Projectile(Entity owner, string id, Vector2 velocity, double lifeTime, bool explosive = false, bool contactTermination = true, float damage = 5.0f, float aoeDamage = 5.0f, float radius = 1.0f, float knockback = 1.0f) : base(owner, id)
 		{
 			_velocity = velocity;
 			_lifeTime = lifeTime;
@@ -163,7 +163,7 @@ namespace Fredrick.src
 
 						_owner.GetComponent<CircleCollider>().Kill();
 					}
-					foreach(Component c in _owner.Components)
+					foreach (Component c in _owner.Components)
 					{
 						if (c is Emitter)
 						{

@@ -18,6 +18,7 @@ namespace Fredrick.src
 		protected Entity _owner;
 		public string Id { get; set; }
 		public bool Active { get; set; }
+		public List<string> Tags { get; set; }
 
 		public Component()
 		{
@@ -28,6 +29,7 @@ namespace Fredrick.src
 			_owner = owner;
 			Id = id;
 			Active = active;
+			Tags = new List<string>();
 		}
 
 		public Entity Owner
