@@ -250,6 +250,9 @@ namespace Fredrick.src
 				spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, cam.Get_Transformation(GraphicsDevice));
 				foreach (var e in actors)
 					e.DebugDraw(spriteBatch);
+				foreach (var e in terrain)
+					e.DebugDraw(spriteBatch);
+				levelEditor.DebugDraw(spriteBatch);
 				spriteBatch.End();
 			}
 

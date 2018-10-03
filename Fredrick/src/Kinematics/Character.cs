@@ -87,7 +87,6 @@ namespace Fredrick.src
 			_acceleration = new Vector2(0, 0);
 			_horAcc = 16;
 			_maxSpeed = 8;
-			_acceleration.Y = -9.8f;
 
 			_groundFriction = 600;
 			_airFriction = 10;

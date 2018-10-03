@@ -70,6 +70,22 @@ namespace Fredrick.src
 			e.Components.Add(r);
 			e.Components.Add(p);
 			entities.Add(e);
+
+			e = new Entity(true, "Platform");
+			e.Tags.Add("Terrain");
+			r = new Renderable(e, "Block", "testSheet", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+			r.Drawable.AddAnimation(0, 0, 1, 30);
+			p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, 0.5f, -0.3f);
+			e.Components.Add(r);
+			e.Components.Add(p);
+			entities.Add(e);
+
+			e = new Entity(true, "Emptyblock");
+			e.Tags.Add("Terrain");
+			r = new Renderable(e, "Block", "testSheet", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+			r.Drawable.AddAnimation(0, 0, 1, 30);
+			e.Components.Add(r);
+			entities.Add(e);
 		}
 
 		public Entity SelectEntity(int i)
@@ -85,7 +101,6 @@ namespace Fredrick.src
 					AABBCollider c = new AABBCollider(e, new Vector2(0), 1, 1);
 					e.Components.Add(r);
 					e.Components.Add(c);
-					entities.Add(e);
 					break;
 				case (1):
 					e = new Entity(true, "Slope");
@@ -95,7 +110,6 @@ namespace Fredrick.src
 					Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, -0.5f, 0.5f, -0.3f);
 					e.Components.Add(r);
 					e.Components.Add(p);
-					entities.Add(e);
 					break;
 				case (2):
 					e = new Entity(true, "Slope");
@@ -105,7 +119,6 @@ namespace Fredrick.src
 					p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, -0.5f, -0.5f);
 					e.Components.Add(r);
 					e.Components.Add(p);
-					entities.Add(e);
 					break;
 				case (3):
 					e = new Entity(true, "Slope");
@@ -115,7 +128,6 @@ namespace Fredrick.src
 					p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, -0.5f, 0.5f);
 					e.Components.Add(r);
 					e.Components.Add(p);
-					entities.Add(e);
 					break;
 				case (4):
 					e = new Entity(true, "Slope");
@@ -125,7 +137,22 @@ namespace Fredrick.src
 					p = new Platform(e, new Vector2(0), 1, 1, 0, 0, -0.5f, 0.5f, 0.5f);
 					e.Components.Add(r);
 					e.Components.Add(p);
-					entities.Add(e);
+					break;
+				case (5):
+					e = new Entity(true, "Platform");
+					e.Tags.Add("Terrain");
+					r = new Renderable(e, "Block", "testSheet", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+					r.Drawable.AddAnimation(0, 0, 1, 30);
+					p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, 0.5f, -0.3f);
+					e.Components.Add(r);
+					e.Components.Add(p);
+					break;
+				case (6):
+					e = new Entity(true, "Emptyblock");
+					e.Tags.Add("Terrain");
+					r = new Renderable(e, "Block", "testSheet", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+					r.Drawable.AddAnimation(0, 0, 1, 30);
+					e.Components.Add(r);
 					break;
 			}
 
@@ -168,7 +195,7 @@ namespace Fredrick.src
 				if (index < 0)
 					index = entities.Count - 1;
 
-				indicator = entities[index];
+				indicator = SelectEntity(index);
 
 				position = InputHandler.Instance.WorldMousePosition;
 				if (gridLock)
@@ -192,6 +219,14 @@ namespace Fredrick.src
 			if (editing)
 			{
 				indicator.Draw(spriteBatch);
+			}
+		}
+
+		public void DebugDraw(SpriteBatch spriteBatch)
+		{
+			if (editing)
+			{
+				indicator.DebugDraw(spriteBatch);
 			}
 		}
 	}
