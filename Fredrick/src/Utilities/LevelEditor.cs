@@ -200,7 +200,7 @@ namespace Fredrick.src
 				position = InputHandler.Instance.WorldMousePosition;
 				if (gridLock)
 				{
-					position = new Vector2((float)Math.Floor(position.X), (float)Math.Floor(position.Y));
+					position = new Vector2((float)Math.Floor(position.X + 0.5), (float)Math.Floor(position.Y + 0.5));
 				}
 				indicator.Position = position;
 				indicator.Update(deltaTime);

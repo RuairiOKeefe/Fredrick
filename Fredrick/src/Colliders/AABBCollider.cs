@@ -90,43 +90,24 @@ namespace Fredrick.src
 			bool collided = false;
 			if (other.PlatformDepth < 0)
 			{
-				float f;
-				Vector2 testMove = new Vector2(0, _tempMove.Y);
+				Vector2 testMove = new Vector2(_tempMove.X, _tempMove.Y);
 				Vector2 newPos = (_owner.Position + testMove);
 
 				_rectangle.UpdatePosition(newPos);
 
 				if (_owner.GetComponent<Character>().Velocity.Y <= 0)
 				{
-					f = (_rectangle.CurrentPosition.X - (other.CurrentPosition.X - (other.Width / 2))) / ((other.CurrentPosition.X + (other.Width / 2)) - (other.CurrentPosition.X - (other.Width / 2)));//(currentX - minX) / (maxX - minX)
+					float f = (_rectangle.CurrentPosition.X - (other.CurrentPosition.X - (other.Width / 2))) / ((other.CurrentPosition.X + (other.Width / 2)) - (other.CurrentPosition.X - (other.Width / 2)));//(currentX - minX) / (maxX - minX)
 					if (f > 0 && f < 1)
 					{
 						float y = ((other.LHeight * (1.0f - f)) + (other.RHeight * f)) + other.CurrentPosition.Y;//desired y coordinate
 
-						if ((_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)) > (y + other.PlatformDepth) && (_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)) < y)
+						if (((_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)) > (y + other.PlatformDepth) && (_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)) < y) || (_platformCollided && _owner.GetComponent<Character>().Velocity.Y <= 0))
 						{
 							_tempMove.Y += (y - (newPos.Y - (_rectangle.Height / 2)));
 							_owner.GetComponent<Character>().StopVelY();
 							collided = true;
 						}
-					}
-				}
-
-				testMove = new Vector2(_tempMove.X, _tempMove.Y);
-				newPos = (_owner.Position + testMove);
-
-				_rectangle.UpdatePosition(newPos);
-
-				f = (_rectangle.CurrentPosition.X - (other.CurrentPosition.X - (other.Width / 2))) / ((other.CurrentPosition.X + (other.Width / 2)) - (other.CurrentPosition.X - (other.Width / 2)));//(currentX - minX) / (maxX - minX)
-				if (f > 0 && f < 1)
-				{
-					float y = ((other.LHeight * (1.0f - f)) + (other.RHeight * f)) + other.CurrentPosition.Y;//desired y coordinate
-
-					if (((_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)) > (y + other.PlatformDepth) && (_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)) < y) || ((_platformCollided || collided) && _owner.GetComponent<Character>().Velocity.Y <= 0))
-					{
-						_tempMove.Y += (y - (newPos.Y - (_rectangle.Height / 2)));
-						_owner.GetComponent<Character>().StopVelY();
-						collided = true;
 					}
 				}
 			}
@@ -208,10 +189,10 @@ namespace Fredrick.src
 				cells.Clear();
 				_rectangle.UpdatePosition(_owner.Position + _tempMove);
 
-				int minX = Math.Max((int)Math.Floor(_rectangle.CurrentPosition.X - (_rectangle.Width / 2) + 0.5), 0);
-				int maxX = Math.Min((int)Math.Floor(_rectangle.CurrentPosition.X + (_rectangle.Width / 2) + 0.5), 1000);
-				int minY = Math.Max((int)Math.Floor(_rectangle.CurrentPosition.Y - (_rectangle.Height / 2) + 0.5), 0);
-				int maxY = Math.Min((int)Math.Floor(_rectangle.CurrentPosition.Y + (_rectangle.Height / 2) + 0.5), 1000);
+				int minX = Math.Max((int)Math.Floor(_rectangle.CurrentPosition.X - (_rectangle.Width / 2) + 0.5) - 1, 0);
+				int maxX = Math.Min((int)Math.Floor(_rectangle.CurrentPosition.X + (_rectangle.Width / 2) + 0.5) + 1, 1000);
+				int minY = Math.Max((int)Math.Floor(_rectangle.CurrentPosition.Y - (_rectangle.Height / 2) + 0.5) - 1, 0);
+				int maxY = Math.Min((int)Math.Floor(_rectangle.CurrentPosition.Y + (_rectangle.Height / 2) + 0.5) + 1, 1000);
 				for (int i = minX; i < maxX + 1; i++)
 				{
 					for (int j = minY; j < maxY + 1; j++)
@@ -219,7 +200,6 @@ namespace Fredrick.src
 						cells.Add(new int[2] { i, j });
 					}
 				}
-				Debug.Write(_owner.GetComponent<Character>().Velocity.Y+"\n");
 				bool newPlatformCollided = false;
 				foreach (int[] c in cells)
 				{
