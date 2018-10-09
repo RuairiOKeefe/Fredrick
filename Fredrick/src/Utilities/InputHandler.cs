@@ -176,6 +176,42 @@ namespace Fredrick.src
 			}
 		}
 
+		public bool IsRightMousePressed()
+		{
+			if (_currentMouseState.RightButton == ButtonState.Pressed && _previousMouseState.RightButton == ButtonState.Released)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+
+		public bool IsRightMouseHeld()
+		{
+			if (_currentMouseState.RightButton == ButtonState.Pressed && _previousMouseState.RightButton == ButtonState.Pressed)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+
+		public bool IsRightMouseReleased()
+		{
+			if (_currentMouseState.RightButton == ButtonState.Released)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+
 		public Point GetMouseScreenPos()
 		{
 			return _screenMousePosition;

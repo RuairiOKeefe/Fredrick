@@ -161,6 +161,56 @@ namespace Fredrick.src
 			return e;
 		}
 
+		public void SwitchBlocks()
+		{
+			if (InputHandler.Instance.IsKeyPressed(InputHandler.Action.NextEnt))
+			{
+				index++;
+			}
+			if (InputHandler.Instance.IsKeyPressed(InputHandler.Action.PrevEnt))
+			{
+				index--;
+			}
+			if (InputHandler.Instance.IsKeyPressed(InputHandler.Action.GridLock))
+			{
+				gridLock = !gridLock;
+			}
+
+			if (index > entities.Count - 1)
+				index = 0;
+			if (index < 0)
+				index = entities.Count - 1;
+
+			indicator = SelectEntity(index);
+		}
+
+		public void AddBlock(ref List<Entity> terrain, ContentManager content)
+		{
+			terrain.Add(SelectEntity(index));
+			terrain.Last<Entity>().Load(content);
+		}
+
+		public void RemoveBlock(ref List<Entity> terrain)
+		{
+			List<Entity> localEntities = ColliderManager.Instance.Terrain[(int)Math.Floor(position.X + 0.5), (int)Math.Floor(position.Y + 0.5)];
+
+			int count = localEntities.Count-1;
+			for (int i = count; i > 0; i--)
+			{
+				Entity e = localEntities[i];
+				if (e.GetComponent<Renderable>() != null)
+				{
+					Renderable r = e.GetComponent<Renderable>();
+					Vector2 pos = e.Position + r.Position;
+					if (position.X < pos.X + r.Drawable._width / 2 && position.X > pos.X - r.Drawable._width / 2 && position.Y < pos.Y + r.Drawable._height / 2 && position.Y > pos.Y - r.Drawable._height / 2)
+					{
+						terrain.Remove(e);
+						localEntities.Remove(e);
+					}
+				}
+			}
+		}
+
 		public void Load(ContentManager content)
 		{
 			foreach (Entity e in entities)
@@ -169,34 +219,16 @@ namespace Fredrick.src
 			}
 		}
 
-		public List<Entity> Update(double deltaTime, ref List<Entity> terrain, ContentManager content)
+		public void Update(double deltaTime, ref List<Entity> terrain, ContentManager content)
 		{
 			if (InputHandler.Instance.IsKeyPressed(InputHandler.Action.Editor))
 			{
 				editing = !editing;
 			}
+
 			if (editing)
 			{
-				if (InputHandler.Instance.IsKeyPressed(InputHandler.Action.NextEnt))
-				{
-					index++;
-				}
-				if (InputHandler.Instance.IsKeyPressed(InputHandler.Action.PrevEnt))
-				{
-					index--;
-				}
-				if (InputHandler.Instance.IsKeyPressed(InputHandler.Action.GridLock))
-				{
-					gridLock = !gridLock;
-				}
-
-				if (index > entities.Count - 1)
-					index = 0;
-				if (index < 0)
-					index = entities.Count - 1;
-
-				indicator = SelectEntity(index);
-
+				SwitchBlocks();
 				position = InputHandler.Instance.WorldMousePosition;
 				if (gridLock)
 				{
@@ -207,11 +239,14 @@ namespace Fredrick.src
 
 				if (InputHandler.Instance.IsLeftMousePressed())
 				{
-					terrain.Add(SelectEntity(index));
-					terrain.Last<Entity>().Load(content);
+					AddBlock(ref terrain, content);
+				}
+
+				if (InputHandler.Instance.IsRightMousePressed())
+				{
+					RemoveBlock(ref terrain);
 				}
 			}
-			return terrain;
 		}
 
 		public void Draw(SpriteBatch spriteBatch)
