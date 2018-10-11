@@ -39,6 +39,11 @@ namespace Fredrick.src
 			_drawable.Load(content);
 		}
 
+		public override void Unload()
+		{
+
+		}
+
 		public override void Update(double deltaTime)
 		{
 			_drawable.Animate(deltaTime);

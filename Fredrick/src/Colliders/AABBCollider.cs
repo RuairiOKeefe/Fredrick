@@ -23,6 +23,8 @@ namespace Fredrick.src
 
 		private List<int[]> cells;
 
+		private int minX, maxX, minY, maxY;
+
 		public RectangleF Rectangle
 		{
 			get { return _rectangle; }
@@ -135,6 +137,34 @@ namespace Fredrick.src
 			return collided;
 		}
 
+		public void SetCells(bool addToScene)
+		{
+			minX = Math.Max((int)Math.Floor(_rectangle.CurrentPosition.X - (_rectangle.Width / 2) + 0.5), 0);
+			maxX = Math.Min((int)Math.Floor(_rectangle.CurrentPosition.X + (_rectangle.Width / 2) + 0.5), 1000);
+			minY = Math.Max((int)Math.Floor(_rectangle.CurrentPosition.Y - (_rectangle.Height / 2) + 0.5), 0);
+			maxY = Math.Min((int)Math.Floor(_rectangle.CurrentPosition.Y + (_rectangle.Height / 2) + 0.5), 1000);
+
+			for (int i = minX; i < maxX + 1; i++)
+			{
+				for (int j = minY; j < maxY + 1; j++)
+				{
+					if (addToScene)
+						ColliderManager.Instance.Terrain[i, j].Add(_owner);
+					cells.Add(new int[2] { i, j });
+				}
+			}
+		}
+
+		public void ClearCells(bool removeFromScene)
+		{
+			if (removeFromScene)
+				foreach (int[] c in cells)
+				{
+					ColliderManager.Instance.Terrain[c[0], c[1]].Remove(_owner);
+				}
+			cells.Clear();
+		}
+
 		public override void Load(ContentManager content)
 		{
 			_rectangle.UpdatePosition(_owner.Position + _position);
@@ -160,16 +190,17 @@ namespace Fredrick.src
 			fixture = body.CreateFixture(box);
 
 			cells = new List<int[]>();
-			int minX = Math.Max((int)Math.Floor(_rectangle.CurrentPosition.X - (_rectangle.Width / 2) + 0.5), 0);
-			int maxX = Math.Min((int)Math.Floor(_rectangle.CurrentPosition.X + (_rectangle.Width / 2) + 0.5), 1000);
-			int minY = Math.Max((int)Math.Floor(_rectangle.CurrentPosition.Y - (_rectangle.Height / 2) + 0.5), 0);
-			int maxY = Math.Min((int)Math.Floor(_rectangle.CurrentPosition.Y + (_rectangle.Height / 2) + 0.5), 1000);
-			for (int i = minX; i < maxX + 1; i++)
+			SetCells(true);
+		}
+
+		public override void Unload()
+		{
+			ClearCells(true);
+			foreach (Body b in ColliderManager.Instance.World.BodyList)
 			{
-				for (int j = minY; j < maxY + 1; j++)
+				if (b.UserData == (object)_owner)
 				{
-					ColliderManager.Instance.Terrain[i, j].Add(_owner);
-					cells.Add(new int[2] { i, j });
+					ColliderManager.Instance.World.RemoveBody(b);
 				}
 			}
 		}
@@ -181,25 +212,9 @@ namespace Fredrick.src
 				_tempMove = _owner.GetComponent<Character>().AttemptedPosition;
 				_rectangle.UpdatePosition(_owner.Position + _tempMove);
 
-				foreach (int[] c in cells)
-				{
-					ColliderManager.Instance.Terrain[c[0], c[1]].Remove(_owner);
-				}
+				ClearCells(true);
+				SetCells(false);
 
-				cells.Clear();
-				_rectangle.UpdatePosition(_owner.Position + _tempMove);
-
-				int minX = Math.Max((int)Math.Floor(_rectangle.CurrentPosition.X - (_rectangle.Width / 2) + 0.5) - 1, 0);
-				int maxX = Math.Min((int)Math.Floor(_rectangle.CurrentPosition.X + (_rectangle.Width / 2) + 0.5) + 1, 1000);
-				int minY = Math.Max((int)Math.Floor(_rectangle.CurrentPosition.Y - (_rectangle.Height / 2) + 0.5) - 1, 0);
-				int maxY = Math.Min((int)Math.Floor(_rectangle.CurrentPosition.Y + (_rectangle.Height / 2) + 0.5) + 1, 1000);
-				for (int i = minX; i < maxX + 1; i++)
-				{
-					for (int j = minY; j < maxY + 1; j++)
-					{
-						cells.Add(new int[2] { i, j });
-					}
-				}
 				bool newPlatformCollided = false;
 				foreach (int[] c in cells)
 				{
@@ -229,25 +244,10 @@ namespace Fredrick.src
 						b.Position = _owner.Position + _position;
 					}
 				}
-				cells.Clear();
+				ClearCells(false);
+
 				_rectangle.UpdatePosition(_owner.Position + _tempMove);
-
-				minX = Math.Max((int)Math.Floor(_rectangle.CurrentPosition.X - (_rectangle.Width / 2) + 0.5), 0);
-				maxX = Math.Min((int)Math.Floor(_rectangle.CurrentPosition.X + (_rectangle.Width / 2) + 0.5), 1000);
-				minY = Math.Max((int)Math.Floor(_rectangle.CurrentPosition.Y - (_rectangle.Height / 2) + 0.5), 0);
-				maxY = Math.Min((int)Math.Floor(_rectangle.CurrentPosition.Y + (_rectangle.Height / 2) + 0.5), 1000);
-				for (int i = minX; i < maxX + 1; i++)
-				{
-					for (int j = minY; j < maxY + 1; j++)
-					{
-						cells.Add(new int[2] { i, j });
-					}
-				}
-
-				foreach (int[] c in cells)
-				{
-					ColliderManager.Instance.Terrain[c[0], c[1]].Add(_owner);
-				}
+				SetCells(true);
 			}
 		}
 

@@ -85,6 +85,11 @@ namespace Fredrick.src
 			_pD.Load(content);
 		}
 
+		public override void Unload()
+		{
+
+		}
+
 		public override void Update(double deltaTime)
 		{
 			if (_continuous)

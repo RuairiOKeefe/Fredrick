@@ -194,16 +194,21 @@ namespace Fredrick.src
 		{
 			List<Entity> localEntities = ColliderManager.Instance.Terrain[(int)Math.Floor(position.X + 0.5), (int)Math.Floor(position.Y + 0.5)];
 
-			int count = localEntities.Count-1;
-			for (int i = count; i > 0; i--)
+			int count = localEntities.Count - 1;
+			for (int i = count; i >= 0; i--)
 			{
 				Entity e = localEntities[i];
 				if (e.GetComponent<Renderable>() != null)
 				{
 					Renderable r = e.GetComponent<Renderable>();
+
 					Vector2 pos = e.Position + r.Position;
-					if (position.X < pos.X + r.Drawable._width / 2 && position.X > pos.X - r.Drawable._width / 2 && position.Y < pos.Y + r.Drawable._height / 2 && position.Y > pos.Y - r.Drawable._height / 2)
+					float halfWidth = ((float)r.Drawable._width / (float)r.Drawable._spriteSize) / 2;
+					float halfHeight = ((float)r.Drawable._height / (float)r.Drawable._spriteSize) / 2;
+
+					if (position.X < pos.X + halfWidth && position.X > pos.X - halfWidth && position.Y < pos.Y + halfHeight && position.Y > pos.Y - halfHeight)
 					{
+						e.Unload();
 						terrain.Remove(e);
 						localEntities.Remove(e);
 					}

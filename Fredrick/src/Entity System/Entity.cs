@@ -50,6 +50,14 @@ namespace Fredrick.src
 			}
 		}
 
+		public void Unload()
+		{
+			foreach (var c in Components)
+			{
+				c.Unload();
+			}
+		}
+
 		public void Update(double deltaTime)//Add remove check here for if component is to be removed
 		{
 			if (Active)

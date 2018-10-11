@@ -39,6 +39,7 @@ namespace Fredrick.src
 		}
 
 		public abstract void Load(ContentManager content);
+		public abstract void Unload();
 		public abstract void Update(double deltaTime);
 		public abstract void Draw(SpriteBatch spriteBatch);
 		public abstract void DebugDraw(SpriteBatch spriteBatch);

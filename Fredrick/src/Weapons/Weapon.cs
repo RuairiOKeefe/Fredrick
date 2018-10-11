@@ -107,6 +107,11 @@ namespace Fredrick.src
 			ArmDrawable.Load(content);
 		}
 
+		public override void Unload()
+		{
+
+		}
+
 		public override void Update(double deltaTime)
 		{
 			Vector2 direction = InputHandler.Instance.WorldMousePosition - _owner.Position;

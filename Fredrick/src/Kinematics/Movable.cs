@@ -89,6 +89,11 @@ namespace Fredrick.src
 
 		}
 
+		public override void Unload()
+		{
+
+		}
+
 		public override void Update(double deltaTime)
 		{
 
