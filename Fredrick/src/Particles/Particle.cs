@@ -19,8 +19,6 @@ namespace Fredrick.src
 
 
 		double _lifeTime;
-		double _halfpoint;
-		float _opacity;
 
 		float _restitution = 0.8f;
 
@@ -50,11 +48,6 @@ namespace Fredrick.src
 			set { _lifeTime = value; }
 		}
 
-		public float Opacity
-		{
-			get { return _opacity; }
-		}
-
 		public Particle()
 		{
 			_position = new Vector2();
@@ -78,7 +71,6 @@ namespace Fredrick.src
 			_scale = new Vector2(1);
 			_velocity = velocity;
 			_lifeTime = lifeTime;
-			_halfpoint = lifeTime / 2;
 
 			_fakeDepth = fakeDepth;
 			_scaleFactor = scaleFactor;
@@ -229,14 +221,6 @@ namespace Fredrick.src
 				_rotation = 0;
 			}
 			_lifeTime -= deltaTime;
-			if (_lifeTime < _halfpoint)
-			{
-				_opacity = (float)(_lifeTime / _halfpoint);
-			}
-			else
-			{
-				_opacity = 1;
-			}
 		}
 	}
 }

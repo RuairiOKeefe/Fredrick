@@ -31,6 +31,18 @@ namespace Fredrick.src
 		bool _fakeDepth;
 		float _scaleFactor;
 
+		private List<Tuple<Color, double>> _lerpColours;//for transparency colours MUST be multiplied by the desired opacity first
+
+		public List<Tuple<Color, double>> LerpColours
+		{
+			get { return _lerpColours; }
+			set
+			{
+				_lerpColours = value;
+				_lerpColours.Sort((x, y) => x.Item2.CompareTo(y.Item2));
+			}
+		}
+
 		protected Random rnd;
 		/// <summary>
 		/// How many particles are emitted per emission if not continuous
@@ -73,6 +85,8 @@ namespace Fredrick.src
 			_quadraticVariance = quadraticVariance;
 			_fakeDepth = fakeDepth;
 			_scaleFactor = scaleFactor;
+
+			_lerpColours = new List<Tuple<Color, double>>();
 		}
 
 		public void Emit()
@@ -89,7 +103,7 @@ namespace Fredrick.src
 				bool forwardMotion = rnd.NextDouble() >= 0.5;
 				float scaleFactor = (forwardMotion ? (1.0f - velocityVariance) : -(1.0f - velocityVariance)) * _scaleFactor;
 				Particle p = ParticleBuffer.Instance.InactiveParticles.Pop();
-				p.Revive(spawnPos + _owner.Position, spawnVel, _lifeTime * rnd.NextDouble(), _fakeDepth, scaleFactor);
+				p.Revive(spawnPos + _owner.Position, spawnVel, _lifeTime , _fakeDepth, scaleFactor);
 				_particles.Add(p);
 			}
 		}
@@ -130,15 +144,47 @@ namespace Fredrick.src
 		public override void Draw(SpriteBatch spriteBatch)
 		{
 			Vector2 inv = new Vector2(1, -1);
+
 			foreach (Particle p in _particles)
 			{
 				Color c = Color.White;
-				c *= p.Opacity;
+				if (_lerpColours.Count == 1)
+					c = _lerpColours[0].Item1;
+				if (_lerpColours.Count > 1)
+				{
+					double lifeRatio = 1 - (p.LifeTime / _lifeTime);
+					Color a = new Color();
+					Color b = new Color();
+					double lerpAmount = 0;
+
+					foreach (Tuple<Color, double> t in _lerpColours)
+					{
+						if (lifeRatio <= t.Item2)
+						{
+							b = t.Item1;
+							int i = _lerpColours.IndexOf(t) - 1;
+							if (i < 0)
+							{
+								a = new Color(0, 0, 0, 0);
+								lerpAmount = lifeRatio / t.Item2;
+							}
+							else
+							{
+								a = _lerpColours[i].Item1;
+								lerpAmount = (lifeRatio - _lerpColours[i].Item2) / (t.Item2 - _lerpColours[i].Item2);
+							}
+							break;
+						}
+					}
+					c = Color.Lerp(a, b, (float)lerpAmount);
+				}
+
 				float layer = _pD._layer;
 				if (p.Scale.X > 1.0f)
 					layer += 0.01f;
 				if (p.Scale.X < 1.0f)
 					layer -= 0.01f;
+
 				spriteBatch.Draw(ResourceManager.Instance.Textures[_pD._spriteName], p.Position * inv * _pD._spriteSize, _pD._sourceRectangle, c, p.Rotation, _pD._origin, p.Scale, _pD._spriteEffects, layer);
 			}
 		}
