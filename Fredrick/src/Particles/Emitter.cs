@@ -26,6 +26,11 @@ namespace Fredrick.src
 		protected float _spawnVelocity;
 		protected double _lifeTime;
 
+		bool _quadraticVariance;
+
+		bool _fakeDepth;
+		float _scaleFactor;
+
 		protected Random rnd;
 		/// <summary>
 		/// How many particles are emitted per emission if not continuous
@@ -44,7 +49,7 @@ namespace Fredrick.src
 			set { _pD = value; }
 		}
 
-		public Emitter(Entity owner, String spriteName, bool continuous, int maxParticles, int emissionCount, Vector2 acceleration, float spawnWidth = 0, float spawnHeight = 0, float spawnVelocity = 3.0f, double lifeTime = 3.0) : base(owner)
+		public Emitter(Entity owner, String spriteName, bool continuous, int maxParticles, int emissionCount, Vector2 acceleration, float spawnWidth = 0, float spawnHeight = 0, float spawnVelocity = 3.0f, double lifeTime = 3.0, bool quadraticVariance = false, bool fakeDepth = false, float scaleFactor = 1.0f) : base(owner)
 		{
 			_pD = new Drawable(spriteName, new Vector2(16, 16), 32, 32, 0.1f);
 			_position = new Vector2(0, 0);
@@ -64,6 +69,10 @@ namespace Fredrick.src
 			_emissionCount = emissionCount;
 			_spawnVelocity = spawnVelocity;
 			_lifeTime = lifeTime;
+
+			_quadraticVariance = quadraticVariance;
+			_fakeDepth = fakeDepth;
+			_scaleFactor = scaleFactor;
 		}
 
 		public void Emit()
@@ -73,9 +82,14 @@ namespace Fredrick.src
 				Vector2 spawnPos = new Vector2((float)rnd.NextDouble() * _spawnWidth - (_spawnWidth / 2), (float)rnd.NextDouble() * _spawnHeight - (_spawnHeight / 2));
 				Vector2 spawnVel = new Vector2((float)rnd.NextDouble() * 2 - 1, (float)rnd.NextDouble() * 2 - 1);
 				spawnVel.Normalize();
-				spawnVel *= (_spawnVelocity * (float)rnd.NextDouble());
+				float velocityVariance = (float)rnd.NextDouble();
+				if (_quadraticVariance)
+					velocityVariance *= velocityVariance;//modifies the distribution so more particles move slowly
+				spawnVel *= (_spawnVelocity * velocityVariance);
+				bool forwardMotion = rnd.NextDouble() >= 0.5;
+				float scaleFactor = (forwardMotion ? (1.0f - velocityVariance) : -(1.0f - velocityVariance)) * _scaleFactor;
 				Particle p = ParticleBuffer.Instance.InactiveParticles.Pop();
-				p.Revive(spawnPos + _owner.Position, spawnVel, _lifeTime * rnd.NextDouble());
+				p.Revive(spawnPos + _owner.Position, spawnVel, _lifeTime * rnd.NextDouble(), _fakeDepth, scaleFactor);
 				_particles.Add(p);
 			}
 		}
@@ -120,7 +134,12 @@ namespace Fredrick.src
 			{
 				Color c = Color.White;
 				c *= p.Opacity;
-				spriteBatch.Draw(ResourceManager.Instance.Textures[_pD._spriteName], p.Position * inv * _pD._spriteSize, _pD._sourceRectangle, c, p.Rotation, _pD._origin, _scale, _pD._spriteEffects, _pD._layer);
+				float layer = _pD._layer;
+				if (p.Scale.X > 1.0f)
+					layer += 0.01f;
+				if (p.Scale.X < 1.0f)
+					layer -= 0.01f;
+				spriteBatch.Draw(ResourceManager.Instance.Textures[_pD._spriteName], p.Position * inv * _pD._spriteSize, _pD._sourceRectangle, c, p.Rotation, _pD._origin, p.Scale, _pD._spriteEffects, layer);
 			}
 		}
 

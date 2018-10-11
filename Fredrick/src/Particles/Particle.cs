@@ -13,14 +13,19 @@ namespace Fredrick.src
 		//need to add collision logic and animation code
 		Vector2 _position;
 		float _rotation;
+		Vector2 _scale;
 		Vector2 _velocity;
 		Vector2 _tempMove;
+
 
 		double _lifeTime;
 		double _halfpoint;
 		float _opacity;
 
 		float _restitution = 0.8f;
+
+		bool _fakeDepth;
+		float _scaleFactor;
 
 		public Vector2 Position
 		{
@@ -31,6 +36,12 @@ namespace Fredrick.src
 		public float Rotation
 		{
 			get { return _rotation; }
+		}
+
+		public Vector2 Scale
+		{
+			get { return _scale; }
+			set { _scale = value; }
 		}
 
 		public double LifeTime
@@ -50,19 +61,27 @@ namespace Fredrick.src
 			_velocity = new Vector2();
 		}
 
-		public Particle(Vector2 position, Vector2 velocity, double lifeTime)
+		public Particle(Vector2 position, Vector2 velocity, double lifeTime, bool fakeDepth = false, float scaleFactor = 1.0f)
 		{
 			_position = position;
+			_scale = new Vector2(1);
 			_velocity = velocity;
 			_lifeTime = lifeTime;
+
+			_fakeDepth = fakeDepth;
+			_scaleFactor = scaleFactor;
 		}
 
-		public void Revive(Vector2 position, Vector2 velocity, double lifeTime)
+		public void Revive(Vector2 position, Vector2 velocity, double lifeTime, bool fakeDepth = false, float scaleFactor = 1.0f)
 		{
 			_position = position;
+			_scale = new Vector2(1);
 			_velocity = velocity;
 			_lifeTime = lifeTime;
 			_halfpoint = lifeTime / 2;
+
+			_fakeDepth = fakeDepth;
+			_scaleFactor = scaleFactor;
 		}
 
 		public bool CheckCollision(RectangleF other)
@@ -163,6 +182,20 @@ namespace Fredrick.src
 		{
 			_velocity += acceleration * (float)deltaTime;
 			_tempMove = _velocity * (float)deltaTime;
+
+			if (_fakeDepth)
+			{
+				if (_scaleFactor > 0)
+				{
+					_scale.X *= 1+(_scaleFactor * (float)deltaTime);
+					_scale.Y *= 1 + (_scaleFactor * (float)deltaTime);
+				}
+				else
+				{
+					_scale.X /= 1 + (-_scaleFactor * (float)deltaTime);
+					_scale.Y /= 1 + (-_scaleFactor * (float)deltaTime);
+				}
+			}
 
 			int x = (int)Math.Floor(_position.X + _tempMove.X + 0.5f);
 			int y = (int)Math.Floor(_position.Y + _tempMove.Y + 0.5f);

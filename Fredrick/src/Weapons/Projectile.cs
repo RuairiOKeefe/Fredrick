@@ -180,10 +180,20 @@ namespace Fredrick.src
 
 				if (_owner.GetComponent<Emitter>() != null)
 				{
-					if (_owner.GetComponent<Emitter>().Particles.Count == 0)
+					bool dead = true;
+					foreach (Component c in _owner.Components)
 					{
-						_dead = true;
+						if (c is Emitter)
+						{
+							Emitter e = c as Emitter;
+							if (e.Particles.Count != 0)
+							{
+								dead = false;
+							}
+						}
 					}
+					_dead = dead;
+
 				}
 				else
 				{

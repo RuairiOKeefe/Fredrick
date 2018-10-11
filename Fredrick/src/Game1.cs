@@ -87,12 +87,13 @@ namespace Fredrick.src
 				entity.Components.Add(renderable);
 				entity.Components.Add(character);
 				entity.Components.Add(boxCollider);
-				Emitter emitter = new Emitter(entity, "arrow", true, 3000, 50, new Vector2(0, -10), 0, 0, 8, 0.0);
-				emitter.ParticleDrawable.AddAnimation(0, 32, 1, 30);
+				Emitter emitter = new Emitter(entity, "tempParticle", true, 3000, 20, new Vector2(0, -0), 0, 0, 2, 0.0, true, true, 1.0f);
+				emitter.ParticleDrawable = new Drawable("tempParticle", new Vector2(4), 8, 8, 0.1f);
+				emitter.ParticleDrawable.AddAnimation(0, 0, 1, 30);
 				entity.Components.Add(emitter);
 				Weapon weapon = new Weapon(entity, "Grenade", new Vector2(0.8f, 0), new Vector2(0.8f, 0), 0.1, 4.0f, 20.0f, 6.0f, true);
 				weapon.WeaponDrawable = new Drawable("fragNade", new Vector2(16), 32, 32, 0.2f);
-				weapon.ArmDrawable = new Drawable("tempArm", new Vector2(3,7), 32, 32, 0.1f);
+				weapon.ArmDrawable = new Drawable("tempArm", new Vector2(3, 7), 32, 32, 0.1f);
 				entity.Components.Add(weapon);
 
 				for (int i = 0; i < 101; i++)

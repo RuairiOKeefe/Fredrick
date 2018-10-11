@@ -50,12 +50,13 @@ namespace Fredrick.src
 				Renderable r = new Renderable(e, "Projectile", spriteName, new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
 				r.Drawable.AddAnimation(0, 0, 1, 1);
 				r.Drawable.AddAnimation(32, 0, 1, 1);
-				Emitter emitter = new Emitter(e, "explosion", false, 1000, 300, new Vector2(0, 0), 0, 0, 8.0f, 0.5);
-
+				Emitter explosionEmitter = new Emitter(e, "explosion", false, 1000, 300, new Vector2(0, 0), 0, 0, 6.0f, 1.5, false, false, 1.0f);
+				Emitter emberEmitter = new Emitter(e, "tempParticle", false, 1000, 300, new Vector2(0, 0), 0, 0, 8.0f, 2, true, true, 0.5f);
 				e.Components.Add(p);
 				e.Components.Add(cc);
 				e.Components.Add(r);
-				e.Components.Add(emitter);
+				e.Components.Add(explosionEmitter);
+				e.Components.Add(emberEmitter);
 
 				_inactiveProjectiles.Push(e);//need to improve
 
