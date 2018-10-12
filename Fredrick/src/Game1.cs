@@ -87,7 +87,7 @@ namespace Fredrick.src
 				entity.Components.Add(renderable);
 				entity.Components.Add(character);
 				entity.Components.Add(boxCollider);
-				Emitter emitter = new Emitter(entity, "tempParticle", true, 3000, 20, new Vector2(0, -0), 0, 0, 2, 0.0, true, true, 1.0f);
+				Emitter emitter = new Emitter(entity, "tempParticle", true, 3000, 20, new Vector2(0, -0), 0, 0, 2, 0.0);
 				emitter.ParticleDrawable = new Drawable("tempParticle", new Vector2(4), 8, 8, 0.1f);
 				emitter.ParticleDrawable.AddAnimation(0, 0, 1, 30);
 				entity.Components.Add(emitter);

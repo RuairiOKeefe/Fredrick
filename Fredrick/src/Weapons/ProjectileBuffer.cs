@@ -64,9 +64,17 @@ namespace Fredrick.src
 				Renderable r = new Renderable(e, "Projectile", spriteName, new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
 				r.Drawable.AddAnimation(0, 0, 1, 1);
 				r.Drawable.AddAnimation(32, 0, 1, 1);
-				Emitter explosionEmitter = new Emitter(e, "explosion", false, 1000, 600, new Vector2(0, 0), 0, 0, 17.0f, 0.6, false, false, 1.0f);
+
+				Emitter explosionEmitter = new Emitter(e, "explosion", false, 1000, 000, new Vector2(0, 0), 0, 0, 17.0f, 0.6);
+				explosionEmitter.SetLifeTime(0.6, 0, 0);
+				explosionEmitter.SetVelocity(0.0f, 1.0f, 17.0f);
+				explosionEmitter.SetScaling(false, 0.0f);
 				explosionEmitter.LerpColours = lerpColoursExE;
-				Emitter emberEmitter = new Emitter(e, "tempParticle", false, 1000, 000, new Vector2(0, -16.0f), 0, 0, 10.0f, 0.5, true, true, 0.1f);
+
+				Emitter emberEmitter = new Emitter(e, "tempParticle", false, 1000, 300, new Vector2(0, -0.0f), 0, 0, 10.0f, 0.5);
+				emberEmitter.SetLifeTime(0.0, 0.5, 1.2);
+				emberEmitter.SetVelocity(0.0f, 8.0f, 16.0f, true);
+				emberEmitter.SetScaling(true, 0.1f);
 				emberEmitter.LerpColours = lerpColoursEmE;
 
 				e.Components.Add(p);

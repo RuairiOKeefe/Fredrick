@@ -24,9 +24,14 @@ namespace Fredrick.src
 		protected Vector2 _acceleration;
 
 		protected float _spawnVelocity;
-		protected double _lifeTime;
+		protected float _minVelVar;//m
+		protected float _maxVelVar;
 
-		bool _quadraticVariance;
+		protected double _lifetime;
+		protected double _minLTVar;
+		protected double _maxLTVar;
+
+		bool _sqrVelVar;
 
 		bool _fakeDepth;
 		float _scaleFactor;
@@ -61,7 +66,7 @@ namespace Fredrick.src
 			set { _pD = value; }
 		}
 
-		public Emitter(Entity owner, String spriteName, bool continuous, int maxParticles, int emissionCount, Vector2 acceleration, float spawnWidth = 0, float spawnHeight = 0, float spawnVelocity = 3.0f, double lifeTime = 3.0, bool quadraticVariance = false, bool fakeDepth = false, float scaleFactor = 1.0f) : base(owner)
+		public Emitter(Entity owner, String spriteName, bool continuous, int maxParticles, int emissionCount, Vector2 acceleration, float spawnWidth = 0, float spawnHeight = 0, float spawnVelocity = 3.0f, double lifeTime = 3.0) : base(owner)
 		{
 			_pD = new Drawable(spriteName, new Vector2(16, 16), 32, 32, 0.1f);
 			_position = new Vector2(0, 0);
@@ -79,14 +84,32 @@ namespace Fredrick.src
 			_maxParticles = maxParticles;
 			_continuous = continuous;
 			_emissionCount = emissionCount;
-			_spawnVelocity = spawnVelocity;
-			_lifeTime = lifeTime;
 
-			_quadraticVariance = quadraticVariance;
-			_fakeDepth = fakeDepth;
-			_scaleFactor = scaleFactor;
+			_spawnVelocity = spawnVelocity;
+			_lifetime = lifeTime;
 
 			_lerpColours = new List<Tuple<Color, double>>();
+		}
+
+		public void SetVelocity(float spawnVelocity, float minVariance, float maxVariance, bool sqrVelVar = false)
+		{
+			_spawnVelocity = spawnVelocity;
+			_minVelVar = minVariance;
+			_maxVelVar = maxVariance;
+			_sqrVelVar = sqrVelVar;
+		}
+
+		public void SetLifeTime(double lifeTime, double minVariance, double maxVariance)
+		{
+			_lifetime = lifeTime;
+			_minLTVar = minVariance;
+			_maxLTVar = maxVariance;
+		}
+
+		public void SetScaling(bool fakeDepth, float scaleFactor)
+		{
+			_fakeDepth = fakeDepth;
+			_scaleFactor = scaleFactor;
 		}
 
 		public void Emit()
@@ -96,14 +119,21 @@ namespace Fredrick.src
 				Vector2 spawnPos = new Vector2((float)rnd.NextDouble() * _spawnWidth - (_spawnWidth / 2), (float)rnd.NextDouble() * _spawnHeight - (_spawnHeight / 2));
 				Vector2 spawnVel = new Vector2((float)rnd.NextDouble() * 2 - 1, (float)rnd.NextDouble() * 2 - 1);
 				spawnVel.Normalize();
-				float velocityVariance = (float)rnd.NextDouble();
-				if (_quadraticVariance)
-					velocityVariance *= velocityVariance;//modifies the distribution so more particles move slowly
-				spawnVel *= (_spawnVelocity * velocityVariance);
+
+				float velocityRND = (float)rnd.NextDouble();
+				if (_sqrVelVar)
+					velocityRND *= velocityRND;//modifies the distribution so more particles move slowly
+				float velocityVar = (velocityRND * (_maxVelVar - _minVelVar)) + _minVelVar;
+				spawnVel *= (_spawnVelocity + velocityVar);
+
+				double lifetimeRND = rnd.NextDouble();
+				double lifetime = _lifetime + ((lifetimeRND * (_maxLTVar - _minLTVar)) + _minLTVar);
+
 				bool forwardMotion = rnd.NextDouble() >= 0.5;
-				float scaleFactor = (forwardMotion ? (1.0f - velocityVariance) : -(1.0f - velocityVariance)) * _scaleFactor;
+				float scaleFactor = (forwardMotion ? (1.0f - velocityRND) : -(1.0f - velocityRND)) * _scaleFactor;
+
 				Particle p = ParticleBuffer.Instance.InactiveParticles.Pop();
-				p.Revive(spawnPos + _owner.Position, spawnVel, _lifeTime , _fakeDepth, scaleFactor);
+				p.Revive(spawnPos + _owner.Position, spawnVel, lifetime, _fakeDepth, scaleFactor);
 				_particles.Add(p);
 			}
 		}
@@ -133,7 +163,7 @@ namespace Fredrick.src
 			{
 				Particle p = _particles[i];
 				p.Update(deltaTime, _acceleration);
-				if (p.LifeTime < 0)
+				if (p.Lifetime < 0)
 				{
 					ParticleBuffer.Instance.InactiveParticles.Push(p);
 					_particles.Remove(p);
@@ -152,7 +182,7 @@ namespace Fredrick.src
 					c = _lerpColours[0].Item1;
 				if (_lerpColours.Count > 1)
 				{
-					double lifeRatio = 1 - (p.LifeTime / _lifeTime);
+					double lifeRatio = 1 - (p.Lifetime / p.InitLifetime);
 					Color a = new Color();
 					Color b = new Color();
 					double lerpAmount = 0;

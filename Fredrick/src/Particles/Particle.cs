@@ -18,7 +18,8 @@ namespace Fredrick.src
 		Vector2 _tempMove;
 
 
-		double _lifeTime;
+		double _lifetime;
+		double _initLifetime;
 
 		float _restitution = 0.8f;
 
@@ -42,10 +43,16 @@ namespace Fredrick.src
 			set { _scale = value; }
 		}
 
-		public double LifeTime
+		public double Lifetime
 		{
-			get { return _lifeTime; }
-			set { _lifeTime = value; }
+			get { return _lifetime; }
+			set { _lifetime = value; }
+		}
+
+		public double InitLifetime
+		{
+			get { return _initLifetime; }
+			set { _initLifetime = value; }
 		}
 
 		public Particle()
@@ -59,7 +66,8 @@ namespace Fredrick.src
 			_position = position;
 			_scale = new Vector2(1);
 			_velocity = velocity;
-			_lifeTime = lifeTime;
+			_lifetime = lifeTime;
+			_initLifetime = lifeTime;
 
 			_fakeDepth = fakeDepth;
 			_scaleFactor = scaleFactor;
@@ -70,7 +78,8 @@ namespace Fredrick.src
 			_position = position;
 			_scale = new Vector2(1);
 			_velocity = velocity;
-			_lifeTime = lifeTime;
+			_lifetime = lifeTime;
+			_initLifetime = lifeTime;
 
 			_fakeDepth = fakeDepth;
 			_scaleFactor = scaleFactor;
@@ -220,7 +229,7 @@ namespace Fredrick.src
 			{
 				_rotation = 0;
 			}
-			_lifeTime -= deltaTime;
+			_lifetime -= deltaTime;
 		}
 	}
 }
