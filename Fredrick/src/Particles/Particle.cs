@@ -16,10 +16,11 @@ namespace Fredrick.src
 		Vector2 _scale;
 		Vector2 _velocity;
 		Vector2 _tempMove;
-
+		bool _collide;
 
 		double _lifetime;
 		double _initLifetime;
+		bool _reduceLifeOnCollision;
 
 		float _restitution = 0.8f;
 
@@ -61,25 +62,31 @@ namespace Fredrick.src
 			_velocity = new Vector2();
 		}
 
-		public Particle(Vector2 position, Vector2 velocity, double lifeTime, bool fakeDepth = false, float scaleFactor = 1.0f)
+		public Particle(Vector2 position, Vector2 velocity, double lifeTime, bool collide = false, bool reduceLifeOnCollision = false, bool fakeDepth = false, float scaleFactor = 1.0f)
 		{
 			_position = position;
-			_scale = new Vector2(1);
+			_scale = new Vector2(1.0f);
 			_velocity = velocity;
+			_collide = collide;
+
 			_lifetime = lifeTime;
 			_initLifetime = lifeTime;
+			_reduceLifeOnCollision = reduceLifeOnCollision;
 
 			_fakeDepth = fakeDepth;
 			_scaleFactor = scaleFactor;
 		}
 
-		public void Revive(Vector2 position, Vector2 velocity, double lifeTime, bool fakeDepth = false, float scaleFactor = 1.0f)
+		public void Revive(Vector2 position, Vector2 velocity, double lifeTime, bool collide = false, bool reduceLifeOnCollision = false, bool fakeDepth = false, float scaleFactor = 1.0f)
 		{
 			_position = position;
-			_scale = new Vector2(1);
+			_scale = new Vector2(1.0f);
 			_velocity = velocity;
+			_collide = collide;
+
 			_lifetime = lifeTime;
 			_initLifetime = lifeTime;
+			_reduceLifeOnCollision = reduceLifeOnCollision;
 
 			_fakeDepth = fakeDepth;
 			_scaleFactor = scaleFactor;
@@ -188,7 +195,7 @@ namespace Fredrick.src
 			{
 				if (_scaleFactor > 0)
 				{
-					_scale.X *= 1+(_scaleFactor * (float)deltaTime);
+					_scale.X *= 1 + (_scaleFactor * (float)deltaTime);
 					_scale.Y *= 1 + (_scaleFactor * (float)deltaTime);
 				}
 				else
@@ -198,23 +205,30 @@ namespace Fredrick.src
 				}
 			}
 
-			int x = (int)Math.Floor(_position.X + _tempMove.X + 0.5f);
-			int y = (int)Math.Floor(_position.Y + _tempMove.Y + 0.5f);
-
-
-			foreach (Entity e in ColliderManager.Instance.Terrain[x, y])
+			if (_collide)
 			{
-				if (e.GetComponent<Character>() == null)
+				int x = (int)Math.Floor(_position.X + _tempMove.X + 0.5f);
+				int y = (int)Math.Floor(_position.Y + _tempMove.Y + 0.5f);
+
+				bool collided = false;
+				foreach (Entity e in ColliderManager.Instance.Terrain[x, y])
 				{
-					if (e.GetComponent<AABBCollider>() != null)
-						if (CheckCollision(e.GetComponent<AABBCollider>().Rectangle))
-						{
-						}
-					if (e.GetComponent<Platform>() != null)
-						if (CheckCollision(e.GetComponent<Platform>()))
-						{
-						}
+					if (e.GetComponent<Character>() == null)
+					{
+						if (e.GetComponent<AABBCollider>() != null)
+							if (CheckCollision(e.GetComponent<AABBCollider>().Rectangle))
+							{
+								collided = true;
+							}
+						if (e.GetComponent<Platform>() != null)
+							if (CheckCollision(e.GetComponent<Platform>()))
+							{
+								collided = true;
+							}
+					}
 				}
+				if (collided && _reduceLifeOnCollision)
+					_lifetime /= 2.0;
 			}
 
 			_position += _tempMove;

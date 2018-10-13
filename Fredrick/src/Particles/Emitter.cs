@@ -24,17 +24,19 @@ namespace Fredrick.src
 		protected Vector2 _acceleration;
 
 		protected float _spawnVelocity;
-		protected float _minVelVar;//m
+		protected float _minVelVar;
 		protected float _maxVelVar;
+		protected bool _sqrVelVar;
+
+		protected bool _collide;
+		protected bool _reduceLifeOnCollision;
 
 		protected double _lifetime;
 		protected double _minLTVar;
 		protected double _maxLTVar;
 
-		bool _sqrVelVar;
-
-		bool _fakeDepth;
-		float _scaleFactor;
+		protected bool _fakeDepth;
+		protected float _scaleFactor;
 
 		private List<Tuple<Color, double>> _lerpColours;//for transparency colours MUST be multiplied by the desired opacity first
 
@@ -99,6 +101,12 @@ namespace Fredrick.src
 			_sqrVelVar = sqrVelVar;
 		}
 
+		public void SetCollision(bool collide = false, bool reduceLifeOnCollision = false)
+		{
+			_collide = collide;
+			_reduceLifeOnCollision = reduceLifeOnCollision;
+		}
+
 		public void SetLifeTime(double lifeTime, double minVariance, double maxVariance)
 		{
 			_lifetime = lifeTime;
@@ -133,7 +141,7 @@ namespace Fredrick.src
 				float scaleFactor = (forwardMotion ? (1.0f - velocityRND) : -(1.0f - velocityRND)) * _scaleFactor;
 
 				Particle p = ParticleBuffer.Instance.InactiveParticles.Pop();
-				p.Revive(spawnPos + _owner.Position, spawnVel, lifetime, _fakeDepth, scaleFactor);
+				p.Revive(spawnPos + _owner.Position, spawnVel, lifetime, _collide, _reduceLifeOnCollision, _fakeDepth, scaleFactor);
 				_particles.Add(p);
 			}
 		}
@@ -215,7 +223,7 @@ namespace Fredrick.src
 				if (p.Scale.X < 1.0f)
 					layer -= 0.01f;
 
-				spriteBatch.Draw(ResourceManager.Instance.Textures[_pD._spriteName], p.Position * inv * _pD._spriteSize, _pD._sourceRectangle, c, p.Rotation, _pD._origin, p.Scale, _pD._spriteEffects, layer);
+				spriteBatch.Draw(ResourceManager.Instance.Textures[_pD._spriteName], p.Position * inv * _pD._spriteSize, _pD._sourceRectangle, c, p.Rotation, _pD._origin, _scale * p.Scale, _pD._spriteEffects, layer);
 			}
 		}
 

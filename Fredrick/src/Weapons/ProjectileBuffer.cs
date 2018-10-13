@@ -52,10 +52,11 @@ namespace Fredrick.src
 			lerpColoursExE.Add(new Tuple<Color, double>(new Color(61, 59, 58, 255) * 0.1f, 0.5));
 			lerpColoursExE.Add(new Tuple<Color, double>(new Color(61, 59, 58, 255) * 0.0f, 1.0));
 
-			lerpColoursEmE.Add(new Tuple<Color, double>(new Color(244, 212, 156, 255) * 0.2f, 0.0));
-			lerpColoursEmE.Add(new Tuple<Color, double>(new Color(255, 231, 137, 255) * 0.5f, 0.5));
-			lerpColoursEmE.Add(new Tuple<Color, double>(new Color(247, 223, 200, 255) * 0.1f, 0.9));
-			lerpColoursEmE.Add(new Tuple<Color, double>(new Color(247, 223, 200, 255) * 0.0f, 1.0));
+			lerpColoursEmE.Add(new Tuple<Color, double>(new Color(198, 48, 2, 255) * 0.5f, 0.0));
+			lerpColoursEmE.Add(new Tuple<Color, double>(new Color(242, 192, 0, 255) * 0.8f, 0.3));
+			lerpColoursEmE.Add(new Tuple<Color, double>(new Color(250, 243, 67, 255) * 0.8f, 0.4));
+			lerpColoursEmE.Add(new Tuple<Color, double>(new Color(255, 255, 211, 255) * 0.5f, 0.5));
+			lerpColoursEmE.Add(new Tuple<Color, double>(new Color(255, 255, 255, 255) * 0.0f, 1.0));
 			for (int i = 0; i < NUM_PROJECTILES; i++)
 			{
 				Entity e = new Entity();
@@ -65,16 +66,20 @@ namespace Fredrick.src
 				r.Drawable.AddAnimation(0, 0, 1, 1);
 				r.Drawable.AddAnimation(32, 0, 1, 1);
 
-				Emitter explosionEmitter = new Emitter(e, "explosion", false, 1000, 000, new Vector2(0, 0), 0, 0, 17.0f, 0.6);
+				Emitter explosionEmitter = new Emitter(e, "explosion", false, 1000, 600, new Vector2(0, 0), 0, 0, 17.0f, 0.6);
 				explosionEmitter.SetLifeTime(0.6, 0, 0);
 				explosionEmitter.SetVelocity(0.0f, 1.0f, 17.0f);
+				explosionEmitter.SetCollision(true, false);
 				explosionEmitter.SetScaling(false, 0.0f);
 				explosionEmitter.LerpColours = lerpColoursExE;
 
-				Emitter emberEmitter = new Emitter(e, "tempParticle", false, 1000, 300, new Vector2(0, -0.0f), 0, 0, 10.0f, 0.5);
+				Emitter emberEmitter = new Emitter(e, "tempSpark", false, 1000, 50, new Vector2(0, -12.0f), 0, 0, 10.0f, 0.5);//need trails
+				emberEmitter.ParticleDrawable = new Drawable("tempSpark", new Vector2(8), 16, 16, 0.1f);
+				emberEmitter.Scale = new Vector2(0.25f);
 				emberEmitter.SetLifeTime(0.0, 0.5, 1.2);
-				emberEmitter.SetVelocity(0.0f, 8.0f, 16.0f, true);
-				emberEmitter.SetScaling(true, 0.1f);
+				emberEmitter.SetVelocity(0.0f, 10.5f, 12.0f, true);
+				emberEmitter.SetCollision(true, true);
+				emberEmitter.SetScaling(true, 0.5f);
 				emberEmitter.LerpColours = lerpColoursEmE;
 
 				e.Components.Add(p);

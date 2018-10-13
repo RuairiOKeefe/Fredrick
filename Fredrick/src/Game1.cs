@@ -32,6 +32,8 @@ namespace Fredrick.src
 			graphics = new GraphicsDeviceManager(this);
 			graphics.PreferredBackBufferWidth = 1600;
 			graphics.PreferredBackBufferHeight = 900;
+			//graphics.PreferredBackBufferWidth = 1920;
+			//graphics.PreferredBackBufferHeight = 1080;
 			this.IsMouseVisible = true;
 			Content.RootDirectory = "Content";
 			//graphics.IsFullScreen = true;
