@@ -29,7 +29,7 @@ namespace Fredrick.src
 			Entity e = new Entity(true, "Block");
 			e.Tags.Add("Terrain");
 			Renderable r = new Renderable(e, "Block", "testSheet", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
-			r.Drawable.AddAnimation(0, 0, 1, 30);
+			r.Drawable.AddAnimation(0, 0, 1, 30, Animation.OnEnd.Loop, 0);
 			AABBCollider c = new AABBCollider(e, new Vector2(0), 1, 1);
 			e.Components.Add(r);
 			e.Components.Add(c);
@@ -38,7 +38,7 @@ namespace Fredrick.src
 			e = new Entity(true, "Slope");
 			e.Tags.Add("Terrain");
 			r = new Renderable(e, "Slock", "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
-			r.Drawable.AddAnimation(0, 0, 1, 30);
+			r.Drawable.AddAnimation(0, 0, 1, 30, Animation.OnEnd.Loop, 0);
 			Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, -0.5f, 0.5f, -0.3f);
 			e.Components.Add(r);
 			e.Components.Add(p);
@@ -47,7 +47,7 @@ namespace Fredrick.src
 			e = new Entity(true, "Slope");
 			e.Tags.Add("Terrain");
 			r = new Renderable(e, "Slope", "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
-			r.Drawable.AddAnimation(32, 0, 1, 30);
+			r.Drawable.AddAnimation(32, 0, 1, 30, Animation.OnEnd.Loop, 0);
 			p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, -0.5f, -0.3f);
 			e.Components.Add(r);
 			e.Components.Add(p);
@@ -56,7 +56,7 @@ namespace Fredrick.src
 			e = new Entity(true, "Slope");
 			e.Tags.Add("Terrain");
 			r = new Renderable(e, "Slope", "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
-			r.Drawable.AddAnimation(64, 0, 1, 30);
+			r.Drawable.AddAnimation(64, 0, 1, 30, Animation.OnEnd.Loop, 0);
 			p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, -0.5f, 0.3f);
 			e.Components.Add(r);
 			e.Components.Add(p);
@@ -65,7 +65,7 @@ namespace Fredrick.src
 			e = new Entity(true, "Slope");
 			e.Tags.Add("Terrain");
 			r = new Renderable(e, "Slope", "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
-			r.Drawable.AddAnimation(96, 0, 1, 30);
+			r.Drawable.AddAnimation(96, 0, 1, 30, Animation.OnEnd.Loop, 0);
 			p = new Platform(e, new Vector2(0), 1, 1, 0, 0, -0.5f, 0.5f, 0.3f);
 			e.Components.Add(r);
 			e.Components.Add(p);
@@ -74,7 +74,7 @@ namespace Fredrick.src
 			e = new Entity(true, "Platform");
 			e.Tags.Add("Terrain");
 			r = new Renderable(e, "Block", "grass", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
-			r.Drawable.AddAnimation(0, 0, 1, 30);
+			r.Drawable.AddAnimation(0, 0, 1, 30, Animation.OnEnd.Loop, 0);
 			p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, 0.5f, -0.3f);
 			e.Components.Add(r);
 			e.Components.Add(p);
@@ -83,7 +83,7 @@ namespace Fredrick.src
 			e = new Entity(true, "Emptyblock");
 			e.Tags.Add("Terrain");
 			r = new Renderable(e, "Block", "testSheet", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
-			r.Drawable.AddAnimation(0, 0, 1, 30);
+			r.Drawable.AddAnimation(0, 0, 1, 30, Animation.OnEnd.Loop, 0);
 			e.Components.Add(r);
 			entities.Add(e);
 		}
@@ -97,7 +97,7 @@ namespace Fredrick.src
 					e = new Entity(true, "Block");
 					e.Tags.Add("Terrain");
 					Renderable r = new Renderable(e, "Block", "Dirt", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
-					r.Drawable.AddAnimation(0, 0, 1, 30);
+					r.Drawable.AddAnimation(0, 0, 1, 30, Animation.OnEnd.Loop, 0);
 					AABBCollider c = new AABBCollider(e, new Vector2(0), 1, 1);
 					e.Components.Add(r);
 					e.Components.Add(c);
@@ -106,7 +106,7 @@ namespace Fredrick.src
 					e = new Entity(true, "Slope");
 					e.Tags.Add("Terrain");
 					r = new Renderable(e, "Slope", "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
-					r.Drawable.AddAnimation(0, 0, 1, 30);
+					r.Drawable.AddAnimation(0, 0, 1, 30, Animation.OnEnd.Loop, 0);
 					Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, -0.5f, 0.5f, -0.3f);
 					e.Components.Add(r);
 					e.Components.Add(p);
@@ -115,7 +115,7 @@ namespace Fredrick.src
 					e = new Entity(true, "Slope");
 					e.Tags.Add("Terrain");
 					r = new Renderable(e, "Slope", "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
-					r.Drawable.AddAnimation(32, 0, 1, 30);
+					r.Drawable.AddAnimation(32, 0, 1, 30, Animation.OnEnd.Loop, 0);
 					p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, -0.5f, -0.5f);
 					e.Components.Add(r);
 					e.Components.Add(p);
@@ -124,7 +124,7 @@ namespace Fredrick.src
 					e = new Entity(true, "Slope");
 					e.Tags.Add("Terrain");
 					r = new Renderable(e, "Slope", "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
-					r.Drawable.AddAnimation(64, 0, 1, 30);
+					r.Drawable.AddAnimation(64, 0, 1, 30, Animation.OnEnd.Loop, 0);
 					p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, -0.5f, 0.5f);
 					e.Components.Add(r);
 					e.Components.Add(p);
@@ -133,7 +133,7 @@ namespace Fredrick.src
 					e = new Entity(true, "Slope");
 					e.Tags.Add("Terrain");
 					r = new Renderable(e, "Slope", "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
-					r.Drawable.AddAnimation(96, 0, 1, 30);
+					r.Drawable.AddAnimation(96, 0, 1, 30, Animation.OnEnd.Loop, 0);
 					p = new Platform(e, new Vector2(0), 1, 1, 0, 0, -0.5f, 0.5f, 0.5f);
 					e.Components.Add(r);
 					e.Components.Add(p);
@@ -142,7 +142,7 @@ namespace Fredrick.src
 					e = new Entity(true, "Platform");
 					e.Tags.Add("Terrain");
 					r = new Renderable(e, "Block", "grass", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
-					r.Drawable.AddAnimation(0, 0, 1, 30);
+					r.Drawable.AddAnimation(0, 0, 1, 30, Animation.OnEnd.Loop, 0);
 					p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, 0.5f, -0.3f);
 					e.Components.Add(r);
 					e.Components.Add(p);
@@ -151,7 +151,7 @@ namespace Fredrick.src
 					e = new Entity(true, "Emptyblock");
 					e.Tags.Add("Terrain");
 					r = new Renderable(e, "Block", "Dirt", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
-					r.Drawable.AddAnimation(0, 0, 1, 30);
+					r.Drawable.AddAnimation(0, 0, 1, 30, Animation.OnEnd.Loop, 0);
 					e.Components.Add(r);
 					break;
 			}

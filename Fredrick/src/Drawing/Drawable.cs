@@ -26,8 +26,6 @@ namespace Fredrick.src
 
 		public List<Animation> _animations;//Stores an int key
 		public int _currentAnim;//which animation is currently being used
-		public bool _transition;//Does a transition need to occur
-		public int _nextAnim;//The animation to be transitioned to
 
 		public Drawable()
 		{
@@ -46,8 +44,6 @@ namespace Fredrick.src
 			_sourceRectangle = new Rectangle(0, 0, _width, _height);
 			_animations = new List<Animation>();
 			_currentAnim = 0;
-			_transition = false;
-			_nextAnim = 0;
 		}
 
 		public void Load(ContentManager content)
@@ -62,14 +58,12 @@ namespace Fredrick.src
 			}
 		}
 
-		public void AddAnimation(int startX, int startY, int frames, float frameRate)
+		public void AddAnimation(int startX, int startY, int frames, float frameRate, Animation.OnEnd onEnd, int nextAnim)
 		{
-			_animations.Add(new Animation(_spriteWidth, _spriteHeight, startX, startY, _width, _height, frames, frameRate));
+			_animations.Add(new Animation(_spriteWidth, _spriteHeight, startX, startY, _width, _height, frames, frameRate, onEnd, nextAnim));
 			if (_animations.Count == 1)
 			{
 				_currentAnim = 0;
-				_transition = false;
-				_nextAnim = 0;
 			}
 		}
 
@@ -77,18 +71,8 @@ namespace Fredrick.src
 		{
 			if (nextAnim != _currentAnim)
 			{
-				_nextAnim = nextAnim;
-				_transition = true;
-			}
-		}
-
-		public void TryTransition()
-		{
-			if (_animations[_currentAnim].GetCurrentFrame() == 0)
-			{
-				_animations[_nextAnim].TransitionInAnim(_animations[_currentAnim].GetNextFrame());
-				_currentAnim = _nextAnim;
-				_transition = false;
+				_animations[nextAnim].TransitionInAnim(_animations[_currentAnim].GetNextFrame());
+				_currentAnim = nextAnim;
 			}
 		}
 
@@ -96,9 +80,10 @@ namespace Fredrick.src
 		{
 			if (_animations.Count > 0)
 			{
-				_sourceRectangle.Location = _animations[_currentAnim].UpdateAnimation(deltaTime);
-				if (_transition)
-					TryTransition();
+				bool transition;
+				_sourceRectangle.Location = _animations[_currentAnim].UpdateAnimation(deltaTime, out transition);
+				if (transition)
+					TransitionAnim(_animations[_currentAnim].NextAnim);
 			}
 		}
 	}

@@ -63,8 +63,8 @@ namespace Fredrick.src
 				Projectile p = new Projectile(e);
 				CircleCollider cc = new CircleCollider(e);
 				Renderable r = new Renderable(e, "Projectile", spriteName, new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
-				r.Drawable.AddAnimation(0, 0, 1, 1);
-				r.Drawable.AddAnimation(32, 0, 1, 1);
+				r.Drawable.AddAnimation(0, 0, 1, 1, Animation.OnEnd.Loop, 0);
+				r.Drawable.AddAnimation(32, 0, 1, 1, Animation.OnEnd.Loop, 0);
 
 				Emitter explosionEmitter = new Emitter(e, "explosion", false, 1000, 600, new Vector2(0, 0), 0, 0, 17.0f, 0.6);
 				explosionEmitter.SetLifeTime(0.6, 0, 0);

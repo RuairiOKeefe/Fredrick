@@ -10,6 +10,13 @@ namespace Fredrick.src
 	[Serializable]
 	public class Animation
 	{
+		public enum OnEnd
+		{
+			LockLastFrame,
+			Loop,
+			TriggerNext
+		}
+
 		private int _spriteWidth;
 		private int _spriteHeight;
 		private int _startX;
@@ -26,6 +33,9 @@ namespace Fredrick.src
 		private double _frameTime;//The time taken between each frame depending on the framerate
 		private double _nextFrame;//How much time has elapsed since this frame was switched to
 
+		private OnEnd _onEnd;
+		private int _nextAnim;
+
 		public int SpriteWidth
 		{
 			get { return _spriteWidth; }
@@ -36,6 +46,12 @@ namespace Fredrick.src
 		{
 			get { return _spriteHeight; }
 			set { _spriteHeight = value; }
+		}
+
+		public int NextAnim
+		{
+			get { return _nextAnim; }
+			set { _nextAnim = value; }
 		}
 
 		public Animation()//Constructor shouldn't be used as there are no way to set fields currently, as animations shouldn't be dynamic
@@ -57,7 +73,7 @@ namespace Fredrick.src
 			_nextFrame = 0;
 		}
 
-		public Animation(int spriteWidth, int spriteHeight, int startX, int startY, int width, int height, int frames, float framerate)
+		public Animation(int spriteWidth, int spriteHeight, int startX, int startY, int width, int height, int frames, float framerate, OnEnd onEnd, int nextAnim)
 		{
 			_spriteWidth = spriteWidth;
 			_spriteHeight = spriteHeight;
@@ -75,35 +91,57 @@ namespace Fredrick.src
 			_currentFrame = 0;
 			_frameTime = 1.0 / _framerate;
 			_nextFrame = 0;
+
+			_onEnd = onEnd;
+			_nextAnim = nextAnim;
 		}
 
-		public Point UpdateAnimation(double deltaTime)
+		public Point UpdateAnimation(double deltaTime, out bool transition)
 		{
+			transition = false;
 			_nextFrame += deltaTime;
 			if (_nextFrame >= _frameTime)
 			{
 				_nextFrame -= _frameTime;
 				_currentFrame++;
-				if (_currentFrame >= _frames)
-					_currentFrame = 0;
 
-				if (_currentFrame == 0)
+				bool locked = false;
+				if (_currentFrame >= _frames)
 				{
-					_currentX = _startX;
-					_currentY = _startY;
-				}
-				else
-				{
-					_currentX += _width;
-					if (_currentX >= _spriteWidth)
+					switch (_onEnd)
 					{
-						_currentX = 0;
-						_currentY += _height;
+						case (OnEnd.LockLastFrame):
+							_currentFrame = _frames - 1;
+							locked = true;
+							break;
+						case (OnEnd.Loop):
+							_currentFrame = 0;
+							break;
+						case (OnEnd.TriggerNext):
+							transition = true;
+							break;
 					}
-					if (_currentY >= _spriteHeight)
+				}
+				if (!locked)
+				{
+					if (_currentFrame == 0)
 					{
-						_currentX = 0;
-						_currentY = 0;
+						_currentX = _startX;
+						_currentY = _startY;
+					}
+					else
+					{
+						_currentX += _width;
+						if (_currentX >= _spriteWidth)
+						{
+							_currentX = 0;
+							_currentY += _height;
+						}
+						if (_currentY >= _spriteHeight)
+						{
+							_currentX = 0;
+							_currentY = 0;
+						}
 					}
 				}
 			}
@@ -124,6 +162,8 @@ namespace Fredrick.src
 		public void TransitionInAnim(double nextFrame)
 		{
 			_currentFrame = 0;
+			_currentX = _startX;
+			_currentY = _startY;
 			_nextFrame = nextFrame;
 		}
 	}

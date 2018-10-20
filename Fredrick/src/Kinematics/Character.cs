@@ -221,17 +221,17 @@ namespace Fredrick.src
 				case State.Standing:
 					if (_moveCommand != 0)
 						_motionState = State.Walking;
-					if (!_grounded || _jumpWait)
+					if (!_grounded)
 						_motionState = State.Jumping;
 					break;
 				case State.Walking:
 					if (_moveCommand == 0)
 						_motionState = State.Standing;
-					if (!_grounded || _jumpWait)
+					if (!_grounded)
 						_motionState = State.Jumping;
 					break;
 				case State.Jumping:
-					if (!_jumpCommand)
+					if (_grounded)
 						_motionState = State.Walking;//Need proper handler for landing
 					break;
 				default:
@@ -241,13 +241,40 @@ namespace Fredrick.src
 			switch (_motionState)
 			{
 				case State.Standing:
-
+					foreach (Component c in _owner.Components)
+					{
+						if (c.Tags.Contains("Legs"))
+						{
+							if (c is Renderable)
+							{
+								(c as Renderable).Drawable.TransitionAnim(0);
+							}
+						}
+					}
 					break;
 				case State.Walking:
-
+					foreach (Component c in _owner.Components)
+					{
+						if (c.Tags.Contains("Legs"))
+						{
+							if (c is Renderable)
+							{
+								(c as Renderable).Drawable.TransitionAnim(1);
+							}
+						}
+					}
 					break;
 				case State.Jumping:
-
+					foreach (Component c in _owner.Components)
+					{
+						if (c.Tags.Contains("Legs"))
+						{
+							if (c is Renderable)
+							{
+								(c as Renderable).Drawable.TransitionAnim(2);
+							}
+						}
+					}
 					break;
 				default:
 					throw new Exception("Unrecognised state reached");
@@ -281,7 +308,6 @@ namespace Fredrick.src
 				{
 					if (c is Renderable)
 					{
-						//Renderable r = c as Renderable;
 						(c as Renderable).Flip(_facingRight);
 					}
 				}

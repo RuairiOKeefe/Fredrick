@@ -157,7 +157,7 @@
 /processorParam:TextureFormat=Color
 /build:grass.png
 
-#begin Run Cycle.png
+#begin Character.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -167,5 +167,5 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Run Cycle.png
+/build:Character.png
 

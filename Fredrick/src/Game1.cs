@@ -32,10 +32,11 @@ namespace Fredrick.src
 			graphics = new GraphicsDeviceManager(this);
 			graphics.PreferredBackBufferWidth = 1600;
 			graphics.PreferredBackBufferHeight = 900;
-			//graphics.PreferredBackBufferWidth = 1920;
-			//graphics.PreferredBackBufferHeight = 1080;
 			this.IsMouseVisible = true;
 			Content.RootDirectory = "Content";
+
+			//graphics.PreferredBackBufferWidth = 1920;
+			//graphics.PreferredBackBufferHeight = 1080;
 			//graphics.IsFullScreen = true;
 
 			serializer = new Serializer();
@@ -81,17 +82,20 @@ namespace Fredrick.src
 				Entity entity = new Entity(true, "Player");
 				entity.Position = new Vector2(8, 8);
 				actors.Add(entity);
-				Renderable renderable = new Renderable(entity, "Body", "Run Cycle", new Vector2(32, 32), new Vector2(0), new Vector2(1), 64, 64, 0.3f);
+				Renderable renderable = new Renderable(entity, "Legs", "Character", new Vector2(32, 32), new Vector2(0), new Vector2(1), 64, 64, 0.3f);
 				Character character = new Character(entity);
 				AABBCollider boxCollider = new AABBCollider(entity, new Vector2(0), 1.0f, 2.0f);
-				renderable.Drawable.AddAnimation(0, 0, 10, 12);
+				renderable.Drawable.AddAnimation(0, 0, 5, 12, Animation.OnEnd.Loop, 0);
+				renderable.Drawable.AddAnimation(64, 64, 10, 12, Animation.OnEnd.Loop, 0);
+				renderable.Drawable.AddAnimation(192, 192, 4, 12, Animation.OnEnd.LockLastFrame, 0);
 				renderable.Tags.Add("MotionFlip");
-				entity.Components.Add(renderable);
+				renderable.Tags.Add("Legs");
 				entity.Components.Add(character);
+				entity.Components.Add(renderable);
 				entity.Components.Add(boxCollider);
 				Emitter emitter = new Emitter(entity, "tempParticle", true, 3000, 20, new Vector2(0, -0), 0, 0, 2, 0.0);
 				emitter.ParticleDrawable = new Drawable("tempParticle", new Vector2(4), 8, 8, 0.1f);
-				emitter.ParticleDrawable.AddAnimation(0, 0, 1, 30);
+				emitter.ParticleDrawable.AddAnimation(0, 0, 1, 30, Animation.OnEnd.Loop, 0);
 				entity.Components.Add(emitter);
 				Weapon weapon = new Weapon(entity, "Grenade", new Vector2(0.8f, 0), new Vector2(0.8f, 0), 0.1, 4.0f, 20.0f, 6.0f, true);
 				weapon.Position = new Vector2(0, 0.5f);
@@ -110,7 +114,7 @@ namespace Fredrick.src
 							terrain.Add(e);
 							Renderable r = new Renderable(e, "Block", "Dirt", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
 							AABBCollider c = new AABBCollider(e, new Vector2(0));
-							r.Drawable.AddAnimation(0, 0, 1, 30);
+							r.Drawable.AddAnimation(0, 0, 1, 30, Animation.OnEnd.Loop, 0);
 							e.Components.Add(r);
 							e.Components.Add(c);
 						}
@@ -128,7 +132,7 @@ namespace Fredrick.src
 							terrain.Add(e);
 							Renderable r = new Renderable(e, "Block", "Dirt", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
 							AABBCollider c = new AABBCollider(e, new Vector2(0));
-							r.Drawable.AddAnimation(0, 0, 1, 30);
+							r.Drawable.AddAnimation(0, 0, 1, 30, Animation.OnEnd.Loop, 0);
 							e.Components.Add(r);
 							e.Components.Add(c);
 						}
@@ -146,7 +150,7 @@ namespace Fredrick.src
 							terrain.Add(e);
 							Renderable r = new Renderable(e, "Block", "Dirt", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
 							AABBCollider c = new AABBCollider(e, new Vector2(0));
-							r.Drawable.AddAnimation(0, 0, 1, 30);
+							r.Drawable.AddAnimation(0, 0, 1, 30, Animation.OnEnd.Loop, 0);
 							e.Components.Add(r);
 							e.Components.Add(c);
 						}
