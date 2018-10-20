@@ -73,9 +73,9 @@ namespace Fredrick.src
 				explosionEmitter.SetScaling(false, 0.0f);
 				explosionEmitter.LerpColours = lerpColoursExE;
 
-				Emitter emberEmitter = new Emitter(e, "tempSpark", false, 1000, 50, new Vector2(0, -12.0f), 0, 0, 10.0f, 0.5);//need trails
+				Emitter emberEmitter = new Emitter(e, "tempSpark", false, 1000, 50, new Vector2(0, -26.0f), 0, 0, 10.0f, 0.5);//need trails
 				emberEmitter.ParticleDrawable = new Drawable("tempSpark", new Vector2(8), 16, 16, 0.1f);
-				emberEmitter.Scale = new Vector2(0.25f);
+				emberEmitter.Scale = new Vector2(0.5f);
 				emberEmitter.SetLifeTime(0.0, 0.5, 1.2);
 				emberEmitter.SetVelocity(0.0f, 10.5f, 12.0f, true);
 				emberEmitter.SetCollision(true, true);

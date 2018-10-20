@@ -56,6 +56,8 @@ namespace Fredrick.src
 		private Vector2 _followPosition;
 		private Vector2 _followOffset;
 
+		private bool _facingRight;
+
 		public bool Grounded
 		{
 			get { return _grounded; }
@@ -266,6 +268,23 @@ namespace Fredrick.src
 			else
 			{
 				_followPosition = _owner.Position;
+			}
+
+			if (_moveCommand > 0)
+				_facingRight = true;
+			if (_moveCommand < 0)
+				_facingRight = false;
+
+			foreach (Component c in _owner.Components)
+			{
+				if (c.Tags.Contains("MotionFlip"))
+				{
+					if (c is Renderable)
+					{
+						//Renderable r = c as Renderable;
+						(c as Renderable).Flip(_facingRight);
+					}
+				}
 			}
 		}
 

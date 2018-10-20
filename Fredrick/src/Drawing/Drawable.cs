@@ -55,6 +55,11 @@ namespace Fredrick.src
 			ResourceManager.Instance.AddTexture(content, _spriteName);
 			_spriteWidth = ResourceManager.Instance.Textures[_spriteName].Width;
 			_spriteHeight = ResourceManager.Instance.Textures[_spriteName].Height;
+			foreach (Animation a in _animations)
+			{
+				a.SpriteWidth = _spriteWidth;
+				a.SpriteHeight = _spriteHeight;
+			}
 		}
 
 		public void AddAnimation(int startX, int startY, int frames, float frameRate)

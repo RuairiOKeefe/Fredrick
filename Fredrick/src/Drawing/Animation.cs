@@ -26,6 +26,18 @@ namespace Fredrick.src
 		private double _frameTime;//The time taken between each frame depending on the framerate
 		private double _nextFrame;//How much time has elapsed since this frame was switched to
 
+		public int SpriteWidth
+		{
+			get { return _spriteWidth; }
+			set { _spriteWidth = value; }
+		}
+
+		public int SpriteHeight
+		{
+			get { return _spriteHeight; }
+			set { _spriteHeight = value; }
+		}
+
 		public Animation()//Constructor shouldn't be used as there are no way to set fields currently, as animations shouldn't be dynamic
 		{
 			_spriteWidth = 0;

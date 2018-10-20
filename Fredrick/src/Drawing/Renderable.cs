@@ -13,6 +13,7 @@ namespace Fredrick.src
 	public class Renderable : Component
 	{
 		protected Drawable _drawable;
+		protected bool _facingRight;
 
 		public Drawable Drawable
 		{
@@ -32,6 +33,23 @@ namespace Fredrick.src
 			_drawable = new Drawable(spriteName, origin, width, height, layer);
 			_position = position;
 			_scale = scale;
+			_facingRight = true;
+		}
+
+		public void Flip(bool faceRight)
+		{
+			if (faceRight != _facingRight)
+			{
+				_facingRight = !_facingRight;
+				if (_facingRight)
+				{
+					_drawable._spriteEffects = SpriteEffects.None;
+				}
+				else
+				{
+					_drawable._spriteEffects = SpriteEffects.FlipHorizontally;
+				}
+			}
 		}
 
 		public override void Load(ContentManager content)

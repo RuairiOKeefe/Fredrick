@@ -81,11 +81,11 @@ namespace Fredrick.src
 				Entity entity = new Entity(true, "Player");
 				entity.Position = new Vector2(8, 8);
 				actors.Add(entity);
-				Renderable renderable = new Renderable(entity, "Body", "TestSheet", new Vector2(8, 8), new Vector2(0), new Vector2(2), 16, 16, 0.3f);
+				Renderable renderable = new Renderable(entity, "Body", "Run Cycle", new Vector2(32, 32), new Vector2(0), new Vector2(1), 64, 64, 0.3f);
 				Character character = new Character(entity);
-				AABBCollider boxCollider = new AABBCollider(entity, new Vector2(0), 1.0f, 1.0f);
-				renderable.Drawable.AddAnimation(0, 32, 1, 30);
-				renderable.Drawable.AddAnimation(0, 32, 4, 30);
+				AABBCollider boxCollider = new AABBCollider(entity, new Vector2(0), 1.0f, 2.0f);
+				renderable.Drawable.AddAnimation(0, 0, 10, 12);
+				renderable.Tags.Add("MotionFlip");
 				entity.Components.Add(renderable);
 				entity.Components.Add(character);
 				entity.Components.Add(boxCollider);
@@ -94,6 +94,7 @@ namespace Fredrick.src
 				emitter.ParticleDrawable.AddAnimation(0, 0, 1, 30);
 				entity.Components.Add(emitter);
 				Weapon weapon = new Weapon(entity, "Grenade", new Vector2(0.8f, 0), new Vector2(0.8f, 0), 0.1, 4.0f, 20.0f, 6.0f, true);
+				weapon.Position = new Vector2(0, 0.5f);
 				weapon.WeaponDrawable = new Drawable("fragNade", new Vector2(16), 32, 32, 0.2f);
 				weapon.ArmDrawable = new Drawable("tempArm", new Vector2(3, 7), 32, 32, 0.1f);
 				entity.Components.Add(weapon);
@@ -107,7 +108,7 @@ namespace Fredrick.src
 							Entity e = new Entity(true, "Block");
 							e.Position = new Vector2(i, j);
 							terrain.Add(e);
-							Renderable r = new Renderable(e, "Block", "TestSheet", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+							Renderable r = new Renderable(e, "Block", "Dirt", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
 							AABBCollider c = new AABBCollider(e, new Vector2(0));
 							r.Drawable.AddAnimation(0, 0, 1, 30);
 							e.Components.Add(r);
@@ -125,7 +126,7 @@ namespace Fredrick.src
 							Entity e = new Entity(true, "Block");
 							e.Position = new Vector2(i, j);
 							terrain.Add(e);
-							Renderable r = new Renderable(e, "Block", "TestSheet", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+							Renderable r = new Renderable(e, "Block", "Dirt", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
 							AABBCollider c = new AABBCollider(e, new Vector2(0));
 							r.Drawable.AddAnimation(0, 0, 1, 30);
 							e.Components.Add(r);
@@ -143,7 +144,7 @@ namespace Fredrick.src
 							Entity e = new Entity(true, "Block");
 							e.Position = new Vector2(i + 3, j + 2);
 							terrain.Add(e);
-							Renderable r = new Renderable(e, "Block", "TestSheet", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+							Renderable r = new Renderable(e, "Block", "Dirt", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
 							AABBCollider c = new AABBCollider(e, new Vector2(0));
 							r.Drawable.AddAnimation(0, 0, 1, 30);
 							e.Components.Add(r);

@@ -73,7 +73,7 @@ namespace Fredrick.src
 
 			e = new Entity(true, "Platform");
 			e.Tags.Add("Terrain");
-			r = new Renderable(e, "Block", "testSheet", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+			r = new Renderable(e, "Block", "grass", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
 			r.Drawable.AddAnimation(0, 0, 1, 30);
 			p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, 0.5f, -0.3f);
 			e.Components.Add(r);
@@ -96,7 +96,7 @@ namespace Fredrick.src
 				case (0):
 					e = new Entity(true, "Block");
 					e.Tags.Add("Terrain");
-					Renderable r = new Renderable(e, "Block", "TestSheet", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+					Renderable r = new Renderable(e, "Block", "Dirt", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
 					r.Drawable.AddAnimation(0, 0, 1, 30);
 					AABBCollider c = new AABBCollider(e, new Vector2(0), 1, 1);
 					e.Components.Add(r);
@@ -141,7 +141,7 @@ namespace Fredrick.src
 				case (5):
 					e = new Entity(true, "Platform");
 					e.Tags.Add("Terrain");
-					r = new Renderable(e, "Block", "testSheet", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+					r = new Renderable(e, "Block", "grass", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
 					r.Drawable.AddAnimation(0, 0, 1, 30);
 					p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, 0.5f, -0.3f);
 					e.Components.Add(r);
@@ -150,7 +150,7 @@ namespace Fredrick.src
 				case (6):
 					e = new Entity(true, "Emptyblock");
 					e.Tags.Add("Terrain");
-					r = new Renderable(e, "Block", "testSheet", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+					r = new Renderable(e, "Block", "Dirt", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
 					r.Drawable.AddAnimation(0, 0, 1, 30);
 					e.Components.Add(r);
 					break;
