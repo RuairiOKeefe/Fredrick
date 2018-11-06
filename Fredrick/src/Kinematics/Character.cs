@@ -31,6 +31,7 @@ namespace Fredrick.src
 		protected float _moveCommand;//Horizontal movement command
 		protected bool _jumpCommand;//Jumping command
 
+		private Vector2 _prevAcceleration;
 		private float _groundFriction;
 		private float _airFriction;
 		private float _movingFriction;
@@ -40,7 +41,6 @@ namespace Fredrick.src
 		private bool _grounded;
 		private bool _prevGrounded;
 		private double _fallVelocity;
-
 
 		private double _jumpDuration;
 		private double _jumpClock;
@@ -105,7 +105,7 @@ namespace Fredrick.src
 			_jumpSpeed = 14.0f;
 			_fallAcceleration = -40.0f;
 			_terminalVelocity = -30.0f;
-			_maxJumps = 2;
+			_maxJumps = 200;
 			_jumpWait = false;
 			_jumpDelay = 0.2;//may want to remove variable?
 
@@ -115,6 +115,7 @@ namespace Fredrick.src
 
 		public void Walk(double deltaTime)
 		{
+			_prevAcceleration = _acceleration;
 			if (_grounded)
 			{
 				if (_moveCommand != 0)
@@ -180,42 +181,8 @@ namespace Fredrick.src
 				_velocity.Y = _terminalVelocity;
 		}
 
-		public override void Update(double deltaTime)
+		public void StateHandler()
 		{
-			_moveCommand = InputHandler.Instance.MoveX;
-			_jumpCommand = InputHandler.Instance.IsKeyPressed(InputHandler.Action.Jump);
-
-			if (_jumpWait)
-			{
-				_jumpTimer += deltaTime;
-				if (_jumpTimer >= _jumpDelay)
-				{
-					_jumpWait = false;
-					_jumpTimer = 0;
-				}
-			}
-
-			_jumpClock -= deltaTime;
-			_prevGrounded = _grounded;
-
-			if (_jumpTrigger.Update(_owner.Position) && !_jumpWait)
-			{
-				_grounded = true;
-				_jumpsLeft = _maxJumps;
-			}
-			else
-				_grounded = false;
-
-			if (!_grounded)
-			{
-				_fallVelocity = Velocity.Y;
-			}
-			else
-			{
-				if (_prevGrounded)//Gives a frame to check fall trauma
-					_fallVelocity = 0;
-			}
-
 			switch (_motionState)
 			{
 				case State.Standing:
@@ -262,6 +229,10 @@ namespace Fredrick.src
 								(c as Renderable).Drawable.TransitionAnim(1);
 							}
 						}
+						if (_velocity.X > 3)
+						{
+
+						}
 					}
 					break;
 				case State.Jumping:
@@ -271,7 +242,14 @@ namespace Fredrick.src
 						{
 							if (c is Renderable)
 							{
-								(c as Renderable).Drawable.TransitionAnim(2);
+								if ((c as Renderable).Drawable._currentAnim != 2)
+								{
+									(c as Renderable).Drawable.TransitionAnim(2);//Add two frames of legs extending, to be played if not turning, and two recovary frames for landing
+								}
+								if (_prevAcceleration.X * _acceleration.X < 0 || _jumpCommand)
+								{
+									(c as Renderable).Drawable.RestartAnim();
+								}
 							}
 						}
 					}
@@ -279,6 +257,45 @@ namespace Fredrick.src
 				default:
 					throw new Exception("Unrecognised state reached");
 			}
+		}
+
+		public override void Update(double deltaTime)
+		{
+			_moveCommand = InputHandler.Instance.MoveX;
+			_jumpCommand = InputHandler.Instance.IsKeyPressed(InputHandler.Action.Jump);
+
+			if (_jumpWait)
+			{
+				_jumpTimer += deltaTime;
+				if (_jumpTimer >= _jumpDelay)
+				{
+					_jumpWait = false;
+					_jumpTimer = 0;
+				}
+			}
+
+			_jumpClock -= deltaTime;
+			_prevGrounded = _grounded;
+
+			if (_jumpTrigger.Update(_owner.Position) && !_jumpWait)
+			{
+				_grounded = true;
+				_jumpsLeft = _maxJumps;
+			}
+			else
+				_grounded = false;
+
+			if (!_grounded)
+			{
+				_fallVelocity = Velocity.Y;
+			}
+			else
+			{
+				if (_prevGrounded)//Gives a frame to check fall trauma
+					_fallVelocity = 0;
+			}
+
+			StateHandler();
 
 			Walk(deltaTime);
 			ResolveMotion(deltaTime);
@@ -309,6 +326,10 @@ namespace Fredrick.src
 					if (c is Renderable)
 					{
 						(c as Renderable).Flip(_facingRight);
+					}
+					if (c is Weapon)
+					{
+						(c as Weapon).Flip(_facingRight);
 					}
 				}
 			}

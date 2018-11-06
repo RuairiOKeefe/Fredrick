@@ -36,6 +36,8 @@ namespace Fredrick.src
 		private OnEnd _onEnd;
 		private int _nextAnim;
 
+		private Dictionary<String, SortedDictionary<int, Vector2>> _mountPoints;
+
 		public int SpriteWidth
 		{
 			get { return _spriteWidth; }
@@ -52,6 +54,12 @@ namespace Fredrick.src
 		{
 			get { return _nextAnim; }
 			set { _nextAnim = value; }
+		}
+
+		public Dictionary<String, SortedDictionary<int, Vector2>> MountPoints
+		{
+			get { return _mountPoints; }
+			set { _mountPoints = value; }
 		}
 
 		public Animation()//Constructor shouldn't be used as there are no way to set fields currently, as animations shouldn't be dynamic
@@ -71,6 +79,8 @@ namespace Fredrick.src
 			_currentFrame = 0;
 			_frameTime = 1.0 / _framerate;
 			_nextFrame = 0;
+
+			_mountPoints = new Dictionary<string, SortedDictionary<int, Vector2>>();
 		}
 
 		public Animation(int spriteWidth, int spriteHeight, int startX, int startY, int width, int height, int frames, float framerate, OnEnd onEnd, int nextAnim)
@@ -94,6 +104,8 @@ namespace Fredrick.src
 
 			_onEnd = onEnd;
 			_nextAnim = nextAnim;
+
+			_mountPoints = new Dictionary<string, SortedDictionary<int, Vector2>>();
 		}
 
 		public Point UpdateAnimation(double deltaTime, out bool transition)
@@ -165,6 +177,24 @@ namespace Fredrick.src
 			_currentX = _startX;
 			_currentY = _startY;
 			_nextFrame = nextFrame;
+		}
+
+		public Vector2 GetMountPoint(String mount)
+		{
+			Vector2 mountpoint = new Vector2();
+			if (_mountPoints.ContainsKey(mount))
+			{
+				List<int> keys = new List<int>(_mountPoints[mount].Keys);
+				int index = 0;
+				foreach (int key in keys)
+				{
+					if (key <= _currentFrame)
+						index = key;
+				}
+				mountpoint = _mountPoints[mount][index];
+			}
+
+			return mountpoint;
 		}
 	}
 }

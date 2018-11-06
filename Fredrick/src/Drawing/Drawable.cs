@@ -76,6 +76,11 @@ namespace Fredrick.src
 			}
 		}
 
+		public void RestartAnim()
+		{
+			_animations[_currentAnim].TransitionInAnim(_animations[_currentAnim].GetNextFrame());
+		}
+
 		public void Animate(double deltaTime)
 		{
 			if (_animations.Count > 0)

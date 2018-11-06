@@ -74,7 +74,7 @@ namespace Fredrick.src
 		{
 			_viewportWidth = width;
 			_viewportHeight = height;
-			_zoom = 1.0f;
+			_zoom =2.0f;
 			_rotation = 0.0f;
 			_position = Vector2.Zero;
 

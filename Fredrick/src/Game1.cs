@@ -85,11 +85,31 @@ namespace Fredrick.src
 				Renderable renderable = new Renderable(entity, "Legs", "Character", new Vector2(32, 32), new Vector2(0), new Vector2(1), 64, 64, 0.3f);
 				Character character = new Character(entity);
 				AABBCollider boxCollider = new AABBCollider(entity, new Vector2(0), 1.0f, 2.0f);
-				renderable.Drawable.AddAnimation(0, 0, 5, 12, Animation.OnEnd.Loop, 0);
-				renderable.Drawable.AddAnimation(64, 64, 10, 12, Animation.OnEnd.Loop, 0);
-				renderable.Drawable.AddAnimation(192, 192, 4, 12, Animation.OnEnd.LockLastFrame, 0);
+				renderable.Drawable.AddAnimation(0, 0, 1, 12, Animation.OnEnd.Loop, 0);
+				renderable.Drawable.AddAnimation(64, 0, 10, 12, Animation.OnEnd.Loop, 0);
+				renderable.Drawable.AddAnimation(192, 128, 6, 12, Animation.OnEnd.LockLastFrame, 0);
 				renderable.Tags.Add("MotionFlip");
 				renderable.Tags.Add("Legs");
+
+				SortedDictionary<int, Vector2> aps = new SortedDictionary<int, Vector2>();
+				aps.Add(0, new Vector2(0, 0.53125f));
+				renderable.Drawable._animations[0].MountPoints.Add("Arm", aps);
+
+				SortedDictionary<int, Vector2> apr = new SortedDictionary<int, Vector2>();
+				apr.Add(0, new Vector2(0, 0.5625f));
+				apr.Add(2, new Vector2(0, 0.53125f));
+				apr.Add(5, new Vector2(0, 0.5625f));
+				apr.Add(7, new Vector2(0, 0.53125f));
+				renderable.Drawable._animations[1].MountPoints.Add("Arm", apr);
+
+				SortedDictionary<int, Vector2> apj = new SortedDictionary<int, Vector2>();
+				apj.Add(0, new Vector2(0, 0.5625f));
+				apj.Add(1, new Vector2(0, 0.5f));
+				apj.Add(2, new Vector2(0, 0.475f));
+				apj.Add(4, new Vector2(0, 0.5f));
+				apj.Add(5, new Vector2(0, 0.5625f));
+				renderable.Drawable._animations[2].MountPoints.Add("Arm", apj);
+
 				entity.Components.Add(character);
 				entity.Components.Add(renderable);
 				entity.Components.Add(boxCollider);
@@ -100,7 +120,8 @@ namespace Fredrick.src
 				Weapon weapon = new Weapon(entity, "Grenade", new Vector2(0.8f, 0), new Vector2(0.8f, 0), 0.1, 4.0f, 20.0f, 6.0f, true);
 				weapon.Position = new Vector2(0, 0.5f);
 				weapon.WeaponDrawable = new Drawable("fragNade", new Vector2(16), 32, 32, 0.2f);
-				weapon.ArmDrawable = new Drawable("tempArm", new Vector2(3, 7), 32, 32, 0.1f);
+				weapon.ArmDrawable = new Drawable("Arm", new Vector2(31, 31), 64, 64, 0.1f);
+				weapon.Tags.Add("MotionFlip");
 				entity.Components.Add(weapon);
 
 				for (int i = 0; i < 101; i++)
