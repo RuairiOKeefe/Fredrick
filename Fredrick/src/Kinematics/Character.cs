@@ -90,10 +90,10 @@ namespace Fredrick.src
 			_horAcc = 16;
 			_maxSpeed = 8;
 
-			_groundFriction = 600;
-			_airFriction = 10;
+			_groundFriction = 1000;
+			_airFriction = 40;
 			_movingFriction = 100;
-			_airMove = 0.9f;
+			_airMove = 0.4f;
 
 			_motionState = State.Standing;
 
@@ -105,7 +105,7 @@ namespace Fredrick.src
 			_jumpSpeed = 14.0f;
 			_fallAcceleration = -40.0f;
 			_terminalVelocity = -30.0f;
-			_maxJumps = 200;
+			_maxJumps = 2;
 			_jumpWait = false;
 			_jumpDelay = 0.2;//may want to remove variable?
 
@@ -242,13 +242,13 @@ namespace Fredrick.src
 						{
 							if (c is Renderable)
 							{
-								if ((c as Renderable).Drawable._currentAnim != 2)
+								if (_jumpCommand || !((c as Renderable).Drawable._currentAnim == 2 || ((c as Renderable).Drawable._currentAnim == 3) && (_velocity.Y < 0)))
 								{
-									(c as Renderable).Drawable.TransitionAnim(2);//Add two frames of legs extending, to be played if not turning, and two recovary frames for landing
+									(c as Renderable).Drawable.TransitionAnim(2);
 								}
-								if (_prevAcceleration.X * _acceleration.X < 0 || _jumpCommand)
+								if (_velocity.Y < 0)
 								{
-									(c as Renderable).Drawable.RestartAnim();
+									(c as Renderable).Drawable.TransitionAnim(3);
 								}
 							}
 						}

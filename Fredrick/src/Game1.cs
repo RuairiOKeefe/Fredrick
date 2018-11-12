@@ -87,7 +87,8 @@ namespace Fredrick.src
 				AABBCollider boxCollider = new AABBCollider(entity, new Vector2(0), 1.0f, 2.0f);
 				renderable.Drawable.AddAnimation(0, 0, 1, 12, Animation.OnEnd.Loop, 0);
 				renderable.Drawable.AddAnimation(64, 0, 10, 12, Animation.OnEnd.Loop, 0);
-				renderable.Drawable.AddAnimation(192, 128, 6, 12, Animation.OnEnd.LockLastFrame, 0);
+				renderable.Drawable.AddAnimation(192, 128, 3, 12, Animation.OnEnd.LockLastFrame, 0);
+				renderable.Drawable.AddAnimation(64, 192, 3, 12, Animation.OnEnd.LockLastFrame, 0);
 				renderable.Tags.Add("MotionFlip");
 				renderable.Tags.Add("Legs");
 
@@ -96,19 +97,23 @@ namespace Fredrick.src
 				renderable.Drawable._animations[0].MountPoints.Add("Arm", aps);
 
 				SortedDictionary<int, Vector2> apr = new SortedDictionary<int, Vector2>();
-				apr.Add(0, new Vector2(0, 0.5625f));
-				apr.Add(2, new Vector2(0, 0.53125f));
-				apr.Add(5, new Vector2(0, 0.5625f));
-				apr.Add(7, new Vector2(0, 0.53125f));
+				apr.Add(0, new Vector2(0, 0.53125f));
+				apr.Add(3, new Vector2(0, 0.5625f));
+				apr.Add(5, new Vector2(0, 0.53125f));
+				apr.Add(8, new Vector2(0, 0.5625f));
 				renderable.Drawable._animations[1].MountPoints.Add("Arm", apr);
 
 				SortedDictionary<int, Vector2> apj = new SortedDictionary<int, Vector2>();
 				apj.Add(0, new Vector2(0, 0.5625f));
 				apj.Add(1, new Vector2(0, 0.5f));
 				apj.Add(2, new Vector2(0, 0.475f));
-				apj.Add(4, new Vector2(0, 0.5f));
-				apj.Add(5, new Vector2(0, 0.5625f));
 				renderable.Drawable._animations[2].MountPoints.Add("Arm", apj);
+
+				SortedDictionary<int, Vector2> apl = new SortedDictionary<int, Vector2>();
+				apl.Add(0, new Vector2(0, 0.475f));
+				apl.Add(1, new Vector2(0, 0.5f));
+				apl.Add(2, new Vector2(0, 0.5625f));
+				renderable.Drawable._animations[3].MountPoints.Add("Arm", apl);
 
 				entity.Components.Add(character);
 				entity.Components.Add(renderable);
