@@ -32,13 +32,13 @@ namespace Fredrick.src
 		private double _armourRegenTimer;
 		private Resistances _armourResistance;//Used instead of base resistances if armour is active
 
-		private float _sheildThreshold;//Sheilds should have a negative threshold, providing a base amount of damage that will only be dealt to the sheild each time damage is dealt
-		private float _sheildHealth;
-		private float _sheildHealthMax;
-		private float _sheildRegen;
-		private double _sheildRegenDelay;
-		private double _sheildRegenTimer;
-		private Resistances _sheildResistance;
+		private float _shieldThreshold;//Shields should have a negative threshold, providing a base amount of damage that will only be dealt to the sheild each time damage is dealt
+		private float _shieldHealth;
+		private float _shieldHealthMax;
+		private float _shreldRegen;
+		private double _shieldRegenDelay;
+		private double _shieldRegenTimer;
+		private Resistances _shieldResistance;
 
 		private List<Attack> DoTAttacks;
 
@@ -46,7 +46,7 @@ namespace Fredrick.src
 		{
 			_baseResistance = new Resistances();
 			_armourResistance = new Resistances();
-			_sheildResistance = new Resistances();
+			_shieldResistance = new Resistances();
 		}
 
 		private float Resist(Resistances resistances, Attack.DamageType type, float damage)
@@ -69,25 +69,25 @@ namespace Fredrick.src
 			float remainingDamage = attack.Damage;
 			float actualDamage;
 
-			if (_sheildHealth > 0)
+			if (_shieldHealth > 0)
 			{
-				actualDamage = Resist(_sheildResistance, attack.Type, remainingDamage);
+				actualDamage = Resist(_shieldResistance, attack.Type, remainingDamage);
 				if (actualDamage > 0)
 				{
-					if (_sheildThreshold < 0)
+					if (_shieldThreshold < 0)
 					{
-						_sheildHealth += _sheildThreshold;
-						_sheildHealth = _sheildHealth < 0 ? 0 : _sheildHealth;//Don't allow threshold damage to overflow 
-						_sheildHealth -= actualDamage;
+						_shieldHealth += _shieldThreshold;
+						_shieldHealth = _shieldHealth < 0 ? 0 : _shieldHealth;//Don't allow threshold damage to overflow 
+						_shieldHealth -= actualDamage;
 					}
 					else
 					{
-						float unblockedDamage = actualDamage - _sheildThreshold;
+						float unblockedDamage = actualDamage - _shieldThreshold;
 						unblockedDamage = unblockedDamage < 0 ? unblockedDamage : 0;//If damage did not surpass threshold, no damage is taken
-						_sheildHealth -= unblockedDamage;
+						_shieldHealth -= unblockedDamage;
 					}
 				}
-				remainingDamage = _sheildHealth < 0 ? -_sheildHealth : 0;
+				remainingDamage = _shieldHealth < 0 ? -_shieldHealth : 0;
 			}
 
 			if (_armourHealth > 0)
