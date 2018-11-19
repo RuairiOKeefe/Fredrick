@@ -36,7 +36,7 @@ namespace Fredrick.src
 		private OnEnd _onEnd;
 		private int _nextAnim;
 
-		private Dictionary<String, SortedDictionary<int, Vector2>> _mountPoints;
+		private Dictionary<Component, SortedDictionary<int, Vector2>> _mountPoints;
 
 		public int SpriteWidth
 		{
@@ -56,7 +56,7 @@ namespace Fredrick.src
 			set { _nextAnim = value; }
 		}
 
-		public Dictionary<String, SortedDictionary<int, Vector2>> MountPoints
+		public Dictionary<Component, SortedDictionary<int, Vector2>> MountPoints
 		{
 			get { return _mountPoints; }
 			set { _mountPoints = value; }
@@ -80,7 +80,7 @@ namespace Fredrick.src
 			_frameTime = 1.0 / _framerate;
 			_nextFrame = 0;
 
-			_mountPoints = new Dictionary<string, SortedDictionary<int, Vector2>>();
+			_mountPoints = new Dictionary<Component, SortedDictionary<int, Vector2>>();
 		}
 
 		public Animation(int spriteWidth, int spriteHeight, int startX, int startY, int width, int height, int frames, float framerate, OnEnd onEnd, int nextAnim)
@@ -105,7 +105,7 @@ namespace Fredrick.src
 			_onEnd = onEnd;
 			_nextAnim = nextAnim;
 
-			_mountPoints = new Dictionary<string, SortedDictionary<int, Vector2>>();
+			_mountPoints = new Dictionary<Component, SortedDictionary<int, Vector2>>();
 		}
 
 		public Point UpdateAnimation(double deltaTime, out bool transition)
@@ -158,6 +158,8 @@ namespace Fredrick.src
 				}
 			}
 
+			UpdateMounted();
+
 			return new Point(_currentX, _currentY);
 		}
 
@@ -179,7 +181,22 @@ namespace Fredrick.src
 			_nextFrame = nextFrame;
 		}
 
-		public Vector2 GetMountPoint(String mount)
+		public void UpdateMounted()
+		{
+			foreach(var m in _mountPoints)
+			{
+				List<int> keys = new List<int>(m.Value.Keys);
+				int index = 0;
+				foreach (int key in keys)
+				{
+					if (key <= _currentFrame)
+						index = key;
+				}
+				m.Key.Position = m.Value[index];
+			}
+		}
+
+		public Vector2 GetMountPoint(Component mount)//This function is probably not needed
 		{
 			Vector2 mountpoint = new Vector2();
 			if (_mountPoints.ContainsKey(mount))

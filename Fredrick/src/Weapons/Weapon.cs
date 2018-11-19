@@ -135,17 +135,6 @@ namespace Fredrick.src
 
 		public override void Update(double deltaTime)
 		{
-			foreach (Component c in _owner.Components)
-			{
-				if (c.Tags.Contains("Legs"))
-				{
-					if (c is Renderable)
-					{
-						_position = (c as Renderable).Drawable._animations[(c as Renderable).Drawable._currentAnim].GetMountPoint("Arm");
-					}
-				}
-			}
-
 			Vector2 direction = InputHandler.Instance.WorldMousePosition - _owner.Position;
 			direction.Normalize();
 

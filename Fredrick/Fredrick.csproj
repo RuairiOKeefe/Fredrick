@@ -46,6 +46,8 @@
     <Compile Include="src\Cameras\FollowCamera.cs" />
     <Compile Include="src\Colliders\AABBTrigger.cs" />
     <Compile Include="src\Colliders\CircleCollider.cs" />
+    <Compile Include="src\Damage System\Attack.cs" />
+    <Compile Include="src\Damage System\Damageable.cs" />
     <Compile Include="src\Drawing\Animation.cs" />
     <Compile Include="src\Colliders\AABBCollider.cs" />
     <Compile Include="src\Cameras\Camera.cs" />

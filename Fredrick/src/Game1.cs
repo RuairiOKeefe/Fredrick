@@ -84,36 +84,13 @@ namespace Fredrick.src
 				actors.Add(entity);
 				Renderable renderable = new Renderable(entity, "Legs", "Character", new Vector2(32, 32), new Vector2(0), new Vector2(1), 64, 64, 0.3f);
 				Character character = new Character(entity);
-				AABBCollider boxCollider = new AABBCollider(entity, new Vector2(0), 1.0f, 2.0f);
+				AABBCollider boxCollider = new AABBCollider(entity, new Vector2(0), 0.6f, 2.0f);
 				renderable.Drawable.AddAnimation(0, 0, 1, 12, Animation.OnEnd.Loop, 0);
 				renderable.Drawable.AddAnimation(64, 0, 10, 12, Animation.OnEnd.Loop, 0);
 				renderable.Drawable.AddAnimation(192, 128, 3, 12, Animation.OnEnd.LockLastFrame, 0);
 				renderable.Drawable.AddAnimation(64, 192, 3, 12, Animation.OnEnd.LockLastFrame, 0);
 				renderable.Tags.Add("MotionFlip");
 				renderable.Tags.Add("Legs");
-
-				SortedDictionary<int, Vector2> aps = new SortedDictionary<int, Vector2>();
-				aps.Add(0, new Vector2(0, 0.53125f));
-				renderable.Drawable._animations[0].MountPoints.Add("Arm", aps);
-
-				SortedDictionary<int, Vector2> apr = new SortedDictionary<int, Vector2>();
-				apr.Add(0, new Vector2(0, 0.53125f));
-				apr.Add(3, new Vector2(0, 0.5625f));
-				apr.Add(5, new Vector2(0, 0.53125f));
-				apr.Add(8, new Vector2(0, 0.5625f));
-				renderable.Drawable._animations[1].MountPoints.Add("Arm", apr);
-
-				SortedDictionary<int, Vector2> apj = new SortedDictionary<int, Vector2>();
-				apj.Add(0, new Vector2(0, 0.5625f));
-				apj.Add(1, new Vector2(0, 0.5f));
-				apj.Add(2, new Vector2(0, 0.475f));
-				renderable.Drawable._animations[2].MountPoints.Add("Arm", apj);
-
-				SortedDictionary<int, Vector2> apl = new SortedDictionary<int, Vector2>();
-				apl.Add(0, new Vector2(0, 0.475f));
-				apl.Add(1, new Vector2(0, 0.5f));
-				apl.Add(2, new Vector2(0, 0.5625f));
-				renderable.Drawable._animations[3].MountPoints.Add("Arm", apl);
 
 				entity.Components.Add(character);
 				entity.Components.Add(renderable);
@@ -128,6 +105,61 @@ namespace Fredrick.src
 				weapon.ArmDrawable = new Drawable("Arm", new Vector2(31, 31), 64, 64, 0.1f);
 				weapon.Tags.Add("MotionFlip");
 				entity.Components.Add(weapon);
+
+				Renderable headRenderable = new Renderable(entity, "Head", "Head", new Vector2(32, 32), new Vector2(0), new Vector2(1), 64, 64, 0.3f);
+				headRenderable.Position = new Vector2(0, 0.875f);
+				headRenderable.Tags.Add("MotionFlip");
+				entity.Components.Add(headRenderable);
+
+				//Arm
+
+				SortedDictionary<int, Vector2> aps = new SortedDictionary<int, Vector2>();
+				aps.Add(0, new Vector2(0, 0.53125f));
+				renderable.Drawable._animations[0].MountPoints.Add(weapon, aps);
+
+				SortedDictionary<int, Vector2> apr = new SortedDictionary<int, Vector2>();
+				apr.Add(0, new Vector2(0, 0.53125f));
+				apr.Add(3, new Vector2(0, 0.5625f));
+				apr.Add(5, new Vector2(0, 0.53125f));
+				apr.Add(8, new Vector2(0, 0.5625f));
+				renderable.Drawable._animations[1].MountPoints.Add(weapon, apr);
+
+				SortedDictionary<int, Vector2> apj = new SortedDictionary<int, Vector2>();
+				apj.Add(0, new Vector2(0, 0.5625f));
+				apj.Add(1, new Vector2(0, 0.5f));
+				apj.Add(2, new Vector2(0, 0.475f));
+				renderable.Drawable._animations[2].MountPoints.Add(weapon, apj);
+
+				SortedDictionary<int, Vector2> apl = new SortedDictionary<int, Vector2>();
+				apl.Add(0, new Vector2(0, 0.475f));
+				apl.Add(1, new Vector2(0, 0.5f));
+				apl.Add(2, new Vector2(0, 0.5625f));
+				renderable.Drawable._animations[3].MountPoints.Add(weapon, apl);
+
+				//Head
+
+				SortedDictionary<int, Vector2> hps = new SortedDictionary<int, Vector2>();
+				hps.Add(0, new Vector2(0, 0.875f));
+				renderable.Drawable._animations[0].MountPoints.Add(headRenderable, hps);
+
+				SortedDictionary<int, Vector2> hpr = new SortedDictionary<int, Vector2>();
+				hpr.Add(0, new Vector2(0, 0.875f));
+				hpr.Add(3, new Vector2(0, 0.90625f));
+				hpr.Add(5, new Vector2(0, 0.875f));
+				hpr.Add(8, new Vector2(0, 0.90625f));
+				renderable.Drawable._animations[1].MountPoints.Add(headRenderable, hpr);
+
+				SortedDictionary<int, Vector2> hpj = new SortedDictionary<int, Vector2>();
+				hpj.Add(0, new Vector2(0, 0.90625f));
+				hpj.Add(1, new Vector2(0, 0.84375f));
+				hpj.Add(2, new Vector2(0, 0.78125f));
+				renderable.Drawable._animations[2].MountPoints.Add(headRenderable, hpj);
+
+				SortedDictionary<int, Vector2> hpl = new SortedDictionary<int, Vector2>();
+				hpl.Add(0, new Vector2(0, 0.78125f));
+				hpl.Add(1, new Vector2(0, 0.84375f));
+				hpl.Add(2, new Vector2(0, 0.90625f));
+				renderable.Drawable._animations[3].MountPoints.Add(headRenderable, hpl);
 
 				for (int i = 0; i < 101; i++)
 				{

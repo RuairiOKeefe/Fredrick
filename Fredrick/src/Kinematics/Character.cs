@@ -226,7 +226,7 @@ namespace Fredrick.src
 						{
 							if (c is Renderable)
 							{
-								(c as Renderable).Drawable.TransitionAnim(1);
+								(c as Renderable).Drawable.TransitionAnim(1);//Add case to stop animation when contacting a wall
 							}
 						}
 						if (_velocity.X > 3)
