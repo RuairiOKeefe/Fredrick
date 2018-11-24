@@ -40,13 +40,14 @@ namespace Fredrick.src
 		private double _shieldRegenTimer;
 		private Resistances _shieldResistance;
 
-		private List<Attack> DoTAttacks;
+		private Dictionary<string, Attack> _DoTAttacks;
 
 		public Damageable(Entity owner, string id) : base(owner, id)
 		{
 			_baseResistance = new Resistances();
 			_armourResistance = new Resistances();
 			_shieldResistance = new Resistances();
+			_DoTAttacks = new Dictionary<string, Attack>();
 		}
 
 		private float Resist(Resistances resistances, Attack.DamageType type, float damage)
@@ -64,7 +65,64 @@ namespace Fredrick.src
 			}
 		}
 
-		public void DealDamage(Attack attack)//currently only for direct damage
+		public void DealDamage(Attack attack)
+		{
+			float remainingDamage = attack.Damage;
+			float actualDamage;
+
+			if (_shieldHealth > 0)
+			{
+				actualDamage = Resist(_shieldResistance, attack.Type, remainingDamage);
+				if (actualDamage > 0)
+				{
+					if (_shieldThreshold < 0)
+					{
+						_shieldHealth += _shieldThreshold;
+						_shieldHealth = _shieldHealth < 0 ? 0 : _shieldHealth;//Don't allow threshold damage to overflow 
+						_shieldHealth -= actualDamage;
+					}
+					else
+					{
+						float unblockedDamage = actualDamage - _shieldThreshold;
+						unblockedDamage = unblockedDamage < 0 ? unblockedDamage : 0;//If damage did not surpass threshold, no damage is taken
+						_shieldHealth -= unblockedDamage;
+					}
+				}
+				remainingDamage = _shieldHealth < 0 ? -_shieldHealth : 0;
+			}
+
+			if (_armourHealth > 0)
+			{
+				actualDamage = Resist(_armourResistance, attack.Type, remainingDamage);
+				if (actualDamage > 0)
+				{
+					if (_armourThreshold < 0)//If armour is negative the resistances will still apply and armour is broken in the same manner but no health damage is "blocked"
+					{
+						_armourHealth += _armourThreshold;
+						_health -= actualDamage;
+					}
+					else
+					{
+						float unblockedDamage = actualDamage - _armourThreshold;
+						unblockedDamage = unblockedDamage < 0 ? unblockedDamage : 0;//If damage did not surpass threshold, no damage is taken
+						float blockedDamage = actualDamage - unblockedDamage;
+						_armourHealth -= blockedDamage;//Armour takes damage equal to the amount blocked
+						_health -= unblockedDamage;
+					}
+				}
+
+			}
+			else//Take pure health damage
+			{
+				actualDamage = Resist(_baseResistance, attack.Type, remainingDamage);
+				if (actualDamage > 0)
+				{
+					_health -= actualDamage;
+				}
+			}
+		}
+
+		public void DealDamageOverTime(Attack attack, double deltaTime)
 		{
 			float remainingDamage = attack.Damage;
 			float actualDamage;
