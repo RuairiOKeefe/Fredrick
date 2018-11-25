@@ -8,17 +8,19 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Fredrick.src
 {
+	[Serializable]
 	public class StatusHandler : Component
 	{
+		[Serializable]
 		public class Timer
 		{
 			public double TimeRemaining { get; set; }
 			public double NextTick { get; set; }
 
-			public Timer(double timeRemaining)
+			public Timer(double timeRemaining, double nextTick = 0)
 			{
 				TimeRemaining = timeRemaining;
-				NextTick = 0;
+				NextTick = nextTick;
 			}
 		}
 
@@ -33,15 +35,17 @@ namespace Fredrick.src
 
 		public void AddStatus(StatusEffect status)
 		{
+			double nextTick = 0;
 			foreach (var s in Statuses)
 			{
 				if (s.Item1.GetType() == status.GetType())
 				{
+					nextTick = s.Item2.NextTick;
 					Statuses.Remove(s);
 					break;
 				}
 			}
-			Statuses.Add(new Tuple<StatusEffect, Timer>(status, new Timer(status.Duration)));
+			Statuses.Add(new Tuple<StatusEffect, Timer>(status, new Timer(status.Duration, nextTick)));
 			status.Begin(ref _owner);
 		}
 
@@ -57,8 +61,9 @@ namespace Fredrick.src
 
 		public override void Update(double deltaTime)
 		{
-			foreach (var s in Statuses)
+			for (int i = Statuses.Count - 1; i >= 0; i--)
 			{
+				Tuple<StatusEffect, Timer> s = Statuses[i];
 				s.Item2.NextTick -= deltaTime;
 				s.Item2.TimeRemaining -= deltaTime;
 
@@ -71,6 +76,7 @@ namespace Fredrick.src
 				if (s.Item2.TimeRemaining <= 0)
 				{
 					s.Item1.End(ref _owner);
+					Statuses.Remove(s);
 				}
 			}
 		}

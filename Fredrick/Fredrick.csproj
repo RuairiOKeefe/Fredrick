@@ -61,6 +61,8 @@
     <Compile Include="src\Entity System\Component.cs" />
     <Compile Include="src\Drawing\Drawable.cs" />
     <Compile Include="src\Drawing\ResourceManager.cs" />
+    <Compile Include="src\UI\Canvas.cs" />
+    <Compile Include="src\UI\TextElement.cs" />
     <Compile Include="src\Utilities\DebugManager.cs" />
     <Compile Include="src\Entity System\Entity.cs" />
     <Compile Include="src\Utilities\FastNoise.cs" />

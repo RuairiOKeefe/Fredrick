@@ -8,8 +8,8 @@ namespace Fredrick.src
 {
 	public abstract class StatusEffect
 	{
-		public float Magnitude { get; set; }
-		public double Duration { get; set; }
+		public abstract float Magnitude { get; }
+		public abstract double Duration { get; }
 
 		public abstract void Begin(ref Entity target);
 		public abstract void End(ref Entity target);

@@ -17,6 +17,7 @@ namespace Fredrick.src
 		SpriteBatch spriteBatch;
 		List<Entity> actors = new List<Entity>();
 		List<Entity> terrain = new List<Entity>();
+		Entity UI = new Entity();
 		FollowCamera cam;
 		Effect lighting;
 		Effect bloom;
@@ -105,7 +106,12 @@ namespace Fredrick.src
 				weapon.ArmDrawable = new Drawable("Arm", new Vector2(31, 31), 64, 64, 0.1f);
 				weapon.Tags.Add("MotionFlip");
 				entity.Components.Add(weapon);
-
+				Damageable damageable = new Damageable(entity, "Health");
+				damageable.Health = 100000;
+				damageable.BaseResistance = new Damageable.Resistances(1, 1, 1);
+				entity.Components.Add(damageable);
+				StatusHandler statusHandler = new StatusHandler(entity, "StatusHandler");
+				entity.Components.Add(statusHandler);
 				Renderable headRenderable = new Renderable(entity, "Head", "Head", new Vector2(32, 32), new Vector2(0), new Vector2(1), 64, 64, 0.3f);
 				headRenderable.Position = new Vector2(0, 0.875f);
 				headRenderable.Tags.Add("MotionFlip");
@@ -237,6 +243,17 @@ namespace Fredrick.src
 			}
 
 			levelEditor.Load(Content);
+
+
+			Canvas canvas = new Canvas(UI, "UI");
+			TextElement<float> debugElement = new TextElement<float>();
+			debugElement.Font = Content.Load<SpriteFont>("Debug");
+			debugElement.PrependText = "Health: ";
+			debugElement.SetData(actors[0].GetComponent<Damageable>().Health);
+			debugElement.Position = new Vector2(1, 1);
+			debugElement.Colour = Color.White;
+			canvas.TextElements.Add(debugElement);
+			UI.Components.Add(canvas);
 		}
 
 		/// <summary>
@@ -270,6 +287,9 @@ namespace Fredrick.src
 			{
 				if (e.GetComponent<Weapon>() != null)
 					e.GetComponent<Weapon>().UpdateProjectilePos();
+				if (e.GetComponent<StatusHandler>() != null)
+					if (DebugManager.Instance.Debug)
+						e.GetComponent<StatusHandler>().AddStatus(new Burn());
 			}
 			foreach (var e in terrain)
 			{
@@ -280,9 +300,12 @@ namespace Fredrick.src
 			//terrain[terrain.Count - 1].Load(Content);
 			//cam.Trauma = 1;
 			cam.Update(gameTime.ElapsedGameTime.TotalSeconds);
+			UI.GetComponent<Canvas>().TextElements[0].SetData(actors[0].GetComponent<Damageable>().Health);//This should not be required
+			UI.Update(gameTime.ElapsedGameTime.TotalSeconds);
 
 			if (InputHandler.Instance.IsKeyPressed(InputHandler.Action.Debug))
 				DebugManager.Instance.Debug = !DebugManager.Instance.Debug;
+
 			base.Update(gameTime);
 		}
 
@@ -321,6 +344,10 @@ namespace Fredrick.src
 				levelEditor.DebugDraw(spriteBatch);
 				spriteBatch.End();
 			}
+
+			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, null);
+			UI.Draw(spriteBatch);
+			spriteBatch.End();
 
 			base.Draw(gameTime);
 		}

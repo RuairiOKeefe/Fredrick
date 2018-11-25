@@ -193,3 +193,10 @@
 /processorParam:TextureFormat=Color
 /build:Head.png
 
+#begin Debug.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Debug.spritefont
+

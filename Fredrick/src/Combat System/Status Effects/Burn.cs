@@ -8,8 +8,8 @@ namespace Fredrick.src
 {
 	public class Burn : StatusEffect
 	{
-		new public const float Magnitude = 10.0f;
-		new public const double Duration = 5.0;
+		public override float Magnitude { get { return 10.0f; } }
+		public override double Duration { get { return 5.0; } }
 
 		public override void Begin(ref Entity target)
 		{
