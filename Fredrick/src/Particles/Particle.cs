@@ -143,18 +143,18 @@ namespace Fredrick.src
 
 		public bool CheckCollision(Platform other)
 		{
+			Vector2 testMove = new Vector2(_tempMove.X, _tempMove.Y);
+			Vector2 newPos = (_position + testMove);
 			bool collided = false;
 			if (other.PlatformDepth < 0)
 			{
-				Vector2 testMove = new Vector2(_tempMove.X, _tempMove.Y);
-				Vector2 newPos = (_position + testMove);
 				{
 					float f = (newPos.X - (other.CurrentPosition.X - (other.Width / 2))) / ((other.CurrentPosition.X + (other.Width / 2)) - (other.CurrentPosition.X - (other.Width / 2)));//(currentX - minX) / (maxX - minX)
 					if (f > 0 && f < 1)
 					{
 						float y = ((other.LHeight * (1.0f - f)) + (other.RHeight * f)) + other.CurrentPosition.Y;
 
-						if (newPos.Y > y && newPos.Y < y + other.PlatformDepth)
+						if (newPos.Y < y && newPos.Y > y + other.PlatformDepth)
 						{
 							_tempMove.Y -= (newPos.Y - y);
 							_velocity = (_velocity - (2f * Vector2.Dot(_velocity, other.Normal)) * other.Normal) * _restitution;
@@ -165,8 +165,7 @@ namespace Fredrick.src
 			}
 			else
 			{
-				Vector2 testMove = new Vector2(_tempMove.X, _tempMove.Y);
-				Vector2 newPos = (_position + testMove);
+				newPos = (_position + testMove);
 				{
 					float f = (newPos.X - (other.CurrentPosition.X - (other.Width / 2))) / ((other.CurrentPosition.X + (other.Width / 2)) - (other.CurrentPosition.X - (other.Width / 2)));//(currentX - minX) / (maxX - minX)
 					if (f > 0 && f < 1)
