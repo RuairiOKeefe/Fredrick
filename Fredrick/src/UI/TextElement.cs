@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework;
 
 namespace Fredrick.src
 {
-	public class TextElement<T>
+	public class TextElement
 	{
 		public SpriteFont Font { get; set; }
 		public string PrependText { get; set; }
@@ -18,26 +18,17 @@ namespace Fredrick.src
 		public Vector2 Position { get; set; }
 		public Color Colour { get; set; }
 
-		private T data;
-
-		public T GetData()
-		{
-			return data;
-		}
-
-		public void SetData(T value)//Add a method to search through entities to find required data using tags?
-		{
-			data = value;
-		}
+		public Object Object { get; set; }
+		public string PropertyName { get; set; }
 
 		public TextElement()
 		{
-			
+
 		}
 
 		public void Update()
 		{
-			Text = PrependText + data + AppendText;
+			Text = PrependText + Object.GetType().GetProperty(PropertyName).GetValue(Object, null).ToString() + AppendText;
 		}
 	}
 }

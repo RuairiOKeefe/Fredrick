@@ -10,11 +10,11 @@ namespace Fredrick.src
 {
 	public class Canvas : Component
 	{
-		public List<TextElement<float>> TextElements { get; set; }
+		public List<TextElement> TextElements { get; set; }
 
 		public Canvas(Entity owner, string id) : base(owner, id)
 		{
-			TextElements = new List<TextElement<float>>();
+			TextElements = new List<TextElement>();
 		}
 
 		public override void Load(ContentManager content)

@@ -246,10 +246,11 @@ namespace Fredrick.src
 
 
 			Canvas canvas = new Canvas(UI, "UI");
-			TextElement<float> debugElement = new TextElement<float>();
+			TextElement debugElement = new TextElement();
 			debugElement.Font = Content.Load<SpriteFont>("Debug");
 			debugElement.PrependText = "Health: ";
-			debugElement.SetData(actors[0].GetComponent<Damageable>().Health);
+			debugElement.Object = actors[0].GetComponent<Damageable>();
+			debugElement.PropertyName = "Health";
 			debugElement.Position = new Vector2(1, 1);
 			debugElement.Colour = Color.White;
 			canvas.TextElements.Add(debugElement);
@@ -300,7 +301,6 @@ namespace Fredrick.src
 			//terrain[terrain.Count - 1].Load(Content);
 			//cam.Trauma = 1;
 			cam.Update(gameTime.ElapsedGameTime.TotalSeconds);
-			UI.GetComponent<Canvas>().TextElements[0].SetData(actors[0].GetComponent<Damageable>().Health);//This should not be required
 			UI.Update(gameTime.ElapsedGameTime.TotalSeconds);
 
 			if (InputHandler.Instance.IsKeyPressed(InputHandler.Action.Debug))
