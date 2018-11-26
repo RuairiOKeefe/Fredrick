@@ -39,7 +39,7 @@ namespace Fredrick.src
 		{
 			foreach (var t in TextElements)
 			{
-				spriteBatch.DrawString(t.Font, t.Text, t.Position, t.Colour);
+				spriteBatch.DrawString(t.Font, t.Text, t.Position, t.Colour, t.Rotation, t.Origin, t.Scale, t.SpriteEffect, t.LayerDepth);
 			}
 
 		}

@@ -246,13 +246,8 @@ namespace Fredrick.src
 
 
 			Canvas canvas = new Canvas(UI, "UI");
-			TextElement debugElement = new TextElement();
-			debugElement.Font = Content.Load<SpriteFont>("Debug");
-			debugElement.PrependText = "Health: ";
-			debugElement.Object = actors[0].GetComponent<Damageable>();
-			debugElement.PropertyName = "Health";
-			debugElement.Position = new Vector2(1, 1);
-			debugElement.Colour = Color.White;
+			TextElement debugElement = new TextElement(Content.Load<SpriteFont>("Debug"), new Vector2(0), Color.White, 0, TextElement.Justification.Left, 1.0f);
+			debugElement.AddContent("Health: ", "", actors[0].GetComponent<Damageable>(), "Health");
 			canvas.TextElements.Add(debugElement);
 			UI.Components.Add(canvas);
 		}
