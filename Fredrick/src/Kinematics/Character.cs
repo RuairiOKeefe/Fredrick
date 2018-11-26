@@ -20,192 +20,167 @@ namespace Fredrick.src
 			Jumping
 		}
 
-		private State _motionState;
-		public State MotionState
-		{
-			get { return _motionState; }
-			set { _motionState = value; }
-		}
+		public State MotionState { get; set; }
 
 		//Commands are simply what the related controller wants to do at a given instance, in case of player this represents button inputs
-		protected float _moveCommand;//Horizontal movement command
-		protected bool _jumpCommand;//Jumping command
+		public float MoveCommand { get; set; }
+		public bool JumpCommand { get; set; }
 
-		private Vector2 _prevAcceleration;
-		private float _groundFriction;
-		private float _airFriction;
-		private float _movingFriction;
-		private float _airMove;
+		public Vector2 PrevAcceleration { get; set; }
+		public float GroundFriction { get; set; }
+		public float AirFriction { get; set; }
+		public float MovingFriction { get; set; }
+		public float AirMove { get; set; }
 
-		private AABBTrigger _jumpTrigger;
-		private bool _grounded;
-		private bool _prevGrounded;
-		private double _fallVelocity;
+		public AABBTrigger JumpTrigger { get; set; }
+		public bool Grounded { get; set; }
+		public bool PrevGrounded { get; set; }
+		public double FallVelocity { get; set; }
 
-		private double _jumpDuration;
+		public double JumpDuration { get; set; }
 		private double _jumpClock;
-		private float _jumpSpeed;
-		private float _fallAcceleration;
-		private float _terminalVelocity;
-		private int _maxJumps;
+		public float JumpSpeed { get; set; }
+		public float FallAcceleration { get; set; }
+		public float TerminalVelocity { get; set; }
+		public int MaxJumps { get; set; }
 		private int _jumpsLeft;
-		private bool _jumpWait;
-		private double _jumpDelay;//How much time between jumps
+		public bool JumpWait { get; set; }
+		public double JumpDelay { get; set; }//How much time between jumps
 		private double _jumpTimer;
 
-		private Vector2 _followPosition;
-		private Vector2 _followOffset;
+		public Vector2 FollowPosition;
+		public Vector2 FollowOffset;
 
 		private bool _facingRight;
-
-		public bool Grounded
-		{
-			get { return _grounded; }
-		}
-
-		public bool PrevGrounded
-		{
-			get { return _prevGrounded; }
-		}
 
 		public double JumpTimer
 		{
 			get { return _jumpTimer; }
 		}
 
-		public double FallVelocity
-		{
-			get { return _fallVelocity; }
-		}
-
-		public Vector2 FollowPosition
-		{
-			get { return _followPosition; }
-		}
-
 		public Character(Entity owner) : base(owner)
 		{
-			_velocity = new Vector2(0, 0);
-			_acceleration = new Vector2(0, 0);
-			_horAcc = 16;
-			_maxSpeed = 8;
+			Velocity = new Vector2(0, 0);
+			Acceleration = new Vector2(0, 0);
+			HorAcc = 16;
+			MaxSpeed = 8;
 
-			_groundFriction = 1000;
-			_airFriction = 40;
-			_movingFriction = 100;
-			_airMove = 0.4f;
+			GroundFriction = 1000;
+			AirFriction = 40;
+			MovingFriction = 100;
+			AirMove = 0.4f;
 
-			_motionState = State.Standing;
+			MotionState = State.Standing;
 
-			_jumpTrigger = new AABBTrigger(_owner);
-			_jumpTrigger.Rectangle = new RectangleF(new Vector2(0, -1.0f), 1, 0.5f);
+			JumpTrigger = new AABBTrigger(_owner);
+			JumpTrigger.Rectangle = new RectangleF(new Vector2(0, -1.0f), 1, 0.5f);
 
-			_jumpDuration = 0.3f;
+			JumpDuration = 0.3f;
 			_jumpClock = 0;
-			_jumpSpeed = 14.0f;
-			_fallAcceleration = -40.0f;
-			_terminalVelocity = -30.0f;
-			_maxJumps = 2;
-			_jumpWait = false;
-			_jumpDelay = 0.2;//may want to remove variable?
+			JumpSpeed = 14.0f;
+			FallAcceleration = -40.0f;
+			TerminalVelocity = -30.0f;
+			MaxJumps = 2;
+			JumpWait = false;
+			JumpDelay = 0.2;//may want to remove variable?
 
-			_followOffset = new Vector2(5, 0);
+			FollowOffset = new Vector2(5, 0);
 
 		}
 
 		public void Walk(double deltaTime)
 		{
-			_prevAcceleration = _acceleration;
-			if (_grounded)
+			PrevAcceleration = Acceleration;
+			if (Grounded)
 			{
-				if (_moveCommand != 0)
+				if (MoveCommand != 0)
 				{
-					_acceleration.X = _horAcc * _moveCommand;
-					_friction = _movingFriction;
+					Acceleration = new Vector2(HorAcc * MoveCommand, Acceleration.Y);
+					_friction = MovingFriction;
 
-					if ((_velocity.X * _velocity.X) > (_maxSpeed * _maxSpeed) && _velocity.X * _moveCommand > 0)
+					if ((Velocity.X * Velocity.X) > (MaxSpeed * MaxSpeed) && Velocity.X * MoveCommand > 0)
 					{
-						_velocity.X = _maxSpeed * Math.Sign(_moveCommand);
-						_acceleration.X = 0;
+						Velocity = new Vector2(MaxSpeed * Math.Sign(MoveCommand), Velocity.Y);
+						Acceleration = new Vector2(0, Acceleration.Y);
 					}
 				}
 				else
 				{
-					_acceleration.X = 0;
-					_friction = _groundFriction;
+					Acceleration = new Vector2(0, Acceleration.Y);
+					_friction = GroundFriction;
 				}
 			}
 			else
 			{
-				_friction = _airFriction;
+				_friction = AirFriction;
 
-				if (_moveCommand != 0)
+				if (MoveCommand != 0)
 				{
-					_acceleration.X = _horAcc * _moveCommand * _airMove;
+					Acceleration = new Vector2(HorAcc * MoveCommand * AirMove, 0);
 
 
 				}
-				if ((_velocity.X * _velocity.X) > (_maxSpeed * _maxSpeed) && _velocity.X * _moveCommand > 0)
+				if ((Velocity.X * Velocity.X) > (MaxSpeed * MaxSpeed) && Velocity.X * MoveCommand > 0)
 				{
-					_velocity.X = _maxSpeed * Math.Sign(_moveCommand);
-					_acceleration.X = 0;
+					Velocity = new Vector2(MaxSpeed * Math.Sign(MoveCommand), Velocity.Y);
+					Acceleration = new Vector2(0, Acceleration.Y);
 				}
 			}
 
-			if (_jumpCommand)
+			if (JumpCommand)
 			{
-				if (_grounded)
+				if (Grounded)
 				{
-					_velocity.Y = _jumpSpeed;
-					_jumpWait = true;
-					_jumpClock = _jumpDuration;
-					_acceleration.Y = 0;
+					Velocity = new Vector2(Velocity.X, JumpSpeed);
+					JumpWait = true;
+					_jumpClock = JumpDuration;
+					Acceleration = new Vector2(Acceleration.X, 0);
 				}
 				else
 					if (_jumpsLeft > 0)
 				{
-					_velocity.Y = _jumpSpeed;
+					Velocity = new Vector2(Velocity.X, JumpSpeed);
 					_jumpsLeft--;
-					_jumpWait = true;
-					_jumpClock = _jumpDuration;
-					_acceleration.Y = 0;
+					JumpWait = true;
+					_jumpClock = JumpDuration;
+					Acceleration = new Vector2(Acceleration.X, 0);
 				}
 			}
 
-			if (_acceleration.Y == 0 && _jumpClock < 0 || _velocity.Y == 0)
+			if (Acceleration.Y == 0 && _jumpClock < 0 || Velocity.Y == 0)
 			{
-				_acceleration.Y = _fallAcceleration;
+				Acceleration = new Vector2(Acceleration.X, FallAcceleration);
 			}
 
-			if (_velocity.Y < _terminalVelocity)
-				_velocity.Y = _terminalVelocity;
+			if (Velocity.Y < TerminalVelocity)
+				Velocity = new Vector2(Velocity.X, TerminalVelocity);
 		}
 
 		public void StateHandler()
 		{
-			switch (_motionState)
+			switch (MotionState)
 			{
 				case State.Standing:
-					if (_moveCommand != 0)
-						_motionState = State.Walking;
-					if (!_grounded)
-						_motionState = State.Jumping;
+					if (MoveCommand != 0)
+						MotionState = State.Walking;
+					if (!Grounded)
+						MotionState = State.Jumping;
 					break;
 				case State.Walking:
-					if (_moveCommand == 0)
-						_motionState = State.Standing;
-					if (!_grounded)
-						_motionState = State.Jumping;
+					if (MoveCommand == 0)
+						MotionState = State.Standing;
+					if (!Grounded)
+						MotionState = State.Jumping;
 					break;
 				case State.Jumping:
-					if (_grounded)
-						_motionState = State.Walking;//Need proper handler for landing
+					if (Grounded)
+						MotionState = State.Walking;//Need proper handler for landing
 					break;
 				default:
 					throw new Exception("Unrecognised state reached");
 			}
 
-			switch (_motionState)
+			switch (MotionState)
 			{
 				case State.Standing:
 					foreach (Component c in _owner.Components)
@@ -229,7 +204,7 @@ namespace Fredrick.src
 								(c as Renderable).Drawable.TransitionAnim(1);//Add case to stop animation when contacting a wall
 							}
 						}
-						if (_velocity.X > 3)
+						if (Velocity.X > 3)
 						{
 
 						}
@@ -242,11 +217,11 @@ namespace Fredrick.src
 						{
 							if (c is Renderable)
 							{
-								if (_jumpCommand || !((c as Renderable).Drawable._currentAnim == 2 || ((c as Renderable).Drawable._currentAnim == 3) && (_velocity.Y < 0)))
+								if (JumpCommand || !((c as Renderable).Drawable._currentAnim == 2 || ((c as Renderable).Drawable._currentAnim == 3) && (Velocity.Y < 0)))
 								{
 									(c as Renderable).Drawable.TransitionAnim(2);
 								}
-								if (_velocity.Y < 0)
+								if (Velocity.Y < 0)
 								{
 									(c as Renderable).Drawable.TransitionAnim(3);
 								}
@@ -261,38 +236,38 @@ namespace Fredrick.src
 
 		public override void Update(double deltaTime)
 		{
-			_moveCommand = InputHandler.Instance.MoveX;
-			_jumpCommand = InputHandler.Instance.IsKeyPressed(InputHandler.Action.Jump);
+			MoveCommand = InputHandler.Instance.MoveX;
+			JumpCommand = InputHandler.Instance.IsKeyPressed(InputHandler.Action.Jump);
 
-			if (_jumpWait)
+			if (JumpWait)
 			{
 				_jumpTimer += deltaTime;
-				if (_jumpTimer >= _jumpDelay)
+				if (_jumpTimer >= JumpDelay)
 				{
-					_jumpWait = false;
+					JumpWait = false;
 					_jumpTimer = 0;
 				}
 			}
 
 			_jumpClock -= deltaTime;
-			_prevGrounded = _grounded;
+			PrevGrounded = Grounded;
 
-			if (_jumpTrigger.Update(_owner.Position) && !_jumpWait)
+			if (JumpTrigger.Update(_owner.Position) && !JumpWait)
 			{
-				_grounded = true;
-				_jumpsLeft = _maxJumps;
+				Grounded = true;
+				_jumpsLeft = MaxJumps;
 			}
 			else
-				_grounded = false;
+				Grounded = false;
 
-			if (!_grounded)
+			if (!Grounded)
 			{
-				_fallVelocity = Velocity.Y;
+				FallVelocity = Velocity.Y;
 			}
 			else
 			{
-				if (_prevGrounded)//Gives a frame to check fall trauma
-					_fallVelocity = 0;
+				if (PrevGrounded)//Gives a frame to check fall trauma
+					FallVelocity = 0;
 			}
 
 			StateHandler();
@@ -300,23 +275,23 @@ namespace Fredrick.src
 			Walk(deltaTime);
 			ResolveMotion(deltaTime);
 
-			if (_moveCommand > 0)
+			if (MoveCommand > 0)
 			{
-				_followPosition = _owner.Position + _followOffset;
+				FollowPosition = _owner.Position + FollowOffset;
 			}
 			else
-				if (_moveCommand < 0)
+				if (MoveCommand < 0)
 			{
-				_followPosition = _owner.Position - _followOffset;
+				FollowPosition = _owner.Position - FollowOffset;
 			}
 			else
 			{
-				_followPosition = _owner.Position;
+				FollowPosition = _owner.Position;
 			}
 
-			if (_moveCommand > 0)
+			if (MoveCommand > 0)
 				_facingRight = true;
-			if (_moveCommand < 0)
+			if (MoveCommand < 0)
 				_facingRight = false;
 
 			foreach (Component c in _owner.Components)
@@ -342,7 +317,7 @@ namespace Fredrick.src
 
 		public override void DebugDraw(SpriteBatch spriteBatch)
 		{
-			_jumpTrigger.DebugDraw(spriteBatch);
+			JumpTrigger.DebugDraw(spriteBatch);
 		}
 	}
 }

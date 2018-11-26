@@ -14,11 +14,14 @@ namespace Fredrick.src
 	{
 		//If this component is used with a collider of any kind, this component should be added to the entity before the collider or invalid moves will be possible
 
-		protected Vector2 _attemptedPosition;//The location the entity wants to move to
-		protected Vector2 _velocity;
-		protected Vector2 _acceleration;
-		protected float _horAcc;
-		protected float _maxSpeed;
+		/// <summary>
+		/// The location the entity wants to move to
+		/// </summary>
+		public Vector2 AttemptedPosition { get; set; }
+		public Vector2 Velocity { get; set; }
+		public Vector2 Acceleration { get; set; }
+		public float HorAcc { get; set; }
+		public float MaxSpeed { get; set; }
 
 		protected float _friction;
 
@@ -27,61 +30,43 @@ namespace Fredrick.src
 
 		}
 
-		public Vector2 AttemptedPosition
-		{
-			get { return _attemptedPosition; }
-			set { _attemptedPosition = value; }
-		}
-
-		public Vector2 Velocity
-		{
-			get { return _velocity; }
-			set { _velocity = value; }
-		}
-
-		public Vector2 Acceleration
-		{
-			get { return _acceleration; }
-			set { _acceleration = value; }
-		}
-
 		public void StopVelX()
 		{
-			_velocity.X = 0;
+			Velocity = new Vector2(0.0f, Velocity.Y);
 		}
 
 		public void StopVelY()
 		{
-			_velocity.Y = 0;
+			Velocity = new Vector2(Velocity.X, 0.0f);
 		}
 
 		public void ResolveMotion(double deltaTime)
 		{
-			float tempAccX = _acceleration.X - (_friction * _velocity.X * (float)deltaTime);
+			float tempAccX = Acceleration.X - (_friction * Velocity.X * (float)deltaTime);
 
-			if (_velocity.X > 0)
+			if (Velocity.X > 0)
 			{
-				if (_velocity.X + tempAccX * (float)deltaTime < 0)
-					_velocity.X = 0;
+				if (Velocity.X + tempAccX * (float)deltaTime < 0)
+					Velocity = new Vector2(0.0f, Velocity.Y);
 				else
-					_velocity.X += tempAccX * (float)deltaTime;
+					Velocity = new Vector2(Velocity.X + (tempAccX * (float)deltaTime), Velocity.Y);
 			}
 			else
 			{
-				if (_velocity.X < 0)
-					if (_velocity.X + tempAccX * (float)deltaTime > 0)
-						_velocity.X = 0;
+				if (Velocity.X < 0)
+					if (Velocity.X + tempAccX * (float)deltaTime > 0)
+						Velocity = new Vector2(0.0f, Velocity.Y);
 					else
-						_velocity.X += tempAccX * (float)deltaTime;
+						Velocity = new Vector2(Velocity.X + (tempAccX * (float)deltaTime), Velocity.Y);
 				else
-					_velocity.X += tempAccX * (float)deltaTime;
+					Velocity = new Vector2(Velocity.X + (tempAccX * (float)deltaTime), Velocity.Y);
 			}
 
-			_velocity.Y += _acceleration.Y * (float)deltaTime;
-			_attemptedPosition = Vector2.Multiply(_velocity, (float)deltaTime);
+			Velocity = new Vector2(Velocity.X, Velocity.Y + (Acceleration.Y * (float)deltaTime));
+			AttemptedPosition = Vector2.Multiply(Velocity, (float)deltaTime);
 
 			if (_owner.GetComponent<AABBCollider>() == null && _owner.GetComponent<CircleCollider>() == null)
-				_owner.Move(_attemptedPosition);//If this does not contain a collider just move it because nothing will stop it.
+				_owner.Move(AttemptedPosition);//If this does not contain a collider just move it because nothing will stop it.
 		}
 
 		public override void Load(ContentManager content)

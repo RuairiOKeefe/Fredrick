@@ -55,12 +55,12 @@ namespace Fredrick.src
 		public Projectile(Entity owner) : base(owner)
 		{
 			_position = new Vector2();
-			_velocity = new Vector2();
+			Velocity = new Vector2();
 		}
 
 		public Projectile(Entity owner, string id, Vector2 velocity, double lifeTime, bool explosive = false, bool contactTermination = true, float damage = 5.0f, float aoeDamage = 5.0f, float radius = 1.0f, float knockback = 1.0f) : base(owner, id)
 		{
-			_velocity = velocity;
+			Velocity = velocity;
 			_lifeTime = lifeTime;
 			_explosive = explosive;
 			_contactTermination = contactTermination;
@@ -91,7 +91,7 @@ namespace Fredrick.src
 			}
 			else
 			{
-				_velocity = velocity;
+				Velocity = velocity;
 			}
 
 			_dead = false;
@@ -124,9 +124,9 @@ namespace Fredrick.src
 
 			if (_owner.GetComponent<CircleCollider>() == null)
 			{
-				if (_velocity.Length() > 0)
+				if (Velocity.Length() > 0)
 				{
-					Vector2 v = _velocity;
+					Vector2 v = Velocity;
 					v.Normalize();
 					_rotation = (float)Math.Atan2(-v.Y, v.X);
 				}

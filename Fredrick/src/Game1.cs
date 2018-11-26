@@ -293,7 +293,6 @@ namespace Fredrick.src
 					e.GetComponent<Weapon>().UpdateProjectilePos();
 			}
 			levelEditor.Update(gameTime.ElapsedGameTime.TotalSeconds, ref terrain, Content);
-			//terrain[terrain.Count - 1].Load(Content);
 			//cam.Trauma = 1;
 			cam.Update(gameTime.ElapsedGameTime.TotalSeconds);
 			UI.Update(gameTime.ElapsedGameTime.TotalSeconds);
