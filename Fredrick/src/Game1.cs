@@ -239,9 +239,10 @@ namespace Fredrick.src
 			{
 				e.Load(Content);
 				if (e.GetComponent<Character>() != null)
-					cam.SetSubject(e);
+					cam.Subject = e;
 			}
-
+			cam.OffsetAmount = new Vector2(3.0f, 0.6f);
+			cam.CameraSpeed = 3.0f;
 			levelEditor.Load(Content);
 
 

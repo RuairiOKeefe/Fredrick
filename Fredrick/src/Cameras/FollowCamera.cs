@@ -10,53 +10,47 @@ namespace Fredrick.src
 {
 	public class FollowCamera : Camera
 	{
-		protected Vector2 _shakenPosition;
-		protected Vector2 _offset;
-		protected double _offsetPosScale;
+		public Entity Subject { get; set; } //The object being followed
+		public Vector2 OffsetAmount { get; set; }
+		public Vector2 GoalOffset { get; set; }
+		public Vector2 CurrentOffset { get; set; }
+		public float CameraSpeed;
 
-		float _shakenRotation;
-		float _offsetRotation;
-		float _offsetRotScale;
+		private Vector2 _shakenPosition;
+		private float _offsetPositionScale;
 
-		protected double _trauma;
-		double _traumaDecay;
-		protected double _shake;
+		private float _shakenRotation { get; set; }
+		private float _offsetRotationScale { get; set; }
 
-		float _time;
+		public double Trauma { get; set; }
+		private double _traumaDecay;
+
+		/// <summary>
+		/// A counter used for sampling noise
+		/// </summary>
+		private float _sampleCounter;
+		private const float _counterReset = 1000.0f;//Required as counter gives less varied noise when it excedes a threshold
 
 		private FastNoise _noiseOffX;
 		private FastNoise _noiseOffY;
 		private FastNoise _noiseRot;
 
-		Random rnd;
+		private Random rnd;
 		private int _seed;
-
-		Entity _subject; //The object being followed
-
-		public void SetSubject(Entity subject)
-		{
-			_subject = subject;
-		}
-
-		public double Trauma
-		{
-			get { return _trauma; }
-			set { _trauma = value; }
-		}
 
 		FollowCamera()
 		{
-			_viewportWidth = 1920;
-			_viewportHeight = 1080;
-			_zoom = 1.0f;
-			_rotation = 0.0f;
-			_position = Vector2.Zero;
+			ViewportWidth = 1920;
+			ViewportHeight = 1080;
+			Zoom = 1.0f;
+			Rotation = 0.0f;
+			Position = Vector2.Zero;
 
-			_offsetPosScale = 1;
-			_offsetRotScale = 0.2f;
+			_offsetPositionScale = 1;
+			_offsetRotationScale = 0.2f;
 			_traumaDecay = 2.0f;
 
-			_time = 0;
+			_sampleCounter = 0;
 
 			rnd = new Random();
 			_seed = rnd.Next(int.MaxValue);
@@ -72,17 +66,17 @@ namespace Fredrick.src
 
 		public FollowCamera(float width, float height)
 		{
-			_viewportWidth = width;
-			_viewportHeight = height;
-			_zoom =2.0f;
-			_rotation = 0.0f;
-			_position = Vector2.Zero;
+			ViewportWidth = width;
+			ViewportHeight = height;
+			Zoom = 2.0f;
+			Rotation = 0.0f;
+			Position = Vector2.Zero;
 
-			_offsetPosScale = 1;
-			_offsetRotScale = 0.2f;
-			_traumaDecay = 2.0f;
+			_offsetPositionScale = 1;
+			_offsetRotationScale = 0.2f;
+			_traumaDecay = 1.0f;
 
-			_time = 0;
+			_sampleCounter = 0;
 
 			rnd = new Random();
 			_seed = rnd.Next(int.MaxValue);
@@ -96,43 +90,60 @@ namespace Fredrick.src
 			_noiseRot.SetNoiseType(FastNoise.NoiseType.Perlin);
 		}
 
+		public void UpdateFollowPosition(double deltaTime)
+		{
+			if (Subject.GetComponent<Character>() != null)
+			{
+				//Needs to be moved to trauma probe class
+				if (Subject.GetComponent<Character>().Grounded && !Subject.GetComponent<Character>().PrevGrounded)
+				{
+					Trauma += (-Subject.GetComponent<Character>().FallVelocity * 5.0f);
+				}
+
+				GoalOffset = Subject.GetComponent<Character>().Velocity / Subject.GetComponent<Character>().MaxSpeed * OffsetAmount;
+				if (float.IsNaN(GoalOffset.X) || float.IsNaN(GoalOffset.Y))
+					GoalOffset = new Vector2(0);
+				CurrentOffset += (GoalOffset - CurrentOffset) * (float)deltaTime * CameraSpeed;
+			}
+			Position = Subject.Position + CurrentOffset;
+		}
+
 		public new void Update(double deltaTime)
 		{
-			if (_subject.GetComponent<Character>() != null)
+			UpdateFollowPosition(deltaTime);
+
+			_sampleCounter += (float)deltaTime * 1000;
+			if (_sampleCounter > _counterReset)
+				_sampleCounter = 0;
+
+			Trauma -= deltaTime / _traumaDecay;
+
+			if (Trauma > 1)
+				Trauma = 1;
+
+			if (Trauma < 0)
+				Trauma = 0;
+
+			float shake = (float)(Trauma * Trauma * Trauma);
+
+			Vector2 shakePositionOffset = new Vector2
 			{
-				_position += (_subject.GetComponent<Character>().FollowPosition - _position) * 2.0f * (float)deltaTime;
-				if (_subject.GetComponent<Character>().Grounded && !_subject.GetComponent<Character>().PrevGrounded)
-				{
-					_trauma += (-_subject.GetComponent<Character>().FallVelocity / 40);
-				}
-			}
+				X = _noiseOffX.GetNoise(_sampleCounter, _sampleCounter) * shake * _offsetPositionScale,
+				Y = _noiseOffY.GetNoise(_sampleCounter, _sampleCounter) * shake * _offsetPositionScale
+			};
 
-			_time += (float)deltaTime * 1000;
+			float shakeRotationOffset = _noiseRot.GetNoise(_sampleCounter, _sampleCounter) * shake * _offsetRotationScale;
 
-			_trauma -= deltaTime / _traumaDecay;
-
-			if (_trauma > 1)
-				_trauma = 1;
-
-			if (_trauma < 0)
-				_trauma = 0;
-
-			_shake = _trauma * _trauma * _trauma;
-
-			_offset.X = _noiseOffX.GetNoise(_time, _time) * (float)_shake * (float)_offsetPosScale;
-			_offset.Y = _noiseOffY.GetNoise(_time, _time) * (float)_shake * (float)_offsetPosScale;
-			_offsetRotation = _noiseRot.GetNoise(_time, _time) * (float)_shake * (float)_offsetRotScale;
-
-			_shakenPosition = _position + _offset;
-			_shakenRotation = _rotation + _offsetRotation;
+			_shakenPosition = Position + shakePositionOffset;
+			_shakenRotation = Rotation + shakeRotationOffset;
 		}
 
 		public new Matrix Get_Transformation(GraphicsDevice graphicsDevice)
 		{
 			_transform = Matrix.CreateTranslation(new Vector3(-_shakenPosition.X * 32, _shakenPosition.Y * 32, 0)) *
 													Matrix.CreateRotationZ(_shakenRotation) *
-													Matrix.CreateScale(new Vector3(_zoom, _zoom, 1)) *
-													Matrix.CreateTranslation(new Vector3(_viewportWidth * 0.5f, _viewportHeight * 0.5f, 0));
+													Matrix.CreateScale(new Vector3(Zoom, Zoom, 1)) *
+													Matrix.CreateTranslation(new Vector3(ViewportWidth * 0.5f, ViewportHeight * 0.5f, 0));
 			return _transform;
 		}
 	}
