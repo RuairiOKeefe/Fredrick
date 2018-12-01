@@ -64,17 +64,20 @@ namespace Fredrick.src
 			_noiseRot.SetNoiseType(FastNoise.NoiseType.Perlin);
 		}
 
-		public FollowCamera(float width, float height)
+		public FollowCamera(float width, float height, Entity subject, float zoom = 1.0f, float offsetPositionScale = 1.0f, float offsetRotationScale = 0.2f, float cameraSpeed = 1.0f)
 		{
 			ViewportWidth = width;
 			ViewportHeight = height;
-			Zoom = 2.0f;
+			Subject = subject;
+
+			Zoom = zoom;
 			Rotation = 0.0f;
 			Position = Vector2.Zero;
 
-			_offsetPositionScale = 1;
-			_offsetRotationScale = 0.2f;
+			_offsetPositionScale = offsetPositionScale;
+			_offsetRotationScale = offsetRotationScale;
 			_traumaDecay = 1.0f;
+			CameraSpeed = cameraSpeed;
 
 			_sampleCounter = 0;
 
@@ -92,20 +95,24 @@ namespace Fredrick.src
 
 		public void UpdateFollowPosition(double deltaTime)
 		{
-			if (Subject.GetComponent<Character>() != null)
+			if (Subject != null)
 			{
-				//Needs to be moved to trauma probe class
-				if (Subject.GetComponent<Character>().Grounded && !Subject.GetComponent<Character>().PrevGrounded)
+				if (Subject.GetComponent<Character>() != null)
 				{
-					Trauma += (-Subject.GetComponent<Character>().FallVelocity * 5.0f);
-				}
+					//Needs to be moved to trauma probe class
+					if (Subject.GetComponent<Character>().Grounded && !Subject.GetComponent<Character>().PrevGrounded)
+					{
+						Trauma += (-Subject.GetComponent<Character>().FallVelocity * 5.0f);
+					}
 
-				GoalOffset = Subject.GetComponent<Character>().Velocity / Subject.GetComponent<Character>().MaxSpeed * OffsetAmount;
-				if (float.IsNaN(GoalOffset.X) || float.IsNaN(GoalOffset.Y))
-					GoalOffset = new Vector2(0);
-				CurrentOffset += (GoalOffset - CurrentOffset) * (float)deltaTime * CameraSpeed;
+					GoalOffset = Subject.GetComponent<Character>().Velocity.Length() > 0.1f ? Vector2.Normalize(Subject.GetComponent<Character>().Velocity) : new Vector2(0);
+					GoalOffset *= OffsetAmount;
+					if (float.IsNaN(GoalOffset.X) || float.IsNaN(GoalOffset.Y))
+						GoalOffset = new Vector2(0);
+					CurrentOffset += (GoalOffset - CurrentOffset) * (float)deltaTime * CameraSpeed;
+				}
+				Position = Subject.Position + CurrentOffset;
 			}
-			Position = Subject.Position + CurrentOffset;
 		}
 
 		public new void Update(double deltaTime)

@@ -61,8 +61,6 @@ namespace Fredrick.src
 		/// </summary>
 		protected override void LoadContent()
 		{
-
-			cam = new FollowCamera(1600, 900);
 			// Create a new SpriteBatch, which can be used to draw textures.
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 
@@ -238,11 +236,9 @@ namespace Fredrick.src
 			foreach (Entity e in actors)
 			{
 				e.Load(Content);
-				if (e.GetComponent<Character>() != null)
-					cam.Subject = e;
 			}
-			cam.OffsetAmount = new Vector2(3.0f, 0.6f);
-			cam.CameraSpeed = 3.0f;
+			cam = new FollowCamera(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight, actors[0], 1.0f, 1.0f, 0.2f, 2.0f);
+			cam.OffsetAmount = new Vector2(4.0f, 1.8f);
 			levelEditor.Load(Content);
 
 
