@@ -22,7 +22,8 @@ namespace Fredrick.src
 
 		public State MotionState { get; set; }
 
-		//Commands are simply what the related controller wants to do at a given instance, in case of player this represents button inputs
+		public Controller Controller { get; set; }
+
 		public float MoveCommand { get; set; }
 		public bool JumpCommand { get; set; }
 
@@ -60,6 +61,8 @@ namespace Fredrick.src
 
 		public Character(Entity owner) : base(owner)
 		{
+			Controller = new Controller();
+
 			Velocity = new Vector2(0, 0);
 			Acceleration = new Vector2(0, 0);
 			HorAcc = 16;
@@ -236,8 +239,10 @@ namespace Fredrick.src
 
 		public override void Update(double deltaTime)
 		{
-			MoveCommand = InputHandler.Instance.MoveX;
-			JumpCommand = InputHandler.Instance.IsKeyPressed(InputHandler.Action.Jump);
+			Controller.Update();//Remove once controller is being updated elsewhere
+
+			MoveCommand = Controller.Movement;
+			JumpCommand = Controller.Jump;
 
 			if (JumpWait)
 			{

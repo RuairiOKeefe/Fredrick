@@ -83,6 +83,9 @@ namespace Fredrick.src
 				actors.Add(entity);
 				Renderable renderable = new Renderable(entity, "Legs", "Character", new Vector2(32, 32), new Vector2(0), new Vector2(1), 64, 64, 0.3f);
 				Character character = new Character(entity);
+				character.Controller = new PlayerController();
+				(character.Controller as PlayerController).Keyboard = true;
+
 				AABBCollider boxCollider = new AABBCollider(entity, new Vector2(0), 0.6f, 2.0f);
 				renderable.Drawable.AddAnimation(0, 0, 1, 12, Animation.OnEnd.Loop, 0);
 				renderable.Drawable.AddAnimation(64, 0, 10, 12, Animation.OnEnd.Loop, 0);
