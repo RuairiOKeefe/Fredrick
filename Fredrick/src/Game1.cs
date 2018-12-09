@@ -178,8 +178,9 @@ namespace Fredrick.src
 					hpl.Add(2, new Vector2(0, 0.90625f));
 					renderable.Drawable._animations[3].MountPoints.Add(headRenderable, hpl);
 				}
-				Controller cont = actors[1].GetDerivedComponent<Controller>();
-				cont = new Controller();
+				actors[1].Components.Remove(actors[1].GetDerivedComponent<Controller>());
+				PatrolAI cont = new PatrolAI(actors[1], "Controller");
+				actors[1].Components.Add(cont);
 
 				actors[1].Position = new Vector2(32, 8);
 

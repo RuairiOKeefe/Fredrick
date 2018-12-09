@@ -71,6 +71,7 @@
     <Compile Include="src\Cameras\Camera.cs" />
     <Compile Include="src\Drawing\PostProcessing.cs" />
     <Compile Include="src\Entity System\IComponentOwner.cs" />
+    <Compile Include="src\InputHandling\PatrolAI.cs" />
     <Compile Include="src\InputHandling\PlayerController.cs" />
     <Compile Include="src\Kinematics\Character.cs" />
     <Compile Include="src\Colliders\ColliderManager.cs" />
