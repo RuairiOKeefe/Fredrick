@@ -13,6 +13,11 @@ namespace Fredrick.src
 		public bool Keyboard;
 		public int ControllerIndex;
 
+		public PlayerController(Entity owner, string id, bool active = true) : base(owner, id, active)
+		{
+
+		}
+
 		protected override void SetMovement()
 		{
 			Movement = 0;
@@ -32,7 +37,7 @@ namespace Fredrick.src
 
 		protected override void SetAim()
 		{
-			
+			Aim = InputHandler.Instance.WorldMousePosition - (_owner.Position + Position);
 		}
 
 		protected override void SetJump()
@@ -47,7 +52,8 @@ namespace Fredrick.src
 
 		protected override void SetFire()
 		{
-			
+			FirePressed = InputHandler.Instance.IsLeftMousePressed();
+			FireHeld = InputHandler.Instance.IsLeftMouseHeld();
 		}
 	}
 }

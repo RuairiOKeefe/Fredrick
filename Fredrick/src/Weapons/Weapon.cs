@@ -12,6 +12,8 @@ namespace Fredrick.src
 	[Serializable]
 	public class Weapon : Component
 	{
+		private bool _fireCommand;
+
 		protected Vector2 _spotSpawn;
 		protected Vector2 _weaponPosition;//The arm has uses the base transform
 		protected Vector2 _transformedWeaponPosition;
@@ -135,7 +137,22 @@ namespace Fredrick.src
 
 		public override void Update(double deltaTime)
 		{
-			Vector2 direction = InputHandler.Instance.WorldMousePosition - _owner.Position;
+
+			Vector2 direction;
+			if (_owner.GetDerivedComponent<Controller>() != null)
+			{
+				direction = _owner.GetDerivedComponent<Controller>().Aim;
+				if (_continuous)
+					_fireCommand = _owner.GetDerivedComponent<Controller>().FireHeld;
+				else
+					_fireCommand = _owner.GetDerivedComponent<Controller>().FirePressed;
+			}
+			else
+			{
+				direction = new Vector2(1, 0);
+				_fireCommand = false;
+			}
+
 			direction.Normalize();
 
 			_rotation = (float)Math.Atan2(-direction.Y, direction.X);
@@ -150,19 +167,9 @@ namespace Fredrick.src
 
 			if (_nextfire <= 0)
 			{
-				if (_continuous)
+				if (_fireCommand)
 				{
-					if (InputHandler.Instance.IsLeftMouseHeld())
-					{
-						Fire(direction, sin, cos);
-					}
-				}
-				else
-				{
-					if (InputHandler.Instance.IsLeftMousePressed())
-					{
-						Fire(direction, sin, cos);
-					}
+					Fire(direction, sin, cos);
 				}
 			}
 			else

@@ -42,6 +42,12 @@ namespace Fredrick.src
 			return (T)component;
 		}
 
+		public T GetDerivedComponent<T>() where T : Component
+		{
+			var component = Components.FirstOrDefault(c => c.GetType().BaseType == typeof(T));
+			return (T)component;
+		}
+
 		public void Load(ContentManager content)
 		{
 			foreach (var c in Components)

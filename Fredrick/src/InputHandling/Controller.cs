@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Fredrick.src
 {
 	[Serializable]
-	public class Controller
+	public class Controller :Component
 	{
 		public float Movement { get; protected set; }
 		public Vector2 Aim { get; protected set; }
@@ -21,17 +23,42 @@ namespace Fredrick.src
 
 		}
 
+		public Controller(Entity owner, string id, bool active = true) : base(owner, id, active)
+		{
+
+		}
+
 		protected virtual void SetMovement() { }
 		protected virtual void SetAim() { }
 		protected virtual void SetJump() { }
 		protected virtual void SetFire() { }
 
-		public virtual void Update()
+		public override void Load(ContentManager content)
+		{
+
+		}
+
+		public override void Unload()
+		{
+
+		}
+
+		public override void Update(double deltaTime)
 		{
 			SetMovement();
 			SetAim();
 			SetJump();
 			SetFire();
-		}//Update should be called to get any inputs that occur then
+		}
+
+		public override void Draw(SpriteBatch spriteBatch)
+		{
+
+		}
+
+		public override void DebugDraw(SpriteBatch spriteBatch)
+		{
+
+		}
 	}
 }

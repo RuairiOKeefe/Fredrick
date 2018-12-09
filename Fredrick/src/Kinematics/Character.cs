@@ -22,8 +22,6 @@ namespace Fredrick.src
 
 		public State MotionState { get; set; }
 
-		public Controller Controller { get; set; }
-
 		public float MoveCommand { get; set; }
 		public bool JumpCommand { get; set; }
 
@@ -61,8 +59,6 @@ namespace Fredrick.src
 
 		public Character(Entity owner) : base(owner)
 		{
-			Controller = new Controller();
-
 			Velocity = new Vector2(0, 0);
 			Acceleration = new Vector2(0, 0);
 			HorAcc = 16;
@@ -239,10 +235,16 @@ namespace Fredrick.src
 
 		public override void Update(double deltaTime)
 		{
-			Controller.Update();//Remove once controller is being updated elsewhere
-
-			MoveCommand = Controller.Movement;
-			JumpCommand = Controller.Jump;
+			if (_owner.GetDerivedComponent<Controller>() != null)
+			{
+				MoveCommand = _owner.GetDerivedComponent<Controller>().Movement;
+				JumpCommand = _owner.GetDerivedComponent<Controller>().Jump;
+			}
+			else
+			{
+				MoveCommand = 0;
+				JumpCommand = false;
+			}
 
 			if (JumpWait)
 			{
