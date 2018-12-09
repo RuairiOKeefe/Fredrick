@@ -116,7 +116,6 @@ namespace Fredrick.src
 						Health -= unblockedDamage;
 					}
 				}
-
 			}
 			else//Take pure health damage
 			{
@@ -125,6 +124,12 @@ namespace Fredrick.src
 				{
 					Health -= actualDamage;
 				}
+			}
+
+			if (attack.StatusEffects.Count > 0 && _owner.GetComponent<StatusHandler>() != null)
+			{
+				foreach (StatusEffect s in attack.StatusEffects)
+					_owner.GetComponent<StatusHandler>().AddStatus(s);
 			}
 		}
 

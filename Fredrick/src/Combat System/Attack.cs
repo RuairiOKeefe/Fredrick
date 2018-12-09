@@ -22,7 +22,11 @@ namespace Fredrick.src
 		public Attack(DamageType type, List<StatusEffect> statusEffects, float damage)
 		{
 			Type = type;
-			StatusEffects = statusEffects;
+			StatusEffects = new List<StatusEffect>();
+			if(statusEffects !=null)
+			{
+				StatusEffects = statusEffects;
+			}
 			Damage = damage;
 		}
 	}

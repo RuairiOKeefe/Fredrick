@@ -52,6 +52,8 @@ namespace Fredrick.src
 			set { _dead = value; }
 		}
 
+		public Attack Attack { get; set; }
+
 		public Projectile(Entity owner) : base(owner)
 		{
 			_position = new Vector2();
@@ -156,6 +158,10 @@ namespace Fredrick.src
 									force.Normalize();
 									force *= _knockback;
 									e.GetComponent<CircleCollider>().ApplyForce(force, _owner.Position);
+								}
+								if (e.GetComponent<Damageable>() != null)
+								{
+									e.GetComponent<Damageable>().DealDamage(Attack);
 								}
 							}
 							c = c.Next;

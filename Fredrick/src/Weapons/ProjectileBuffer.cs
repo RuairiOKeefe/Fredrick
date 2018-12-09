@@ -61,6 +61,7 @@ namespace Fredrick.src
 			{
 				Entity e = new Entity();
 				Projectile p = new Projectile(e);
+				p.Attack = new Attack(Attack.DamageType.Fire, new List<StatusEffect>() { new Burn() }, 10);
 				CircleCollider cc = new CircleCollider(e);
 				Renderable r = new Renderable(e, "Projectile", spriteName, new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
 				r.Drawable.AddAnimation(0, 0, 1, 1, Animation.OnEnd.Loop, 0);
