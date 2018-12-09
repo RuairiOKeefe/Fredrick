@@ -139,10 +139,10 @@ namespace Fredrick.src
 
 		public void SetCells(bool addToScene)
 		{
-			minX = Math.Max((int)Math.Floor(_rectangle.CurrentPosition.X - (_rectangle.Width / 2) + 0.5), 0);
-			maxX = Math.Min((int)Math.Floor(_rectangle.CurrentPosition.X + (_rectangle.Width / 2) + 0.5), 1000);
-			minY = Math.Max((int)Math.Floor(_rectangle.CurrentPosition.Y - (_rectangle.Height / 2) + 0.5), 0);
-			maxY = Math.Min((int)Math.Floor(_rectangle.CurrentPosition.Y + (_rectangle.Height / 2) + 0.5), 1000);
+			minX = Math.Min(Math.Max((int)Math.Floor(_rectangle.CurrentPosition.X - (_rectangle.Width / 2) + 0.5), 0), 1000);
+			maxX = Math.Min(Math.Max((int)Math.Floor(_rectangle.CurrentPosition.X + (_rectangle.Width / 2) + 0.5), 0), 1000);
+			minY = Math.Min(Math.Max((int)Math.Floor(_rectangle.CurrentPosition.Y - (_rectangle.Height / 2) + 0.5), 0), 1000);
+			maxY = Math.Min(Math.Max((int)Math.Floor(_rectangle.CurrentPosition.Y + (_rectangle.Height / 2) + 0.5), 0), 1000);
 
 			for (int i = minX; i < maxX + 1; i++)
 			{

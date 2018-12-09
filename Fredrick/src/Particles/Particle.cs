@@ -206,8 +206,8 @@ namespace Fredrick.src
 
 			if (_collide)
 			{
-				int x = (int)Math.Floor(_position.X + _tempMove.X + 0.5f);
-				int y = (int)Math.Floor(_position.Y + _tempMove.Y + 0.5f);
+				int x = Math.Min(Math.Max((int)Math.Floor(_position.X + _tempMove.X + 0.5f), 0), 1000);
+				int y = Math.Min(Math.Max((int)Math.Floor(_position.Y + _tempMove.Y + 0.5f), 0), 1000);
 
 				bool collided = false;
 				foreach (Entity e in ColliderManager.Instance.Terrain[x, y])
