@@ -60,7 +60,7 @@ namespace Fredrick.src
 			Velocity = new Vector2();
 		}
 
-		public Projectile(Entity owner, string id, Vector2 velocity, double lifeTime, bool explosive = false, bool contactTermination = true, float damage = 5.0f, float aoeDamage = 5.0f, float radius = 1.0f, float knockback = 1.0f) : base(owner, id)
+		public Projectile(Entity owner, string id, Vector2 velocity, double lifeTime, bool explosive = false, bool contactTermination = true, float damage = 5.0f, float aoeDamage = 5.0f, float radius = 3.0f, float knockback = 1.0f) : base(owner, id)
 		{
 			Velocity = velocity;
 			_lifeTime = lifeTime;
@@ -73,7 +73,7 @@ namespace Fredrick.src
 			_knockback = knockback;
 		}
 
-		public void Revive(Vector2 velocity, double lifeTime, bool explosive = false, bool contactTermination = true, float damage = 5.0f, float aoeDamage = 5.0f, float radius = 1.0f, float knockback = 1.0f)
+		public void Revive(Vector2 velocity, double lifeTime, bool explosive = false, bool contactTermination = true, float damage = 5.0f, float aoeDamage = 5.0f, float radius = 3.0f, float knockback = 1.0f)
 		{
 
 			_lifeTime = lifeTime;

@@ -12,18 +12,11 @@ namespace Fredrick.src
 	[Serializable]
 	public class Weapon : Component
 	{
-		private bool _fireCommand;
-
 		protected Vector2 _spotSpawn;
 		protected Vector2 _weaponPosition;//The arm has uses the base transform
 		protected Vector2 _transformedWeaponPosition;
 
-		protected double _fireRate;//How long between shots
 		protected double _nextfire;//Counter till next shot can be fired
-
-		protected float _damage;
-		protected float _aoeDamage;
-		protected float _shotSpeed;
 
 		protected bool _continuous;
 
@@ -36,38 +29,22 @@ namespace Fredrick.src
 
 		List<Entity> _projectiles;
 
-		public double FireRate
-		{
-			get { return _fireRate; }
-			set { _fireRate = value; }
-		}
+		public double FireRate { get; set; }//How long between shots
 
-		public float Damage
-		{
-			get { return _damage; }
-			set { _damage = value; }
-		}
+		public float Damage { get; set; }
 
-		public float AOEDamage
-		{
-			get { return _aoeDamage; }
-			set { _aoeDamage = value; }
-		}
+		public float AOEDamage { get; set; }
 
-		public float ShotSpeed
-		{
-			get { return _shotSpeed; }
-			set { _shotSpeed = value; }
-		}
+		public float ShotSpeed { get; set; }
 
 		public Weapon(Entity owner, string id, Vector2 shotSpawn, Vector2 weaponPosition, double fireRate = 0.5, float damage = 10.0f, float aoeDamage = 20.0f, float shotSpeed = 5.0f, bool continuous = true) : base(owner, id)
 		{
 			_spotSpawn = shotSpawn;
 			_weaponPosition = weaponPosition;
-			_fireRate = fireRate;
-			_damage = damage;
-			_aoeDamage = aoeDamage;
-			_shotSpeed = shotSpeed;
+			FireRate = fireRate;
+			Damage = damage;
+			AOEDamage = aoeDamage;
+			ShotSpeed = shotSpeed;
 
 			_continuous = continuous;
 
@@ -89,11 +66,11 @@ namespace Fredrick.src
 
 			e.Position = _owner.Position + _position + transformedShotSpawn;
 
-			Vector2 shotVelocity = direction * _shotSpeed;
-			e.GetComponent<Projectile>().Revive(shotVelocity, 2.0, true, false, 10.0f, 20.0f, 2.0f, 1.0f);
+			Vector2 shotVelocity = direction * ShotSpeed;
+			e.GetComponent<Projectile>().Revive(shotVelocity, 2.0, true, false, 10.0f, 20.0f, 3.0f, 1.0f);
 			_projectiles.Add(e);
 
-			_nextfire = _fireRate;
+			_nextfire = FireRate;
 		}
 
 		public void UpdateProjectilePos()
@@ -137,20 +114,21 @@ namespace Fredrick.src
 
 		public override void Update(double deltaTime)
 		{
+			bool fireCommand = false;
 
 			Vector2 direction;
 			if (_owner.GetDerivedComponent<Controller>() != null)
 			{
 				direction = _owner.GetDerivedComponent<Controller>().Aim;
 				if (_continuous)
-					_fireCommand = _owner.GetDerivedComponent<Controller>().FireHeld;
+					fireCommand = _owner.GetDerivedComponent<Controller>().FireHeld;
 				else
-					_fireCommand = _owner.GetDerivedComponent<Controller>().FirePressed;
+					fireCommand = _owner.GetDerivedComponent<Controller>().FirePressed;
 			}
 			else
 			{
 				direction = new Vector2(1, 0);
-				_fireCommand = false;
+				fireCommand = false;
 			}
 
 			direction.Normalize();
@@ -167,7 +145,7 @@ namespace Fredrick.src
 
 			if (_nextfire <= 0)
 			{
-				if (_fireCommand)
+				if (fireCommand)
 				{
 					Fire(direction, sin, cos);
 				}

@@ -262,9 +262,12 @@ namespace Fredrick.src
 
 
 			Canvas canvas = new Canvas(UI, "UI");
-			TextElement debugElement = new TextElement(Content.Load<SpriteFont>("Debug"), new Vector2(0), Color.White, 0, TextElement.Justification.Left, 1.0f);
-			debugElement.AddContent("Health: ", "", actors[0].GetComponent<Damageable>(), "Health");
-			canvas.TextElements.Add(debugElement);
+			TextElement debugElement1 = new TextElement(Content.Load<SpriteFont>("Debug"), new Vector2(0), Color.White, 0, TextElement.Justification.Left, 1.0f);
+			debugElement1.AddContent("Player Health: ", "", actors[0].GetComponent<Damageable>(), "Health");
+			canvas.TextElements.Add(debugElement1);
+			TextElement debugElement2 = new TextElement(Content.Load<SpriteFont>("Debug"), new Vector2(0,40), Color.White, 0, TextElement.Justification.Left, 1.0f);
+			debugElement2.AddContent("Enemy Health: ", "", actors[1].GetComponent<Damageable>(), "Health");
+			canvas.TextElements.Add(debugElement2);
 			UI.Components.Add(canvas);
 		}
 
@@ -299,9 +302,6 @@ namespace Fredrick.src
 			{
 				if (e.GetComponent<Weapon>() != null)
 					e.GetComponent<Weapon>().UpdateProjectilePos();
-				if (e.GetComponent<StatusHandler>() != null)
-					if (DebugManager.Instance.Debug)
-						e.GetComponent<StatusHandler>().AddStatus(new Burn());
 			}
 			foreach (var e in terrain)
 			{
