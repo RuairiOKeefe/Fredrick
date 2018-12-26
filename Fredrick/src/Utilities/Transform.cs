@@ -11,31 +11,15 @@ namespace Fredrick.src
 	[Serializable]
 	public class Transform
 	{
-		protected Vector2 _position;
-		protected float _rotation;
-		protected Vector2 _scale;
+		public Vector2 Position { get; set; }
 
-		public Vector2 Position
-		{
-			get { return _position; }
-			set { _position = value; }
-		}
+		public float Rotation { get; set; }
 
-		public float Rotation
-		{
-			get { return _rotation; }
-			set { _rotation = value; }
-		}
-
-		public Vector2 Scale
-		{
-			get { return _scale; }
-			set { _scale = value; }
-		}
+		public Vector2 Scale { get; set; }
 
 		public void Move(Vector2 offset)
 		{
-			_position += offset;
+			Position += offset;
 		}
 	}
 }

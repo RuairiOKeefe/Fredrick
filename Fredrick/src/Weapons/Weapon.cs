@@ -37,7 +37,7 @@ namespace Fredrick.src
 
 		public float ShotSpeed { get; set; }
 
-		public Weapon(Entity owner, string id, Vector2 shotSpawn, Vector2 weaponPosition, double fireRate = 0.5, float damage = 10.0f, float aoeDamage = 20.0f, float shotSpeed = 5.0f, bool continuous = true) : base(owner, id)
+		public Weapon(Entity owner, string id, Vector2 shotSpawn, Vector2 weaponPosition, double fireRate = 0.5, float damage = 10.0f, float aoeDamage = 20.0f, float shotSpeed = 5.0f, bool continuous = true, bool active = true) : base(owner, id, active)
 		{
 			_spotSpawn = shotSpawn;
 			_weaponPosition = weaponPosition;
@@ -50,7 +50,7 @@ namespace Fredrick.src
 
 			_projectiles = new List<Entity>();
 
-			_scale = new Vector2(1);
+			Scale = new Vector2(1);
 
 			_facingRight = true;
 		}
@@ -64,7 +64,7 @@ namespace Fredrick.src
 
 			Vector2 transformedShotSpawn = new Vector2((cos * tssx) - (sin * tssy), (sin * tssx) + (cos * tssy));
 
-			e.Position = _owner.Position + _position + transformedShotSpawn;
+			e.Position = _owner.Position + Position + transformedShotSpawn;
 
 			Vector2 shotVelocity = direction * ShotSpeed;
 			e.GetComponent<Projectile>().Revive(shotVelocity, 2.0, true, false, 10.0f, 20.0f, 3.0f, 1.0f);
@@ -133,10 +133,10 @@ namespace Fredrick.src
 
 			direction.Normalize();
 
-			_rotation = (float)Math.Atan2(-direction.Y, direction.X);
+			Rotation = (float)Math.Atan2(-direction.Y, direction.X);
 
-			float sin = (float)Math.Sin(-_rotation);
-			float cos = (float)Math.Cos(-_rotation);
+			float sin = (float)Math.Sin(-Rotation);
+			float cos = (float)Math.Cos(-Rotation);
 
 			float twpx = _weaponPosition.X;
 			float twpy = _weaponPosition.Y;
@@ -170,8 +170,8 @@ namespace Fredrick.src
 		public override void Draw(SpriteBatch spriteBatch)
 		{
 			Vector2 inv = new Vector2(1, -1);
-			spriteBatch.Draw(ResourceManager.Instance.Textures[WeaponDrawable._spriteName], (_transformedWeaponPosition + _position + _owner.Position) * inv * WeaponDrawable._spriteSize, WeaponDrawable._sourceRectangle, WeaponDrawable._colour, _owner.Rotation + _rotation, WeaponDrawable._origin, _scale, WeaponDrawable._spriteEffects, WeaponDrawable._layer);
-			spriteBatch.Draw(ResourceManager.Instance.Textures[ArmDrawable._spriteName], (_position + _owner.Position) * inv * ArmDrawable._spriteSize, ArmDrawable._sourceRectangle, ArmDrawable._colour, _owner.Rotation + _rotation, ArmDrawable._origin, _scale, ArmDrawable._spriteEffects, ArmDrawable._layer);
+			spriteBatch.Draw(ResourceManager.Instance.Textures[WeaponDrawable._spriteName], (_transformedWeaponPosition + Position + _owner.Position) * inv * WeaponDrawable._spriteSize, WeaponDrawable._sourceRectangle, WeaponDrawable._colour, _owner.Rotation + Rotation, WeaponDrawable._origin, Scale, WeaponDrawable._spriteEffects, WeaponDrawable._layer);
+			spriteBatch.Draw(ResourceManager.Instance.Textures[ArmDrawable._spriteName], (Position + _owner.Position) * inv * ArmDrawable._spriteSize, ArmDrawable._sourceRectangle, ArmDrawable._colour, _owner.Rotation + Rotation, ArmDrawable._origin, Scale, ArmDrawable._spriteEffects, ArmDrawable._layer);
 
 			foreach (Entity e in _projectiles)
 			{

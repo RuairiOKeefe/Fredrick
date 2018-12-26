@@ -36,7 +36,7 @@ namespace Fredrick.src
 		public AABBCollider()
 		{
 			_owner = null;
-			_position = new Vector2(0);
+			Position = new Vector2(0);
 		}
 
 		public AABBCollider(Entity owner, Vector2 position, float width = 1.0f, float height = 1.0f) : base(owner)
@@ -167,7 +167,7 @@ namespace Fredrick.src
 
 		public override void Load(ContentManager content)
 		{
-			_rectangle.UpdatePosition(_owner.Position + _position);
+			_rectangle.UpdatePosition(_owner.Position + Position);
 			_index = ColliderManager.Instance.Colliders.Count;
 			ColliderManager.Instance.Colliders.Add(this);
 
@@ -175,7 +175,7 @@ namespace Fredrick.src
 			PolygonShape box;
 			Fixture fixture;
 
-			body = new Body(ColliderManager.Instance.World, _owner.Position + _position, 0, BodyType.Static);
+			body = new Body(ColliderManager.Instance.World, _owner.Position + Position, 0, BodyType.Static);
 			if (_owner.GetComponent<Character>() != null)
 			{
 				body.BodyType = BodyType.Kinematic;
@@ -241,7 +241,7 @@ namespace Fredrick.src
 				{
 					if (b.UserData == (object)_owner)
 					{
-						b.Position = _owner.Position + _position;
+						b.Position = _owner.Position + Position;
 					}
 				}
 				ClearCells(false);

@@ -200,3 +200,8 @@
 /processorParam:TextureFormat=Compressed
 /build:Debug.spritefont
 
+#begin ParticleEffects.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:ParticleEffects.xml
+

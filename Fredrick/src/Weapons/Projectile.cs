@@ -56,7 +56,7 @@ namespace Fredrick.src
 
 		public Projectile(Entity owner) : base(owner)
 		{
-			_position = new Vector2();
+			Position = new Vector2();
 			Velocity = new Vector2();
 		}
 
@@ -101,7 +101,7 @@ namespace Fredrick.src
 
 			_body = new Body(ColliderManager.Instance.World, _owner.Position, 0, BodyType.Dynamic);
 			_circle = new CircleShape(_radius, 1.0f);
-			_circle.Position = _position;
+			_circle.Position = Position;
 			_fixture = _body.CreateFixture(_circle);
 
 			_body.BodyType = BodyType.Dynamic;
@@ -130,13 +130,13 @@ namespace Fredrick.src
 				{
 					Vector2 v = Velocity;
 					v.Normalize();
-					_rotation = (float)Math.Atan2(-v.Y, v.X);
+					Rotation = (float)Math.Atan2(-v.Y, v.X);
 				}
 				else
 				{
-					_rotation = 0;
+					Rotation = 0;
 				}
-				_owner.Rotation = _rotation;
+				_owner.Rotation = Rotation;
 			}
 
 

@@ -90,8 +90,8 @@ namespace Fredrick.src
 
 		public Platform(Entity owner, Vector2 position, float width, float height, float offsetX, float offsetY, float lHeight, float rHeight, float platformDepth) : base(owner)
 		{
-			_position = position;
-			_currentPosition = owner.Position + _position;
+			Position = position;
+			_currentPosition = owner.Position + Position;
 			_width = width;
 			_height = height;
 
@@ -133,7 +133,7 @@ namespace Fredrick.src
 
 		public override void Load(ContentManager content)
 		{
-			_currentPosition = _owner.Position + _position;
+			_currentPosition = _owner.Position + Position;
 
 			Body body;
 			EdgeShape shape;

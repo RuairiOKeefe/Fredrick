@@ -64,7 +64,7 @@ namespace Fredrick.src
 
 		public RectangleF(Vector2 position, float width, float height)
 		{
-			_position = position;
+			Position = position;
 			_width = width;
 			_height = height;
 
@@ -78,7 +78,7 @@ namespace Fredrick.src
 
 		public void UpdatePosition(Vector2 currentPosition)
 		{
-			_currentPosition = currentPosition + _position;
+			_currentPosition = currentPosition + Position;
 		}
 
 		public bool Intersect(RectangleF other)
