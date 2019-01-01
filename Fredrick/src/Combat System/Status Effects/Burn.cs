@@ -9,7 +9,7 @@ namespace Fredrick.src
 {
 	public class Burn : StatusEffect
 	{
-		public override int ParticleDensity { get { return 200; } }
+		public override int ParticleDensity { get { return 500; } }
 		public override float Magnitude { get { return 10.0f; } }
 		public override double Duration { get { return 5.0; } }
 		public override List<Tuple<Emitter, Component>> Emitters { get; }

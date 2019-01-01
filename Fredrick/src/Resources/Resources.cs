@@ -102,11 +102,11 @@ namespace Fredrick.src
 			Emitters.Add("Embers", embers);
 
 			List<Tuple<Color, double>> fireLerp = new List<Tuple<Color, double>>();
-			fireLerp.Add(new Tuple<Color, double>(new Color(198, 48, 2, 255) * 0.5f, 0.0));
-			fireLerp.Add(new Tuple<Color, double>(new Color(242, 192, 0, 255) * 0.8f, 0.3));
-			fireLerp.Add(new Tuple<Color, double>(new Color(250, 243, 67, 255) * 0.8f, 0.4));
-			fireLerp.Add(new Tuple<Color, double>(new Color(255, 255, 211, 255) * 0.5f, 0.5));
-			fireLerp.Add(new Tuple<Color, double>(new Color(255, 255, 255, 255) * 0.0f, 1.0));
+			fireLerp.Add(new Tuple<Color, double>(new Color(215, 48, 2, 255) * 0.5f, 0.0));
+			fireLerp.Add(new Tuple<Color, double>(new Color(222, 172, 0, 255) * 0.8f, 0.3));
+			fireLerp.Add(new Tuple<Color, double>(new Color(240, 223, 67, 255) * 0.8f, 0.4));
+			fireLerp.Add(new Tuple<Color, double>(new Color(155, 155, 111, 255) * 0.5f, 0.5));
+			fireLerp.Add(new Tuple<Color, double>(new Color(85, 85, 85, 255) * 0.0f, 1.0));
 			Emitter fire = new Emitter(null, "Fire", true, 1000, 50, new Vector2(0, 15.0f), 0, 0, 10.0f, 0.5);
 			fire.ParticleDrawable = new Drawable("Fire", new Vector2(8), 16, 16, 0.1f);
 			fire.SetLifeTime(0.0, 0.5, 1.2);
