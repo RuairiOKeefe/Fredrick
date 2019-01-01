@@ -69,6 +69,7 @@ namespace Fredrick.src
 			for (int i = Statuses.Count - 1; i >= 0; i--)
 			{
 				Tuple<StatusEffect, Timer> s = Statuses[i];
+				s.Item1.Update(ref _owner, deltaTime);
 				s.Item2.NextTick -= deltaTime;
 				s.Item2.TimeRemaining -= deltaTime;
 
@@ -88,7 +89,10 @@ namespace Fredrick.src
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
-
+			foreach (var s in Statuses)
+			{
+				s.Item1.Draw(ref _owner, spriteBatch);
+			}
 		}
 
 		public override void DebugDraw(SpriteBatch spriteBatch)

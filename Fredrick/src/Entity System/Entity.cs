@@ -81,8 +81,9 @@ namespace Fredrick.src
 		{
 			if (Active)
 			{
-				foreach (var c in Components)
+				for (int i = Components.Count - 1; i >= 0; i--)
 				{
+					Component c = Components[i];
 					if (c.Active)
 						c.Update(deltaTime);
 				}

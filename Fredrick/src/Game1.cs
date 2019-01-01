@@ -75,6 +75,7 @@ namespace Fredrick.src
 
 			ColliderManager.Instance.Load();
 			ProjectileBuffer.Instance.Load(Content);
+			Resources.Instance.Load(Content);
 
 			if (true)
 			{
@@ -91,6 +92,7 @@ namespace Fredrick.src
 					renderable.Drawable.AddAnimation(64, 192, 3, 12, Animation.OnEnd.LockLastFrame, 0);
 					renderable.Tags.Add("MotionFlip");
 					renderable.Tags.Add("Legs");
+					renderable.Tags.Add("Body");
 					entity.Components.Add(renderable);
 
 					Character character = new Character(entity);
@@ -113,6 +115,7 @@ namespace Fredrick.src
 					weapon.WeaponDrawable = new Drawable("fragNade", new Vector2(16), 32, 32, 0.2f);
 					weapon.ArmDrawable = new Drawable("Arm", new Vector2(31, 31), 64, 64, 0.1f);
 					weapon.Tags.Add("MotionFlip");
+					weapon.Tags.Add("Body");
 					entity.Components.Add(weapon);
 
 					Damageable damageable = new Damageable(entity, "Health");

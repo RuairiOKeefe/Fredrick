@@ -136,7 +136,7 @@ namespace Fredrick.src
 			if (attack.StatusEffects.Count > 0 && _owner.GetComponent<StatusHandler>() != null)
 			{
 				foreach (StatusEffect s in attack.StatusEffects)
-					_owner.GetComponent<StatusHandler>().AddStatus(s);
+					_owner.GetComponent<StatusHandler>().AddStatus(s.Copy());
 			}
 		}
 
