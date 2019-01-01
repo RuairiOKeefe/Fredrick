@@ -74,7 +74,7 @@ namespace Fredrick.src
 			bloom = Content.Load<Effect>("Bloom");
 
 			ColliderManager.Instance.Load();
-			ProjectileBuffer.Instance.Load("fragNade", Content);
+			ProjectileBuffer.Instance.Load(Content);
 
 			if (true)
 			{

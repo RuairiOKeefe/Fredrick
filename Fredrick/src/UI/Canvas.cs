@@ -12,6 +12,11 @@ namespace Fredrick.src
 	{
 		public List<TextElement> TextElements { get; set; }
 
+		public Canvas()
+		{
+			TextElements = new List<TextElement>();
+		}
+
 		public Canvas(Entity owner, string id) : base(owner, id)
 		{
 			TextElements = new List<TextElement>();
@@ -47,6 +52,11 @@ namespace Fredrick.src
 		public override void DebugDraw(SpriteBatch spriteBatch)
 		{
 
+		}
+
+		public override Component Copy(Entity owner)
+		{
+			return new Canvas();
 		}
 	}
 }

@@ -38,29 +38,12 @@ namespace Fredrick.src
 			set { _inactiveProjectiles = value; }
 		}
 
-		public void Load(String spriteName, ContentManager content)
+		public void Load(ContentManager content)
 		{
-			ResourceManager.Instance.AddTexture(content, spriteName);
-			ResourceManager.Instance.AddTexture(content, "explosion");
-			ResourceManager.Instance.AddTexture(content, "tempParticle");
-
 			for (int i = 0; i < NUM_PROJECTILES; i++)
 			{
-				Entity e = new Entity();
-				Projectile p = new Projectile(e);
-				p.Attack = new Attack(Attack.DamageType.Fire, new List<StatusEffect>() { new Burn() }, 10);
-				CircleCollider cc = new CircleCollider(e);
-				Renderable r = new Renderable(e, "Projectile", spriteName, new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
-				r.Drawable.AddAnimation(0, 0, 1, 1, Animation.OnEnd.Loop, 0);
-				r.Drawable.AddAnimation(32, 0, 1, 1, Animation.OnEnd.Loop, 0);
-
-				e.Components.Add(p);
-				e.Components.Add(cc);
-				e.Components.Add(r);
-				e.Components.Add(new Emitter(e, Resources.Instance.Emitters["Explosion"]));
-				e.Components.Add(new Emitter(e, Resources.Instance.Emitters["Embers"]));
-
-				_inactiveProjectiles.Push(e);//need to improve
+				Entity e = new Entity(Resources.Instance.ProjectileEntities["FragNade"]);
+				_inactiveProjectiles.Push(e);
 
 				e.Load(content);
 			}

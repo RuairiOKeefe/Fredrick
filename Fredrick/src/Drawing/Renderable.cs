@@ -12,14 +12,9 @@ namespace Fredrick.src
 	[Serializable]
 	public class Renderable : Component
 	{
-		protected Drawable _drawable;
 		protected bool _facingRight;
 
-		public Drawable Drawable
-		{
-			get { return _drawable; }
-			set { _drawable = value; }
-		}
+		public Drawable Drawable { get; set; }
 
 		public Renderable()
 		{
@@ -30,9 +25,18 @@ namespace Fredrick.src
 
 		public Renderable(Entity owner, string id, string spriteName, Vector2 origin, Vector2 position, Vector2 scale, int width = 32, int height = 32, float layer = 0.1f) : base(owner, id)
 		{
-			_drawable = new Drawable(spriteName, origin, width, height, layer);
+			Drawable = new Drawable(spriteName, origin, width, height, layer);
 			Position = position;
 			Scale = scale;
+			_facingRight = true;
+		}
+
+		public Renderable(Entity owner, Renderable original) : base(owner, original.Id, original.Active)
+		{
+			Position = original.Position;
+			Rotation = original.Rotation;
+			Scale = original.Scale;
+			Drawable = new Drawable(original.Drawable);
 			_facingRight = true;
 		}
 
@@ -43,18 +47,18 @@ namespace Fredrick.src
 				_facingRight = !_facingRight;
 				if (_facingRight)
 				{
-					_drawable._spriteEffects = SpriteEffects.None;
+					Drawable._spriteEffects = SpriteEffects.None;
 				}
 				else
 				{
-					_drawable._spriteEffects = SpriteEffects.FlipHorizontally;
+					Drawable._spriteEffects = SpriteEffects.FlipHorizontally;
 				}
 			}
 		}
 
 		public override void Load(ContentManager content)
 		{
-			_drawable.Load(content);
+			Drawable.Load(content);
 		}
 
 		public override void Unload()
@@ -64,18 +68,23 @@ namespace Fredrick.src
 
 		public override void Update(double deltaTime)
 		{
-			_drawable.Animate(deltaTime);
+			Drawable.Animate(deltaTime);
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
 			Vector2 inv = new Vector2(1, -1);
-			spriteBatch.Draw(ResourceManager.Instance.Textures[_drawable._spriteName], (Position + _owner.Position) * inv * _drawable._spriteSize, _drawable._sourceRectangle, _drawable._colour, _owner.Rotation + Rotation, _drawable._origin, Scale, _drawable._spriteEffects, _drawable._layer);
+			spriteBatch.Draw(ResourceManager.Instance.Textures[Drawable._spriteName], (Position + _owner.Position) * inv * Drawable._spriteSize, Drawable._sourceRectangle, Drawable._colour, _owner.Rotation + Rotation, Drawable._origin, Scale, Drawable._spriteEffects, Drawable._layer);
 		}
 
 		public override void DebugDraw(SpriteBatch spriteBatch)
 		{
 
+		}
+
+		public override Component Copy(Entity owner)
+		{
+			return new Renderable(owner, this);
 		}
 	}
 }

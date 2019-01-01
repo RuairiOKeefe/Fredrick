@@ -28,6 +28,11 @@ namespace Fredrick.src
 
 		public List<Tuple<StatusEffect, Timer>> Statuses { get; private set; }
 
+		public StatusHandler()
+		{
+			Statuses = new List<Tuple<StatusEffect, Timer>>();
+		}
+
 		public StatusHandler(Entity owner, string id) : base(owner, id)
 		{
 			Statuses = new List<Tuple<StatusEffect, Timer>>();
@@ -89,6 +94,11 @@ namespace Fredrick.src
 		public override void DebugDraw(SpriteBatch spriteBatch)
 		{
 
+		}
+
+		public override Component Copy(Entity owner)
+		{
+			return new StatusHandler();
 		}
 	}
 }

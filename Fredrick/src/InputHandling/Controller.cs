@@ -60,5 +60,10 @@ namespace Fredrick.src
 		{
 
 		}
+
+		public override Component Copy(Entity owner)
+		{
+			return new Controller();
+		}
 	}
 }

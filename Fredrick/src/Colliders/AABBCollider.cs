@@ -267,5 +267,10 @@ namespace Fredrick.src
 			DebugManager.Instance.DrawLine(spriteBatch, br, bl);
 			DebugManager.Instance.DrawLine(spriteBatch, bl, tl);
 		}
+
+		public override Component Copy(Entity owner)
+		{
+			return new AABBCollider();
+		}
 	}
 }

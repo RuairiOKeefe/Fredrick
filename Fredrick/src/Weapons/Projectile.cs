@@ -14,7 +14,6 @@ namespace Fredrick.src
 	[Serializable]
 	public class Projectile : Movable
 	{
-		private double _lifeTime;
 		/// <summary>
 		/// Does the projectile deal aoe damage when it terminates?
 		/// </summary>
@@ -23,34 +22,26 @@ namespace Fredrick.src
 		/// Will the projectile terminate upon contact?
 		/// </summary>
 		private bool _contactTermination;
-		/// <summary>
-		/// Is the projectile finished
-		/// </summary>
-		private bool _dead;
+
 		private bool _detonated;
 
 		private float _damage;
 		private float _aoeDamage;
 
 		//For explosion aoe
-		Body _body;
-		CircleShape _circle;
-		Fixture _fixture;
+		private Body _body;
+		private CircleShape _circle;
+		private Fixture _fixture;
 
-		float _radius;
-		float _knockback;
+		private float _radius;
+		private float _knockback;
 
-		public double LifeTime
-		{
-			get { return _lifeTime; }
-			set { _lifeTime = value; }
-		}
+		public double LifeTime { get; set; }
 
-		public bool Dead
-		{
-			get { return _dead; }
-			set { _dead = value; }
-		}
+		/// <summary>
+		/// Is the projectile finished
+		/// </summary>
+		public bool Dead { get; set; }
 
 		public Attack Attack { get; set; }
 
@@ -63,7 +54,7 @@ namespace Fredrick.src
 		public Projectile(Entity owner, string id, Vector2 velocity, double lifeTime, bool explosive = false, bool contactTermination = true, float damage = 5.0f, float aoeDamage = 5.0f, float radius = 3.0f, float knockback = 1.0f) : base(owner, id)
 		{
 			Velocity = velocity;
-			_lifeTime = lifeTime;
+			LifeTime = lifeTime;
 			_explosive = explosive;
 			_contactTermination = contactTermination;
 
@@ -73,10 +64,24 @@ namespace Fredrick.src
 			_knockback = knockback;
 		}
 
+		public Projectile(Entity owner, Projectile original) : base(owner, original.Id)
+		{
+			Velocity = original.Velocity;
+			LifeTime = original.LifeTime;
+			_explosive = original._explosive;
+			_contactTermination = original._contactTermination;
+
+			_damage = original._damage;
+			_aoeDamage = original._aoeDamage;
+			_radius = original._radius;
+			_knockback = original._knockback;
+			Attack = original.Attack;
+		}
+
 		public void Revive(Vector2 velocity, double lifeTime, bool explosive = false, bool contactTermination = true, float damage = 5.0f, float aoeDamage = 5.0f, float radius = 3.0f, float knockback = 1.0f)
 		{
 
-			_lifeTime = lifeTime;
+			LifeTime = lifeTime;
 			_explosive = explosive;
 			_contactTermination = contactTermination;
 
@@ -96,7 +101,7 @@ namespace Fredrick.src
 				Velocity = velocity;
 			}
 
-			_dead = false;
+			Dead = false;
 			_detonated = false;
 
 			_body = new Body(ColliderManager.Instance.World, _owner.Position, 0, BodyType.Dynamic);
@@ -119,7 +124,7 @@ namespace Fredrick.src
 
 		public override void Update(double deltaTime)
 		{
-			_lifeTime -= deltaTime;
+			LifeTime -= deltaTime;
 			_body.Position = _owner.Position;
 
 			ResolveMotion(deltaTime);
@@ -140,7 +145,7 @@ namespace Fredrick.src
 			}
 
 
-			if (_lifeTime < 0)
+			if (LifeTime < 0)
 			{
 				if (!_detonated)
 				{
@@ -198,12 +203,12 @@ namespace Fredrick.src
 							}
 						}
 					}
-					_dead = dead;
+					Dead = dead;
 
 				}
 				else
 				{
-					_dead = true;
+					Dead = true;
 				}
 			}
 		}
@@ -211,6 +216,11 @@ namespace Fredrick.src
 		public override void Draw(SpriteBatch spriteBatch)
 		{
 
+		}
+
+		public override Component Copy(Entity owner)
+		{
+			return new Projectile(owner, this);
 		}
 	}
 }

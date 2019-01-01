@@ -253,5 +253,10 @@ namespace Fredrick.src
 		{
 
 		}
+
+		public override Component Copy(Entity owner)
+		{
+			return new Emitter(owner, this);
+		}
 	}
 }

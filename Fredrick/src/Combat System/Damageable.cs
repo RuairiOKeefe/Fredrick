@@ -49,6 +49,13 @@ namespace Fredrick.src
 		public double ShieldRegenTimer { get; set; }
 		public Resistances ShieldResistance { get; set; }
 
+		public Damageable()
+		{
+			BaseResistance = new Resistances();
+			ArmourResistance = new Resistances();
+			ShieldResistance = new Resistances();
+		}
+
 		public Damageable(Entity owner, string id) : base(owner, id)
 		{
 			BaseResistance = new Resistances();
@@ -158,6 +165,11 @@ namespace Fredrick.src
 		public override void DebugDraw(SpriteBatch spriteBatch)
 		{
 
+		}
+
+		public override Component Copy(Entity owner)
+		{
+			return new Damageable();
 		}
 	}
 }

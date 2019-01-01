@@ -201,5 +201,10 @@ namespace Fredrick.src
 			new Vector2(_currentPosition.X + (Width / 2), (_currentPosition.Y + RHeight + PlatformDepth))
 			);
 		}
+
+		public override Component Copy(Entity owner)
+		{
+			return new Platform();
+		}
 	}
 }

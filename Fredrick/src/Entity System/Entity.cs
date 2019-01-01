@@ -36,6 +36,19 @@ namespace Fredrick.src
 			Components = new List<Component>();
 		}
 
+		public Entity(Entity original)
+		{
+			Id = original.Id;
+			Active = original.Active;
+			Tags = original.Tags;
+			Components = new List<Component>();
+			foreach (Component c in original.Components)
+			{
+				Components.Add(c.Copy(this));
+				Components[Components.Count - 1].Owner = this;
+			}
+		}
+
 		public T GetComponent<T>() where T : Component
 		{
 			var component = Components.FirstOrDefault(c => c.GetType() == typeof(T));

@@ -37,6 +37,11 @@ namespace Fredrick.src
 
 		public float ShotSpeed { get; set; }
 
+		public Weapon()
+		{
+
+		}
+
 		public Weapon(Entity owner, string id, Vector2 shotSpawn, Vector2 weaponPosition, double fireRate = 0.5, float damage = 10.0f, float aoeDamage = 20.0f, float shotSpeed = 5.0f, bool continuous = true, bool active = true) : base(owner, id, active)
 		{
 			_spotSpawn = shotSpawn;
@@ -182,6 +187,11 @@ namespace Fredrick.src
 		public override void DebugDraw(SpriteBatch spriteBatch)
 		{
 
+		}
+
+		public override Component Copy(Entity owner)
+		{
+			return new Weapon();
 		}
 	}
 }

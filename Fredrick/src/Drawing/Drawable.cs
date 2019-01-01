@@ -46,6 +46,22 @@ namespace Fredrick.src
 			_currentAnim = 0;
 		}
 
+		public Drawable(Drawable original)
+		{
+			_spriteName = original._spriteName;
+			_spriteSize = original._spriteSize;
+			_origin = original._origin;
+			_width = original._width;
+			_height = original._height;
+			_layer = original._layer;
+			_colour = original._colour;
+
+			_sourceRectangle = original._sourceRectangle;
+			_animations = new List<Animation>();
+			_animations = original._animations;
+			_currentAnim = 0;
+		}
+
 		public void Load(ContentManager content)
 		{
 			ResourceManager.Instance.AddTexture(content, _spriteName);

@@ -132,5 +132,10 @@ namespace Fredrick.src
 			DebugManager.Instance.DrawLine(spriteBatch, br + _owner.Position, bl + _owner.Position);
 			DebugManager.Instance.DrawLine(spriteBatch, bl + _owner.Position, tl + _owner.Position);
 		}
+
+		public override Component Copy(Entity owner)
+		{
+			return new AABBTrigger();
+		}
 	}
 }

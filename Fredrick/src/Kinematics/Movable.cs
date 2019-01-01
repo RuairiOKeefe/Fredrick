@@ -25,6 +25,11 @@ namespace Fredrick.src
 
 		protected float _friction;
 
+		public Movable()
+		{
+
+		}
+
 		public Movable(Entity owner, string id = null) : base(owner, id)
 		{
 
@@ -92,6 +97,11 @@ namespace Fredrick.src
 		public override void DebugDraw(SpriteBatch spriteBatch)
 		{
 
+		}
+
+		public override Component Copy(Entity owner)
+		{
+			return new Movable();
 		}
 	}
 }

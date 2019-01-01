@@ -36,6 +36,11 @@ namespace Fredrick.src
 			//_fixture = _body.CreateFixture(_circle);
 		}
 
+		public CircleCollider(Entity owner, CircleCollider original) : base(owner, original.Id, original.Active)
+		{
+
+		}
+
 		public void Revive()
 		{
 			_body = new Body(ColliderManager.Instance.World, _owner.Position, 0, BodyType.Dynamic);
@@ -95,6 +100,11 @@ namespace Fredrick.src
 		public override void DebugDraw(SpriteBatch spriteBatch)
 		{
 
+		}
+
+		public override Component Copy(Entity owner)
+		{
+			return new CircleCollider();
 		}
 	}
 }

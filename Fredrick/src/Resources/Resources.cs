@@ -27,12 +27,41 @@ namespace Fredrick.src
 			}
 		}
 
-		public Dictionary<string, Emitter> Emitters { get; private set; }
+		public Dictionary<string, Renderable> Renderables { get; private set; } = new Dictionary<string, Renderable>();
+		public Dictionary<string, Emitter> Emitters { get; private set; } = new Dictionary<string, Emitter>();
+		public Dictionary<string, CircleCollider> CircleColliders { get; private set; } = new Dictionary<string, CircleCollider>();
+		public Dictionary<string, Projectile> Projectiles { get; private set; } = new Dictionary<string, Projectile>();
+
+		public Dictionary<string, Entity> ProjectileEntities { get; private set; } = new Dictionary<string, Entity>();
 
 
 		Resources()
 		{
+			InitComponents();
+			InitEntities();
+		}
+
+		public void InitComponents()
+		{
+			InitRenderables();
 			InitEmitters();
+			InitCircleColliders();
+			InitProjectiles();
+		}
+
+		public void InitEntities()
+		{
+			InitProjectileEntities();
+		}
+
+		private void InitRenderables()
+		{
+			Renderable fragNade = new Renderable(null, "Projectile", "FragNade", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+			fragNade.Drawable.AddAnimation(0, 0, 1, 1, Animation.OnEnd.Loop, 0);
+			fragNade.Drawable.AddAnimation(32, 0, 1, 1, Animation.OnEnd.Loop, 0);
+
+			Renderables.Add("FragNade", fragNade);
+
 		}
 
 		private void InitEmitters()
@@ -71,6 +100,31 @@ namespace Fredrick.src
 
 			Emitters.Add("Embers", Embers);
 
+		}
+
+		private void InitCircleColliders()
+		{
+			CircleCollider fragNade = new CircleCollider(null);
+			CircleColliders.Add("FragNade", fragNade);
+		}
+
+		private void InitProjectiles()
+		{
+			Projectile fragNade = new Projectile(null);
+			fragNade.Attack = new Attack(Attack.DamageType.Fire, new List<StatusEffect>() { new Burn() }, 10);
+			Projectiles.Add("FragNade", fragNade);
+		}
+
+		private void InitProjectileEntities()
+		{
+			Entity fragNade = new Entity();
+			fragNade.Components.Add(new Projectile(fragNade, Projectiles["FragNade"]));
+			fragNade.Components.Add(new CircleCollider(fragNade, CircleColliders["FragNade"]));
+			fragNade.Components.Add(new Renderable(fragNade, Renderables["FragNade"]));
+			fragNade.Components.Add(new Emitter(fragNade, Emitters["Explosion"]));
+			fragNade.Components.Add(new Emitter(fragNade, Emitters["Embers"]));
+
+			ProjectileEntities.Add("FragNade", fragNade);
 		}
 	}
 }
