@@ -36,9 +36,9 @@ namespace Fredrick.src
 			this.IsMouseVisible = true;
 			Content.RootDirectory = "Content";
 
-			//graphics.PreferredBackBufferWidth = 1920;
-			//graphics.PreferredBackBufferHeight = 1080;
-			//graphics.IsFullScreen = true;
+			graphics.PreferredBackBufferWidth = 1920;
+			graphics.PreferredBackBufferHeight = 1080;
+			graphics.IsFullScreen = true;
 
 			serializer = new Serializer();
 			levelEditor = new LevelEditor();
@@ -131,6 +131,41 @@ namespace Fredrick.src
 					headRenderable.Tags.Add("MotionFlip");
 					entity.Components.Add(headRenderable);
 
+					//////////////////////////////////////////
+
+					Bone root = new Bone("body", new Vector2(0), 0, new Vector2(0), new Vector2(0));
+					root.Drawable = new Drawable("TempLeg", new Vector2(16), 32, 32, 0.1f);
+					Bone babyBone = new Bone("leg", new Vector2(0), 0, new Vector2(0.5f, 0), new Vector2(-0.5f, 0));
+					babyBone.Drawable = new Drawable("TempLeg", new Vector2(16), 32, 32, 0.1f);
+					root.AddChild(babyBone);
+
+					Bone babyBone1 = new Bone("leg1", new Vector2(0), 0, new Vector2(-0.5f, 0), new Vector2(-0.5f, 0));
+					babyBone1.Drawable = new Drawable("TempLeg", new Vector2(16), 32, 32, 0.1f);
+
+					Bone babyBone2 = new Bone("leg2", new Vector2(0), 0, new Vector2(-0.5f, 0), new Vector2(-0.5f, 0));
+					babyBone2.Drawable = new Drawable("TempLeg", new Vector2(16), 32, 32, 0.1f);
+
+					Bone babyBone3 = new Bone("leg3", new Vector2(0), 0, new Vector2(-0.5f, 0), new Vector2(-0.5f, 0));
+					babyBone3.Drawable = new Drawable("TempLeg", new Vector2(16), 32, 32, 0.1f);
+
+					Bone babyBone4 = new Bone("leg4", new Vector2(0), 0, new Vector2(-0.5f, 0), new Vector2(-0.5f, 0));
+					babyBone4.Drawable = new Drawable("TempLeg", new Vector2(16), 32, 32, 0.1f);
+
+					babyBone.AddChild(babyBone1);
+					babyBone1.AddChild(babyBone2);
+					babyBone2.AddChild(babyBone3);
+					babyBone3.AddChild(babyBone4);
+
+					List<RigFrame> animation = new List<RigFrame>();
+					Dictionary<string, float> rotations = new Dictionary<string, float>();
+					rotations.Add("body", 1);
+					rotations.Add("leg", 0.5f);
+
+					animation.Add(new RigFrame(rotations, new Vector2(0), 0.0));
+					CharacterRig characterRig = new CharacterRig(entity, "testrig", root, animation);
+					entity.Components.Add(characterRig);
+					/////////////////////////////////////////////
+
 					//Arm
 
 					SortedDictionary<int, Vector2> aps = new SortedDictionary<int, Vector2>();
@@ -181,6 +216,7 @@ namespace Fredrick.src
 					hpl.Add(2, new Vector2(0, 0.90625f));
 					renderable.Drawable._animations[3].MountPoints.Add(headRenderable, hpl);
 				}
+				//This is jank af fix it at some point
 				actors[1].Components.Remove(actors[1].GetDerivedComponent<Controller>());
 				PatrolAI cont = new PatrolAI(actors[1], "Controller");
 				actors[1].Components.Add(cont);
@@ -268,7 +304,7 @@ namespace Fredrick.src
 			TextElement debugElement1 = new TextElement(Content.Load<SpriteFont>("Debug"), new Vector2(0), Color.White, 0, TextElement.Justification.Left, 1.0f);
 			debugElement1.AddContent("Player Health: ", "", actors[0].GetComponent<Damageable>(), "Health");
 			canvas.TextElements.Add(debugElement1);
-			TextElement debugElement2 = new TextElement(Content.Load<SpriteFont>("Debug"), new Vector2(0,40), Color.White, 0, TextElement.Justification.Left, 1.0f);
+			TextElement debugElement2 = new TextElement(Content.Load<SpriteFont>("Debug"), new Vector2(0, 40), Color.White, 0, TextElement.Justification.Left, 1.0f);
 			debugElement2.AddContent("Enemy Health: ", "", actors[1].GetComponent<Damageable>(), "Health");
 			canvas.TextElements.Add(debugElement2);
 			UI.Components.Add(canvas);

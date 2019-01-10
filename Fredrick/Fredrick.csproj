@@ -69,6 +69,7 @@
     <Compile Include="src\Drawing\Animation.cs" />
     <Compile Include="src\Colliders\AABBCollider.cs" />
     <Compile Include="src\Cameras\Camera.cs" />
+    <Compile Include="src\Drawing\CharacterRig.cs" />
     <Compile Include="src\Drawing\PostProcessing.cs" />
     <Compile Include="src\Entity System\IComponentOwner.cs" />
     <Compile Include="src\InputHandling\PatrolAI.cs" />
