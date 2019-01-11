@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using FarseerPhysics.Common;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Collision;
+using System;
 
 namespace Fredrick.src
 {
@@ -36,9 +37,9 @@ namespace Fredrick.src
 			this.IsMouseVisible = true;
 			Content.RootDirectory = "Content";
 
-			graphics.PreferredBackBufferWidth = 1920;
-			graphics.PreferredBackBufferHeight = 1080;
-			graphics.IsFullScreen = true;
+			//graphics.PreferredBackBufferWidth = 1920;
+			//graphics.PreferredBackBufferHeight = 1080;
+			//graphics.IsFullScreen = true;
 
 			serializer = new Serializer();
 			levelEditor = new LevelEditor();
@@ -157,11 +158,24 @@ namespace Fredrick.src
 					babyBone3.AddChild(babyBone4);
 
 					List<RigFrame> animation = new List<RigFrame>();
-					Dictionary<string, float> rotations = new Dictionary<string, float>();
-					rotations.Add("body", 1);
-					rotations.Add("leg", 0.5f);
+					Dictionary<string, Tuple<float, bool>> rotations = new Dictionary<string, Tuple<float, bool>>();
+					rotations.Add("body", new Tuple<float, bool>(1.0f, true));
+					rotations.Add("leg", new Tuple<float, bool>(0.5f, true));
+					rotations.Add("leg1", new Tuple<float, bool>(1.5f, true));
+					rotations.Add("leg2", new Tuple<float, bool>(-1.5f, true));
+					rotations.Add("leg3", new Tuple<float, bool>(1.5f, true));
+					rotations.Add("leg4", new Tuple<float, bool>(-1.5f, true));
 
-					animation.Add(new RigFrame(rotations, new Vector2(0), 0.0));
+					animation.Add(new RigFrame(rotations, new Vector2(0), 1.0));
+
+					Dictionary<string, Tuple<float, bool>> rotations1 = new Dictionary<string, Tuple<float, bool>>();
+					rotations1.Add("body", new Tuple<float, bool>(2.0f, true));
+					rotations1.Add("leg", new Tuple<float, bool>(1.5f, true));
+					rotations1.Add("leg1", new Tuple<float, bool>(-1.5f, true));
+					rotations1.Add("leg2", new Tuple<float, bool>(1.5f, true));
+					rotations1.Add("leg3", new Tuple<float, bool>(-1.5f, true));
+					rotations1.Add("leg4", new Tuple<float, bool>(1.5f, true));
+					animation.Add(new RigFrame(rotations1, new Vector2(0), 2.0));
 					CharacterRig characterRig = new CharacterRig(entity, "testrig", root, animation);
 					entity.Components.Add(characterRig);
 					/////////////////////////////////////////////

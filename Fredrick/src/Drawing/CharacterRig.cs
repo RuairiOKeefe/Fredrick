@@ -99,7 +99,7 @@ namespace Fredrick.src
 
 		public void Update()
 		{
-			Rotation += 0.02f;
+			//Rotation += 0.02f;
 			if (Parent != null)
 			{
 				TransformedRotation = Rotation + Parent.TransformedRotation;//my guess is the inverse is fucking it somehow?
@@ -127,7 +127,7 @@ namespace Fredrick.src
 		public void Draw(SpriteBatch spriteBatch, CharacterRig rig)
 		{
 			Vector2 inv = new Vector2(1, -1);
-			spriteBatch.Draw(ResourceManager.Instance.Textures[Drawable._spriteName],  (rig.Owner.Position + rig.Position + Position) * inv * Drawable._spriteSize, Drawable._sourceRectangle, Drawable._colour, rig.Rotation + TransformedRotation, Drawable._origin, rig.Scale, Drawable._spriteEffects, Drawable._layer);
+			spriteBatch.Draw(ResourceManager.Instance.Textures[Drawable._spriteName], (rig.Owner.Position + rig.Position + Position) * inv * Drawable._spriteSize, Drawable._sourceRectangle, Drawable._colour, rig.Rotation + TransformedRotation, Drawable._origin, rig.Scale, Drawable._spriteEffects, Drawable._layer);
 
 			foreach (Bone b in Children)
 			{
@@ -155,11 +155,11 @@ namespace Fredrick.src
 	[Serializable]
 	public class RigFrame
 	{
-		public Dictionary<string, float> BoneFrames;
+		public Dictionary<string, Tuple<float, bool>> BoneFrames;//bool clockwise
 		public Vector2 Position;//Main bone position
 		public double FrameTime;
 
-		public RigFrame(Dictionary<string, float> boneFrames, Vector2 position, double frameTime)
+		public RigFrame(Dictionary<string, Tuple<float, bool>> boneFrames, Vector2 position, double frameTime)
 		{
 			BoneFrames = boneFrames;
 			Position = position;
@@ -173,27 +173,35 @@ namespace Fredrick.src
 		public Bone Root;
 		public List<Bone> Bones;
 		public List<RigFrame> Animation;
+		public int CurrentFrame;
+		public int NextFrame;
+		double m_frameTime;
 
 		public CharacterRig()
 		{
-			Scale = new Vector2(1.0f);
-			Bones = new List<Bone>();
 			Animation = new List<RigFrame>();
+			Bones = new List<Bone>();
+			Scale = new Vector2(1.0f);
 		}
 
 		public CharacterRig(Entity owner, string id, Bone root, List<RigFrame> animation) : base(owner, id)
 		{
+			Animation = new List<RigFrame>();
+			Bones = new List<Bone>();
 			Scale = new Vector2(1.0f);
 			Root = root;
 			Animation = animation;
-			Bones = new List<Bone>();
-			Animation = new List<RigFrame>();
+			
+			
 		}
 
 		public override void Load(ContentManager content)
 		{
 			Root.Load(content);
 			Root.PopulateRig(ref Bones);
+			m_frameTime = 0.0;
+			CurrentFrame = Animation.Count-1;
+			NextFrame = 0;
 		}
 
 		public override void Unload()
@@ -203,12 +211,30 @@ namespace Fredrick.src
 
 		public override void Update(double deltaTime)
 		{
-			float lerpValue = 0.5f;
-			int lerpPoint = 1;
-			//get index and ratio then set position lerp
-			foreach (Bone b in Bones)
+			if (Animation.Count > 0)
 			{
-				//b.Rotation = Animation[lerpPoint].BoneFrames[b.Id] * (1 - lerpValue) + Animation[lerpPoint + 1 % Animation.Count].BoneFrames[b.Id] * (lerpValue);//This?
+				float lerpValue;
+				m_frameTime += deltaTime;
+				if (m_frameTime > Animation[NextFrame].FrameTime)
+				{
+					CurrentFrame = NextFrame;
+					NextFrame = (CurrentFrame + 1) % (Animation.Count);
+					m_frameTime = m_frameTime % Animation[Animation.Count - 1].FrameTime;
+				}
+				if (CurrentFrame != Animation.Count - 1)
+				{
+					lerpValue = (float)((m_frameTime - Animation[CurrentFrame].FrameTime) / (Animation[NextFrame].FrameTime - Animation[CurrentFrame].FrameTime));
+				}
+				else
+				{
+					lerpValue = (float)(m_frameTime / Animation[NextFrame].FrameTime);
+				}
+
+				//get index and ratio then set position lerp
+				foreach (Bone b in Bones)
+				{
+					b.Rotation = Animation[CurrentFrame].BoneFrames[b.Id].Item1 * (1 - lerpValue) + Animation[NextFrame].BoneFrames[b.Id].Item1 * (lerpValue);
+				}
 			}
 
 			Root.Update();
