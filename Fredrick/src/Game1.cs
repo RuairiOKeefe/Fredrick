@@ -37,9 +37,9 @@ namespace Fredrick.src
 			this.IsMouseVisible = true;
 			Content.RootDirectory = "Content";
 
-			//graphics.PreferredBackBufferWidth = 1920;
-			//graphics.PreferredBackBufferHeight = 1080;
-			//graphics.IsFullScreen = true;
+			graphics.PreferredBackBufferWidth = 1920;
+			graphics.PreferredBackBufferHeight = 1080;
+			graphics.IsFullScreen = true;
 
 			serializer = new Serializer();
 			levelEditor = new LevelEditor();
@@ -94,7 +94,7 @@ namespace Fredrick.src
 					renderable.Tags.Add("MotionFlip");
 					renderable.Tags.Add("Legs");
 					renderable.Tags.Add("Body");
-					entity.Components.Add(renderable);
+					//entity.Components.Add(renderable);
 
 					Character character = new Character(entity);
 					entity.Components.Add(character);
@@ -117,7 +117,7 @@ namespace Fredrick.src
 					weapon.ArmDrawable = new Drawable("Arm", new Vector2(31, 31), 64, 64, 0.1f);
 					weapon.Tags.Add("MotionFlip");
 					weapon.Tags.Add("Body");
-					entity.Components.Add(weapon);
+					//entity.Components.Add(weapon);
 
 					Damageable damageable = new Damageable(entity, "Health");
 					damageable.Health = 100000;
@@ -130,55 +130,9 @@ namespace Fredrick.src
 					Renderable headRenderable = new Renderable(entity, "Head", "Head", new Vector2(32, 32), new Vector2(0), new Vector2(1), 64, 64, 0.3f);
 					headRenderable.Position = new Vector2(0, 0.875f);
 					headRenderable.Tags.Add("MotionFlip");
-					entity.Components.Add(headRenderable);
+					//entity.Components.Add(headRenderable);
 
-					//////////////////////////////////////////
-
-					Bone root = new Bone("body", new Vector2(0), 0, new Vector2(0), new Vector2(0));
-					root.Drawable = new Drawable("TempLeg", new Vector2(16), 32, 32, 0.1f);
-					Bone babyBone = new Bone("leg", new Vector2(0), 0, new Vector2(0.5f, 0), new Vector2(-0.5f, 0));
-					babyBone.Drawable = new Drawable("TempLeg", new Vector2(16), 32, 32, 0.1f);
-					root.AddChild(babyBone);
-
-					Bone babyBone1 = new Bone("leg1", new Vector2(0), 0, new Vector2(-0.5f, 0), new Vector2(-0.5f, 0));
-					babyBone1.Drawable = new Drawable("TempLeg", new Vector2(16), 32, 32, 0.1f);
-
-					Bone babyBone2 = new Bone("leg2", new Vector2(0), 0, new Vector2(-0.5f, 0), new Vector2(-0.5f, 0));
-					babyBone2.Drawable = new Drawable("TempLeg", new Vector2(16), 32, 32, 0.1f);
-
-					Bone babyBone3 = new Bone("leg3", new Vector2(0), 0, new Vector2(-0.5f, 0), new Vector2(-0.5f, 0));
-					babyBone3.Drawable = new Drawable("TempLeg", new Vector2(16), 32, 32, 0.1f);
-
-					Bone babyBone4 = new Bone("leg4", new Vector2(0), 0, new Vector2(-0.5f, 0), new Vector2(-0.5f, 0));
-					babyBone4.Drawable = new Drawable("TempLeg", new Vector2(16), 32, 32, 0.1f);
-
-					babyBone.AddChild(babyBone1);
-					babyBone1.AddChild(babyBone2);
-					babyBone2.AddChild(babyBone3);
-					babyBone3.AddChild(babyBone4);
-
-					List<RigFrame> animation = new List<RigFrame>();
-					Dictionary<string, Tuple<float, bool>> rotations = new Dictionary<string, Tuple<float, bool>>();
-					rotations.Add("body", new Tuple<float, bool>(1.0f, true));
-					rotations.Add("leg", new Tuple<float, bool>(0.5f, true));
-					rotations.Add("leg1", new Tuple<float, bool>(1.5f, true));
-					rotations.Add("leg2", new Tuple<float, bool>(-1.5f, true));
-					rotations.Add("leg3", new Tuple<float, bool>(1.5f, true));
-					rotations.Add("leg4", new Tuple<float, bool>(-1.5f, true));
-
-					animation.Add(new RigFrame(rotations, new Vector2(0), 1.0));
-
-					Dictionary<string, Tuple<float, bool>> rotations1 = new Dictionary<string, Tuple<float, bool>>();
-					rotations1.Add("body", new Tuple<float, bool>(2.0f, true));
-					rotations1.Add("leg", new Tuple<float, bool>(1.5f, true));
-					rotations1.Add("leg1", new Tuple<float, bool>(-1.5f, true));
-					rotations1.Add("leg2", new Tuple<float, bool>(1.5f, true));
-					rotations1.Add("leg3", new Tuple<float, bool>(-1.5f, true));
-					rotations1.Add("leg4", new Tuple<float, bool>(1.5f, true));
-					animation.Add(new RigFrame(rotations1, new Vector2(0), 2.0));
-					CharacterRig characterRig = new CharacterRig(entity, "testrig", root, animation);
-					entity.Components.Add(characterRig);
-					/////////////////////////////////////////////
+					entity.Components.Add(new CharacterRig(entity, Resources.Instance.CharacterRigs["Player"]));
 
 					//Arm
 
@@ -309,7 +263,7 @@ namespace Fredrick.src
 			{
 				e.Load(Content);
 			}
-			cam = new FollowCamera(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight, actors[0], 1.0f, 1.0f, 0.2f, 2.0f);
+			cam = new FollowCamera(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight, actors[0], 3.0f, 1.0f, 0.2f, 2.0f);
 			cam.OffsetAmount = new Vector2(4.0f, 1.8f);
 			levelEditor.Load(Content);
 

@@ -155,11 +155,11 @@ namespace Fredrick.src
 	[Serializable]
 	public class RigFrame
 	{
-		public Dictionary<string, Tuple<float, bool>> BoneFrames;//bool clockwise
+		public Dictionary<string, float> BoneFrames;//bool clockwise
 		public Vector2 Position;//Main bone position
 		public double FrameTime;
 
-		public RigFrame(Dictionary<string, Tuple<float, bool>> boneFrames, Vector2 position, double frameTime)
+		public RigFrame(Dictionary<string, float> boneFrames, Vector2 position, double frameTime)
 		{
 			BoneFrames = boneFrames;
 			Position = position;
@@ -171,9 +171,9 @@ namespace Fredrick.src
 	public class CharacterRig : Component
 	{
 		public Bone Root;
-		public List<Bone> Bones;
+		public List<Bone> Bones;//Bones are set during load, created from root
+		public RigFrame PreviousFrame;
 		public List<RigFrame> Animation;
-		public int CurrentFrame;
 		public int NextFrame;
 		double m_frameTime;
 
@@ -191,8 +191,18 @@ namespace Fredrick.src
 			Scale = new Vector2(1.0f);
 			Root = root;
 			Animation = animation;
-			
-			
+			PreviousFrame = Animation[0];
+
+		}
+
+		public CharacterRig(Entity owner, CharacterRig original) : base(owner, original.Id, original.Active)
+		{
+			Animation = new List<RigFrame>();
+			Bones = new List<Bone>();
+			Scale = original.Scale;
+			Root = original.Root;
+			Animation = original.Animation;
+			PreviousFrame = Animation[0];
 		}
 
 		public override void Load(ContentManager content)
@@ -200,8 +210,7 @@ namespace Fredrick.src
 			Root.Load(content);
 			Root.PopulateRig(ref Bones);
 			m_frameTime = 0.0;
-			CurrentFrame = Animation.Count-1;
-			NextFrame = 0;
+			NextFrame = 1;
 		}
 
 		public override void Unload()
@@ -217,23 +226,16 @@ namespace Fredrick.src
 				m_frameTime += deltaTime;
 				if (m_frameTime > Animation[NextFrame].FrameTime)
 				{
-					CurrentFrame = NextFrame;
-					NextFrame = (CurrentFrame + 1) % (Animation.Count);
-					m_frameTime = m_frameTime % Animation[Animation.Count - 1].FrameTime;
+					m_frameTime = m_frameTime % Animation[NextFrame].FrameTime;
+					PreviousFrame = Animation[NextFrame];
+					NextFrame = (NextFrame + 1) % (Animation.Count);
 				}
-				if (CurrentFrame != Animation.Count - 1)
-				{
-					lerpValue = (float)((m_frameTime - Animation[CurrentFrame].FrameTime) / (Animation[NextFrame].FrameTime - Animation[CurrentFrame].FrameTime));
-				}
-				else
-				{
-					lerpValue = (float)(m_frameTime / Animation[NextFrame].FrameTime);
-				}
+				lerpValue = (float)(m_frameTime / Animation[NextFrame].FrameTime);
 
-				//get index and ratio then set position lerp
+				Position = PreviousFrame.Position * (1 - lerpValue) + Animation[NextFrame].Position * (lerpValue);
 				foreach (Bone b in Bones)
 				{
-					b.Rotation = Animation[CurrentFrame].BoneFrames[b.Id].Item1 * (1 - lerpValue) + Animation[NextFrame].BoneFrames[b.Id].Item1 * (lerpValue);
+					b.Rotation = PreviousFrame.BoneFrames[b.Id] * (1 - lerpValue) + Animation[NextFrame].BoneFrames[b.Id] * (lerpValue);
 				}
 			}
 
@@ -252,7 +254,7 @@ namespace Fredrick.src
 
 		public override Component Copy(Entity owner)
 		{
-			return null;
+			return new CharacterRig(owner, this);
 		}
 	}
 }
