@@ -81,7 +81,8 @@ namespace Fredrick.src
 
 		public void Load(ContentManager content)
 		{
-			Drawable.Load(content);
+			if (Drawable != null)
+				Drawable.Load(content);
 			foreach (Bone b in Children)
 			{
 				b.Load(content);
@@ -102,7 +103,7 @@ namespace Fredrick.src
 			//Rotation += 0.02f;
 			if (Parent != null)
 			{
-				TransformedRotation = Rotation + Parent.TransformedRotation;//my guess is the inverse is fucking it somehow?
+				TransformedRotation = Rotation + Parent.TransformedRotation;
 				float parentSin = (float)Math.Sin(-Parent.TransformedRotation);
 				float parentCos = (float)Math.Cos(-Parent.TransformedRotation);
 				float sin = (float)Math.Sin(-TransformedRotation);
@@ -124,14 +125,25 @@ namespace Fredrick.src
 			}
 		}
 
-		public void Draw(SpriteBatch spriteBatch, CharacterRig rig)
+		public void Draw(SpriteBatch spriteBatch, CharacterRig rig, bool motionFlip)
 		{
-			Vector2 inv = new Vector2(1, -1);
-			spriteBatch.Draw(ResourceManager.Instance.Textures[Drawable._spriteName], (rig.Owner.Position + rig.Position + Position) * inv * Drawable._spriteSize, Drawable._sourceRectangle, Drawable._colour, rig.Rotation + TransformedRotation, Drawable._origin, rig.Scale, Drawable._spriteEffects, Drawable._layer);
+			if (Drawable != null)
+			{
+				Vector2 inv = new Vector2(1, -1);
+				if (motionFlip)
+				{
+					Vector2 xFlip = new Vector2(-1, 1);
+					spriteBatch.Draw(ResourceManager.Instance.Textures[Drawable._spriteName], (rig.Owner.Position + (rig.Position + Position) * xFlip) * inv * Drawable._spriteSize, Drawable._sourceRectangle, Drawable._colour, -(rig.Rotation + TransformedRotation), Drawable._origin, rig.Scale, SpriteEffects.FlipHorizontally, Drawable._layer);
+				}
+				else
+				{
+					spriteBatch.Draw(ResourceManager.Instance.Textures[Drawable._spriteName], (rig.Owner.Position + rig.Position + Position) * inv * Drawable._spriteSize, Drawable._sourceRectangle, Drawable._colour, rig.Rotation + TransformedRotation, Drawable._origin, rig.Scale, Drawable._spriteEffects, Drawable._layer);
+				}
 
+			}
 			foreach (Bone b in Children)
 			{
-				b.Draw(spriteBatch, rig);
+				b.Draw(spriteBatch, rig, motionFlip);
 			}
 		}
 
@@ -165,6 +177,45 @@ namespace Fredrick.src
 			Position = position;
 			FrameTime = frameTime;
 		}
+
+		public RigFrame(List<Bone> bones, Vector2 position, double frameTime)
+		{
+			BoneFrames = new Dictionary<string, float>();
+			foreach (Bone b in bones)
+			{
+				BoneFrames.Add(b.Id, b.Rotation);
+			}
+			Position = position;
+			FrameTime = frameTime;
+		}
+	}
+
+	[Serializable]
+	public class RigAnimation
+	{
+		public string Id;
+		public List<RigFrame> RigFrames;
+		public bool RootOverride;
+		public bool Loop;
+		public bool Over;
+
+		public RigAnimation()
+		{
+			Id = "";
+			RigFrames = new List<RigFrame>();
+			RootOverride = false;
+			Loop = true;
+			Over = false;
+		}
+
+		public RigAnimation(string id, List<RigFrame> rigFrames, bool rootOverride, bool loop, bool over = false)
+		{
+			Id = id;
+			RigFrames = rigFrames;
+			RootOverride = rootOverride;
+			Loop = loop;
+			Over = over;
+		}
 	}
 
 	[Serializable]
@@ -173,36 +224,71 @@ namespace Fredrick.src
 		public Bone Root;
 		public List<Bone> Bones;//Bones are set during load, created from root
 		public RigFrame PreviousFrame;
-		public List<RigFrame> Animation;
-		public int NextFrame;
+		public Dictionary<string, RigAnimation> Animations;
+		public RigAnimation CurrentAnimation;
+		public int NextFrame { get; private set; }
+		public bool MotionFlip;
 		double m_frameTime;
 
 		public CharacterRig()
 		{
-			Animation = new List<RigFrame>();
+			CurrentAnimation = new RigAnimation();
+			Animations = new Dictionary<string, RigAnimation>();
 			Bones = new List<Bone>();
 			Scale = new Vector2(1.0f);
 		}
 
-		public CharacterRig(Entity owner, string id, Bone root, List<RigFrame> animation) : base(owner, id)
+		public CharacterRig(Entity owner, string id, Bone root, Dictionary<string, RigAnimation> animations) : base(owner, id)
 		{
-			Animation = new List<RigFrame>();
+			CurrentAnimation = new RigAnimation();
+			Animations = new Dictionary<string, RigAnimation>();
 			Bones = new List<Bone>();
 			Scale = new Vector2(1.0f);
 			Root = root;
-			Animation = animation;
-			PreviousFrame = Animation[0];
+			Animations = animations;
+			CurrentAnimation = Animations.First().Value;
+			PreviousFrame = CurrentAnimation.RigFrames[0];
 
 		}
 
 		public CharacterRig(Entity owner, CharacterRig original) : base(owner, original.Id, original.Active)
 		{
-			Animation = new List<RigFrame>();
+			CurrentAnimation = new RigAnimation();
+			Animations = new Dictionary<string, RigAnimation>();
 			Bones = new List<Bone>();
+			Tags = original.Tags;
 			Scale = original.Scale;
+			Rotation = original.Rotation;
 			Root = original.Root;
-			Animation = original.Animation;
-			PreviousFrame = Animation[0];
+			Animations = original.Animations;
+			CurrentAnimation = original.CurrentAnimation;
+			PreviousFrame = CurrentAnimation.RigFrames[0];
+		}
+
+		public void RestartAnim()
+		{
+			PreviousFrame = CurrentAnimation.RigFrames[0];
+			NextFrame = 0;
+			m_frameTime = 0;
+			CurrentAnimation.Over = false;
+		}
+
+		public void SwitchToAnim(string id, bool smooth = true)
+		{
+			if (smooth)
+			{
+				PreviousFrame = new RigFrame(Bones, Position, 0);
+				CurrentAnimation = Animations[id];
+				NextFrame = 0;
+				m_frameTime = 0;
+			}
+			else
+			{
+				CurrentAnimation = Animations[id];
+				PreviousFrame = CurrentAnimation.RigFrames[0];
+				NextFrame = 1;
+				m_frameTime = 0;
+			}
 		}
 
 		public override void Load(ContentManager content)
@@ -220,22 +306,34 @@ namespace Fredrick.src
 
 		public override void Update(double deltaTime)
 		{
-			if (Animation.Count > 0)
+			if (CurrentAnimation.RigFrames.Count > 1 && !CurrentAnimation.Over)
 			{
 				float lerpValue;
 				m_frameTime += deltaTime;
-				if (m_frameTime > Animation[NextFrame].FrameTime)
+				if (m_frameTime > CurrentAnimation.RigFrames[NextFrame].FrameTime)
 				{
-					m_frameTime = m_frameTime % Animation[NextFrame].FrameTime;
-					PreviousFrame = Animation[NextFrame];
-					NextFrame = (NextFrame + 1) % (Animation.Count);
+					m_frameTime = m_frameTime % CurrentAnimation.RigFrames[NextFrame].FrameTime;
+					PreviousFrame = CurrentAnimation.RigFrames[NextFrame];
+					NextFrame+=1;
+					if (NextFrame > CurrentAnimation.RigFrames.Count-1)
+					{
+						if (CurrentAnimation.Loop)
+						{
+							NextFrame = NextFrame % (CurrentAnimation.RigFrames.Count);
+						}
+						else
+						{
+							NextFrame = NextFrame % (CurrentAnimation.RigFrames.Count);
+							CurrentAnimation.Over = true;
+						}
+					}
 				}
-				lerpValue = (float)(m_frameTime / Animation[NextFrame].FrameTime);
+				lerpValue = (float)(m_frameTime / CurrentAnimation.RigFrames[NextFrame].FrameTime);
 
-				Position = PreviousFrame.Position * (1 - lerpValue) + Animation[NextFrame].Position * (lerpValue);
+				Position = PreviousFrame.Position * (1 - lerpValue) + CurrentAnimation.RigFrames[NextFrame].Position * (lerpValue);
 				foreach (Bone b in Bones)
 				{
-					b.Rotation = PreviousFrame.BoneFrames[b.Id] * (1 - lerpValue) + Animation[NextFrame].BoneFrames[b.Id] * (lerpValue);
+					b.Rotation = PreviousFrame.BoneFrames[b.Id] * (1 - lerpValue) + CurrentAnimation.RigFrames[NextFrame].BoneFrames[b.Id] * (lerpValue);
 				}
 			}
 
@@ -244,7 +342,7 @@ namespace Fredrick.src
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
-			Root.Draw(spriteBatch, this);
+			Root.Draw(spriteBatch, this, MotionFlip);
 		}
 
 		public override void DebugDraw(SpriteBatch spriteBatch)

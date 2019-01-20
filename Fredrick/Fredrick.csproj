@@ -80,6 +80,7 @@
     <Compile Include="src\Drawing\Drawable.cs" />
     <Compile Include="src\Drawing\ResourceManager.cs" />
     <Compile Include="src\InputHandling\Controller.cs" />
+    <Compile Include="src\Resources\AnimationResources.cs" />
     <Compile Include="src\UI\Canvas.cs" />
     <Compile Include="src\UI\TextElement.cs" />
     <Compile Include="src\Utilities\DebugManager.cs" />

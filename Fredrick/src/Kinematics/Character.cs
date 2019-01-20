@@ -309,9 +309,9 @@ namespace Fredrick.src
 					{
 						(c as Renderable).Flip(_facingRight);
 					}
-					if (c is Weapon)
+					if (c is CharacterRig)
 					{
-						(c as Weapon).Flip(_facingRight);
+						(c as CharacterRig).MotionFlip = !_facingRight;
 					}
 				}
 			}

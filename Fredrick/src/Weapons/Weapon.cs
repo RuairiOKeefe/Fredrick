@@ -24,7 +24,6 @@ namespace Fredrick.src
 
 		protected bool _facingRight;
 
-		public Drawable ArmDrawable { get; set; }
 		public Drawable WeaponDrawable { get; set; }
 
 		List<Entity> _projectiles;
@@ -60,6 +59,11 @@ namespace Fredrick.src
 			_facingRight = true;
 		}
 
+		public Weapon(Entity owner, Weapon original)
+		{
+
+		}
+
 		public void Fire(Vector2 direction, float sin, float cos)
 		{
 			Entity e = ProjectileBuffer.Instance.InactiveProjectiles.Pop();
@@ -76,6 +80,17 @@ namespace Fredrick.src
 			_projectiles.Add(e);
 
 			_nextfire = FireRate;
+
+			foreach (Component c in Owner.Components)
+			{
+				if (c.Tags.Contains("Arms"))
+				{
+					if (c is CharacterRig)
+					{
+						((CharacterRig)c).RestartAnim();
+					}
+				}
+			}
 		}
 
 		public void UpdateProjectilePos()
@@ -89,27 +104,9 @@ namespace Fredrick.src
 			}
 		}
 
-		public void Flip(bool faceRight)
-		{
-			//needs to be changed to account for position change
-			if (faceRight != _facingRight)
-			{
-				_facingRight = !_facingRight;
-				if (_facingRight)
-				{
-					ArmDrawable._spriteEffects = SpriteEffects.None;
-				}
-				else
-				{
-					ArmDrawable._spriteEffects = SpriteEffects.FlipVertically;
-				}
-			}
-		}
-
 		public override void Load(ContentManager content)
 		{
 			WeaponDrawable.Load(content);
-			ArmDrawable.Load(content);
 		}
 
 		public override void Unload()
@@ -176,7 +173,6 @@ namespace Fredrick.src
 		{
 			Vector2 inv = new Vector2(1, -1);
 			spriteBatch.Draw(ResourceManager.Instance.Textures[WeaponDrawable._spriteName], (_transformedWeaponPosition + Position + _owner.Position) * inv * WeaponDrawable._spriteSize, WeaponDrawable._sourceRectangle, WeaponDrawable._colour, _owner.Rotation + Rotation, WeaponDrawable._origin, Scale, WeaponDrawable._spriteEffects, WeaponDrawable._layer);
-			spriteBatch.Draw(ResourceManager.Instance.Textures[ArmDrawable._spriteName], (Position + _owner.Position) * inv * ArmDrawable._spriteSize, ArmDrawable._sourceRectangle, ArmDrawable._colour, _owner.Rotation + Rotation, ArmDrawable._origin, Scale, ArmDrawable._spriteEffects, ArmDrawable._layer);
 
 			foreach (Entity e in _projectiles)
 			{

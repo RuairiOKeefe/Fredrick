@@ -37,9 +37,9 @@ namespace Fredrick.src
 			this.IsMouseVisible = true;
 			Content.RootDirectory = "Content";
 
-			graphics.PreferredBackBufferWidth = 1920;
-			graphics.PreferredBackBufferHeight = 1080;
-			graphics.IsFullScreen = true;
+			//graphics.PreferredBackBufferWidth = 1920;
+			//graphics.PreferredBackBufferHeight = 1080;
+			//graphics.IsFullScreen = true;
 
 			serializer = new Serializer();
 			levelEditor = new LevelEditor();
@@ -114,10 +114,9 @@ namespace Fredrick.src
 					Weapon weapon = new Weapon(entity, "Grenade", new Vector2(0.8f, 0), new Vector2(0.8f, 0), 0.1, 4.0f, 20.0f, 6.0f, true);
 					weapon.Position = new Vector2(0, 0.5f);
 					weapon.WeaponDrawable = new Drawable("fragNade", new Vector2(16), 32, 32, 0.2f);
-					weapon.ArmDrawable = new Drawable("Arm", new Vector2(31, 31), 64, 64, 0.1f);
 					weapon.Tags.Add("MotionFlip");
 					weapon.Tags.Add("Body");
-					//entity.Components.Add(weapon);
+					entity.Components.Add(weapon);
 
 					Damageable damageable = new Damageable(entity, "Health");
 					damageable.Health = 100000;
@@ -127,62 +126,9 @@ namespace Fredrick.src
 					StatusHandler statusHandler = new StatusHandler(entity, "StatusHandler");
 					entity.Components.Add(statusHandler);
 
-					Renderable headRenderable = new Renderable(entity, "Head", "Head", new Vector2(32, 32), new Vector2(0), new Vector2(1), 64, 64, 0.3f);
-					headRenderable.Position = new Vector2(0, 0.875f);
-					headRenderable.Tags.Add("MotionFlip");
-					//entity.Components.Add(headRenderable);
 
-					entity.Components.Add(new CharacterRig(entity, Resources.Instance.CharacterRigs["Player"]));
-
-					//Arm
-
-					SortedDictionary<int, Vector2> aps = new SortedDictionary<int, Vector2>();
-					aps.Add(0, new Vector2(0, 0.53125f));
-					renderable.Drawable._animations[0].MountPoints.Add(weapon, aps);
-
-					SortedDictionary<int, Vector2> apr = new SortedDictionary<int, Vector2>();
-					apr.Add(0, new Vector2(0, 0.53125f));
-					apr.Add(3, new Vector2(0, 0.5625f));
-					apr.Add(5, new Vector2(0, 0.53125f));
-					apr.Add(8, new Vector2(0, 0.5625f));
-					renderable.Drawable._animations[1].MountPoints.Add(weapon, apr);
-
-					SortedDictionary<int, Vector2> apj = new SortedDictionary<int, Vector2>();
-					apj.Add(0, new Vector2(0, 0.5625f));
-					apj.Add(1, new Vector2(0, 0.5f));
-					apj.Add(2, new Vector2(0, 0.475f));
-					renderable.Drawable._animations[2].MountPoints.Add(weapon, apj);
-
-					SortedDictionary<int, Vector2> apl = new SortedDictionary<int, Vector2>();
-					apl.Add(0, new Vector2(0, 0.475f));
-					apl.Add(1, new Vector2(0, 0.5f));
-					apl.Add(2, new Vector2(0, 0.5625f));
-					renderable.Drawable._animations[3].MountPoints.Add(weapon, apl);
-
-					//Head
-
-					SortedDictionary<int, Vector2> hps = new SortedDictionary<int, Vector2>();
-					hps.Add(0, new Vector2(0, 0.875f));
-					renderable.Drawable._animations[0].MountPoints.Add(headRenderable, hps);
-
-					SortedDictionary<int, Vector2> hpr = new SortedDictionary<int, Vector2>();
-					hpr.Add(0, new Vector2(0, 0.875f));
-					hpr.Add(3, new Vector2(0, 0.90625f));
-					hpr.Add(5, new Vector2(0, 0.875f));
-					hpr.Add(8, new Vector2(0, 0.90625f));
-					renderable.Drawable._animations[1].MountPoints.Add(headRenderable, hpr);
-
-					SortedDictionary<int, Vector2> hpj = new SortedDictionary<int, Vector2>();
-					hpj.Add(0, new Vector2(0, 0.90625f));
-					hpj.Add(1, new Vector2(0, 0.84375f));
-					hpj.Add(2, new Vector2(0, 0.78125f));
-					renderable.Drawable._animations[2].MountPoints.Add(headRenderable, hpj);
-
-					SortedDictionary<int, Vector2> hpl = new SortedDictionary<int, Vector2>();
-					hpl.Add(0, new Vector2(0, 0.78125f));
-					hpl.Add(1, new Vector2(0, 0.84375f));
-					hpl.Add(2, new Vector2(0, 0.90625f));
-					renderable.Drawable._animations[3].MountPoints.Add(headRenderable, hpl);
+					entity.Components.Add(new CharacterRig(entity, Resources.Instance.CharacterRigs["PlayerLegs"]));
+					entity.Components.Add(new CharacterRig(entity, Resources.Instance.CharacterRigs["PlayerArms"]));
 				}
 				//This is jank af fix it at some point
 				actors[1].Components.Remove(actors[1].GetDerivedComponent<Controller>());
