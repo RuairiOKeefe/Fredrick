@@ -160,19 +160,19 @@ namespace Fredrick.src
 		{
 			Bone shoulder = new Bone("Shoulder", new Vector2(0), 0, new Vector2(0), new Vector2(0));
 
-			Bone UpperLegFront = new Bone("UpperArmFront", new Vector2(0), 0, new Vector2(0 / 32f, 0 / 32f), new Vector2(0.0f, -4 / 32f));
-			UpperLegFront.Drawable = new Drawable("UpperLeg", new Vector2(16), 32, 32, 0.11f);
-			shoulder.AddChild(UpperLegFront);
-			Bone LowerLegFront = new Bone("LowerArmFront", new Vector2(0), 0, new Vector2(0.0f, -6 / 32f), new Vector2(0.0f, -9 / 32f));
-			LowerLegFront.Drawable = new Drawable("LowerLeg", new Vector2(16), 32, 32, 0.12f);
-			UpperLegFront.AddChild(LowerLegFront);
+			Bone UpperArmFront = new Bone("UpperArmFront", new Vector2(0), 0, new Vector2(0 / 32f, 0 / 32f), new Vector2(0.0f, -4 / 32f));
+			UpperArmFront.Drawable = new Drawable("UpperArm", new Vector2(16), 32, 32, 0.11f);
+			shoulder.AddChild(UpperArmFront);
+			Bone LowerArmFront = new Bone("LowerArmFront", new Vector2(0), 0, new Vector2(0.0f, -8 / 32f), new Vector2(0.0f, -6 / 32f));
+			LowerArmFront.Drawable = new Drawable("LowerArm", new Vector2(16), 32, 32, 0.12f);
+			UpperArmFront.AddChild(LowerArmFront);
 
-			Bone UpperLegBack = new Bone("UpperArmBack", new Vector2(0), 0, new Vector2(-0 / 32f, 0 / 32f), new Vector2(0.0f, -4 / 32f));
-			UpperLegBack.Drawable = new Drawable("UpperLeg", new Vector2(16), 32, 32, 0.17f);
-			shoulder.AddChild(UpperLegBack);
-			Bone LowerLegBack = new Bone("LowerArmBack", new Vector2(0), 0, new Vector2(0.0f, -6 / 32f), new Vector2(0.0f, -9 / 32f));
-			LowerLegBack.Drawable = new Drawable("LowerLeg", new Vector2(16), 32, 32, 0.18f);
-			UpperLegBack.AddChild(LowerLegBack);
+			Bone UpperArmBack = new Bone("UpperArmBack", new Vector2(0), 0, new Vector2(-0 / 32f, 0 / 32f), new Vector2(0.0f, -4 / 32f));
+			UpperArmBack.Drawable = new Drawable("UpperArm", new Vector2(16), 32, 32, 0.17f);
+			shoulder.AddChild(UpperArmBack);
+			Bone LowerArmBack = new Bone("LowerArmBack", new Vector2(0), 0, new Vector2(0.0f, -8 / 32f), new Vector2(0.0f, -6 / 32f));
+			LowerArmBack.Drawable = new Drawable("LowerArm", new Vector2(16), 32, 32, 0.18f);
+			UpperArmBack.AddChild(LowerArmBack);
 
 			Dictionary<string, RigAnimation> animations = new Dictionary<string, RigAnimation>();
 
