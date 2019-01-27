@@ -22,7 +22,7 @@ namespace Fredrick.src
 			Bone LowerLegFront = new Bone("LowerLegFront", new Vector2(0), 0, new Vector2(0.0f, -6 / 32f), new Vector2(0.0f, -9 / 32f));
 			LowerLegFront.Drawable = new Drawable("LowerLeg", new Vector2(16), 32, 32, 0.15f);
 			UpperLegFront.AddChild(LowerLegFront);
-			Bone FootFront = new Bone("FootFront", new Vector2(0), 0, new Vector2(0.0f, -13 / 32f), new Vector2(0.0f, 0.0f));
+			Bone FootFront = new Bone("FootFront", new Vector2(0), 0, new Vector2(0.0f, -10 / 32f), new Vector2(0.0f, 0.0f));
 			FootFront.Drawable = new Drawable("Foot", new Vector2(16), 32, 32, 0.1f);
 			LowerLegFront.AddChild(FootFront);
 			Bone ToesFront = new Bone("ToesFront", new Vector2(0), 0, new Vector2(2 / 32f, 0.0f), new Vector2(1 / 32f, 0.0f));
@@ -35,7 +35,7 @@ namespace Fredrick.src
 			Bone LowerLegBack = new Bone("LowerLegBack", new Vector2(0), 0, new Vector2(0.0f, -6 / 32f), new Vector2(0.0f, -9 / 32f));
 			LowerLegBack.Drawable = new Drawable("LowerLeg", new Vector2(16), 32, 32, 0.15f);
 			UpperLegBack.AddChild(LowerLegBack);
-			Bone FootBack = new Bone("FootBack", new Vector2(0), 0, new Vector2(0.0f, -13 / 32f), new Vector2(0.0f, 0.0f));
+			Bone FootBack = new Bone("FootBack", new Vector2(0), 0, new Vector2(0.0f, -10 / 32f), new Vector2(0.0f, 0.0f));
 			FootBack.Drawable = new Drawable("Foot", new Vector2(16), 32, 32, 0.1f);
 			LowerLegBack.AddChild(FootBack);
 			Bone ToesBack = new Bone("ToesBack", new Vector2(0), 0, new Vector2(2 / 32f, 0.0f), new Vector2(1 / 32f, 0.0f));
@@ -57,7 +57,7 @@ namespace Fredrick.src
 			playerContactFront.Add("LowerLegBack", 0.6f);
 			playerContactFront.Add("FootBack", 0.2f);
 			playerContactFront.Add("ToesBack", -0.6f);
-			run.RigFrames.Add(new RigFrame(playerContactFront, new Vector2(0, 0.45f), 0.12));
+			run.RigFrames.Add(new RigFrame(playerContactFront, new Vector2(0, 11 / 32f), 0.12));
 
 			Dictionary<string, float> playerDownFront = new Dictionary<string, float>();
 			playerDownFront.Add("Torso", 0.0f);
@@ -70,7 +70,7 @@ namespace Fredrick.src
 			playerDownFront.Add("LowerLegBack", 1.7f);
 			playerDownFront.Add("FootBack", 0.4f);
 			playerDownFront.Add("ToesBack", -0.2f);
-			run.RigFrames.Add(new RigFrame(playerDownFront, new Vector2(0, 0.3f), 0.12));
+			run.RigFrames.Add(new RigFrame(playerDownFront, new Vector2(0, 8 / 32f), 0.12));
 
 			Dictionary<string, float> playerContFirstFront = new Dictionary<string, float>();
 			playerContFirstFront.Add("Torso", 0.0f);
@@ -83,7 +83,7 @@ namespace Fredrick.src
 			playerContFirstFront.Add("LowerLegBack", 1.9f);
 			playerContFirstFront.Add("FootBack", 0.5f);
 			playerContFirstFront.Add("ToesBack", 0.0f);
-			run.RigFrames.Add(new RigFrame(playerContFirstFront, new Vector2(0, 0.45f), 0.12));
+			run.RigFrames.Add(new RigFrame(playerContFirstFront, new Vector2(0, 11 / 32f), 0.12));
 
 			Dictionary<string, float> playerContSecondFront = new Dictionary<string, float>();
 			playerContSecondFront.Add("Torso", 0.0f);
@@ -96,7 +96,7 @@ namespace Fredrick.src
 			playerContSecondFront.Add("LowerLegBack", 0.7f);
 			playerContSecondFront.Add("FootBack", -0.4f);
 			playerContSecondFront.Add("ToesBack", -0.3f);
-			run.RigFrames.Add(new RigFrame(playerContSecondFront, new Vector2(0, 0.5f), 0.12));
+			run.RigFrames.Add(new RigFrame(playerContSecondFront, new Vector2(0, 14 / 32f), 0.12));
 
 			Dictionary<string, float> playerContactBack = new Dictionary<string, float>();
 			playerContactBack.Add("Torso", 0.0f);
@@ -109,7 +109,7 @@ namespace Fredrick.src
 			playerContactBack.Add("LowerLegBack", -0.2f);
 			playerContactBack.Add("FootBack", 0.4f);
 			playerContactBack.Add("ToesBack", -0.3f);
-			run.RigFrames.Add(new RigFrame(playerContactBack, new Vector2(0, 0.45f), 0.12));
+			run.RigFrames.Add(new RigFrame(playerContactBack, new Vector2(0, 11 / 32f), 0.12));
 
 			Dictionary<string, float> playerDownBack = new Dictionary<string, float>();
 			playerDownBack.Add("Torso", 0.0f);
@@ -122,7 +122,7 @@ namespace Fredrick.src
 			playerDownBack.Add("LowerLegBack", 1.4f);
 			playerDownBack.Add("FootBack", -0.4f);
 			playerDownBack.Add("ToesBack", -0.1f);
-			run.RigFrames.Add(new RigFrame(playerDownBack, new Vector2(0, 0.3f), 0.12));
+			run.RigFrames.Add(new RigFrame(playerDownBack, new Vector2(0, 8 / 32f), 0.12));
 
 			Dictionary<string, float> playerContFirstBack = new Dictionary<string, float>();
 			playerContFirstBack.Add("Torso", 0.0f);
@@ -135,7 +135,7 @@ namespace Fredrick.src
 			playerContFirstBack.Add("LowerLegBack", 0.3f);
 			playerContFirstBack.Add("FootBack", 0.6f);
 			playerContFirstBack.Add("ToesBack", -0.3f);
-			run.RigFrames.Add(new RigFrame(playerContFirstBack, new Vector2(0, 0.45f), 0.12));
+			run.RigFrames.Add(new RigFrame(playerContFirstBack, new Vector2(0, 11 / 32f), 0.12));
 
 			Dictionary<string, float> playerContSecondBack = new Dictionary<string, float>();
 			playerContSecondBack.Add("Torso", 0.0f);
