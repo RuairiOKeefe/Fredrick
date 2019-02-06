@@ -61,6 +61,12 @@ namespace Fredrick.src
 			return (T)component;
 		}
 
+		public Component GetComponentWithId(string id)
+		{
+			var component = Components.FirstOrDefault(c => c.Id == id);
+			return component;
+		}
+
 		public void Load(ContentManager content)
 		{
 			foreach (var c in Components)

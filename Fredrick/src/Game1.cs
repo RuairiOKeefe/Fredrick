@@ -80,7 +80,7 @@ namespace Fredrick.src
 
 			if (true)
 			{
-				for (int i = 0; i < 2; i++)
+				for (int i = 0; i < 1; i++)
 				{
 					Entity entity = new Entity(true, "Player");
 					entity.Position = new Vector2(8, 8);
@@ -111,7 +111,7 @@ namespace Fredrick.src
 					emitter.ParticleDrawable.AddAnimation(0, 0, 1, 30, Animation.OnEnd.Loop, 0);
 					entity.Components.Add(emitter);
 
-					Weapon weapon = new Weapon(entity, "Grenade", new Vector2(0.8f, 0), new Vector2(0.8f, 0), 0.1, 4.0f, 20.0f, 6.0f, true);
+					Weapon weapon = new Weapon(entity, "Grenade", new Vector2(0.8f, 0), new Vector2(0.8f, 0), 0.4, 4.0f, 20.0f, 6.0f, true);
 					weapon.Position = new Vector2(0, 0.5f);
 					weapon.WeaponDrawable = new Drawable("fragNade", new Vector2(16), 32, 32, 0.2f);
 					weapon.Tags.Add("MotionFlip");
@@ -130,12 +130,6 @@ namespace Fredrick.src
 					entity.Components.Add(new CharacterRig(entity, Resources.Instance.CharacterRigs["PlayerLegs"]));
 					entity.Components.Add(new CharacterRig(entity, Resources.Instance.CharacterRigs["PlayerArms"]));
 				}
-				//This is jank af fix it at some point
-				actors[1].Components.Remove(actors[1].GetDerivedComponent<Controller>());
-				PatrolAI cont = new PatrolAI(actors[1], "Controller");
-				actors[1].Components.Add(cont);
-
-				actors[1].Position = new Vector2(32, 8);
 
 				for (int i = 0; i < 101; i++)
 				{
@@ -218,9 +212,6 @@ namespace Fredrick.src
 			TextElement debugElement1 = new TextElement(Content.Load<SpriteFont>("Debug"), new Vector2(0), Color.White, 0, TextElement.Justification.Left, 1.0f);
 			debugElement1.AddContent("Player Health: ", "", actors[0].GetComponent<Damageable>(), "Health");
 			canvas.TextElements.Add(debugElement1);
-			TextElement debugElement2 = new TextElement(Content.Load<SpriteFont>("Debug"), new Vector2(0, 40), Color.White, 0, TextElement.Justification.Left, 1.0f);
-			debugElement2.AddContent("Enemy Health: ", "", actors[1].GetComponent<Damageable>(), "Health");
-			canvas.TextElements.Add(debugElement2);
 			UI.Components.Add(canvas);
 		}
 

@@ -157,14 +157,6 @@ namespace Fredrick.src
 	}
 
 	[Serializable]
-	public class BoneFrame ///PROBABLY DON'T NEED BONE INFO, so float can be used instead
-	{
-		public Bone Bone { get; set; }
-		public float Rotation { get; set; }
-
-	}
-
-	[Serializable]
 	public class RigFrame
 	{
 		public Dictionary<string, float> BoneFrames;//bool clockwise
@@ -195,7 +187,9 @@ namespace Fredrick.src
 	{
 		public string Id;
 		public List<RigFrame> RigFrames;
-		public bool RootOverride;
+		public float OverrideRotation;
+		public int FrameMin;
+		public int FrameMax;
 		public bool Loop;
 		public bool Over;
 
@@ -203,18 +197,23 @@ namespace Fredrick.src
 		{
 			Id = "";
 			RigFrames = new List<RigFrame>();
-			RootOverride = false;
 			Loop = true;
 			Over = false;
 		}
 
-		public RigAnimation(string id, List<RigFrame> rigFrames, bool rootOverride, bool loop, bool over = false)
+		public RigAnimation(string id, List<RigFrame> rigFrames, bool loop, bool over = false)
 		{
 			Id = id;
 			RigFrames = rigFrames;
-			RootOverride = rootOverride;
 			Loop = loop;
 			Over = over;
+		}
+
+		public void SetOverrideRotation(float rotation, int frameMin, int frameMax)
+		{
+			OverrideRotation = rotation;
+			FrameMin = frameMin;
+			FrameMax = frameMax;
 		}
 	}
 
@@ -229,6 +228,9 @@ namespace Fredrick.src
 		public int NextFrame { get; private set; }
 		public bool MotionFlip;
 		double m_frameTime;
+		public Vector2 OverridePosition;
+		public float OverrideRotation;
+		public string MountId;//If not blank will search for component to track
 
 		public CharacterRig()
 		{
@@ -263,6 +265,8 @@ namespace Fredrick.src
 			Animations = original.Animations;
 			CurrentAnimation = original.CurrentAnimation;
 			PreviousFrame = CurrentAnimation.RigFrames[0];
+			OverridePosition = new Vector2(0);
+			MountId = original.MountId;
 		}
 
 		public void RestartAnim()
@@ -291,6 +295,11 @@ namespace Fredrick.src
 			}
 		}
 
+		public void SetOverrideRotation(string animation, float rotation, int frameMin, int frameMax)
+		{
+			Animations[animation].SetOverrideRotation(rotation, frameMin, frameMax);
+		}
+
 		public override void Load(ContentManager content)
 		{
 			Root.Load(content);
@@ -306,34 +315,62 @@ namespace Fredrick.src
 
 		public override void Update(double deltaTime)
 		{
+			float lerpValue;
+
+			if (MountId != null)
+			{
+				var component = Owner.GetComponentWithId(MountId);
+				OverridePosition = component.Position;
+			}
+
 			if (CurrentAnimation.RigFrames.Count > 1 && !CurrentAnimation.Over)
 			{
-				float lerpValue;
 				m_frameTime += deltaTime;
-				if (m_frameTime > CurrentAnimation.RigFrames[NextFrame].FrameTime)
+			}
+
+			if (m_frameTime > CurrentAnimation.RigFrames[NextFrame].FrameTime)
+			{
+				m_frameTime = m_frameTime % CurrentAnimation.RigFrames[NextFrame].FrameTime;
+				PreviousFrame = new RigFrame(Bones, Position-OverridePosition, m_frameTime);
+				NextFrame += 1;
+				if (NextFrame > CurrentAnimation.RigFrames.Count - 1)
 				{
-					m_frameTime = m_frameTime % CurrentAnimation.RigFrames[NextFrame].FrameTime;
-					PreviousFrame = CurrentAnimation.RigFrames[NextFrame];
-					NextFrame+=1;
-					if (NextFrame > CurrentAnimation.RigFrames.Count-1)
+					if (CurrentAnimation.Loop)
 					{
-						if (CurrentAnimation.Loop)
-						{
-							NextFrame = NextFrame % (CurrentAnimation.RigFrames.Count);
-						}
-						else
-						{
-							NextFrame = NextFrame % (CurrentAnimation.RigFrames.Count);
-							CurrentAnimation.Over = true;
-						}
+						NextFrame = NextFrame % (CurrentAnimation.RigFrames.Count);
+					}
+					else
+					{
+						NextFrame = NextFrame % (CurrentAnimation.RigFrames.Count);
+						PreviousFrame = new RigFrame(Bones, Position - OverridePosition, m_frameTime);
+						CurrentAnimation.Over = true;
 					}
 				}
-				lerpValue = (float)(m_frameTime / CurrentAnimation.RigFrames[NextFrame].FrameTime);
+			}
 
-				Position = PreviousFrame.Position * (1 - lerpValue) + CurrentAnimation.RigFrames[NextFrame].Position * (lerpValue);
-				foreach (Bone b in Bones)
+			lerpValue = (float)(m_frameTime / CurrentAnimation.RigFrames[NextFrame].FrameTime);
+
+			Position = (PreviousFrame.Position * (1 - lerpValue) + CurrentAnimation.RigFrames[NextFrame].Position * (lerpValue)) + OverridePosition;
+
+			foreach (Bone b in Bones)
+			{
+				if (b.Parent == null)
 				{
-					b.Rotation = PreviousFrame.BoneFrames[b.Id] * (1 - lerpValue) + CurrentAnimation.RigFrames[NextFrame].BoneFrames[b.Id] * (lerpValue);
+					float prevFrameRot = PreviousFrame.BoneFrames[b.Id];
+					float nextFrameRot = CurrentAnimation.RigFrames[NextFrame].BoneFrames[b.Id];
+					if (NextFrame >= CurrentAnimation.FrameMin && NextFrame <= CurrentAnimation.FrameMax)
+					{
+						nextFrameRot += CurrentAnimation.OverrideRotation;
+						if (MotionFlip)
+						{
+							nextFrameRot *= -1;//possible fix to flipping inverting animation
+						}
+					}
+					b.Rotation = (prevFrameRot * (1 - lerpValue) + nextFrameRot * (lerpValue));
+				}
+				else
+				{
+					b.Rotation = (PreviousFrame.BoneFrames[b.Id] * (1 - lerpValue) + CurrentAnimation.RigFrames[NextFrame].BoneFrames[b.Id] * (lerpValue));
 				}
 			}
 

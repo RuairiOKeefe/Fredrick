@@ -88,6 +88,7 @@ namespace Fredrick.src
 					if (c is CharacterRig)
 					{
 						((CharacterRig)c).RestartAnim();
+						((CharacterRig)c).SetOverrideRotation("Throwing", Rotation, 1, 1);
 					}
 				}
 			}

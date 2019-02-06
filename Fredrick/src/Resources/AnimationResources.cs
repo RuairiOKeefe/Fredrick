@@ -44,7 +44,7 @@ namespace Fredrick.src
 
 			Dictionary<string, RigAnimation> animations = new Dictionary<string, RigAnimation>();
 
-			RigAnimation run = new RigAnimation("Run", new List<RigFrame>(), false, true);
+			RigAnimation run = new RigAnimation("Run", new List<RigFrame>(), true, false);
 
 			Dictionary<string, float> playerContactFront = new Dictionary<string, float>();
 			playerContactFront.Add("Torso", 0.0f);
@@ -176,15 +176,15 @@ namespace Fredrick.src
 
 			Dictionary<string, RigAnimation> animations = new Dictionary<string, RigAnimation>();
 
-			RigAnimation throwing = new RigAnimation("Throwing", new List<RigFrame>(), true, false);
+			RigAnimation throwing = new RigAnimation("Throwing", new List<RigFrame>(), false, false);
 
 			Dictionary<string, float> playerThrowStart = new Dictionary<string, float>();
 			playerThrowStart.Add("Shoulder", -1.5f);
-			playerThrowStart.Add("UpperArmFront", -1.8f);
+			playerThrowStart.Add("UpperArmFront", 1.8f);
 			playerThrowStart.Add("LowerArmFront", -2.2f);
 			playerThrowStart.Add("UpperArmBack", 1.6f);
 			playerThrowStart.Add("LowerArmBack", -1.6f);
-			throwing.RigFrames.Add(new RigFrame(playerThrowStart, new Vector2(0, 22 / 32f), 0.06));
+			throwing.RigFrames.Add(new RigFrame(playerThrowStart, new Vector2(0, 12 / 32f), 0.06));
 
 			Dictionary<string, float> playerThrowEnd = new Dictionary<string, float>();
 			playerThrowEnd.Add("Shoulder", -1.5f);
@@ -192,7 +192,7 @@ namespace Fredrick.src
 			playerThrowEnd.Add("LowerArmFront", -0.2f);
 			playerThrowEnd.Add("UpperArmBack", 2.0f);
 			playerThrowEnd.Add("LowerArmBack", -1.5f);
-			throwing.RigFrames.Add(new RigFrame(playerThrowEnd, new Vector2(0, 22 / 32f), 0.06));
+			throwing.RigFrames.Add(new RigFrame(playerThrowEnd, new Vector2(0, 12 / 32f), 0.12));
 
 			Dictionary<string, float> playerThrowRecovery = new Dictionary<string, float>();
 			playerThrowRecovery.Add("Shoulder", -1.5f);
@@ -200,13 +200,14 @@ namespace Fredrick.src
 			playerThrowRecovery.Add("LowerArmFront", -1.7f);
 			playerThrowRecovery.Add("UpperArmBack", 2.1f);
 			playerThrowRecovery.Add("LowerArmBack", -1.9f);
-			throwing.RigFrames.Add(new RigFrame(playerThrowRecovery, new Vector2(0, 22 / 32f), 0.3));
+			throwing.RigFrames.Add(new RigFrame(playerThrowRecovery, new Vector2(0, 12 / 32f), 0.3));
 
 			animations.Add("Throwing", throwing);
 
 			CharacterRig characterRig = new CharacterRig(null, "PlayerArms", shoulder, animations);
 			characterRig.Tags.Add("MotionFlip");
 			characterRig.Tags.Add("Arms");
+			characterRig.MountId = "PlayerLegs";
 			return characterRig;
 		}
 	}
