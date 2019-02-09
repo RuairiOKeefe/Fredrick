@@ -64,7 +64,7 @@ namespace Fredrick.src
 
 		}
 
-		public void Fire(Vector2 direction, float sin, float cos)
+		public void Fire(Vector2 direction, float sin, float cos, CharacterRig armsRig)
 		{
 			Entity e = ProjectileBuffer.Instance.InactiveProjectiles.Pop();
 
@@ -81,16 +81,11 @@ namespace Fredrick.src
 
 			_nextfire = FireRate;
 
-			foreach (Component c in Owner.Components)
+
+			if (armsRig != null)
 			{
-				if (c.Tags.Contains("Arms"))
-				{
-					if (c is CharacterRig)
-					{
-						((CharacterRig)c).RestartAnim();
-						((CharacterRig)c).SetOverrideRotation("Throwing", Rotation, 1, 1);
-					}
-				}
+				armsRig.RestartAnim();
+				armsRig.SetOverrideRotation("Throwing", Rotation, 0, 1);
 			}
 		}
 
@@ -119,10 +114,13 @@ namespace Fredrick.src
 		{
 			bool fireCommand = false;
 
+			CharacterRig armsRig = Owner.GetComponent<CharacterRig>(null, "Arms");
+			Vector2 origin = armsRig != null ? armsRig.Position : new Vector2(0);
+
 			Vector2 direction;
 			if (_owner.GetDerivedComponent<Controller>() != null)
 			{
-				direction = _owner.GetDerivedComponent<Controller>().Aim;
+				direction = _owner.GetDerivedComponent<Controller>().GetAim(origin);
 				if (_continuous)
 					fireCommand = _owner.GetDerivedComponent<Controller>().FireHeld;
 				else
@@ -150,7 +148,7 @@ namespace Fredrick.src
 			{
 				if (fireCommand)
 				{
-					Fire(direction, sin, cos);
+					Fire(direction, sin, cos, armsRig);
 				}
 			}
 			else

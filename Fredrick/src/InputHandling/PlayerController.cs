@@ -18,6 +18,11 @@ namespace Fredrick.src
 
 		}
 
+		public override Vector2 GetAim(Vector2 origin)
+		{
+			return (InputHandler.Instance.WorldMousePosition - (Owner.Position + origin));
+		}
+
 		protected override void SetMovement()
 		{
 			Movement = 0;
@@ -33,11 +38,6 @@ namespace Fredrick.src
 					Movement++;
 				}
 			}
-		}
-
-		protected override void SetAim()
-		{
-			Aim = InputHandler.Instance.WorldMousePosition - (_owner.Position + Position);
 		}
 
 		protected override void SetJump()

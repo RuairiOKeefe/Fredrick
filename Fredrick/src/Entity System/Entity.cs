@@ -49,9 +49,9 @@ namespace Fredrick.src
 			}
 		}
 
-		public T GetComponent<T>() where T : Component
+		public T GetComponent<T>(string id = null, string tag = null) where T : Component
 		{
-			var component = Components.FirstOrDefault(c => c.GetType() == typeof(T));
+			var component = Components.FirstOrDefault(c => c.GetType() == typeof(T) && (id == null || c.Id == id) && (tag == null || c.Tags.Contains(tag)));
 			return (T)component;
 		}
 
@@ -64,6 +64,12 @@ namespace Fredrick.src
 		public Component GetComponentWithId(string id)
 		{
 			var component = Components.FirstOrDefault(c => c.Id == id);
+			return component;
+		}
+
+		public Component GetComponentWithTag(string tag)
+		{
+			var component = Components.FirstOrDefault(c => c.Tags.Contains(tag));
 			return component;
 		}
 

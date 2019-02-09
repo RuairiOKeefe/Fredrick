@@ -10,10 +10,9 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Fredrick.src
 {
 	[Serializable]
-	public class Controller :Component
+	public class Controller : Component //may want to make abstract
 	{
 		public float Movement { get; protected set; }
-		public Vector2 Aim { get; protected set; }
 		public bool Jump { get; protected set; }
 		public bool FirePressed { get; protected set; }
 		public bool FireHeld { get; protected set; }
@@ -28,8 +27,9 @@ namespace Fredrick.src
 
 		}
 
+		public virtual Vector2 GetAim(Vector2 origin) { return new Vector2(0); }
+
 		protected virtual void SetMovement() { }
-		protected virtual void SetAim() { }
 		protected virtual void SetJump() { }
 		protected virtual void SetFire() { }
 
@@ -46,7 +46,6 @@ namespace Fredrick.src
 		public override void Update(double deltaTime)
 		{
 			SetMovement();
-			SetAim();
 			SetJump();
 			SetFire();
 		}

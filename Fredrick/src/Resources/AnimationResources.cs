@@ -192,7 +192,7 @@ namespace Fredrick.src
 			playerThrowEnd.Add("LowerArmFront", -0.2f);
 			playerThrowEnd.Add("UpperArmBack", 2.0f);
 			playerThrowEnd.Add("LowerArmBack", -1.5f);
-			throwing.RigFrames.Add(new RigFrame(playerThrowEnd, new Vector2(0, 12 / 32f), 0.12));
+			throwing.RigFrames.Add(new RigFrame(playerThrowEnd, new Vector2(0, 12 / 32f), 0.14));
 
 			Dictionary<string, float> playerThrowRecovery = new Dictionary<string, float>();
 			playerThrowRecovery.Add("Shoulder", -1.5f);
@@ -200,7 +200,7 @@ namespace Fredrick.src
 			playerThrowRecovery.Add("LowerArmFront", -1.7f);
 			playerThrowRecovery.Add("UpperArmBack", 2.1f);
 			playerThrowRecovery.Add("LowerArmBack", -1.9f);
-			throwing.RigFrames.Add(new RigFrame(playerThrowRecovery, new Vector2(0, 12 / 32f), 0.3));
+			throwing.RigFrames.Add(new RigFrame(playerThrowRecovery, new Vector2(0, 12 / 32f), 0.6));
 
 			animations.Add("Throwing", throwing);
 
