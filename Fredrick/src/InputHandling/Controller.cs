@@ -12,10 +12,10 @@ namespace Fredrick.src
 	[Serializable]
 	public class Controller : Component //may want to make abstract
 	{
-		public float Movement { get; protected set; }
-		public bool Jump { get; protected set; }
-		public bool FirePressed { get; protected set; }
-		public bool FireHeld { get; protected set; }
+		public float Movement { get; set; }
+		public bool Jump { get; set; }
+		public bool FirePressed { get; set; }
+		public bool FireHeld { get; set; }
 
 		public Controller()
 		{

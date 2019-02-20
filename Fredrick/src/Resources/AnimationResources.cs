@@ -44,7 +44,38 @@ namespace Fredrick.src
 
 			Dictionary<string, RigAnimation> animations = new Dictionary<string, RigAnimation>();
 
-			RigAnimation run = new RigAnimation("Run", new List<RigFrame>(), true, false);
+			RigAnimation standing = new RigAnimation("Run", new List<RigFrame>(), true, false);
+
+			Dictionary<string, float> feetAppart = new Dictionary<string, float>();
+			feetAppart.Add("Torso", 0.0f);
+			feetAppart.Add("Head", 0.0f);
+			feetAppart.Add("UpperLegFront", 0.2f);
+			feetAppart.Add("LowerLegFront", 0.1f);
+			feetAppart.Add("FootFront", 0.4f);
+			feetAppart.Add("ToesFront", -0.4f);
+			feetAppart.Add("UpperLegBack", -0.3f);
+			feetAppart.Add("LowerLegBack", 0.3f);
+			feetAppart.Add("FootBack", 0.1f);
+			feetAppart.Add("ToesBack", -0.1f);
+			standing.RigFrames.Add(new RigFrame(feetAppart, new Vector2(0, 11 / 32f), 0.4));
+
+			Dictionary<string, float> feetAppart2 = new Dictionary<string, float>();
+			feetAppart2.Add("Torso", 0.0f);
+			feetAppart2.Add("Head", 0.0f);
+			feetAppart2.Add("UpperLegFront", 0.25f);
+			feetAppart2.Add("LowerLegFront", 0.15f);
+			feetAppart2.Add("FootFront", 0.5f);
+			feetAppart2.Add("ToesFront", -0.5f);
+			feetAppart2.Add("UpperLegBack", -0.35f);
+			feetAppart2.Add("LowerLegBack", 0.35f);
+			feetAppart2.Add("FootBack", 0.2f);
+			feetAppart2.Add("ToesBack", -0.2f);
+			standing.RigFrames.Add(new RigFrame(feetAppart2, new Vector2(0, 12 / 32f), 0.4));
+
+			animations.Add("Standing", standing);
+
+
+			RigAnimation run = new RigAnimation("Running", new List<RigFrame>(), true, false);
 
 			Dictionary<string, float> playerContactFront = new Dictionary<string, float>();
 			playerContactFront.Add("Torso", 0.0f);
@@ -150,8 +181,10 @@ namespace Fredrick.src
 			playerContSecondBack.Add("ToesBack", 0.2f);
 			run.RigFrames.Add(new RigFrame(playerContSecondBack, new Vector2(0, 0.5f), 0.12));
 
-			animations.Add("Run", run);
+			animations.Add("Running", run);
+
 			CharacterRig characterRig = new CharacterRig(null, "PlayerLegs", torso, animations);
+			characterRig.Tags.Add("Legs");
 			characterRig.Tags.Add("MotionFlip");
 			return characterRig;
 		}
@@ -192,7 +225,7 @@ namespace Fredrick.src
 			playerThrowEnd.Add("LowerArmFront", -0.2f);
 			playerThrowEnd.Add("UpperArmBack", 2.0f);
 			playerThrowEnd.Add("LowerArmBack", -1.5f);
-			throwing.RigFrames.Add(new RigFrame(playerThrowEnd, new Vector2(0, 12 / 32f), 0.14));
+			throwing.RigFrames.Add(new RigFrame(playerThrowEnd, new Vector2(0, 12 / 32f), 0.05));
 
 			Dictionary<string, float> playerThrowRecovery = new Dictionary<string, float>();
 			playerThrowRecovery.Add("Shoulder", -1.5f);
@@ -200,7 +233,7 @@ namespace Fredrick.src
 			playerThrowRecovery.Add("LowerArmFront", -1.7f);
 			playerThrowRecovery.Add("UpperArmBack", 2.1f);
 			playerThrowRecovery.Add("LowerArmBack", -1.9f);
-			throwing.RigFrames.Add(new RigFrame(playerThrowRecovery, new Vector2(0, 12 / 32f), 0.6));
+			throwing.RigFrames.Add(new RigFrame(playerThrowRecovery, new Vector2(0, 12 / 32f), 0.45));
 
 			animations.Add("Throwing", throwing);
 

@@ -10,12 +10,11 @@ namespace Fredrick.src
 	[Serializable]
 	public class PlayerController : Controller
 	{
-		public bool Keyboard;
-		public int ControllerIndex;
+		public PlayerInput PlayerInput { get; set; }
 
-		public PlayerController(Entity owner, string id, bool active = true) : base(owner, id, active)
+		public PlayerController(Entity owner, string id, PlayerInput playerInput, bool active = true) : base(owner, id, active)
 		{
-
+			PlayerInput = playerInput;
 		}
 
 		public override Vector2 GetAim(Vector2 origin)
@@ -25,35 +24,18 @@ namespace Fredrick.src
 
 		protected override void SetMovement()
 		{
-			Movement = 0;
-			if (Keyboard)
-			{
-
-				if (InputHandler.Instance.IsKeyHeld(InputHandler.Action.Left) || InputHandler.Instance.IsKeyPressed(InputHandler.Action.Left))
-				{
-					Movement--;
-				}
-				if (InputHandler.Instance.IsKeyHeld(InputHandler.Action.Right) || InputHandler.Instance.IsKeyPressed(InputHandler.Action.Right))
-				{
-					Movement++;
-				}
-			}
+			Movement = PlayerInput.GetMovement();
 		}
 
 		protected override void SetJump()
 		{
-			Jump = false;
-			if (Keyboard)
-			{
-				if (InputHandler.Instance.IsKeyPressed(InputHandler.Action.Jump))
-					Jump = true;
-			}
+			Jump = PlayerInput.GetJump();
 		}
 
 		protected override void SetFire()
 		{
-			FirePressed = InputHandler.Instance.IsLeftMousePressed();
-			FireHeld = InputHandler.Instance.IsLeftMouseHeld();
+			FirePressed = PlayerInput.GetFirePressed();
+			FireHeld = PlayerInput.GetFireHeld();
 		}
 	}
 }

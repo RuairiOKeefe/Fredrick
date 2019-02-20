@@ -13,14 +13,7 @@ namespace Fredrick.src
 	public class Character : Movable
 	{
 
-		public enum State
-		{
-			Standing,
-			Walking,
-			Jumping
-		}
-
-		public State MotionState { get; set; }
+		private MovementStateMachine movementState;
 
 		public float MoveCommand { get; set; }
 		public bool JumpCommand { get; set; }
@@ -69,8 +62,6 @@ namespace Fredrick.src
 			MovingFriction = 100;
 			AirMove = 0.4f;
 
-			MotionState = State.Standing;
-
 			JumpTrigger = new AABBTrigger(_owner);
 			JumpTrigger.Rectangle = new RectangleF(new Vector2(0, -1.0f), 1, 0.5f);
 
@@ -85,6 +76,7 @@ namespace Fredrick.src
 
 			FollowOffset = new Vector2(5, 0);
 
+			movementState = new MovementStateMachine(this, MovementStateMachine.Action.Standing);
 		}
 
 		public void Walk(double deltaTime)
@@ -155,83 +147,6 @@ namespace Fredrick.src
 				Velocity = new Vector2(Velocity.X, TerminalVelocity);
 		}
 
-		public void StateHandler()
-		{
-			switch (MotionState)
-			{
-				case State.Standing:
-					if (MoveCommand != 0)
-						MotionState = State.Walking;
-					if (!Grounded)
-						MotionState = State.Jumping;
-					break;
-				case State.Walking:
-					if (MoveCommand == 0)
-						MotionState = State.Standing;
-					if (!Grounded)
-						MotionState = State.Jumping;
-					break;
-				case State.Jumping:
-					if (Grounded)
-						MotionState = State.Walking;//Need proper handler for landing
-					break;
-				default:
-					throw new Exception("Unrecognised state reached");
-			}
-
-			switch (MotionState)
-			{
-				case State.Standing:
-					foreach (Component c in _owner.Components)
-					{
-						if (c.Tags.Contains("Legs"))
-						{
-							if (c is Renderable)
-							{
-								(c as Renderable).Drawable.TransitionAnim(0);
-							}
-						}
-					}
-					break;
-				case State.Walking:
-					foreach (Component c in _owner.Components)
-					{
-						if (c.Tags.Contains("Legs"))
-						{
-							if (c is Renderable)
-							{
-								(c as Renderable).Drawable.TransitionAnim(1);//Add case to stop animation when contacting a wall
-							}
-						}
-						if (Velocity.X > 3)
-						{
-
-						}
-					}
-					break;
-				case State.Jumping:
-					foreach (Component c in _owner.Components)
-					{
-						if (c.Tags.Contains("Legs"))
-						{
-							if (c is Renderable)
-							{
-								if (JumpCommand || !((c as Renderable).Drawable._currentAnim == 2 || ((c as Renderable).Drawable._currentAnim == 3) && (Velocity.Y < 0)))
-								{
-									(c as Renderable).Drawable.TransitionAnim(2);
-								}
-								if (Velocity.Y < 0)
-								{
-									(c as Renderable).Drawable.TransitionAnim(3);
-								}
-							}
-						}
-					}
-					break;
-				default:
-					throw new Exception("Unrecognised state reached");
-			}
-		}
 
 		public override void Update(double deltaTime)
 		{
@@ -277,8 +192,6 @@ namespace Fredrick.src
 					FallVelocity = 0;
 			}
 
-			StateHandler();
-
 			Walk(deltaTime);
 			ResolveMotion(deltaTime);
 
@@ -315,6 +228,7 @@ namespace Fredrick.src
 					}
 				}
 			}
+			movementState.Update();
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)

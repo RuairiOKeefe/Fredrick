@@ -331,7 +331,7 @@ namespace Fredrick.src
 			if (m_frameTime > CurrentAnimation.RigFrames[NextFrame].FrameTime)
 			{
 				m_frameTime = m_frameTime % CurrentAnimation.RigFrames[NextFrame].FrameTime;
-				PreviousFrame = new RigFrame(Bones, Position-OverridePosition, m_frameTime);
+				PreviousFrame = new RigFrame(Bones, Position - OverridePosition, m_frameTime);
 				NextFrame += 1;
 				if (NextFrame > CurrentAnimation.RigFrames.Count - 1)
 				{
@@ -363,10 +363,13 @@ namespace Fredrick.src
 						nextFrameRot += CurrentAnimation.OverrideRotation;
 						if (MotionFlip)
 						{
-							nextFrameRot *= -1;//possible fix to flipping inverting animation
+							b.Rotation = (prevFrameRot * (1 - lerpValue) - nextFrameRot * (lerpValue));
+						}
+						else
+						{
+							b.Rotation = (prevFrameRot * (1 - lerpValue) + nextFrameRot * (lerpValue));
 						}
 					}
-					b.Rotation = (prevFrameRot * (1 - lerpValue) + nextFrameRot * (lerpValue));
 				}
 				else
 				{

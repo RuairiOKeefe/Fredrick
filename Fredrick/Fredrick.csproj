@@ -74,6 +74,7 @@
     <Compile Include="src\Entity System\IComponentOwner.cs" />
     <Compile Include="src\InputHandling\PatrolAI.cs" />
     <Compile Include="src\InputHandling\PlayerController.cs" />
+    <Compile Include="src\InputHandling\PlayerInput.cs" />
     <Compile Include="src\Kinematics\Character.cs" />
     <Compile Include="src\Colliders\ColliderManager.cs" />
     <Compile Include="src\Entity System\Component.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="src\Drawing\ResourceManager.cs" />
     <Compile Include="src\InputHandling\Controller.cs" />
     <Compile Include="src\Resources\AnimationResources.cs" />
+    <Compile Include="src\State Machines\MovementStateMachine.cs" />
     <Compile Include="src\UI\Canvas.cs" />
     <Compile Include="src\UI\TextElement.cs" />
     <Compile Include="src\Utilities\DebugManager.cs" />

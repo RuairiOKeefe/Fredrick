@@ -16,6 +16,7 @@ namespace Fredrick.src
 	{
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
+		List<PlayerInput> playerInputs = new List<PlayerInput>();
 		List<Entity> actors = new List<Entity>();
 		List<Entity> terrain = new List<Entity>();
 		Entity UI = new Entity();
@@ -82,6 +83,9 @@ namespace Fredrick.src
 			{
 				for (int i = 0; i < 1; i++)
 				{
+					PlayerInput playerInput = new PlayerInput();
+					playerInput.Keyboard = true;
+
 					Entity entity = new Entity(true, "Player");
 					entity.Position = new Vector2(8, 8);
 					actors.Add(entity);
@@ -99,8 +103,7 @@ namespace Fredrick.src
 					Character character = new Character(entity);
 					entity.Components.Add(character);
 
-					PlayerController playerController = new PlayerController(entity, "Controller");
-					playerController.Keyboard = true;
+					PlayerController playerController = new PlayerController(entity, "Controller", playerInput);
 					entity.Components.Add(playerController);
 
 					AABBCollider boxCollider = new AABBCollider(entity, new Vector2(0), 0.6f, 2.0f);
@@ -111,7 +114,7 @@ namespace Fredrick.src
 					emitter.ParticleDrawable.AddAnimation(0, 0, 1, 30, Animation.OnEnd.Loop, 0);
 					entity.Components.Add(emitter);
 
-					Weapon weapon = new Weapon(entity, "Grenade", new Vector2(0.8f, 0), new Vector2(0.8f, 0), 0.4, 4.0f, 20.0f, 6.0f, true);
+					Weapon weapon = new Weapon(entity, "Grenade", new Vector2(0.5f, 0), new Vector2(0.8f, 0), 0.4, 4.0f, 20.0f, 6.0f, true);
 					weapon.Position = new Vector2(0, 0.5f);
 					weapon.WeaponDrawable = new Drawable("fragNade", new Vector2(16), 32, 32, 0.2f);
 					weapon.Tags.Add("MotionFlip");
@@ -129,6 +132,7 @@ namespace Fredrick.src
 
 					entity.Components.Add(new CharacterRig(entity, Resources.Instance.CharacterRigs["PlayerLegs"]));
 					entity.Components.Add(new CharacterRig(entity, Resources.Instance.CharacterRigs["PlayerArms"]));
+
 				}
 
 				for (int i = 0; i < 101; i++)
