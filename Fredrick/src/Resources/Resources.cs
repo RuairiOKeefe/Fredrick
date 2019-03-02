@@ -31,14 +31,16 @@ namespace Fredrick.src
 		//Separate resource classes should be created for components with complex construction 
 		private AnimationResources AnimationResources;
 
-		public Dictionary<string, Renderable> Renderables { get; private set; } = new Dictionary<string, Renderable>();
-		public Dictionary<string, Emitter> Emitters { get; private set; } = new Dictionary<string, Emitter>();
-		public Dictionary<string, CircleCollider> CircleColliders { get; private set; } = new Dictionary<string, CircleCollider>();
-		public Dictionary<string, Projectile> Projectiles { get; private set; } = new Dictionary<string, Projectile>();
 		public Dictionary<string, CharacterRig> CharacterRigs { get; private set; } = new Dictionary<string, CharacterRig>();
+		public Dictionary<string, Character> Characters { get; private set; } = new Dictionary<string, Character>();
+		public Dictionary<string, CircleCollider> CircleColliders { get; private set; } = new Dictionary<string, CircleCollider>();
+		public Dictionary<string, Emitter> Emitters { get; private set; } = new Dictionary<string, Emitter>();
+		public Dictionary<string, Projectile> Projectiles { get; private set; } = new Dictionary<string, Projectile>();
+		public Dictionary<string, Renderable> Renderables { get; private set; } = new Dictionary<string, Renderable>();
+
 
 		public Dictionary<string, Entity> ProjectileEntities { get; private set; } = new Dictionary<string, Entity>();
-
+		public Dictionary<string, Entity> PlayerEntities { get; private set; } = new Dictionary<string, Entity>();
 
 		Resources()
 		{
@@ -61,14 +63,22 @@ namespace Fredrick.src
 			InitProjectileEntities();
 		}
 
-		private void InitRenderables()
+		private void InitCharacterRigs()
 		{
-			Renderable fragNade = new Renderable(null, "Projectile", "FragNade", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
-			fragNade.Drawable.AddAnimation(0, 0, 1, 1, Animation.OnEnd.Loop, 0);
-			fragNade.Drawable.AddAnimation(32, 0, 1, 1, Animation.OnEnd.Loop, 0);
+			CharacterRigs.Add("PlayerLegs", new CharacterRig(null, AnimationResources.GetPlayerLegs()));
+			CharacterRigs.Add("PlayerArms", new CharacterRig(null, AnimationResources.GetPlayerArms()));
+		}
 
-			Renderables.Add("FragNade", fragNade);
+		private void InitCharacters()
+		{
+			Character player = new Character(null);
+			Characters.Add("Character", player);
+		}
 
+		private void InitCircleColliders()
+		{
+			CircleCollider fragNade = new CircleCollider(null);
+			CircleColliders.Add("FragNade", fragNade);
 		}
 
 		private void InitEmitters()
@@ -124,12 +134,6 @@ namespace Fredrick.src
 			Emitters.Add("Fire", fire);
 		}
 
-		private void InitCircleColliders()
-		{
-			CircleCollider fragNade = new CircleCollider(null);
-			CircleColliders.Add("FragNade", fragNade);
-		}
-
 		private void InitProjectiles()
 		{
 			Projectile fragNade = new Projectile(null);
@@ -137,10 +141,23 @@ namespace Fredrick.src
 			Projectiles.Add("FragNade", fragNade);
 		}
 
-		private void InitCharacterRigs()
+		private void InitRenderables()
 		{
-			CharacterRigs.Add("PlayerLegs", new CharacterRig(null, AnimationResources.GetPlayerLegs()));
-			CharacterRigs.Add("PlayerArms", new CharacterRig(null, AnimationResources.GetPlayerArms()));
+			Renderable fragNade = new Renderable(null, "Projectile", "FragNade", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+			fragNade.Drawable.AddAnimation(0, 0, 1, 1, Animation.OnEnd.Loop, 0);
+			fragNade.Drawable.AddAnimation(32, 0, 1, 1, Animation.OnEnd.Loop, 0);
+
+			Renderables.Add("FragNade", fragNade);
+
+		}
+
+
+		void InitPlayerEntities()
+		{
+			Entity player = new Entity(true, "Player");
+			player.Components.Add(new Character(player, Characters["Player"]));
+
+			PlayerEntities.Add("Player", player);
 		}
 
 		private void InitProjectileEntities()

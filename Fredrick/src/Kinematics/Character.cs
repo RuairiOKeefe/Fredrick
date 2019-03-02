@@ -13,7 +13,7 @@ namespace Fredrick.src
 	public class Character : Movable
 	{
 
-		private MovementStateMachine movementState;
+		private MovementStateMachine m_movementState;
 
 		public float MoveCommand { get; set; }
 		public bool JumpCommand { get; set; }
@@ -76,7 +76,53 @@ namespace Fredrick.src
 
 			FollowOffset = new Vector2(5, 0);
 
-			movementState = new MovementStateMachine(this, MovementStateMachine.Action.Standing);
+			m_movementState = new MovementStateMachine(this, MovementStateMachine.Action.Standing);
+		}
+
+		public Character(MovementStateMachine movementState, Vector2 prevAcceleration, float groundFriction, float airFriction, float movingFriction, float airMove, AABBTrigger jumpTrigger, bool grounded, bool prevGrounded, double fallVelocity, double jumpDuration, float jumpSpeed, float fallAcceleration, float terminalVelocity, int maxJumps, double jumpDelay)
+		{
+			Velocity = new Vector2(0, 0);
+			Acceleration = new Vector2(0, 0);
+			m_movementState = movementState;
+			PrevAcceleration = prevAcceleration;
+			GroundFriction = groundFriction;
+			AirFriction = airFriction;
+			MovingFriction = movingFriction;
+			AirMove = airMove;
+			JumpTrigger = jumpTrigger;
+			Grounded = grounded;
+			PrevGrounded = prevGrounded;
+			FallVelocity = fallVelocity;
+			JumpDuration = jumpDuration;
+			_jumpClock = 0;
+			JumpSpeed = jumpSpeed;
+			FallAcceleration = fallAcceleration;
+			TerminalVelocity = terminalVelocity;
+			MaxJumps = maxJumps;
+			JumpWait = false;
+			JumpDelay = jumpDelay;
+		}
+
+		public Character(Entity owner, Character original) : base(owner, original.Id)
+		{
+			m_movementState = original.m_movementState;
+			PrevAcceleration = original.PrevAcceleration;
+			GroundFriction = original.GroundFriction;
+			AirFriction = original.AirFriction;
+			MovingFriction = original.MovingFriction;
+			AirMove = original.AirMove;
+			JumpTrigger = original.JumpTrigger;
+			Grounded = original.Grounded;
+			PrevGrounded = original.PrevGrounded;
+			FallVelocity = original.FallVelocity;
+			JumpDuration = original.JumpDuration;
+			_jumpClock = 0;
+			JumpSpeed = original.JumpSpeed;
+			FallAcceleration = original.FallAcceleration;
+			TerminalVelocity = original.TerminalVelocity;
+			MaxJumps = original.MaxJumps;
+			JumpWait = false;
+			JumpDelay = original.JumpDelay;
 		}
 
 		public void Walk(double deltaTime)
@@ -228,7 +274,7 @@ namespace Fredrick.src
 					}
 				}
 			}
-			movementState.Update();
+			m_movementState.Update();
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)
