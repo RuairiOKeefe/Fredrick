@@ -15,7 +15,7 @@ namespace Fredrick.src
 		protected float _width;
 		protected float _height;
 
-		protected Vector2[] _corners;
+		public Vector2[] Corners { get; set; } = new Vector2[4];
 
 		public float Width
 		{
@@ -53,11 +53,6 @@ namespace Fredrick.src
 			}
 		}
 
-		public Vector2[] Corners
-		{
-			get { return _corners; }
-		}
-
 		public RectangleF()
 		{
 		}
@@ -68,11 +63,11 @@ namespace Fredrick.src
 			_width = width;
 			_height = height;
 
-			_corners = new Vector2[4];
-			_corners[0] = new Vector2(-width / 2, height / 2);
-			_corners[1] = new Vector2(width / 2, height / 2);
-			_corners[2] = new Vector2(width / 2, -height / 2);
-			_corners[3] = new Vector2(-width / 2, -height / 2);
+			Corners = new Vector2[4];
+			Corners[0] = new Vector2(-width / 2, height / 2);
+			Corners[1] = new Vector2(width / 2, height / 2);
+			Corners[2] = new Vector2(width / 2, -height / 2);
+			Corners[3] = new Vector2(-width / 2, -height / 2);
 
 		}
 

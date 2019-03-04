@@ -79,17 +79,22 @@ namespace Fredrick.src
 			m_movementState = new MovementStateMachine(this, MovementStateMachine.Action.Standing);
 		}
 
-		public Character(MovementStateMachine movementState, Vector2 prevAcceleration, float groundFriction, float airFriction, float movingFriction, float airMove, AABBTrigger jumpTrigger, bool grounded, bool prevGrounded, double fallVelocity, double jumpDuration, float jumpSpeed, float fallAcceleration, float terminalVelocity, int maxJumps, double jumpDelay)
+		public Character(MovementStateMachine movementState, Vector2 prevAcceleration, float horAcc, float maxSpeed, float groundFriction, float airFriction, float movingFriction, float airMove, AABBTrigger jumpTrigger, bool grounded, bool prevGrounded, double fallVelocity, double jumpDuration, float jumpSpeed, float fallAcceleration, float terminalVelocity, int maxJumps, double jumpDelay)
 		{
 			Velocity = new Vector2(0, 0);
 			Acceleration = new Vector2(0, 0);
 			m_movementState = movementState;
 			PrevAcceleration = prevAcceleration;
+			HorAcc = horAcc;
+			MaxSpeed = maxSpeed;
+
 			GroundFriction = groundFriction;
 			AirFriction = airFriction;
 			MovingFriction = movingFriction;
 			AirMove = airMove;
+
 			JumpTrigger = jumpTrigger;
+
 			Grounded = grounded;
 			PrevGrounded = prevGrounded;
 			FallVelocity = fallVelocity;
@@ -106,12 +111,18 @@ namespace Fredrick.src
 		public Character(Entity owner, Character original) : base(owner, original.Id)
 		{
 			m_movementState = original.m_movementState;
+			m_movementState.Character = this;
 			PrevAcceleration = original.PrevAcceleration;
+			HorAcc = original.HorAcc;
+			MaxSpeed = original.MaxSpeed;
+
 			GroundFriction = original.GroundFriction;
 			AirFriction = original.AirFriction;
 			MovingFriction = original.MovingFriction;
 			AirMove = original.AirMove;
+
 			JumpTrigger = original.JumpTrigger;
+
 			Grounded = original.Grounded;
 			PrevGrounded = original.PrevGrounded;
 			FallVelocity = original.FallVelocity;
@@ -285,6 +296,11 @@ namespace Fredrick.src
 		public override void DebugDraw(SpriteBatch spriteBatch)
 		{
 			JumpTrigger.DebugDraw(spriteBatch);
+		}
+
+		public override Component Copy(Entity owner)
+		{
+			return new Character(owner, this);
 		}
 	}
 }

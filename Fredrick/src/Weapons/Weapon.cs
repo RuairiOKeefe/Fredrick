@@ -59,9 +59,24 @@ namespace Fredrick.src
 			_facingRight = true;
 		}
 
-		public Weapon(Entity owner, Weapon original)
+		public Weapon(Entity owner, Weapon original) : base(owner, original.Id, original.Active)
 		{
+			_spotSpawn = original._spotSpawn;
+			_weaponPosition = original._weaponPosition;
+			FireRate = original.FireRate;
+			Damage = original.Damage;
+			AOEDamage = original.AOEDamage;
+			ShotSpeed = original.ShotSpeed;
 
+			_continuous = original._continuous;
+
+			_projectiles = new List<Entity>();
+
+			Scale = original.Scale;
+
+			WeaponDrawable = original.WeaponDrawable;
+
+			_facingRight = true;
 		}
 
 		public void Fire(Vector2 direction, float sin, float cos, CharacterRig armsRig)
@@ -186,7 +201,7 @@ namespace Fredrick.src
 
 		public override Component Copy(Entity owner)
 		{
-			return new Weapon();
+			return new Weapon(owner, this);
 		}
 	}
 }

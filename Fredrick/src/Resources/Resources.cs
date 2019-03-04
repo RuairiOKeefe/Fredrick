@@ -31,13 +31,16 @@ namespace Fredrick.src
 		//Separate resource classes should be created for components with complex construction 
 		private AnimationResources AnimationResources;
 
+		public Dictionary<string, AABBCollider> AABBColliders { get; private set; } = new Dictionary<string, AABBCollider>();
 		public Dictionary<string, CharacterRig> CharacterRigs { get; private set; } = new Dictionary<string, CharacterRig>();
 		public Dictionary<string, Character> Characters { get; private set; } = new Dictionary<string, Character>();
 		public Dictionary<string, CircleCollider> CircleColliders { get; private set; } = new Dictionary<string, CircleCollider>();
+		public Dictionary<string, Damageable> Damageables { get; private set; } = new Dictionary<string, Damageable>();
 		public Dictionary<string, Emitter> Emitters { get; private set; } = new Dictionary<string, Emitter>();
 		public Dictionary<string, Projectile> Projectiles { get; private set; } = new Dictionary<string, Projectile>();
 		public Dictionary<string, Renderable> Renderables { get; private set; } = new Dictionary<string, Renderable>();
-
+		public Dictionary<string, StatusHandler> StatusHandlers { get; private set; } = new Dictionary<string, StatusHandler>();
+		public Dictionary<string, Weapon> Weapons { get; private set; } = new Dictionary<string, Weapon>();
 
 		public Dictionary<string, Entity> ProjectileEntities { get; private set; } = new Dictionary<string, Entity>();
 		public Dictionary<string, Entity> PlayerEntities { get; private set; } = new Dictionary<string, Entity>();
@@ -51,16 +54,28 @@ namespace Fredrick.src
 
 		public void InitComponents()
 		{
-			InitRenderables();
-			InitEmitters();
-			InitCircleColliders();
-			InitProjectiles();
+			InitAABBColliders();
 			InitCharacterRigs();
+			InitCharacters();
+			InitCircleColliders();
+			InitDamageables();
+			InitEmitters();
+			InitProjectiles();
+			InitRenderables();
+			InitStatusHandlers();
+			InitWeapons();
 		}
 
 		public void InitEntities()
 		{
+			InitPlayerEntities();
 			InitProjectileEntities();
+		}
+
+		private void InitAABBColliders()
+		{
+			AABBCollider playerCollider = new AABBCollider(null, new Vector2(0), 0.6f, 2.0f);
+			AABBColliders.Add("PlayerCollider", playerCollider);
 		}
 
 		private void InitCharacterRigs()
@@ -72,13 +87,21 @@ namespace Fredrick.src
 		private void InitCharacters()
 		{
 			Character player = new Character(null);
-			Characters.Add("Character", player);
+			Characters.Add("Player", player);
 		}
 
 		private void InitCircleColliders()
 		{
 			CircleCollider fragNade = new CircleCollider(null);
 			CircleColliders.Add("FragNade", fragNade);
+		}
+
+		private void InitDamageables()
+		{
+			Damageable playerDamageable = new Damageable(null, "Health");
+			playerDamageable.Health = 100;
+			playerDamageable.BaseResistance = new Damageable.Resistances(1, 1, 1);
+			Damageables.Add("PlayerDamageable", playerDamageable);
 		}
 
 		private void InitEmitters()
@@ -151,12 +174,35 @@ namespace Fredrick.src
 
 		}
 
+		private void InitStatusHandlers()
+		{
+			StatusHandler playerStatus = new StatusHandler(null, "PlayerStatus");
+			StatusHandlers.Add("PlayerStatus", playerStatus);
+		}
+
+		private void InitWeapons()
+		{
+			Weapon fragGrenade = new Weapon(null, "FragGrenade", new Vector2(0.5f, 0), new Vector2(0.8f, 0), 0.4, 4.0f, 20.0f, 6.0f, true);
+			fragGrenade.Position = new Vector2(0, 0.5f);
+			fragGrenade.WeaponDrawable = new Drawable("fragNade", new Vector2(16), 32, 32, 0.2f);
+			fragGrenade.Tags.Add("MotionFlip");
+			//fragWeapon.Tags.Add("Body");
+			Weapons.Add("FragGrenade", fragGrenade);
+		}
+
 
 		void InitPlayerEntities()
 		{
 			Entity player = new Entity(true, "Player");
+			player.Components.Add(new PlayerController(player, "Controller", new PlayerInput()));
 			player.Components.Add(new Character(player, Characters["Player"]));
+			player.Components.Add(new AABBCollider(player, AABBColliders["PlayerCollider"]));
 
+			player.Components.Add(new CharacterRig(player, CharacterRigs["PlayerLegs"]));
+			player.Components.Add(new CharacterRig(player, CharacterRigs["PlayerArms"]));
+			player.Components.Add(new Damageable(player, Damageables["PlayerDamageable"]));
+			player.Components.Add(new StatusHandler(player, StatusHandlers["PlayerStatus"]));
+			player.Components.Add(new Weapon(player, Weapons["FragGrenade"]));
 			PlayerEntities.Add("Player", player);
 		}
 

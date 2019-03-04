@@ -26,16 +26,21 @@ namespace Fredrick.src
 
 		public const double TickRate = 10;
 
-		public List<Tuple<StatusEffect, Timer>> Statuses { get; private set; }
+		public List<Tuple<StatusEffect, Timer>> Statuses { get; private set; } = new List<Tuple<StatusEffect, Timer>>();
 
 		public StatusHandler()
 		{
-			Statuses = new List<Tuple<StatusEffect, Timer>>();
+
 		}
 
 		public StatusHandler(Entity owner, string id) : base(owner, id)
 		{
-			Statuses = new List<Tuple<StatusEffect, Timer>>();
+
+		}
+
+		public StatusHandler(Entity owner, StatusHandler original):base(owner, original.Id)
+		{
+			Statuses = original.Statuses;
 		}
 
 		public void AddStatus(StatusEffect status)
@@ -102,7 +107,7 @@ namespace Fredrick.src
 
 		public override Component Copy(Entity owner)
 		{
-			return new StatusHandler();
+			return new StatusHandler(owner, this);
 		}
 	}
 }

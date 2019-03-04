@@ -17,7 +17,6 @@ namespace Fredrick.src
 	public class AABBCollider : Component
 	{
 		private int _index;//index in ColliderManager
-		private RectangleF _rectangle;
 
 		private Vector2 _tempMove;
 
@@ -25,23 +24,24 @@ namespace Fredrick.src
 
 		private int minX, maxX, minY, maxY;
 
-		public RectangleF Rectangle
-		{
-			get { return _rectangle; }
-			set { _rectangle = value; }
-		}
+		public RectangleF Rectangle { get; set; }
 
 		private bool _platformCollided;
 
 		public AABBCollider()
 		{
 			_owner = null;
-			Position = new Vector2(0);
+			Rectangle = new RectangleF();
 		}
 
 		public AABBCollider(Entity owner, Vector2 position, float width = 1.0f, float height = 1.0f) : base(owner)
 		{
-			_rectangle = new RectangleF(position, width, height);
+			Rectangle = new RectangleF(position, width, height);
+		}
+
+		public AABBCollider(Entity owner, AABBCollider original) : base(owner, original.Id)
+		{
+			Rectangle = original.Rectangle;
 		}
 
 		public bool CheckCollision(RectangleF other)
@@ -51,11 +51,11 @@ namespace Fredrick.src
 			Vector2 testMove = new Vector2(_tempMove.X, 0);
 			Vector2 newPos = (_owner.Position + testMove);
 
-			_rectangle.UpdatePosition(newPos);
-			if (_rectangle.Intersect(other))
+			Rectangle.UpdatePosition(newPos);
+			if (Rectangle.Intersect(other))
 			{
-				float distanceX = _rectangle.CurrentPosition.X - other.CurrentPosition.X;
-				float minDistanceX = (_rectangle.Width + other.Width) / 2;
+				float distanceX = Rectangle.CurrentPosition.X - other.CurrentPosition.X;
+				float minDistanceX = (Rectangle.Width + other.Width) / 2;
 
 				if (distanceX > 0)
 					_tempMove.X += (minDistanceX - distanceX) * 1.05f;//For the record I hate this but without it weird stuff happens because numbers are the worst and binary was a mistake
@@ -69,11 +69,11 @@ namespace Fredrick.src
 			testMove = new Vector2(0, _tempMove.Y);
 			newPos = (_owner.Position + testMove);
 
-			_rectangle.UpdatePosition(newPos);
-			if (_rectangle.Intersect(other))
+			Rectangle.UpdatePosition(newPos);
+			if (Rectangle.Intersect(other))
 			{
-				float distanceY = _rectangle.CurrentPosition.Y - other.CurrentPosition.Y;
-				float minDistanceY = (_rectangle.Height + other.Height) / 2;
+				float distanceY = Rectangle.CurrentPosition.Y - other.CurrentPosition.Y;
+				float minDistanceY = (Rectangle.Height + other.Height) / 2;
 
 				if (distanceY > 0)
 					_tempMove.Y += (minDistanceY - distanceY) * 1.05f;
@@ -95,18 +95,18 @@ namespace Fredrick.src
 				Vector2 testMove = new Vector2(_tempMove.X, _tempMove.Y);
 				Vector2 newPos = (_owner.Position + testMove);
 
-				_rectangle.UpdatePosition(newPos);
+				Rectangle.UpdatePosition(newPos);
 
 				if (_owner.GetComponent<Character>().Velocity.Y <= 0)
 				{
-					float f = (_rectangle.CurrentPosition.X - (other.CurrentPosition.X - (other.Width / 2))) / ((other.CurrentPosition.X + (other.Width / 2)) - (other.CurrentPosition.X - (other.Width / 2)));//(currentX - minX) / (maxX - minX)
+					float f = (Rectangle.CurrentPosition.X - (other.CurrentPosition.X - (other.Width / 2))) / ((other.CurrentPosition.X + (other.Width / 2)) - (other.CurrentPosition.X - (other.Width / 2)));//(currentX - minX) / (maxX - minX)
 					if (f > 0 && f < 1)
 					{
 						float y = ((other.LHeight * (1.0f - f)) + (other.RHeight * f)) + other.CurrentPosition.Y;//desired y coordinate
 
-						if (((_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)) > (y + other.PlatformDepth) && (_rectangle.CurrentPosition.Y - (_rectangle.Height / 2)) < y) || (_platformCollided && _owner.GetComponent<Character>().Velocity.Y <= 0))
+						if (((Rectangle.CurrentPosition.Y - (Rectangle.Height / 2)) > (y + other.PlatformDepth) && (Rectangle.CurrentPosition.Y - (Rectangle.Height / 2)) < y) || (_platformCollided && _owner.GetComponent<Character>().Velocity.Y <= 0))
 						{
-							_tempMove.Y += (y - (newPos.Y - (_rectangle.Height / 2)));
+							_tempMove.Y += (y - (newPos.Y - (Rectangle.Height / 2)));
 							_owner.GetComponent<Character>().StopVelY();
 							collided = true;
 						}
@@ -118,15 +118,15 @@ namespace Fredrick.src
 				Vector2 testMove = new Vector2(_tempMove.X, _tempMove.Y);
 				Vector2 newPos = (_owner.Position + testMove);
 				{
-					_rectangle.UpdatePosition(newPos);
-					float f = (_rectangle.CurrentPosition.X - (other.CurrentPosition.X - (other.Width / 2))) / ((other.CurrentPosition.X + (other.Width / 2)) - (other.CurrentPosition.X - (other.Width / 2)));//(currentX - minX) / (maxX - minX)
+					Rectangle.UpdatePosition(newPos);
+					float f = (Rectangle.CurrentPosition.X - (other.CurrentPosition.X - (other.Width / 2))) / ((other.CurrentPosition.X + (other.Width / 2)) - (other.CurrentPosition.X - (other.Width / 2)));//(currentX - minX) / (maxX - minX)
 					if (f > 0 && f < 1)
 					{
 						float y = ((other.LHeight * (1.0f - f)) + (other.RHeight * f)) + other.CurrentPosition.Y;
 
-						if ((_rectangle.CurrentPosition.Y + (_rectangle.Height / 2)) > y && (_rectangle.CurrentPosition.Y + (_rectangle.Height / 2)) < y + other.PlatformDepth)
+						if ((Rectangle.CurrentPosition.Y + (Rectangle.Height / 2)) > y && (Rectangle.CurrentPosition.Y + (Rectangle.Height / 2)) < y + other.PlatformDepth)
 						{
-							_tempMove.Y -= ((newPos.Y + (_rectangle.Height / 2)) - y);
+							_tempMove.Y -= ((newPos.Y + (Rectangle.Height / 2)) - y);
 							_owner.GetComponent<Character>().Velocity = (_owner.GetComponent<Character>().Velocity - (2f * Vector2.Dot(_owner.GetComponent<Character>().Velocity, other.Normal)) * other.Normal) * 0.5f;
 							collided = true;
 						}
@@ -139,10 +139,10 @@ namespace Fredrick.src
 
 		public void SetCells(bool addToScene)
 		{
-			minX = Math.Min(Math.Max((int)Math.Floor(_rectangle.CurrentPosition.X - (_rectangle.Width / 2) + 0.5), 0), 1000);
-			maxX = Math.Min(Math.Max((int)Math.Floor(_rectangle.CurrentPosition.X + (_rectangle.Width / 2) + 0.5), 0), 1000);
-			minY = Math.Min(Math.Max((int)Math.Floor(_rectangle.CurrentPosition.Y - (_rectangle.Height / 2) + 0.5), 0), 1000);
-			maxY = Math.Min(Math.Max((int)Math.Floor(_rectangle.CurrentPosition.Y + (_rectangle.Height / 2) + 0.5), 0), 1000);
+			minX = Math.Min(Math.Max((int)Math.Floor(Rectangle.CurrentPosition.X - (Rectangle.Width / 2) + 0.5), 0), 1000);
+			maxX = Math.Min(Math.Max((int)Math.Floor(Rectangle.CurrentPosition.X + (Rectangle.Width / 2) + 0.5), 0), 1000);
+			minY = Math.Min(Math.Max((int)Math.Floor(Rectangle.CurrentPosition.Y - (Rectangle.Height / 2) + 0.5), 0), 1000);
+			maxY = Math.Min(Math.Max((int)Math.Floor(Rectangle.CurrentPosition.Y + (Rectangle.Height / 2) + 0.5), 0), 1000);
 
 			for (int i = minX; i < maxX + 1; i++)
 			{
@@ -167,7 +167,7 @@ namespace Fredrick.src
 
 		public override void Load(ContentManager content)
 		{
-			_rectangle.UpdatePosition(_owner.Position + Position);
+			Rectangle.UpdatePosition(_owner.Position + Position);
 			_index = ColliderManager.Instance.Colliders.Count;
 			ColliderManager.Instance.Colliders.Add(this);
 
@@ -182,10 +182,10 @@ namespace Fredrick.src
 			}
 			body.UserData = _owner;
 			Vertices verts = new Vertices();
-			verts.Add(_rectangle.Corners[0]);
-			verts.Add(_rectangle.Corners[1]);
-			verts.Add(_rectangle.Corners[2]);
-			verts.Add(_rectangle.Corners[3]);
+			verts.Add(Rectangle.Corners[0]);
+			verts.Add(Rectangle.Corners[1]);
+			verts.Add(Rectangle.Corners[2]);
+			verts.Add(Rectangle.Corners[3]);
 			box = new PolygonShape(verts, 1.0f);
 			fixture = body.CreateFixture(box);
 
@@ -210,7 +210,7 @@ namespace Fredrick.src
 			if (_owner.GetComponent<Character>() != null)
 			{
 				_tempMove = _owner.GetComponent<Character>().AttemptedPosition;
-				_rectangle.UpdatePosition(_owner.Position + _tempMove);
+				Rectangle.UpdatePosition(_owner.Position + _tempMove);
 
 				ClearCells(true);
 				SetCells(false);
@@ -246,7 +246,7 @@ namespace Fredrick.src
 				}
 				ClearCells(false);
 
-				_rectangle.UpdatePosition(_owner.Position + _tempMove);
+				Rectangle.UpdatePosition(_owner.Position + _tempMove);
 				SetCells(true);
 			}
 		}
@@ -258,10 +258,10 @@ namespace Fredrick.src
 
 		public override void DebugDraw(SpriteBatch spriteBatch)
 		{
-			Vector2 tl = new Vector2(_owner.Position.X - _rectangle.Width / 2, _owner.Position.Y + _rectangle.Height / 2);
-			Vector2 tr = new Vector2(_owner.Position.X + _rectangle.Width / 2, _owner.Position.Y + _rectangle.Height / 2);
-			Vector2 bl = new Vector2(_owner.Position.X - _rectangle.Width / 2, _owner.Position.Y - _rectangle.Height / 2);
-			Vector2 br = new Vector2(_owner.Position.X + _rectangle.Width / 2, _owner.Position.Y - _rectangle.Height / 2);
+			Vector2 tl = new Vector2(_owner.Position.X - Rectangle.Width / 2, _owner.Position.Y + Rectangle.Height / 2);
+			Vector2 tr = new Vector2(_owner.Position.X + Rectangle.Width / 2, _owner.Position.Y + Rectangle.Height / 2);
+			Vector2 bl = new Vector2(_owner.Position.X - Rectangle.Width / 2, _owner.Position.Y - Rectangle.Height / 2);
+			Vector2 br = new Vector2(_owner.Position.X + Rectangle.Width / 2, _owner.Position.Y - Rectangle.Height / 2);
 			DebugManager.Instance.DrawLine(spriteBatch, tl, tr);
 			DebugManager.Instance.DrawLine(spriteBatch, tr, br);
 			DebugManager.Instance.DrawLine(spriteBatch, br, bl);
@@ -270,7 +270,7 @@ namespace Fredrick.src
 
 		public override Component Copy(Entity owner)
 		{
-			return new AABBCollider();
+			return new AABBCollider(owner, this);
 		}
 	}
 }

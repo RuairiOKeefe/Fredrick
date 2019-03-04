@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Fredrick.src
 {
 	[Serializable]
-	class Damageable : Component
+	public class Damageable : Component
 	{
 		[Serializable]
 		public struct Resistances//Multipliers applied to each attack of a given type
@@ -39,12 +39,12 @@ namespace Fredrick.src
 		public float ArmourRegen { get; set; }
 		public double ArmourRegenDelay { get; set; }
 		public double ArmourRegenTimer { get; set; }
-		public Resistances ArmourResistance;//Used instead of base resistances if armour is active
+		public Resistances ArmourResistance { get; set; }//Used instead of base resistances if armour is active
 
 		public float ShieldThreshold { get; set; }//Shields should have a negative threshold, providing a base amount of damage that will only be dealt to the sheild each time damage is dealt
 		public float ShieldHealth { get; set; }
 		public float ShieldHealthMax { get; set; }
-		public float ShreldRegen { get; set; }
+		public float ShieldRegen { get; set; }
 		public double ShieldRegenDelay { get; set; }
 		public double ShieldRegenTimer { get; set; }
 		public Resistances ShieldResistance { get; set; }
@@ -61,6 +61,30 @@ namespace Fredrick.src
 			BaseResistance = new Resistances();
 			ArmourResistance = new Resistances();
 			ShieldResistance = new Resistances();
+		}
+
+		public Damageable(Entity owner, Damageable original) : base(owner, original.Id)
+		{
+			Health = original.Health;
+			MaxHealth = original.MaxHealth;
+			HealthRegen = original.HealthRegen;
+			HealthRegenDelay = original.HealthRegenDelay;
+			HealthRegenTimer = original.HealthRegenTimer;
+			BaseResistance = original.BaseResistance;
+			ArmourThreshold = original.ArmourThreshold;
+			ArmourHealth = original.ArmourHealth;
+			ArmourHealthMax = original.ArmourHealthMax;
+			ArmourRegen = original.ArmourRegen;
+			ArmourRegenDelay = original.ArmourRegenDelay;
+			ArmourRegenTimer = original.ArmourRegenTimer;
+			ArmourResistance = original.ArmourResistance;
+			ShieldThreshold = original.ShieldThreshold;
+			ShieldHealth = original.ShieldHealth;
+			ShieldHealthMax = original.ShieldHealthMax;
+			ShieldRegen = original.ShieldRegen;
+			ShieldRegenDelay = original.ShieldRegenDelay;
+			ShieldRegenTimer = original.ShieldRegenTimer;
+			ShieldResistance = original.ShieldResistance;
 		}
 
 		private float Resist(Resistances resistances, Attack.DamageType type, float damage)
@@ -169,7 +193,7 @@ namespace Fredrick.src
 
 		public override Component Copy(Entity owner)
 		{
-			return new Damageable();
+			return new Damageable(owner, this);
 		}
 	}
 }

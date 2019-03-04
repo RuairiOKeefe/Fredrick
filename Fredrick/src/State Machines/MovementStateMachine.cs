@@ -21,7 +21,7 @@ namespace Fredrick.src
 		}
 
 		public Action CurrentAction;
-		private Character Character;
+		public Character Character;
 
 		public MovementStateMachine()
 		{
