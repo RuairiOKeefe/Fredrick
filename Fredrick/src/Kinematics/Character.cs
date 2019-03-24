@@ -121,7 +121,7 @@ namespace Fredrick.src
 			MovingFriction = original.MovingFriction;
 			AirMove = original.AirMove;
 
-			JumpTrigger = original.JumpTrigger;
+			JumpTrigger = new AABBTrigger(owner, original.JumpTrigger);
 
 			Grounded = original.Grounded;
 			PrevGrounded = original.PrevGrounded;

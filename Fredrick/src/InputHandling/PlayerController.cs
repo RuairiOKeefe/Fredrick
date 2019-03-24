@@ -28,6 +28,11 @@ namespace Fredrick.src
 
 		public override Vector2 GetAim(Vector2 origin)
 		{
+			
+			if (PlayerInput.GetControllerAim() != new Vector2(0))
+			{
+				return PlayerInput.GetControllerAim();
+			}
 			return (InputHandler.Instance.WorldMousePosition - (Owner.Position + origin));
 		}
 
@@ -51,6 +56,12 @@ namespace Fredrick.src
 		public override Component Copy(Entity owner)
 		{
 			return new PlayerController(owner, this);
+		}
+
+		public override void Update(double deltaTime)
+		{
+			PlayerInput.Update();
+			base.Update(deltaTime);
 		}
 	}
 }

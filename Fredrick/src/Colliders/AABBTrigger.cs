@@ -14,7 +14,6 @@ namespace Fredrick.src
 	{
 		private int _index;//index in ColliderManager
 		private RectangleF _rectangle;
-		private Entity _owner;
 
 		private List<AABBCollider> _aabbHits;
 		private List<Platform> _platformHits;
@@ -42,9 +41,15 @@ namespace Fredrick.src
 		{
 		}
 
-		public AABBTrigger(Entity owner)
+		public AABBTrigger(Entity owner) : base(owner)
 		{
-			_owner = owner;
+			_aabbHits = new List<AABBCollider>();
+			_platformHits = new List<Platform>();
+		}
+
+		public AABBTrigger(Entity owner, AABBTrigger original) : base(owner, original.Id)
+		{
+			_rectangle = original.Rectangle;
 			_aabbHits = new List<AABBCollider>();
 			_platformHits = new List<Platform>();
 		}
@@ -103,7 +108,7 @@ namespace Fredrick.src
 
 		public override void Load(ContentManager content)
 		{
-			
+
 		}
 
 		public override void Unload()
@@ -113,12 +118,12 @@ namespace Fredrick.src
 
 		public override void Update(double deltaTime)
 		{
-			
+
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
-			
+
 		}
 
 		public override void DebugDraw(SpriteBatch spriteBatch)
@@ -135,7 +140,7 @@ namespace Fredrick.src
 
 		public override Component Copy(Entity owner)
 		{
-			return new AABBTrigger();
+			return new AABBTrigger(owner, this);
 		}
 	}
 }

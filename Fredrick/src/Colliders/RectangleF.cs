@@ -71,6 +71,20 @@ namespace Fredrick.src
 
 		}
 
+		public RectangleF(RectangleF original)
+		{
+			Position = original.Position;
+			_width = original.Width;
+			_height = original.Height;
+
+			Corners = new Vector2[4];
+			Corners[0] = new Vector2(-_width / 2, _height / 2);
+			Corners[1] = new Vector2(_width / 2, _height / 2);
+			Corners[2] = new Vector2(_width / 2, -_height / 2);
+			Corners[3] = new Vector2(-_width / 2, -_height / 2);
+		}
+
+
 		public void UpdatePosition(Vector2 currentPosition)
 		{
 			_currentPosition = currentPosition + Position;
