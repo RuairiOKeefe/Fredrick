@@ -26,27 +26,27 @@ namespace Fredrick.src
 
 		}
 
-		private bool IsButtonPressed(ButtonState currentState, ButtonState prevState)
+		private bool IsButtonPressed(Buttons button)
 		{
-			if (currentState == ButtonState.Pressed && prevState == ButtonState.Released)
+			if (m_controllerState.IsButtonDown(button) && m_previousControllerState.IsButtonUp(button))
 			{
 				return true;
 			}
 			return false;
 		}
 
-		private bool IsButtonHeld(ButtonState currentState, ButtonState prevState)
+		private bool IsButtonHeld(Buttons button)
 		{
-			if (currentState == ButtonState.Pressed && prevState == ButtonState.Pressed)
+			if (m_controllerState.IsButtonDown(button) && m_previousControllerState.IsButtonDown(button))
 			{
 				return true;
 			}
 			return false;
 		}
 
-		private bool IsButtonReleased(ButtonState currentState)
+		private bool IsButtonReleased(Buttons button)
 		{
-			if (currentState == ButtonState.Released)
+			if (m_controllerState.IsButtonUp(button))
 			{
 				return true;
 			}
@@ -85,7 +85,7 @@ namespace Fredrick.src
 			}
 			if (m_controllerState.IsConnected && !jump)
 			{
-				jump = IsButtonPressed(m_controllerState.Buttons.A, m_previousControllerState.Buttons.A);
+				jump = IsButtonPressed(Buttons.A);
 			}
 
 			return jump;
