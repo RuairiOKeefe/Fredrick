@@ -81,16 +81,15 @@ namespace Fredrick.src
 
 			if (true)
 			{
-				for (int i = 0; i < 1; i++)
-				{
-					PlayerInput playerInput = new PlayerInput();
-					playerInput.Keyboard = true;
+				Entity player = new Entity(Resources.Instance.PlayerEntities["Player"]);
+				player.GetComponent<PlayerController>().PlayerInput = new PlayerInput(PlayerIndex.One, false, true);
+				player.Position = new Vector2(8, 8);
+				actors.Add(player);
 
-					Entity player = new Entity(Resources.Instance.PlayerEntities["Player"]);
-					player.GetComponent<PlayerController>().PlayerInput = playerInput;
-					player.Position = new Vector2(8, 8);
-					actors.Add(player);
-				}
+				Entity player2 = new Entity(Resources.Instance.PlayerEntities["Player"]);
+				player2.GetComponent<PlayerController>().PlayerInput = new PlayerInput(PlayerIndex.One, true, false);
+				player2.Position = new Vector2(16, 8);
+				actors.Add(player2);
 
 				for (int i = 0; i < 101; i++)
 				{
@@ -171,7 +170,7 @@ namespace Fredrick.src
 
 			Canvas canvas = new Canvas(UI, "UI");
 			TextElement debugElement1 = new TextElement(Content.Load<SpriteFont>("Debug"), new Vector2(0), Color.White, 0, TextElement.Justification.Left, 1.0f);
-			debugElement1.AddContent("Player Health: ", "", actors[0].GetComponent<Damageable>(), "Health");
+			debugElement1.AddContent("Player Health: ", "", actors[0].GetComponent<Character>(), "Velocity");
 			canvas.TextElements.Add(debugElement1);
 			UI.Components.Add(canvas);
 		}

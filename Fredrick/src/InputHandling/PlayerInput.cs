@@ -11,8 +11,9 @@ namespace Fredrick.src
 	[Serializable]
 	public class PlayerInput
 	{
-		public int m_PlayerIndex;
-		public bool Keyboard;
+		public PlayerIndex PlayerIndex { get; private set; }
+		public bool Keyboard { get; private set; }
+		public bool Controller { get; private set; }
 
 		[NonSerialized]
 		private GamePadState m_controllerState;
@@ -24,6 +25,13 @@ namespace Fredrick.src
 		public PlayerInput()
 		{
 
+		}
+
+		public PlayerInput(PlayerIndex playerIndex, bool keyboard, bool controller)
+		{
+			PlayerIndex = playerIndex;
+			Keyboard = keyboard;
+			Controller = controller;
 		}
 
 		private bool IsButtonPressed(Buttons button)
@@ -68,9 +76,12 @@ namespace Fredrick.src
 					movement++;
 				}
 			}
-			if (m_controllerState.IsConnected)
+			if (Controller)
 			{
-				movement += m_controllerState.ThumbSticks.Left.X;
+				if (m_controllerState.IsConnected)
+				{
+					movement += m_controllerState.ThumbSticks.Left.X;
+				}
 			}
 			return movement;
 		}
@@ -83,11 +94,13 @@ namespace Fredrick.src
 				if (InputHandler.Instance.IsKeyPressed(InputHandler.Action.Jump))
 					jump = true;
 			}
-			if (m_controllerState.IsConnected && !jump)
+			if (Controller)
 			{
-				jump = IsButtonPressed(Buttons.A);
+				if (m_controllerState.IsConnected && !jump)
+				{
+					jump = IsButtonPressed(Buttons.A);
+				}
 			}
-
 			return jump;
 		}
 
@@ -99,10 +112,13 @@ namespace Fredrick.src
 			{
 				firePressed = InputHandler.Instance.IsLeftMousePressed();
 			}
-			if (m_controllerState.IsConnected && !firePressed)
+			if (Controller)
 			{
-				if (m_controllerState.Triggers.Right >= triggerDeadZone && m_previousControllerState.Triggers.Right < triggerDeadZone)
-					firePressed = true;
+				if (m_controllerState.IsConnected && !firePressed)
+				{
+					if (m_controllerState.Triggers.Right >= triggerDeadZone && m_previousControllerState.Triggers.Right < triggerDeadZone)
+						firePressed = true;
+				}
 			}
 			return firePressed;
 		}
@@ -115,9 +131,12 @@ namespace Fredrick.src
 			{
 				fireHeld = InputHandler.Instance.IsLeftMouseHeld();
 			}
-			if (m_controllerState.IsConnected)
+			if (Controller)
 			{
-				fireHeld = m_controllerState.Triggers.Right >= triggerDeadZone ? true : false;
+				if (m_controllerState.IsConnected)
+				{
+					fireHeld = m_controllerState.Triggers.Right >= triggerDeadZone ? true : false;
+				}
 			}
 
 			return fireHeld;
@@ -133,7 +152,10 @@ namespace Fredrick.src
 		public void Update()
 		{
 			m_previousControllerState = m_controllerState;
-			m_controllerState = GamePad.GetState(PlayerIndex.One);
+			if (Controller)
+			{
+				m_controllerState = GamePad.GetState(PlayerIndex);
+			}
 		}
 	}
 }

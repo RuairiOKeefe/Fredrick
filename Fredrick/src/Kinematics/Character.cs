@@ -110,8 +110,7 @@ namespace Fredrick.src
 
 		public Character(Entity owner, Character original) : base(owner, original.Id)
 		{
-			m_movementState = original.m_movementState;
-			m_movementState.Character = this;
+			m_movementState = new MovementStateMachine(this);
 			PrevAcceleration = original.PrevAcceleration;
 			HorAcc = original.HorAcc;
 			MaxSpeed = original.MaxSpeed;

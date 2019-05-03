@@ -194,7 +194,7 @@ namespace Fredrick.src
 		void InitPlayerEntities()
 		{
 			Entity player = new Entity(true, "Player");
-			player.Components.Add(new PlayerController(player, "Controller", new PlayerInput()));
+			player.Components.Add(new PlayerController(player, "Controller"));
 			player.Components.Add(new Character(player, Characters["Player"]));
 			player.Components.Add(new AABBCollider(player, AABBColliders["PlayerCollider"]));
 

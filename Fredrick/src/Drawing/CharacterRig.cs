@@ -37,6 +37,17 @@ namespace Fredrick.src
 			Connector = connector;
 		}
 
+		public Bone(Bone original)
+		{
+			Id = original.Id;
+			Children = new List<Bone>();
+			Children = original.Children;
+			Position = original.Position;
+			Rotation = original.Rotation;
+			ParentConnector = original.ParentConnector;
+			Connector = original.Connector;
+		}
+
 		~Bone()
 		{
 			if (Parent != null)
@@ -154,6 +165,12 @@ namespace Fredrick.src
 				b.DebugDraw(spriteBatch, rig);
 			}
 		}
+
+		public Bone Copy()
+		{
+			return new Bone(this);
+		}
+
 	}
 
 	[Serializable]
@@ -179,6 +196,22 @@ namespace Fredrick.src
 			}
 			Position = position;
 			FrameTime = frameTime;
+		}
+
+		public RigFrame(RigFrame original)
+		{
+			BoneFrames = new Dictionary<string, float>();
+			foreach (KeyValuePair<string, float> bone in original.BoneFrames)
+			{
+				BoneFrames.Add(bone.Key, bone.Value);
+			}
+			Position = original.Position;
+			FrameTime = original.FrameTime;
+		}
+
+		public RigFrame Copy()
+		{
+			return new RigFrame(this);
 		}
 	}
 
@@ -209,11 +242,28 @@ namespace Fredrick.src
 			Over = over;
 		}
 
+		public RigAnimation(RigAnimation original)
+		{
+			Id = original.Id;
+			RigFrames = new List<RigFrame>();
+			foreach (RigFrame rig in original.RigFrames)
+			{
+				RigFrames.Add(rig.Copy());
+			}
+			Loop = original.Loop;
+			Over = original.Over;
+		}
+
 		public void SetOverrideRotation(float rotation, int frameMin, int frameMax)
 		{
 			OverrideRotation = rotation;
 			FrameMin = frameMin;
 			FrameMax = frameMax;
+		}
+
+		public RigAnimation Copy()
+		{
+			return new RigAnimation(this);
 		}
 	}
 
@@ -255,16 +305,18 @@ namespace Fredrick.src
 
 		public CharacterRig(Entity owner, CharacterRig original) : base(owner, original.Id, original.Active)
 		{
-			CurrentAnimation = new RigAnimation();
 			Animations = new Dictionary<string, RigAnimation>();
+			foreach (KeyValuePair<string, RigAnimation> anim in original.Animations)
+			{
+				Animations.Add(anim.Key, anim.Value.Copy());
+			}
+			CurrentAnimation = original.CurrentAnimation.Copy();
 			Bones = new List<Bone>();
 			Tags = original.Tags;
 			Scale = original.Scale;
 			Rotation = original.Rotation;
-			Root = original.Root;
-			Animations = original.Animations;
-			CurrentAnimation = original.CurrentAnimation;
-			PreviousFrame = CurrentAnimation.RigFrames[0];
+			Root = original.Root.Copy();
+			PreviousFrame = CurrentAnimation.RigFrames[0].Copy();
 			OverridePosition = new Vector2(0);
 			MountId = original.MountId;
 		}

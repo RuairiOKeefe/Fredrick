@@ -16,14 +16,14 @@ namespace Fredrick.src
 		{
 		}
 
-		public PlayerController(Entity owner, string id, PlayerInput playerInput, bool active = true) : base(owner, id, active)
+		public PlayerController(Entity owner, string id, PlayerIndex playerIndex = PlayerIndex.One, bool keyboard = true, bool controller = false, bool active = true) : base(owner, id, active)
 		{
-			PlayerInput = playerInput;
+			PlayerInput = new PlayerInput(playerIndex, keyboard, controller);
 		}
 
 		public PlayerController(Entity owner, PlayerController original) : base(owner, original.Id)
 		{
-			PlayerInput = original.PlayerInput;
+			PlayerInput = new PlayerInput(original.PlayerInput.PlayerIndex, original.PlayerInput.Keyboard, original.PlayerInput.Controller);
 		}
 
 		public override Vector2 GetAim(Vector2 origin)
