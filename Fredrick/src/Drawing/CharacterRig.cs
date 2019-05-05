@@ -16,7 +16,7 @@ namespace Fredrick.src
 		public Bone Parent { get; private set; } = null;
 		public List<Bone> Children { get; private set; }
 		public Drawable Drawable { get; set; }
-		public Vector2 Position { get; set; } //Is really the Transformed Position, but I think 0,0 is the local center //=(Parent Pos + Transformed ParentConnector) +- Transformed Connector ....probably idk i'm only mostly good at maths and did this in like 2 minutes
+		public Vector2 Position { get; private set; }
 		public float Rotation { get; set; }
 		public float TransformedRotation { get; private set; }
 		public Vector2 ParentConnector { get; set; }
