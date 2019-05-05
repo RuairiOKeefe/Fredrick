@@ -82,6 +82,11 @@ namespace Fredrick.src
 		{
 			CharacterRigs.Add("PlayerLegs", new CharacterRig(null, AnimationResources.GetPlayerLegs()));
 			CharacterRigs.Add("PlayerArms", new CharacterRig(null, AnimationResources.GetPlayerArms()));
+
+			foreach (KeyValuePair<string, CharacterRig> rig in CharacterRigs)
+			{
+				rig.Value.Root.PopulateRig(ref rig.Value.Bones);
+			}
 		}
 
 		private void InitCharacters()

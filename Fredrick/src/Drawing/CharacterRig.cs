@@ -37,11 +37,17 @@ namespace Fredrick.src
 			Connector = connector;
 		}
 
-		public Bone(Bone original)
+		public Bone(Bone original, Bone parent = null)
 		{
 			Id = original.Id;
+			if (original.Drawable != null)
+				Drawable = new Drawable(original.Drawable);
+			Parent = parent;
 			Children = new List<Bone>();
-			Children = original.Children;
+			foreach (Bone bone in original.Children)
+			{
+				Children.Add(new Bone(bone, this));
+			}
 			Position = original.Position;
 			Rotation = original.Rotation;
 			ParentConnector = original.ParentConnector;
