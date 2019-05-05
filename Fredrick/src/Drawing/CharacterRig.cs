@@ -16,7 +16,7 @@ namespace Fredrick.src
 		public Bone Parent { get; private set; } = null;
 		public List<Bone> Children { get; private set; }
 		public Drawable Drawable { get; set; }
-		public Vector2 Position { get; private set; }
+		public Vector2 Position { get; private set; } //Should only be set by update
 		public float Rotation { get; set; }
 		public float TransformedRotation { get; private set; }
 		public Vector2 ParentConnector { get; set; }
