@@ -49,6 +49,8 @@ namespace Fredrick.src
 		public double ShieldRegenTimer { get; set; }
 		public Resistances ShieldResistance { get; set; }
 
+		public bool IsDead { get; private set; }
+
 		public Damageable()
 		{
 			BaseResistance = new Resistances();
@@ -162,6 +164,29 @@ namespace Fredrick.src
 				foreach (StatusEffect s in attack.StatusEffects)
 					_owner.GetComponent<StatusHandler>().AddStatus(s.Copy());
 			}
+
+			if (Health <= 0)
+			{
+				Die();
+			}
+		}
+
+		public void Die()
+		{
+			IsDead = true;
+			if (Owner.GetComponent<StatusHandler>() != null)
+			{
+				Owner.GetComponent<StatusHandler>().Statuses.Clear();
+			}
+			Owner.Active = false;
+		}
+
+		public void Spawn()
+		{
+			Health = MaxHealth;
+			ArmourHealth = ArmourHealthMax;
+			ShieldHealth = ShieldHealthMax;
+			IsDead = false;
 		}
 
 		public override void Load(ContentManager content)
@@ -176,8 +201,6 @@ namespace Fredrick.src
 
 		public override void Update(double deltaTime)
 		{
-
-
 
 		}
 

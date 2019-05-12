@@ -104,7 +104,7 @@ namespace Fredrick.src
 		private void InitDamageables()
 		{
 			Damageable playerDamageable = new Damageable(null, "Health");
-			playerDamageable.Health = 100;
+			playerDamageable.MaxHealth = 100;
 			playerDamageable.BaseResistance = new Damageable.Resistances(1, 1, 1);
 			Damageables.Add("PlayerDamageable", playerDamageable);
 		}

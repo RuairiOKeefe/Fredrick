@@ -78,18 +78,27 @@ namespace Fredrick.src
 			ColliderManager.Instance.Load();
 			ProjectileBuffer.Instance.Load(Content);
 			Resources.Instance.Load(Content);
+			SpawnManager.Instance.Load();
 
 			if (true)
 			{
 				Entity player = new Entity(Resources.Instance.PlayerEntities["Player"]);
+				player.Active = false;
 				player.GetComponent<PlayerController>().PlayerInput = new PlayerInput(PlayerIndex.One, false, true);
 				player.Position = new Vector2(8, 8);
 				actors.Add(player);
 
 				Entity player2 = new Entity(Resources.Instance.PlayerEntities["Player"]);
+				player2.Active = false;
 				player2.GetComponent<PlayerController>().PlayerInput = new PlayerInput(PlayerIndex.One, true, false);
 				player2.Position = new Vector2(16, 8);
 				actors.Add(player2);
+
+				SpawnManager.Instance.AddSpawnable(ref player, new Timer(3.0), new Vector2(8, 8));
+				SpawnManager.Instance.AddSpawnable(ref player2, new Timer(3.0), new Vector2(16, 8));
+
+				SpawnManager.Instance.Spawn(player);
+				SpawnManager.Instance.Spawn(player2);
 
 				for (int i = 0; i < 101; i++)
 				{
@@ -170,7 +179,7 @@ namespace Fredrick.src
 
 			Canvas canvas = new Canvas(UI, "UI");
 			TextElement debugElement1 = new TextElement(Content.Load<SpriteFont>("Debug"), new Vector2(0), Color.White, 0, TextElement.Justification.Left, 1.0f);
-			debugElement1.AddContent("Player Health: ", "", actors[0].GetComponent<Character>(), "Velocity");
+			debugElement1.AddContent("Player Health: ", "", actors[0].GetComponent<Damageable>(), "Health");
 			canvas.TextElements.Add(debugElement1);
 			UI.Components.Add(canvas);
 		}
@@ -216,6 +225,8 @@ namespace Fredrick.src
 			//cam.Trauma = 1;
 			cam.Update(gameTime.ElapsedGameTime.TotalSeconds);
 			UI.Update(gameTime.ElapsedGameTime.TotalSeconds);
+
+			SpawnManager.Instance.Update(gameTime.ElapsedGameTime.TotalSeconds);
 
 			if (InputHandler.Instance.IsKeyPressed(InputHandler.Action.Debug))
 				DebugManager.Instance.Debug = !DebugManager.Instance.Debug;

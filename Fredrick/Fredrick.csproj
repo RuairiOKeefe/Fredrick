@@ -72,6 +72,7 @@
     <Compile Include="src\Drawing\CharacterRig.cs" />
     <Compile Include="src\Drawing\PostProcessing.cs" />
     <Compile Include="src\Entity System\IComponentOwner.cs" />
+    <Compile Include="src\GameManagement\SpawnManager.cs" />
     <Compile Include="src\InputHandling\PatrolAI.cs" />
     <Compile Include="src\InputHandling\PlayerController.cs" />
     <Compile Include="src\InputHandling\PlayerInput.cs" />
@@ -103,6 +104,7 @@
     <Compile Include="src\Resources\Resources.cs" />
     <Compile Include="src\Utilities\Serializer.cs" />
     <Compile Include="src\Utilities\SurrogateSelectors.cs" />
+    <Compile Include="src\Utilities\Timer.cs" />
     <Compile Include="src\Utilities\Transform.cs" />
     <Compile Include="src\Colliders\Trigger.cs" />
     <Compile Include="src\Weapons\Projectile.cs" />
