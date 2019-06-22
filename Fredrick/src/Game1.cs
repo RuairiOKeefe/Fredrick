@@ -16,6 +16,7 @@ namespace Fredrick.src
 	{
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
+		Background background;
 		List<PlayerInput> playerInputs = new List<PlayerInput>();
 		List<Entity> actors = new List<Entity>();
 		List<Entity> terrain = new List<Entity>();
@@ -80,17 +81,22 @@ namespace Fredrick.src
 			Resources.Instance.Load(Content);
 			SpawnManager.Instance.Load();
 
+			background = new Background();
+			background.AddLayer(new Drawable("Sky", new Vector2(1920/2, 1080 / 2), 1920, 1080, 0), 0.95f, 0.95f);
+			background.AddLayer(new Drawable("Mountains", new Vector2(1024/2, 578), 1024, 1024, 0), 0.9f, 0.9f);
+			background.AddLayer(new Drawable("Hills", new Vector2(1024 / 2, 620), 1024, 1024, 0), 0.8f, 0.8f);
+
 			if (true)
 			{
 				Entity player = new Entity(Resources.Instance.PlayerEntities["Player"]);
 				player.Active = false;
-				player.GetComponent<PlayerController>().PlayerInput = new PlayerInput(PlayerIndex.One, false, true);
+				player.GetComponent<PlayerController>().PlayerInput = new PlayerInput(PlayerIndex.One, true, false);
 				player.Position = new Vector2(8, 8);
 				actors.Add(player);
 
 				Entity player2 = new Entity(Resources.Instance.PlayerEntities["Player"]);
 				player2.Active = false;
-				player2.GetComponent<PlayerController>().PlayerInput = new PlayerInput(PlayerIndex.One, true, false);
+				player2.GetComponent<PlayerController>().PlayerInput = new PlayerInput(PlayerIndex.One, false, true);
 				player2.Position = new Vector2(16, 8);
 				actors.Add(player2);
 
@@ -163,6 +169,8 @@ namespace Fredrick.src
 				actors = serializer.Load("actorsData");
 			}
 
+			background.Load(Content);
+
 			foreach (Entity e in terrain)
 			{
 				e.Load(Content);
@@ -172,7 +180,7 @@ namespace Fredrick.src
 			{
 				e.Load(Content);
 			}
-			cam = new FollowCamera(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight, actors[0], 3.0f, 1.0f, 0.2f, 2.0f);
+			cam = new FollowCamera(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight, actors[0], 3f, 1.0f, 0.2f, 2.0f);
 			cam.OffsetAmount = new Vector2(4.0f, 1.8f);
 			levelEditor.Load(Content);
 
@@ -244,6 +252,10 @@ namespace Fredrick.src
 			GraphicsDevice.SetRenderTarget(sceneTarget);
 
 			GraphicsDevice.Clear(Color.CornflowerBlue);
+
+			spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearWrap, null, null, null, cam.Get_Transformation(GraphicsDevice));
+			background.Draw(spriteBatch, cam.Position);
+			spriteBatch.End();
 
 			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, lighting, cam.Get_Transformation(GraphicsDevice));
 			foreach (var e in actors)
