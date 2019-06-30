@@ -18,12 +18,16 @@ namespace Fredrick.src
 			//For parallax values: 0 = moves with camera, 1 = stationary
 			public float m_parallaxHorizontal;
 			public float m_parallaxVertical;
+			public float m_offsetHorizontal;
+			public float m_offsetVertical;
 
-			public Layer(Drawable drawable, float parallaxHorizontal, float parallaxVertical)
+			public Layer(Drawable drawable, float parallaxHorizontal, float parallaxVertical, float offsetHorizontal = 0, float offsetVertical = 0)
 			{
 				m_drawable = drawable;
 				m_parallaxHorizontal = parallaxHorizontal;
 				m_parallaxVertical = parallaxVertical;
+				m_offsetHorizontal = offsetHorizontal;
+				m_offsetVertical = offsetVertical;
 			}
 
 			public void Load(ContentManager content)
@@ -33,7 +37,7 @@ namespace Fredrick.src
 
 			public void Draw(SpriteBatch spriteBatch, Vector2 position)
 			{
-				Vector2 drawnPosition = new Vector2(position.X * (1 - m_parallaxHorizontal), position.Y * (1 - m_parallaxVertical)) * m_drawable._spriteSize;
+				Vector2 drawnPosition = new Vector2((position.X * (1 - m_parallaxHorizontal)) + m_offsetHorizontal, (position.Y * (1 - m_parallaxVertical)) + m_offsetVertical) * m_drawable._spriteSize;
 				drawnPosition *= new Vector2(1, -1);
 				position *= new Vector2(1, -1);
 				drawnPosition.X = drawnPosition.X % m_drawable._spriteWidth;
@@ -45,9 +49,9 @@ namespace Fredrick.src
 
 		private List<Layer> layers = new List<Layer>();
 
-		public void AddLayer(Drawable drawable, float parallaxHorizontal, float parallaxVertical)
+		public void AddLayer(Drawable drawable, float parallaxHorizontal, float parallaxVertical, float offsetHorizontal = 0, float offsetVertical = 0)
 		{
-			layers.Add(new Layer(drawable, parallaxHorizontal, parallaxVertical));
+			layers.Add(new Layer(drawable, parallaxHorizontal, parallaxVertical, offsetHorizontal, offsetVertical));
 		}
 
 		public void Load(ContentManager content)
