@@ -82,13 +82,13 @@ namespace Fredrick.src
 			SpawnManager.Instance.Load();
 
 			background = new Background();
-			background.AddLayer(new Drawable("Sky", new Vector2(1920 / 2, 1080 / 2), 1920, 1080, 0), 0.95f, 0.95f, Color.White, 0.0f);
-			background.AddLayer(new Drawable("Mountains", new Vector2(1024 / 2, 578), 1024, 1024, 0), 0.9f, 0.9f, Color.Blue, 0.2f);
-			background.AddLayer(new Drawable("Hills", new Vector2(1024 / 2, 720), 1024, 1024, 0), 0.8f, 0.8f, Color.Blue, 0.5f);
-			background.AddLayer(new Drawable("Trees", new Vector2(1024 / 2, 580), 1024, 1024, 0), 0.6f, 0.6f, Color.Blue, 0.3f);
-			background.AddLayer(new Drawable("Trees", new Vector2((1024 / 2), 580), 1024, 1024, 0), 0.58f, 0.58f, Color.Blue, 0.2f, 100, 0);
-			background.AddLayer(new Drawable("Trees", new Vector2((1024 / 2), 580), 1024, 1024, 0), 0.56f, 0.56f, Color.Blue, 0.1f, 200, 0);
-			background.AddLayer(new Drawable("Trees", new Vector2((1024 / 2), 580), 1024, 1024, 0), 0.54f, 0.54f, Color.Blue, 0.0f, 300, 0);
+			background.AddLayer(new Drawable("Sky", new Vector2(1920 / 2, 1080 / 2), 1920, 1080, 0), 0.95f, 0.95f);
+			background.AddLayer(new Drawable("Mountains", new Vector2(1024 / 2, 578), 1024, 1024, 0), 0.9f, 0.9f);
+			background.AddLayer(new Drawable("Hills", new Vector2(1024 / 2, 720), 1024, 1024, 0), 0.8f, 0.8f);
+			background.AddLayer(new Drawable("Trees", new Vector2(1024 / 2, 580), 1024, 1024, 0), 0.6f, 0.6f);
+			background.AddLayer(new Drawable("Trees", new Vector2((1024 / 2), 580), 1024, 1024, 0), 0.58f, 0.58f, 100, 0);
+			background.AddLayer(new Drawable("Trees", new Vector2((1024 / 2), 580), 1024, 1024, 0), 0.56f, 0.56f, 200, 0);
+			background.AddLayer(new Drawable("Trees", new Vector2((1024 / 2), 580), 1024, 1024, 0), 0.54f, 0.54f, 300, 0);
 
 			if (true)
 			{
