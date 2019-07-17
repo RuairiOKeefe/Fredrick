@@ -141,6 +141,7 @@ namespace Fredrick.src
 			embers.SetVelocity(0.0f, 10.5f, 12.0f, true);
 			embers.SetCollision(true, true);
 			embers.SetScaling(true, 0.5f);
+			embers.Restitution = 0.8f;
 			embers.LerpColours = emberLerp;
 
 			Emitters.Add("Embers", embers);

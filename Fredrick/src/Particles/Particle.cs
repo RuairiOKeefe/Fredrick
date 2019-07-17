@@ -22,7 +22,7 @@ namespace Fredrick.src
 		double _initLifetime;
 		bool _reduceLifeOnCollision;
 
-		float _restitution = 0.8f;
+		float _restitution;
 
 		bool _fakeDepth;
 		float _scaleFactor;
@@ -62,7 +62,7 @@ namespace Fredrick.src
 			_velocity = new Vector2();
 		}
 
-		public Particle(Vector2 position, Vector2 velocity, double lifeTime, bool collide = false, bool reduceLifeOnCollision = false, bool fakeDepth = false, float scaleFactor = 1.0f)
+		public Particle(Vector2 position, Vector2 velocity, double lifeTime, bool collide = false, bool reduceLifeOnCollision = false, float restitution = 0.5f, bool fakeDepth = false, float scaleFactor = 1.0f)
 		{
 			_position = position;
 			_scale = new Vector2(1.0f);
@@ -72,12 +72,13 @@ namespace Fredrick.src
 			_lifetime = lifeTime;
 			_initLifetime = lifeTime;
 			_reduceLifeOnCollision = reduceLifeOnCollision;
+			_restitution = restitution;
 
 			_fakeDepth = fakeDepth;
 			_scaleFactor = scaleFactor;
 		}
 
-		public void Revive(Vector2 position, Vector2 velocity, double lifeTime, bool collide = false, bool reduceLifeOnCollision = false, bool fakeDepth = false, float scaleFactor = 1.0f)
+		public void Revive(Vector2 position, Vector2 velocity, double lifeTime, bool collide = false, bool reduceLifeOnCollision = false, float restitution = 0.5f, bool fakeDepth = false, float scaleFactor = 1.0f)
 		{
 			_position = position;
 			_scale = new Vector2(1.0f);
@@ -87,6 +88,7 @@ namespace Fredrick.src
 			_lifetime = lifeTime;
 			_initLifetime = lifeTime;
 			_reduceLifeOnCollision = reduceLifeOnCollision;
+			_restitution = restitution;
 
 			_fakeDepth = fakeDepth;
 			_scaleFactor = scaleFactor;

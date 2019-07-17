@@ -29,6 +29,7 @@ namespace Fredrick.src
 
 		public bool Collide { get; set; }
 		public bool ReduceLifeOnCollision { get; set; }
+		public float Restitution { get; set; }
 
 		public double Lifetime { get; set; }
 		public double MinLTVar { get; set; }
@@ -163,7 +164,7 @@ namespace Fredrick.src
 				float scaleFactor = (forwardMotion ? (1.0f - velocityRND) : -(1.0f - velocityRND)) * ScaleFactor;
 
 				Particle p = ParticleBuffer.Instance.InactiveParticles.Pop();
-				p.Revive(spawnPos + _owner.Position, spawnVel, lifetime, Collide, ReduceLifeOnCollision, FakeDepth, scaleFactor);
+				p.Revive(spawnPos + _owner.Position, spawnVel, lifetime, Collide, ReduceLifeOnCollision, Restitution, FakeDepth, scaleFactor);
 				Particles.Add(p);
 			}
 		}
