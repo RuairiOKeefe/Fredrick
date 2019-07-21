@@ -29,21 +29,15 @@ namespace Fredrick.src
 
 		public const int NUM_PROJECTILES = 10000;
 
-		private Stack<Entity> _inactiveProjectiles;
-
-
-		public Stack<Entity> InactiveProjectiles
-		{
-			get { return _inactiveProjectiles; }
-			set { _inactiveProjectiles = value; }
-		}
+		public Stack<Entity> InactiveProjectiles;
+		public List<Entity> ActiveProjectiles;
 
 		public void Load(ContentManager content)
 		{
 			for (int i = 0; i < NUM_PROJECTILES; i++)
 			{
 				Entity e = new Entity(Resources.Instance.ProjectileEntities["FragNade"]);
-				_inactiveProjectiles.Push(e);
+				InactiveProjectiles.Push(e);
 
 				e.Load(content);
 			}
@@ -51,8 +45,39 @@ namespace Fredrick.src
 
 		public ProjectileBuffer()
 		{
-			_inactiveProjectiles = new Stack<Entity>(NUM_PROJECTILES);
+			InactiveProjectiles = new Stack<Entity>(NUM_PROJECTILES);
+			ActiveProjectiles = new List<Entity>(NUM_PROJECTILES);
+		}
 
+		public void Update(double deltaTime)
+		{
+			foreach (Entity e in ActiveProjectiles)
+			{
+				if (e.GetComponent<CircleCollider>() != null)
+				{
+					e.GetComponent<CircleCollider>().UpdatePosition();
+				}
+			}
+
+			for (int i = (ActiveProjectiles.Count - 1); i >= 0; i--)
+			{
+				Entity e = ActiveProjectiles[i];
+
+				e.Update(deltaTime);
+				if (e.GetComponent<Projectile>().Dead)
+				{
+					InactiveProjectiles.Push(e);
+					ActiveProjectiles.RemoveAt(i);
+				}
+			}
+		}
+
+		public void Draw(SpriteBatch spriteBatch)
+		{
+			foreach (Entity e in ActiveProjectiles)
+			{
+				e.Draw(spriteBatch);
+			}
 		}
 	}
 }

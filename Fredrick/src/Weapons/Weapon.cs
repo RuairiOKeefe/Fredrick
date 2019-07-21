@@ -12,71 +12,88 @@ namespace Fredrick.src
 	[Serializable]
 	public class Weapon : Component
 	{
+		public Drawable WeaponDrawable { get; set; }
+
+		public List<StatusEffect> ImpactEffects { get; set; }
+
+		public List<StatusEffect> AreaEffects { get; set; }
+
 		protected Vector2 _spotSpawn;
 		protected Vector2 _weaponPosition;//The arm has uses the base transform
 		protected Vector2 _transformedWeaponPosition;
 
-		protected double _nextfire;//Counter till next shot can be fired
+		protected bool m_continuous;
 
-		protected bool _continuous;
+		protected string m_projectile;
 
-		protected string projectile;
+		protected bool m_facingRight;
 
-		protected bool _facingRight;
+		protected double m_fireRate;//How long between shots
 
-		public Drawable WeaponDrawable { get; set; }
+		protected float m_impactDamage;
 
-		List<Entity> _projectiles;
+		protected float m_areaDamage;
 
-		public double FireRate { get; set; }//How long between shots
+		protected float m_projectileSpeed;
 
-		public float Damage { get; set; }
+		protected float m_areaOfEffectRadius;
 
-		public float AOEDamage { get; set; }
+		protected bool m_objectImpactTrigger;
 
-		public float ShotSpeed { get; set; }
+		protected bool m_actorImpactTrigger;
+
+		private double m_nextfire;//Counter till next shot can be fired
 
 		public Weapon()
 		{
 
 		}
 
-		public Weapon(Entity owner, string id, Vector2 shotSpawn, Vector2 weaponPosition, double fireRate = 0.5, float damage = 10.0f, float aoeDamage = 20.0f, float shotSpeed = 5.0f, bool continuous = true, bool active = true) : base(owner, id, active)
+		public Weapon(Entity owner, string id, Vector2 shotSpawn, Vector2 weaponPosition, bool continuous = true, bool active = true) : base(owner, id, active)
 		{
 			_spotSpawn = shotSpawn;
 			_weaponPosition = weaponPosition;
-			FireRate = fireRate;
-			Damage = damage;
-			AOEDamage = aoeDamage;
-			ShotSpeed = shotSpeed;
 
-			_continuous = continuous;
-
-			_projectiles = new List<Entity>();
+			m_continuous = continuous;
 
 			Scale = new Vector2(1);
 
-			_facingRight = true;
+			m_facingRight = true;
 		}
 
 		public Weapon(Entity owner, Weapon original) : base(owner, original.Id, original.Active)
 		{
 			_spotSpawn = original._spotSpawn;
 			_weaponPosition = original._weaponPosition;
-			FireRate = original.FireRate;
-			Damage = original.Damage;
-			AOEDamage = original.AOEDamage;
-			ShotSpeed = original.ShotSpeed;
+			m_fireRate = original.m_fireRate;
+			m_impactDamage = original.m_impactDamage;
+			m_areaDamage = original.m_areaDamage;
+			m_projectileSpeed = original.m_projectileSpeed;
 
-			_continuous = original._continuous;
-
-			_projectiles = new List<Entity>();
+			m_continuous = original.m_continuous;
 
 			Scale = original.Scale;
 
 			WeaponDrawable = original.WeaponDrawable;
 
-			_facingRight = true;
+			m_facingRight = true;
+		}
+
+		public void InitialiseAttack(float impactDamage, float areaDamage, float fireRate, float projectileSpeed, float areaOfEffectRadius, bool objectImpactTrigger, bool actorImpactTrigger)
+		{
+			m_impactDamage = impactDamage;
+
+			m_areaDamage = areaDamage;
+
+			m_fireRate = fireRate;
+
+			m_projectileSpeed = projectileSpeed;
+
+			m_areaOfEffectRadius = areaOfEffectRadius;
+
+			m_objectImpactTrigger = objectImpactTrigger;
+
+			m_actorImpactTrigger = actorImpactTrigger;
 		}
 
 		public void Fire(Vector2 direction, float sin, float cos, CharacterRig armsRig)
@@ -90,28 +107,18 @@ namespace Fredrick.src
 
 			e.Position = _owner.Position + Position + transformedShotSpawn;
 
-			Vector2 shotVelocity = direction * ShotSpeed;
+			Vector2 shotVelocity = direction * m_projectileSpeed;
 			e.GetComponent<Projectile>().Revive(shotVelocity, 2.0, true, false, 10.0f, 20.0f, 3.0f, 1.0f);
-			_projectiles.Add(e);
 
-			_nextfire = FireRate;
+			ProjectileBuffer.Instance.ActiveProjectiles.Add(e);
+
+			m_nextfire = m_fireRate;
 
 
 			if (armsRig != null)
 			{
 				armsRig.RestartAnim();
 				armsRig.SetOverrideRotation("Throwing", Rotation, 0, 1);
-			}
-		}
-
-		public void UpdateProjectilePos()
-		{
-			foreach (Entity e in _projectiles)
-			{
-				if (e.GetComponent<CircleCollider>() != null)
-				{
-					e.GetComponent<CircleCollider>().UpdatePosition();
-				}
 			}
 		}
 
@@ -136,7 +143,7 @@ namespace Fredrick.src
 			if (_owner.GetDerivedComponent<Controller>() != null)
 			{
 				direction = _owner.GetDerivedComponent<Controller>().GetAim(origin);
-				if (_continuous)
+				if (m_continuous)
 					fireCommand = _owner.GetDerivedComponent<Controller>().FireHeld;
 				else
 					fireCommand = _owner.GetDerivedComponent<Controller>().FirePressed;
@@ -159,7 +166,7 @@ namespace Fredrick.src
 
 			_transformedWeaponPosition = new Vector2((cos * twpx) - (sin * twpy), (sin * twpx) + (cos * twpy));
 
-			if (_nextfire <= 0)
+			if (m_nextfire <= 0)
 			{
 				if (fireCommand)
 				{
@@ -168,18 +175,7 @@ namespace Fredrick.src
 			}
 			else
 			{
-				_nextfire -= deltaTime;
-			}
-
-			for (int i = (_projectiles.Count - 1); i >= 0; i--)
-			{
-				Entity e = _projectiles[i];
-				e.Update(deltaTime);
-				if (e.GetComponent<Projectile>().Dead)
-				{
-					ProjectileBuffer.Instance.InactiveProjectiles.Push(e);
-					_projectiles.Remove(e);
-				}
+				m_nextfire -= deltaTime;
 			}
 		}
 
@@ -187,11 +183,6 @@ namespace Fredrick.src
 		{
 			Vector2 inv = new Vector2(1, -1);
 			//spriteBatch.Draw(ResourceManager.Instance.Textures[WeaponDrawable._spriteName], (_transformedWeaponPosition + Position + _owner.Position) * inv * WeaponDrawable._spriteSize, WeaponDrawable._sourceRectangle, WeaponDrawable._colour, _owner.Rotation + Rotation, WeaponDrawable._origin, Scale, WeaponDrawable._spriteEffects, WeaponDrawable._layer);
-
-			foreach (Entity e in _projectiles)
-			{
-				e.Draw(spriteBatch);
-			}
 		}
 
 		public override void DebugDraw(SpriteBatch spriteBatch)

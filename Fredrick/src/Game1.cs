@@ -228,16 +228,8 @@ namespace Fredrick.src
 
 			ColliderManager.Instance.Update(gameTime.ElapsedGameTime.TotalSeconds);
 
-			foreach (var e in actors)
-			{
-				if (e.GetComponent<Weapon>() != null)
-					e.GetComponent<Weapon>().UpdateProjectilePos();
-			}
-			foreach (var e in terrain)
-			{
-				if (e.GetComponent<Weapon>() != null)
-					e.GetComponent<Weapon>().UpdateProjectilePos();
-			}
+			ProjectileBuffer.Instance.Update(gameTime.ElapsedGameTime.TotalSeconds);
+
 			levelEditor.Update(gameTime.ElapsedGameTime.TotalSeconds, ref terrain, Content);
 			//cam.Trauma = 1;
 			cam.Update(gameTime.ElapsedGameTime.TotalSeconds);
@@ -271,6 +263,7 @@ namespace Fredrick.src
 				e.Draw(spriteBatch);
 			foreach (var e in terrain)
 				e.Draw(spriteBatch);
+			ProjectileBuffer.Instance.Draw(spriteBatch);
 			levelEditor.Draw(spriteBatch);
 			spriteBatch.End();
 

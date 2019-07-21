@@ -44,7 +44,7 @@ namespace Fredrick.src
 		public void Revive()
 		{
 			_body = new Body(ColliderManager.Instance.World, _owner.Position, 0, BodyType.Dynamic);
-			_circle = new CircleShape(0.25f, 1.0f);
+			_circle = new CircleShape(0.09375f, 0.3f);
 			_circle.Position = _position;
 			_fixture = _body.CreateFixture(_circle);
 

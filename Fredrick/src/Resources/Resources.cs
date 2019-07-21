@@ -172,7 +172,7 @@ namespace Fredrick.src
 
 		private void InitRenderables()
 		{
-			Renderable fragNade = new Renderable(null, "Projectile", "FragNade", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+			Renderable fragNade = new Renderable(null, "Projectile", "FragNade", new Vector2(4), new Vector2(0), new Vector2(1), 8, 8, 0.1f);
 			fragNade.Drawable.AddAnimation(0, 0, 1, 1, Animation.OnEnd.Loop, 0);
 			fragNade.Drawable.AddAnimation(32, 0, 1, 1, Animation.OnEnd.Loop, 0);
 
@@ -188,10 +188,11 @@ namespace Fredrick.src
 
 		private void InitWeapons()
 		{
-			Weapon fragGrenade = new Weapon(null, "FragGrenade", new Vector2(0.5f, 0), new Vector2(0.8f, 0), 0.4, 4.0f, 20.0f, 6.0f, true);
+			Weapon fragGrenade = new Weapon(null, "FragGrenade", new Vector2(0.5f, 0), new Vector2(0.8f, 0), true);
 			fragGrenade.Position = new Vector2(0, 0.5f);
-			fragGrenade.WeaponDrawable = new Drawable("fragNade", new Vector2(16), 32, 32, 0.2f);
+			fragGrenade.WeaponDrawable = new Drawable("fragNade", new Vector2(4), 8, 8, 0.2f);
 			fragGrenade.Tags.Add("MotionFlip");
+			fragGrenade.InitialiseAttack(5.0f, 50.0f, 0.2f, 0.3f, 5.0f, false, true);
 			//fragWeapon.Tags.Add("Body");
 			Weapons.Add("FragGrenade", fragGrenade);
 		}
