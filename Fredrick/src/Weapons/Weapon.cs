@@ -38,6 +38,12 @@ namespace Fredrick.src
 
 		protected float m_areaOfEffectRadius;
 
+		protected float m_impactKnockback;
+
+		protected float m_areaKnockback;
+
+		protected double m_fuseTimer;
+
 		protected bool m_objectImpactTrigger;
 
 		protected bool m_actorImpactTrigger;
@@ -65,10 +71,17 @@ namespace Fredrick.src
 		{
 			_spotSpawn = original._spotSpawn;
 			_weaponPosition = original._weaponPosition;
-			m_fireRate = original.m_fireRate;
+
 			m_impactDamage = original.m_impactDamage;
 			m_areaDamage = original.m_areaDamage;
+			m_fireRate = original.m_fireRate;
 			m_projectileSpeed = original.m_projectileSpeed;
+			m_areaOfEffectRadius = original.m_areaOfEffectRadius;
+			m_impactKnockback = original.m_impactKnockback;
+			m_areaKnockback = original.m_areaKnockback;
+			m_fuseTimer = original.m_fuseTimer;
+			m_objectImpactTrigger = original.m_objectImpactTrigger;
+			m_actorImpactTrigger = original.m_actorImpactTrigger;
 
 			m_continuous = original.m_continuous;
 
@@ -79,7 +92,7 @@ namespace Fredrick.src
 			m_facingRight = true;
 		}
 
-		public void InitialiseAttack(float impactDamage, float areaDamage, float fireRate, float projectileSpeed, float areaOfEffectRadius, bool objectImpactTrigger, bool actorImpactTrigger)
+		public void InitialiseAttack(float impactDamage, float areaDamage, float fireRate, float projectileSpeed, float areaOfEffectRadius, float impactKnockback, float areaKnockback, double fuseTimer, bool objectImpactTrigger, bool actorImpactTrigger)
 		{
 			m_impactDamage = impactDamage;
 
@@ -90,6 +103,12 @@ namespace Fredrick.src
 			m_projectileSpeed = projectileSpeed;
 
 			m_areaOfEffectRadius = areaOfEffectRadius;
+
+			m_impactKnockback = impactKnockback;
+
+			m_areaKnockback = areaKnockback;
+
+			m_fuseTimer = fuseTimer;
 
 			m_objectImpactTrigger = objectImpactTrigger;
 
@@ -108,7 +127,8 @@ namespace Fredrick.src
 			e.Position = _owner.Position + Position + transformedShotSpawn;
 
 			Vector2 shotVelocity = direction * m_projectileSpeed;
-			e.GetComponent<Projectile>().Revive(shotVelocity, 2.0, true, false, 10.0f, 20.0f, 3.0f, 1.0f);
+			e.GetComponent<Projectile>().InitialiseAttack(m_impactDamage, m_areaDamage, m_projectileSpeed, m_areaOfEffectRadius, m_impactKnockback, m_areaKnockback, m_fuseTimer, m_objectImpactTrigger, m_actorImpactTrigger);
+			e.GetComponent<Projectile>().Revive(shotVelocity, m_fuseTimer);
 
 			ProjectileBuffer.Instance.ActiveProjectiles.Add(e);
 

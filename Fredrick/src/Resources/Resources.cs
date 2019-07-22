@@ -192,7 +192,7 @@ namespace Fredrick.src
 			fragGrenade.Position = new Vector2(0, 0.5f);
 			fragGrenade.WeaponDrawable = new Drawable("fragNade", new Vector2(4), 8, 8, 0.2f);
 			fragGrenade.Tags.Add("MotionFlip");
-			fragGrenade.InitialiseAttack(5.0f, 50.0f, 0.2f, 0.3f, 5.0f, false, true);
+			fragGrenade.InitialiseAttack(5.0f, 50.0f, 0.0f, 0.3f, 5.0f, 0.0f, 1.0f, 2.0, false, true);
 			//fragWeapon.Tags.Add("Body");
 			Weapons.Add("FragGrenade", fragGrenade);
 		}

@@ -14,29 +14,31 @@ namespace Fredrick.src
 	[Serializable]
 	public class Projectile : Movable
 	{
-		/// <summary>
-		/// Does the projectile deal aoe damage when it terminates?
-		/// </summary>
-		private bool _explosive;
-		/// <summary>
-		/// Will the projectile terminate upon contact?
-		/// </summary>
-		private bool _contactTermination;
-
 		private bool _detonated;
-
-		private float _damage;
-		private float _aoeDamage;
 
 		//For explosion aoe
 		private Body _body;
 		private CircleShape _circle;
 		private Fixture _fixture;
 
-		private float _radius;
-		private float _knockback;
 
-		public double LifeTime { get; set; }
+		protected float m_impactDamage;
+
+		protected float m_areaDamage;
+
+		protected float m_projectileSpeed;
+
+		protected float m_areaOfEffectRadius;
+
+		protected bool m_objectImpactTrigger;
+
+		protected bool m_actorImpactTrigger;
+
+		protected float m_impactKnockback;
+
+		protected float m_areaKnockback;
+
+		protected double m_fuseTimer;
 
 		/// <summary>
 		/// Is the projectile finished
@@ -51,44 +53,45 @@ namespace Fredrick.src
 			Velocity = new Vector2();
 		}
 
-		public Projectile(Entity owner, string id, Vector2 velocity, double lifeTime, bool explosive = false, bool contactTermination = true, float damage = 5.0f, float aoeDamage = 5.0f, float radius = 3.0f, float knockback = 1.0f) : base(owner, id)
+		public Projectile(Entity owner, string id, Vector2 velocity, double fuseTimer) : base(owner, id)
 		{
 			Velocity = velocity;
-			LifeTime = lifeTime;
-			_explosive = explosive;
-			_contactTermination = contactTermination;
-
-			_damage = damage;
-			_aoeDamage = aoeDamage;
-			_radius = radius;
-			_knockback = knockback;
+			m_fuseTimer = fuseTimer;
 		}
 
 		public Projectile(Entity owner, Projectile original) : base(owner, original.Id)
 		{
 			Velocity = original.Velocity;
-			LifeTime = original.LifeTime;
-			_explosive = original._explosive;
-			_contactTermination = original._contactTermination;
+			m_fuseTimer = original.m_fuseTimer;
 
-			_damage = original._damage;
-			_aoeDamage = original._aoeDamage;
-			_radius = original._radius;
-			_knockback = original._knockback;
 			Attack = original.Attack;
 		}
 
-		public void Revive(Vector2 velocity, double lifeTime, bool explosive = false, bool contactTermination = true, float damage = 5.0f, float aoeDamage = 5.0f, float radius = 3.0f, float knockback = 1.0f)
+		public void InitialiseAttack(float impactDamage, float areaDamage, float projectileSpeed, float areaOfEffectRadius, float impactKnockback, float areaKnockback, double fuseTimer, bool objectImpactTrigger, bool actorImpactTrigger)
+		{
+			m_impactDamage = impactDamage;
+
+			m_areaDamage = areaDamage;
+
+			m_projectileSpeed = projectileSpeed;
+
+			m_areaOfEffectRadius = areaOfEffectRadius;
+
+			m_impactKnockback = impactKnockback;
+
+			m_areaKnockback = areaKnockback;
+
+			m_fuseTimer = fuseTimer;
+
+			m_objectImpactTrigger = objectImpactTrigger;
+
+			m_actorImpactTrigger = actorImpactTrigger;
+		}
+
+		public void Revive(Vector2 velocity, double fuseTimer)
 		{
 
-			LifeTime = lifeTime;
-			_explosive = explosive;
-			_contactTermination = contactTermination;
-
-			_damage = damage;
-			_aoeDamage = aoeDamage;
-			_radius = radius;
-			_knockback = knockback;
+			m_fuseTimer = fuseTimer;
 
 			if (_owner.GetComponent<CircleCollider>() != null)
 			{
@@ -105,7 +108,7 @@ namespace Fredrick.src
 			_detonated = false;
 
 			_body = new Body(ColliderManager.Instance.World, _owner.Position, 0, BodyType.Dynamic);
-			_circle = new CircleShape(_radius, 1.0f);
+			_circle = new CircleShape(m_areaOfEffectRadius, 1.0f);
 			_circle.Position = Position;
 			_fixture = _body.CreateFixture(_circle);
 
@@ -124,7 +127,7 @@ namespace Fredrick.src
 
 		public override void Update(double deltaTime)
 		{
-			LifeTime -= deltaTime;
+			m_fuseTimer -= deltaTime;
 			_body.Position = _owner.Position;
 
 			ResolveMotion(deltaTime);
@@ -145,7 +148,7 @@ namespace Fredrick.src
 			}
 
 
-			if (LifeTime < 0)
+			if (m_fuseTimer < 0)
 			{
 				if (!_detonated)
 				{
@@ -161,7 +164,7 @@ namespace Fredrick.src
 								{
 									Vector2 force = e.Position - _owner.Position;
 									force.Normalize();
-									force *= _knockback;
+									force *= m_areaKnockback;
 									e.GetComponent<CircleCollider>().ApplyForce(force, _owner.Position);
 								}
 								if (e.GetComponent<Damageable>() != null)
