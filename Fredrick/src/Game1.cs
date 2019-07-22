@@ -229,6 +229,7 @@ namespace Fredrick.src
 			ColliderManager.Instance.Update(gameTime.ElapsedGameTime.TotalSeconds);
 
 			ProjectileBuffer.Instance.Update(gameTime.ElapsedGameTime.TotalSeconds);
+			ParticleBuffer.Instance.Update(gameTime.ElapsedGameTime.TotalSeconds);
 
 			levelEditor.Update(gameTime.ElapsedGameTime.TotalSeconds, ref terrain, Content);
 			//cam.Trauma = 1;
@@ -264,6 +265,7 @@ namespace Fredrick.src
 			foreach (var e in terrain)
 				e.Draw(spriteBatch);
 			ProjectileBuffer.Instance.Draw(spriteBatch);
+			ParticleBuffer.Instance.Draw(spriteBatch);
 			levelEditor.Draw(spriteBatch);
 			spriteBatch.End();
 

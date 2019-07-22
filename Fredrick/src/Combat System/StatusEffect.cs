@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Fredrick.src
 {
+	[Serializable]
 	public abstract class StatusEffect
 	{
 		public abstract int ParticleDensity { get; }

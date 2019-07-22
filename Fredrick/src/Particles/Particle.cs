@@ -10,16 +10,18 @@ namespace Fredrick.src
 	[Serializable]
 	public class Particle
 	{
-		//need to add collision logic and animation code
-		Vector2 _position;
-		float _rotation;
-		Vector2 _scale;
-		Vector2 _velocity;
+		public Drawable Drawable;
+
+		public Vector2 Position;
+		public float Rotation;
+		public Vector2 Scale;
+		public Vector2 Velocity;
+		Vector2 m_acceleration;
 		Vector2 _tempMove;
 		bool _collide;
 
-		double _lifetime;
-		double _initLifetime;
+		public double Lifetime;
+		public double InitLifetime;
 		bool _reduceLifeOnCollision;
 
 		float _restitution;
@@ -27,71 +29,64 @@ namespace Fredrick.src
 		bool _fakeDepth;
 		float _scaleFactor;
 
-		public Vector2 Position
+		public List<Tuple<Color, double>> LerpColours
 		{
-			get { return _position; }
-			set { _position = value; }
+			get { return m_lerpColours; }
+			set
+			{
+				m_lerpColours = value;
+				m_lerpColours.Sort((x, y) => x.Item2.CompareTo(y.Item2));
+			}
 		}
 
-		public float Rotation
-		{
-			get { return _rotation; }
-		}
-
-		public Vector2 Scale
-		{
-			get { return _scale; }
-			set { _scale = value; }
-		}
-
-		public double Lifetime
-		{
-			get { return _lifetime; }
-			set { _lifetime = value; }
-		}
-
-		public double InitLifetime
-		{
-			get { return _initLifetime; }
-			set { _initLifetime = value; }
-		}
+		protected List<Tuple<Color, double>> m_lerpColours;
 
 		public Particle()
 		{
-			_position = new Vector2();
-			_velocity = new Vector2();
+			Position = new Vector2();
+			Velocity = new Vector2();
 		}
 
-		public Particle(Vector2 position, Vector2 velocity, double lifeTime, bool collide = false, bool reduceLifeOnCollision = false, float restitution = 0.5f, bool fakeDepth = false, float scaleFactor = 1.0f)
+		public Particle(Drawable drawable, Vector2 position, Vector2 velocity, Vector2 acceleration, double lifeTime, bool collide = false, bool reduceLifeOnCollision = false, float restitution = 0.5f, bool fakeDepth = false, float scaleFactor = 1.0f, List<Tuple<Color, double>> lerpColours = null)
 		{
-			_position = position;
-			_scale = new Vector2(1.0f);
-			_velocity = velocity;
+			Drawable = drawable;
+			Position = position;
+			Scale = new Vector2(1.0f);
+			Velocity = velocity;
+			m_acceleration = acceleration;
 			_collide = collide;
 
-			_lifetime = lifeTime;
-			_initLifetime = lifeTime;
+			Lifetime = lifeTime;
+			InitLifetime = lifeTime;
 			_reduceLifeOnCollision = reduceLifeOnCollision;
 			_restitution = restitution;
 
 			_fakeDepth = fakeDepth;
 			_scaleFactor = scaleFactor;
+			m_lerpColours = new List<Tuple<Color, double>>();
+			if (lerpColours != null)
+				m_lerpColours = lerpColours;
 		}
 
-		public void Revive(Vector2 position, Vector2 velocity, double lifeTime, bool collide = false, bool reduceLifeOnCollision = false, float restitution = 0.5f, bool fakeDepth = false, float scaleFactor = 1.0f)
+		public void Revive(Drawable drawable, Vector2 position, Vector2 velocity, Vector2 acceleration, double lifeTime, bool collide = false, bool reduceLifeOnCollision = false, float restitution = 0.5f, bool fakeDepth = false, float scaleFactor = 1.0f, List<Tuple<Color, double>> lerpColours = null)
 		{
-			_position = position;
-			_scale = new Vector2(1.0f);
-			_velocity = velocity;
+			Drawable = drawable;
+			Position = position;
+			Scale = new Vector2(1.0f);
+			Velocity = velocity;
+			m_acceleration = acceleration;
 			_collide = collide;
 
-			_lifetime = lifeTime;
-			_initLifetime = lifeTime;
+			Lifetime = lifeTime;
+			InitLifetime = lifeTime;
 			_reduceLifeOnCollision = reduceLifeOnCollision;
 			_restitution = restitution;
 
 			_fakeDepth = fakeDepth;
 			_scaleFactor = scaleFactor;
+			m_lerpColours = new List<Tuple<Color, double>>();
+			if (lerpColours != null)
+				m_lerpColours = lerpColours;
 		}
 
 		public bool CheckCollision(RectangleF other)
@@ -99,7 +94,7 @@ namespace Fredrick.src
 			bool collided = false;
 
 			Vector2 testMove = new Vector2(_tempMove.X, 0);
-			Vector2 newPos = (_position + testMove);
+			Vector2 newPos = (Position + testMove);
 
 			if (other.Intersect(newPos))
 			{
@@ -108,19 +103,19 @@ namespace Fredrick.src
 				if (distanceX > 0)
 				{
 					_tempMove.X += (other.Width / 2 - distanceX) * 1.05f;
-					_velocity = (_velocity - (2f * Vector2.Dot(_velocity, new Vector2(1, 0))) * new Vector2(1, 0)) * _restitution;
+					Velocity = (Velocity - (2f * Vector2.Dot(Velocity, new Vector2(1, 0))) * new Vector2(1, 0)) * _restitution;
 				}
 				else
 				{
 					_tempMove.X += (-other.Width / 2 - distanceX) * 1.05f;
-					_velocity = (_velocity - (2f * Vector2.Dot(_velocity, new Vector2(-1, 0))) * new Vector2(-1, 0)) * _restitution;
+					Velocity = (Velocity - (2f * Vector2.Dot(Velocity, new Vector2(-1, 0))) * new Vector2(-1, 0)) * _restitution;
 				}
 
 				collided = true;
 			}
 
 			testMove = new Vector2(0, _tempMove.Y);
-			newPos = (_position + testMove);
+			newPos = (Position + testMove);
 
 			if (other.Intersect(newPos))
 			{
@@ -129,12 +124,12 @@ namespace Fredrick.src
 				if (distanceY > 0)
 				{
 					_tempMove.Y += (other.Height / 2 - distanceY) * 1.05f;
-					_velocity = (_velocity - (2f * Vector2.Dot(_velocity, new Vector2(0, 1))) * new Vector2(0, 1)) * _restitution;
+					Velocity = (Velocity - (2f * Vector2.Dot(Velocity, new Vector2(0, 1))) * new Vector2(0, 1)) * _restitution;
 				}
 				else
 				{
 					_tempMove.Y += (-other.Height / 2 - distanceY) * 1.05f;
-					_velocity = (_velocity - (2f * Vector2.Dot(_velocity, new Vector2(0, -1))) * new Vector2(0, -1)) * _restitution;
+					Velocity = (Velocity - (2f * Vector2.Dot(Velocity, new Vector2(0, -1))) * new Vector2(0, -1)) * _restitution;
 				}
 
 				collided = true;
@@ -146,7 +141,7 @@ namespace Fredrick.src
 		public bool CheckCollision(Platform other)
 		{
 			Vector2 testMove = new Vector2(_tempMove.X, _tempMove.Y);
-			Vector2 newPos = (_position + testMove);
+			Vector2 newPos = (Position + testMove);
 			bool collided = false;
 			if (other.PlatformDepth < 0)
 			{
@@ -159,7 +154,7 @@ namespace Fredrick.src
 						if (newPos.Y < y && newPos.Y > y + other.PlatformDepth)
 						{
 							_tempMove.Y -= (newPos.Y - y);
-							_velocity = (_velocity - (2f * Vector2.Dot(_velocity, other.Normal)) * other.Normal) * _restitution;
+							Velocity = (Velocity - (2f * Vector2.Dot(Velocity, other.Normal)) * other.Normal) * _restitution;
 							collided = true;
 						}
 					}
@@ -167,7 +162,7 @@ namespace Fredrick.src
 			}
 			else
 			{
-				newPos = (_position + testMove);
+				newPos = (Position + testMove);
 				{
 					float f = (newPos.X - (other.CurrentPosition.X - (other.Width / 2))) / ((other.CurrentPosition.X + (other.Width / 2)) - (other.CurrentPosition.X - (other.Width / 2)));//(currentX - minX) / (maxX - minX)
 					if (f > 0 && f < 1)
@@ -177,7 +172,7 @@ namespace Fredrick.src
 						if (newPos.Y > y && newPos.Y < y + other.PlatformDepth)
 						{
 							_tempMove.Y -= (newPos.Y - y);
-							_velocity = (_velocity - (2f * Vector2.Dot(_velocity, other.Normal)) * other.Normal) * _restitution;
+							Velocity = (Velocity - (2f * Vector2.Dot(Velocity, other.Normal)) * other.Normal) * _restitution;
 							collided = true;
 						}
 					}
@@ -187,29 +182,29 @@ namespace Fredrick.src
 			return collided;
 		}
 
-		public void Update(double deltaTime, Vector2 acceleration)
+		public void Update(double deltaTime)
 		{
-			_velocity += acceleration * (float)deltaTime;
-			_tempMove = _velocity * (float)deltaTime;
+			Velocity += m_acceleration * (float)deltaTime;
+			_tempMove = Velocity * (float)deltaTime;
 
 			if (_fakeDepth)
 			{
 				if (_scaleFactor > 0)
 				{
-					_scale.X *= 1 + (_scaleFactor * (float)deltaTime);
-					_scale.Y *= 1 + (_scaleFactor * (float)deltaTime);
+					Scale.X *= 1 + (_scaleFactor * (float)deltaTime);
+					Scale.Y *= 1 + (_scaleFactor * (float)deltaTime);
 				}
 				else
 				{
-					_scale.X /= 1 + (-_scaleFactor * (float)deltaTime);
-					_scale.Y /= 1 + (-_scaleFactor * (float)deltaTime);
+					Scale.X /= 1 + (-_scaleFactor * (float)deltaTime);
+					Scale.Y /= 1 + (-_scaleFactor * (float)deltaTime);
 				}
 			}
 
 			if (_collide)
 			{
-				int x = Math.Min(Math.Max((int)Math.Floor(_position.X + _tempMove.X + 0.5f), 0), 1000);
-				int y = Math.Min(Math.Max((int)Math.Floor(_position.Y + _tempMove.Y + 0.5f), 0), 1000);
+				int x = Math.Min(Math.Max((int)Math.Floor(Position.X + _tempMove.X + 0.5f), 0), 1000);
+				int y = Math.Min(Math.Max((int)Math.Floor(Position.Y + _tempMove.Y + 0.5f), 0), 1000);
 
 				bool collided = false;
 				foreach (Entity e in ColliderManager.Instance.Terrain[x, y])
@@ -229,22 +224,22 @@ namespace Fredrick.src
 					}
 				}
 				if (collided && _reduceLifeOnCollision)
-					_lifetime /= 2.0;
+					Lifetime /= 2.0;
 			}
 
-			_position += _tempMove;
+			Position += _tempMove;
 
-			if (_velocity.Length() > 0)
+			if (Velocity.Length() > 0)
 			{
-				Vector2 v = _velocity;
+				Vector2 v = Velocity;
 				v.Normalize();
-				_rotation = (float)Math.Atan2(-v.Y, v.X);
+				Rotation = (float)Math.Atan2(-v.Y, v.X);
 			}
 			else
 			{
-				_rotation = 0;
+				Rotation = 0;
 			}
-			_lifetime -= deltaTime;
+			Lifetime -= deltaTime;
 		}
 	}
 }

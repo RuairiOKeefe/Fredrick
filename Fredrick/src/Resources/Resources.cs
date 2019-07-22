@@ -166,7 +166,6 @@ namespace Fredrick.src
 		private void InitProjectiles()
 		{
 			Projectile fragNade = new Projectile(null);
-			fragNade.Attack = new Attack(Attack.DamageType.Fire, new List<StatusEffect>() { new Burn() }, 10);
 			Projectiles.Add("FragNade", fragNade);
 		}
 
@@ -192,7 +191,9 @@ namespace Fredrick.src
 			fragGrenade.Position = new Vector2(0, 0.5f);
 			fragGrenade.WeaponDrawable = new Drawable("fragNade", new Vector2(4), 8, 8, 0.2f);
 			fragGrenade.Tags.Add("MotionFlip");
-			fragGrenade.InitialiseAttack(5.0f, 50.0f, 0.0f, 0.3f, 5.0f, 0.0f, 1.0f, 2.0, false, true);
+			Attack fragImpactAttack = new Attack(Attack.DamageType.Kinetic, new List<StatusEffect>(), 5.0f);
+			Attack fragAreaAttack = new Attack(Attack.DamageType.Kinetic, new List<StatusEffect>(), 5.0f);
+			fragGrenade.InitialiseAttack(fragImpactAttack, fragAreaAttack, 0.0f, 0.3f, 5.0f, 0.0f, 1.0f, 2.0, false, true);
 			//fragWeapon.Tags.Add("Body");
 			Weapons.Add("FragGrenade", fragGrenade);
 		}

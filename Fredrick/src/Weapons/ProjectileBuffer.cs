@@ -32,6 +32,12 @@ namespace Fredrick.src
 		public Stack<Entity> InactiveProjectiles;
 		public List<Entity> ActiveProjectiles;
 
+		public ProjectileBuffer()
+		{
+			InactiveProjectiles = new Stack<Entity>(NUM_PROJECTILES);
+			ActiveProjectiles = new List<Entity>(NUM_PROJECTILES);
+		}
+
 		public void Load(ContentManager content)
 		{
 			for (int i = 0; i < NUM_PROJECTILES; i++)
@@ -41,12 +47,6 @@ namespace Fredrick.src
 
 				e.Load(content);
 			}
-		}
-
-		public ProjectileBuffer()
-		{
-			InactiveProjectiles = new Stack<Entity>(NUM_PROJECTILES);
-			ActiveProjectiles = new List<Entity>(NUM_PROJECTILES);
 		}
 
 		public void Update(double deltaTime)

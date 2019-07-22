@@ -22,9 +22,9 @@ namespace Fredrick.src
 		private Fixture _fixture;
 
 
-		protected float m_impactDamage;
+		protected Attack m_impactAttack;
 
-		protected float m_areaDamage;
+		protected Attack m_areaAttack;
 
 		protected float m_projectileSpeed;
 
@@ -45,8 +45,6 @@ namespace Fredrick.src
 		/// </summary>
 		public bool Dead { get; set; }
 
-		public Attack Attack { get; set; }
-
 		public Projectile(Entity owner) : base(owner)
 		{
 			Position = new Vector2();
@@ -63,15 +61,13 @@ namespace Fredrick.src
 		{
 			Velocity = original.Velocity;
 			m_fuseTimer = original.m_fuseTimer;
-
-			Attack = original.Attack;
 		}
 
-		public void InitialiseAttack(float impactDamage, float areaDamage, float projectileSpeed, float areaOfEffectRadius, float impactKnockback, float areaKnockback, double fuseTimer, bool objectImpactTrigger, bool actorImpactTrigger)
+		public void InitialiseAttack(Attack impactAttack, Attack areaAttack, float projectileSpeed, float areaOfEffectRadius, float impactKnockback, float areaKnockback, double fuseTimer, bool objectImpactTrigger, bool actorImpactTrigger)
 		{
-			m_impactDamage = impactDamage;
+			m_impactAttack = impactAttack;
 
-			m_areaDamage = areaDamage;
+			m_areaAttack = areaAttack;
 
 			m_projectileSpeed = projectileSpeed;
 
@@ -169,7 +165,7 @@ namespace Fredrick.src
 								}
 								if (e.GetComponent<Damageable>() != null)
 								{
-									e.GetComponent<Damageable>().DealDamage(Attack);
+									e.GetComponent<Damageable>().DealDamage(m_areaAttack);
 								}
 							}
 							c = c.Next;
@@ -192,27 +188,7 @@ namespace Fredrick.src
 					_detonated = true;
 				}
 
-				if (_owner.GetComponent<Emitter>() != null)
-				{
-					bool dead = true;
-					foreach (Component c in _owner.Components)
-					{
-						if (c is Emitter)
-						{
-							Emitter e = c as Emitter;
-							if (e.Particles.Count != 0)
-							{
-								dead = false;
-							}
-						}
-					}
-					Dead = dead;
-
-				}
-				else
-				{
-					Dead = true;
-				}
+				Dead = true;
 			}
 		}
 

@@ -30,9 +30,9 @@ namespace Fredrick.src
 
 		protected double m_fireRate;//How long between shots
 
-		protected float m_impactDamage;
+		protected Attack m_impactAttack;
 
-		protected float m_areaDamage;
+		protected Attack m_areaAttack;
 
 		protected float m_projectileSpeed;
 
@@ -72,8 +72,8 @@ namespace Fredrick.src
 			_spotSpawn = original._spotSpawn;
 			_weaponPosition = original._weaponPosition;
 
-			m_impactDamage = original.m_impactDamage;
-			m_areaDamage = original.m_areaDamage;
+			m_impactAttack = original.m_impactAttack;
+			m_areaAttack = original.m_areaAttack;
 			m_fireRate = original.m_fireRate;
 			m_projectileSpeed = original.m_projectileSpeed;
 			m_areaOfEffectRadius = original.m_areaOfEffectRadius;
@@ -92,11 +92,11 @@ namespace Fredrick.src
 			m_facingRight = true;
 		}
 
-		public void InitialiseAttack(float impactDamage, float areaDamage, float fireRate, float projectileSpeed, float areaOfEffectRadius, float impactKnockback, float areaKnockback, double fuseTimer, bool objectImpactTrigger, bool actorImpactTrigger)
+		public void InitialiseAttack(Attack impactAttack, Attack areaAttack, float fireRate, float projectileSpeed, float areaOfEffectRadius, float impactKnockback, float areaKnockback, double fuseTimer, bool objectImpactTrigger, bool actorImpactTrigger)
 		{
-			m_impactDamage = impactDamage;
+			m_impactAttack = impactAttack;
 
-			m_areaDamage = areaDamage;
+			m_areaAttack = areaAttack;
 
 			m_fireRate = fireRate;
 
@@ -127,7 +127,7 @@ namespace Fredrick.src
 			e.Position = _owner.Position + Position + transformedShotSpawn;
 
 			Vector2 shotVelocity = direction * m_projectileSpeed;
-			e.GetComponent<Projectile>().InitialiseAttack(m_impactDamage, m_areaDamage, m_projectileSpeed, m_areaOfEffectRadius, m_impactKnockback, m_areaKnockback, m_fuseTimer, m_objectImpactTrigger, m_actorImpactTrigger);
+			e.GetComponent<Projectile>().InitialiseAttack(m_impactAttack, m_areaAttack, m_projectileSpeed, m_areaOfEffectRadius, m_impactKnockback, m_areaKnockback, m_fuseTimer, m_objectImpactTrigger, m_actorImpactTrigger);
 			e.GetComponent<Projectile>().Revive(shotVelocity, m_fuseTimer);
 
 			ProjectileBuffer.Instance.ActiveProjectiles.Add(e);
