@@ -193,7 +193,7 @@ namespace Fredrick.src
 			fragGrenade.Tags.Add("MotionFlip");
 			Attack fragImpactAttack = new Attack(Attack.DamageType.Kinetic, new List<StatusEffect>(), 5.0f);
 			Attack fragAreaAttack = new Attack(Attack.DamageType.Kinetic, new List<StatusEffect>(), 20.0f);
-			fragGrenade.InitialiseAttack(fragImpactAttack, fragAreaAttack, 0.1f, 0.3f, 5.0f, 0.0f, 1.0f, 2.0, false, true);
+			fragGrenade.InitialiseAttack(fragImpactAttack, fragAreaAttack, 0.1f, 0.3f, 5.0f, 0.0f, 0.05f, 2.0, false, true);
 			//fragWeapon.Tags.Add("Body");
 			Weapons.Add("FragGrenade", fragGrenade);
 		}
