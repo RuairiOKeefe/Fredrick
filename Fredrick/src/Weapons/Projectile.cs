@@ -14,8 +14,6 @@ namespace Fredrick.src
 	[Serializable]
 	public class Projectile : Movable
 	{
-		private bool _detonated;
-
 		//For explosion aoe
 		private Body _body;
 		private CircleShape _circle;
@@ -101,7 +99,6 @@ namespace Fredrick.src
 			}
 
 			Dead = false;
-			_detonated = false;
 
 			_body = new Body(ColliderManager.Instance.World, _owner.Position, 0, BodyType.Dynamic);
 			_circle = new CircleShape(m_areaOfEffectRadius, 1.0f);
@@ -121,9 +118,8 @@ namespace Fredrick.src
 			}
 		}
 
-		public override void Update(double deltaTime)
+		public void MoveProjectile(double deltaTime)
 		{
-			m_fuseTimer -= deltaTime;
 			_body.Position = _owner.Position;
 
 			ResolveMotion(deltaTime);
@@ -142,54 +138,108 @@ namespace Fredrick.src
 				}
 				_owner.Rotation = Rotation;
 			}
+		}
 
+		public void ImpactAttack(Entity target)
+		{
+			if (target.GetComponent<Damageable>() != null)
+			{
+				target.GetComponent<Damageable>().DealDamage(m_impactAttack);
+			}
+		}
+
+		public void AreaAttack()
+		{
+			ContactEdge c = _body.ContactList;
+			while (c != null && c.Next != null)
+			{
+				if (c.Contact.IsTouching)
+				{
+					Entity e = (Entity)c.Other.UserData;
+					if (e.GetComponent<CircleCollider>() != null)
+					{
+						Vector2 force = e.Position - _owner.Position;
+						force.Normalize();
+						force *= m_areaKnockback;
+						e.GetComponent<CircleCollider>().ApplyForce(force, _owner.Position);
+					}
+					if (e.GetComponent<Damageable>() != null)
+					{
+						e.GetComponent<Damageable>().DealDamage(m_areaAttack);
+					}
+				}
+				c = c.Next;
+			}
+		}
+
+		public void Detonate()
+		{
+			_owner.GetComponent<CircleCollider>().Kill();
+			foreach (Component c in _owner.Components)
+			{
+				if (c is Emitter)
+				{
+					Emitter e = c as Emitter;
+					e.Emit();
+				}
+			}
+			if (_owner.GetComponent<Renderable>() != null)
+			{
+				_owner.GetComponent<Renderable>().Drawable.TransitionAnim(1);
+			}
+
+			AreaAttack();
+
+			Dead = true;
+		}
+
+		public override void Update(double deltaTime)
+		{
+			MoveProjectile(deltaTime);
+
+			m_fuseTimer -= deltaTime;
+
+			bool detonate = false;
+
+			if (_owner.GetComponent<CircleCollider>() != null)
+			{
+				CircleCollider collider = _owner.GetComponent<CircleCollider>();
+				ContactEdge c = collider.Body.ContactList;
+
+				while (c != null && c.Next != null)
+				{
+					if (c.Contact.IsTouching)
+					{
+						Entity e = (Entity)c.Other.UserData;
+						if (e != Owner)
+						{
+							if (e.Tags.Contains("Actor") && m_actorImpactTrigger)
+							{
+								detonate = true;
+							}
+							if (!e.Tags.Contains("Actor") && m_objectImpactTrigger)
+							{
+								detonate = true;
+							}
+
+							ImpactAttack(e);
+						}
+					}
+					c = c.Next;
+
+				}
+			}
 
 			if (m_fuseTimer < 0)
 			{
-				if (!_detonated)
-				{
-					if (_owner.GetComponent<CircleCollider>() != null)
-					{
-						ContactEdge c = _body.ContactList;
-						while (c != null && c.Next != null)
-						{
-							if (c.Contact.IsTouching)
-							{
-								Entity e = (Entity)c.Other.UserData;
-								if (e.GetComponent<CircleCollider>() != null)
-								{
-									Vector2 force = e.Position - _owner.Position;
-									force.Normalize();
-									force *= m_areaKnockback;
-									e.GetComponent<CircleCollider>().ApplyForce(force, _owner.Position);
-								}
-								if (e.GetComponent<Damageable>() != null)
-								{
-									e.GetComponent<Damageable>().DealDamage(m_areaAttack);
-								}
-							}
-							c = c.Next;
-						}
-
-						_owner.GetComponent<CircleCollider>().Kill();
-					}
-					foreach (Component c in _owner.Components)
-					{
-						if (c is Emitter)
-						{
-							Emitter e = c as Emitter;
-							e.Emit();
-						}
-					}
-					if (_owner.GetComponent<Renderable>() != null)
-					{
-						_owner.GetComponent<Renderable>().Drawable.TransitionAnim(1);
-					}
-					_detonated = true;
-				}
-
-				Dead = true;
+				detonate = true;
 			}
+
+			if (detonate)
+			{
+				Detonate();
+			}
+
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)

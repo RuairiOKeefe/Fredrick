@@ -16,7 +16,7 @@ namespace Fredrick.src
 	{
 		Vector2 _position;
 
-		Body _body;
+		public Body Body { get; private set; }
 		CircleShape _circle;
 		Fixture _fixture;
 
@@ -43,39 +43,39 @@ namespace Fredrick.src
 
 		public void Revive()
 		{
-			_body = new Body(ColliderManager.Instance.World, _owner.Position, 0, BodyType.Dynamic);
+			Body = new Body(ColliderManager.Instance.World, _owner.Position, 0, BodyType.Dynamic);
 			_circle = new CircleShape(0.09375f, 0.3f);
 			_circle.Position = _position;
-			_fixture = _body.CreateFixture(_circle);
+			_fixture = Body.CreateFixture(_circle);
 
-			_body.BodyType = BodyType.Dynamic;
-			_body.UserData = _owner;
-			_body.Awake = true;
-			_body.Position = _owner.Position;
+			Body.BodyType = BodyType.Dynamic;
+			Body.UserData = _owner;
+			Body.Awake = true;
+			Body.Position = _owner.Position;
 
 
-			_body.Restitution = 0.7f;
+			Body.Restitution = 0.7f;
 		}
 
 		public void ApplyForce(Vector2 force)
 		{
-			_body.ApplyLinearImpulse(force / 2);
+			Body.ApplyLinearImpulse(force / 2);
 		}
 
 		public void ApplyForce(Vector2 force, Vector2 source)
 		{
-			_body.ApplyLinearImpulse(force, source);
+			Body.ApplyLinearImpulse(force, source);
 		}
 
 		public void UpdatePosition()
 		{
-			_owner.Position = _body.Position;
-			_owner.Rotation = -_body.Rotation;//Needs to be negative
+			_owner.Position = Body.Position;
+			_owner.Rotation = -Body.Rotation;//Needs to be negative
 		}
 
 		public void Kill()
 		{
-			ColliderManager.Instance.World.RemoveBody(_body);
+			ColliderManager.Instance.World.RemoveBody(Body);
 		}
 
 		public override void Load(ContentManager content)

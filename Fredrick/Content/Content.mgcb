@@ -121,18 +121,6 @@
 /processorParam:TextureFormat=Color
 /build:tempArm.png
 
-#begin tempSpark.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:tempSpark.png
-
 #begin dirt.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -384,4 +372,16 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:RainDrop.png
+
+#begin Spark.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Spark.png
 

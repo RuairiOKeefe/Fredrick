@@ -134,8 +134,8 @@ namespace Fredrick.src
 			emberLerp.Add(new Tuple<Color, double>(new Color(250, 243, 67, 255) * 0.8f, 0.4));
 			emberLerp.Add(new Tuple<Color, double>(new Color(255, 255, 211, 255) * 0.5f, 0.5));
 			emberLerp.Add(new Tuple<Color, double>(new Color(255, 255, 255, 255) * 0.0f, 1.0));
-			Emitter embers = new Emitter(null, "tempSpark", false, 1000, 50, new Vector2(0, -26.0f), 0, 0, 10.0f, 0.5);//need trails
-			embers.ParticleDrawable = new Drawable("tempSpark", new Vector2(8), 16, 16, 0.1f);
+			Emitter embers = new Emitter(null, "Spark", false, 1000, 50, new Vector2(0, -26.0f), 0, 0, 10.0f, 0.5);//need trails
+			embers.ParticleDrawable = new Drawable("Spark", new Vector2(2,1.5f), 4, 3, 0.1f);
 			embers.Scale = new Vector2(0.5f);
 			embers.SetLifeTime(0.0, 0.5, 1.2);
 			embers.SetVelocity(0.0f, 10.5f, 12.0f, true);
@@ -192,8 +192,8 @@ namespace Fredrick.src
 			fragGrenade.WeaponDrawable = new Drawable("fragNade", new Vector2(4), 8, 8, 0.2f);
 			fragGrenade.Tags.Add("MotionFlip");
 			Attack fragImpactAttack = new Attack(Attack.DamageType.Kinetic, new List<StatusEffect>(), 5.0f);
-			Attack fragAreaAttack = new Attack(Attack.DamageType.Kinetic, new List<StatusEffect>(), 5.0f);
-			fragGrenade.InitialiseAttack(fragImpactAttack, fragAreaAttack, 0.0f, 0.3f, 5.0f, 0.0f, 1.0f, 2.0, false, true);
+			Attack fragAreaAttack = new Attack(Attack.DamageType.Kinetic, new List<StatusEffect>(), 20.0f);
+			fragGrenade.InitialiseAttack(fragImpactAttack, fragAreaAttack, 0.1f, 0.3f, 5.0f, 0.0f, 1.0f, 2.0, false, true);
 			//fragWeapon.Tags.Add("Body");
 			Weapons.Add("FragGrenade", fragGrenade);
 		}
@@ -202,6 +202,7 @@ namespace Fredrick.src
 		void InitPlayerEntities()
 		{
 			Entity player = new Entity(true, "Player");
+			player.Tags.Add("Actor");
 			player.Components.Add(new PlayerController(player, "Controller"));
 			player.Components.Add(new Character(player, Characters["Player"]));
 			player.Components.Add(new AABBCollider(player, AABBColliders["PlayerCollider"]));
