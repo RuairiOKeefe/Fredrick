@@ -69,6 +69,7 @@ namespace Fredrick.src
 
 		public Weapon(Entity owner, Weapon original) : base(owner, original.Id, original.Active)
 		{
+			Position = original.Position;
 			_spotSpawn = original._spotSpawn;
 			_weaponPosition = original._weaponPosition;
 

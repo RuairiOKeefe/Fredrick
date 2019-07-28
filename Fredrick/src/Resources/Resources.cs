@@ -187,7 +187,7 @@ namespace Fredrick.src
 
 		private void InitWeapons()
 		{
-			Weapon fragGrenade = new Weapon(null, "FragGrenade", new Vector2(0.5f, 0), new Vector2(0.8f, 0), true);
+			Weapon fragGrenade = new Weapon(null, "FragGrenade", new Vector2(0.5f, 0), new Vector2(0.5f, 0), true);
 			fragGrenade.Position = new Vector2(0, 0.5f);
 			fragGrenade.WeaponDrawable = new Drawable("fragNade", new Vector2(4), 8, 8, 0.2f);
 			fragGrenade.Tags.Add("MotionFlip");
