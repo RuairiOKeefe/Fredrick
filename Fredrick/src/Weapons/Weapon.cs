@@ -139,7 +139,7 @@ namespace Fredrick.src
 			if (armsRig != null)
 			{
 				armsRig.RestartAnim();
-				armsRig.SetOverrideRotation("Throwing", Rotation, 0, 1);
+				armsRig.SetOverrideRotation(Rotation, false);
 			}
 		}
 

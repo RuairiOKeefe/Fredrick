@@ -226,9 +226,6 @@ namespace Fredrick.src
 	{
 		public string Id;
 		public List<RigFrame> RigFrames;
-		public float OverrideRotation;
-		public int FrameMin;
-		public int FrameMax;
 		public bool Loop;
 		public bool Over;
 
@@ -260,13 +257,6 @@ namespace Fredrick.src
 			Over = original.Over;
 		}
 
-		public void SetOverrideRotation(float rotation, int frameMin, int frameMax)
-		{
-			OverrideRotation = rotation;
-			FrameMin = frameMin;
-			FrameMax = frameMax;
-		}
-
 		public RigAnimation Copy()
 		{
 			return new RigAnimation(this);
@@ -286,7 +276,11 @@ namespace Fredrick.src
 		double m_frameTime;
 		public Vector2 OverridePosition;
 		public float OverrideRotation;
+		public float NextOverrideRotation;
 		public string MountId;//If not blank will search for component to track
+		private float m_previousOverrideRotation;
+		private bool m_loopOverride;// Will the override continue until a new one is set?
+
 
 		public CharacterRig()
 		{
@@ -353,9 +347,10 @@ namespace Fredrick.src
 			}
 		}
 
-		public void SetOverrideRotation(string animation, float rotation, int frameMin, int frameMax)
+		public void SetOverrideRotation(float rotation, bool loopOverride)
 		{
-			Animations[animation].SetOverrideRotation(rotation, frameMin, frameMax);
+			NextOverrideRotation = rotation;
+			m_loopOverride = loopOverride;
 		}
 
 		public override void Load(ContentManager content)
@@ -403,7 +398,14 @@ namespace Fredrick.src
 						PreviousFrame = new RigFrame(Bones, Position - OverridePosition, m_frameTime);
 						CurrentAnimation.Over = true;
 					}
+					if (!m_loopOverride)
+					{
+						NextOverrideRotation = 0;
+					}
 				}
+
+				m_previousOverrideRotation = OverrideRotation;
+				OverrideRotation = NextOverrideRotation;
 			}
 
 			lerpValue = (float)(m_frameTime / CurrentAnimation.RigFrames[NextFrame].FrameTime);
@@ -414,19 +416,15 @@ namespace Fredrick.src
 			{
 				if (b.Parent == null)
 				{
-					float prevFrameRot = PreviousFrame.BoneFrames[b.Id];
-					float nextFrameRot = CurrentAnimation.RigFrames[NextFrame].BoneFrames[b.Id];
-					if (NextFrame >= CurrentAnimation.FrameMin && NextFrame <= CurrentAnimation.FrameMax)
+					float prevFrameRot = PreviousFrame.BoneFrames[b.Id] + m_previousOverrideRotation;
+					float nextFrameRot = CurrentAnimation.RigFrames[NextFrame].BoneFrames[b.Id] + OverrideRotation;
+					if (MotionFlip)
 					{
-						nextFrameRot += CurrentAnimation.OverrideRotation;
-						if (MotionFlip)
-						{
-							b.Rotation = (prevFrameRot * (1 - lerpValue) - nextFrameRot * (lerpValue));
-						}
-						else
-						{
-							b.Rotation = (prevFrameRot * (1 - lerpValue) + nextFrameRot * (lerpValue));
-						}
+						b.Rotation = (prevFrameRot * (1 - lerpValue) - nextFrameRot * (lerpValue));
+					}
+					else
+					{
+						b.Rotation = (prevFrameRot * (1 - lerpValue) + nextFrameRot * (lerpValue));
 					}
 				}
 				else
