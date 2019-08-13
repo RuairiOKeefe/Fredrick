@@ -73,7 +73,7 @@ namespace Fredrick.src
 
 		public RectangleF(RectangleF original)
 		{
-			Position = original.Position;
+			Position = new Vector2(original.Position.X, original.Position.Y);
 			_width = original.Width;
 			_height = original.Height;
 

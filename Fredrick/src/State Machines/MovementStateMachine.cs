@@ -34,12 +34,20 @@ namespace Fredrick.src
 			CurrentAction = action;
 		}
 
-		public void IdleTransistion()
+		public void TryStanding()
 		{
-
+			if (Math.Abs(Character.Velocity.X) < 0.2f && Character.Grounded)
+			{
+				CharacterRig rig = Character.Owner.GetComponent<CharacterRig>(null, "Legs");
+				if (rig != null)
+				{
+					rig.SwitchToAnim("Standing", true);
+				}
+				CurrentAction = Action.Standing;
+			}
 		}
 
-		public void StandingTransistion()
+		public void TryWalking()
 		{
 			if (Math.Abs(Character.Velocity.X) > 0.2f && Character.Grounded)
 			{
@@ -52,17 +60,49 @@ namespace Fredrick.src
 			}
 		}
 
-		public void WalkingTransistion()
+		public void TryJumping()
 		{
-			if (Math.Abs(Character.Velocity.X) < 0.2f && Character.Grounded)
+			if (Character.JumpCommand)
 			{
 				CharacterRig rig = Character.Owner.GetComponent<CharacterRig>(null, "Legs");
 				if (rig != null)
 				{
-					rig.SwitchToAnim("Standing", true);
+					rig.SwitchToAnim("Jumping", true);
 				}
-				CurrentAction = Action.Standing;
+				CurrentAction = Action.Jumping;
 			}
+		}
+
+		public void TryFalling()
+		{
+			if (Character.Velocity.Y < 0.0f && !Character.Grounded)
+			{
+				CharacterRig rig = Character.Owner.GetComponent<CharacterRig>(null, "Legs");
+				if (rig != null)
+				{
+					rig.SwitchToAnim("Falling", true);
+				}
+				CurrentAction = Action.Falling;
+			}
+		}
+
+
+		public void IdleTransistion()
+		{
+
+		}
+
+		public void StandingTransistion()
+		{
+			TryWalking();
+			TryJumping();
+		}
+
+		public void WalkingTransistion()
+		{
+			TryStanding();
+			TryJumping();
+			TryFalling();
 		}
 
 		public void SprintingTransistion()
@@ -77,12 +117,17 @@ namespace Fredrick.src
 
 		public void JumpingTransistion()
 		{
-
+			//TryStanding();
+			//TryWalking();
+			TryJumping();
+			TryFalling();
 		}
 
 		public void FallingTransistion()
 		{
-
+			TryStanding();
+			TryWalking();
+			TryJumping();
 		}
 
 		public void Update()

@@ -49,7 +49,7 @@ namespace Fredrick.src
 
 		public AABBTrigger(Entity owner, AABBTrigger original) : base(owner, original.Id)
 		{
-			_rectangle = original.Rectangle;
+			_rectangle = new RectangleF(original.Rectangle);
 			_aabbHits = new List<AABBCollider>();
 			_platformHits = new List<Platform>();
 		}
@@ -91,14 +91,14 @@ namespace Fredrick.src
 
 			foreach (Platform p in ColliderManager.Instance.Platforms)
 			{
-				if (p.Owner != _owner)
+				if (p.Owner != Owner)
 					if (CheckCollision(p))
 						trigger = true;
 			}
 
 			foreach (AABBCollider c in ColliderManager.Instance.Colliders)
 			{
-				if (c.Owner != _owner)
+				if (c.Owner != Owner)
 					if (CheckCollision(c))
 						trigger = true;
 			}

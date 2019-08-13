@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -62,7 +63,7 @@ namespace Fredrick.src
 			MovingFriction = 100;
 			AirMove = 0.4f;
 
-			JumpTrigger = new AABBTrigger(_owner);
+			JumpTrigger = new AABBTrigger(owner);
 			JumpTrigger.Rectangle = new RectangleF(new Vector2(0, -1.0f), 1, 0.5f);
 
 			JumpDuration = 0.3f;
@@ -93,7 +94,7 @@ namespace Fredrick.src
 			MovingFriction = movingFriction;
 			AirMove = airMove;
 
-			JumpTrigger = jumpTrigger;
+			JumpTrigger = new AABBTrigger(_owner, jumpTrigger);
 
 			Grounded = grounded;
 			PrevGrounded = prevGrounded;
@@ -203,13 +204,22 @@ namespace Fredrick.src
 				Velocity = new Vector2(Velocity.X, TerminalVelocity);
 		}
 
+		public override void Load(ContentManager content)
+		{
+			JumpTrigger.Load(content);
+		}
+
+		public override void Unload()
+		{
+
+		}
 
 		public override void Update(double deltaTime)
 		{
-			if (_owner.GetDerivedComponent<Controller>() != null)
+			if (Owner.GetDerivedComponent<Controller>() != null)
 			{
-				MoveCommand = _owner.GetDerivedComponent<Controller>().Movement;
-				JumpCommand = _owner.GetDerivedComponent<Controller>().Jump;
+				MoveCommand = Owner.GetDerivedComponent<Controller>().Movement;
+				JumpCommand = Owner.GetDerivedComponent<Controller>().Jump;
 			}
 			else
 			{
@@ -230,13 +240,15 @@ namespace Fredrick.src
 			_jumpClock -= deltaTime;
 			PrevGrounded = Grounded;
 
-			if (JumpTrigger.Update(_owner.Position) && !JumpWait)
+			if (JumpTrigger.Update(Owner.Position) && !JumpWait)
 			{
 				Grounded = true;
 				_jumpsLeft = MaxJumps;
 			}
 			else
+			{
 				Grounded = false;
+			}
 
 			if (!Grounded)
 			{
@@ -253,16 +265,16 @@ namespace Fredrick.src
 
 			if (MoveCommand > 0)
 			{
-				FollowPosition = _owner.Position + FollowOffset;
+				FollowPosition = Owner.Position + FollowOffset;
 			}
 			else
 				if (MoveCommand < 0)
 			{
-				FollowPosition = _owner.Position - FollowOffset;
+				FollowPosition = Owner.Position - FollowOffset;
 			}
 			else
 			{
-				FollowPosition = _owner.Position;
+				FollowPosition = Owner.Position;
 			}
 
 			if (MoveCommand > 0)
@@ -270,7 +282,7 @@ namespace Fredrick.src
 			if (MoveCommand < 0)
 				_facingRight = false;
 
-			foreach (Component c in _owner.Components)
+			foreach (Component c in Owner.Components)
 			{
 				if (c.Tags.Contains("MotionFlip"))
 				{

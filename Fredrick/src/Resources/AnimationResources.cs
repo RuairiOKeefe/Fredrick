@@ -11,6 +11,8 @@ namespace Fredrick.src
 	{
 		public CharacterRig GetPlayerLegs()
 		{
+			Dictionary<string, RigAnimation> animations = new Dictionary<string, RigAnimation>();
+
 			Bone torso = new Bone("Torso", new Vector2(0), 0, new Vector2(0), new Vector2(0));
 			torso.Drawable = new Drawable("Torso", new Vector2(16), 32, 32, 0.15f);
 			Bone Head = new Bone("Head", new Vector2(0), 0, new Vector2(2 / 32f, 25 / 32f), new Vector2(0, -5 / 32f));
@@ -41,8 +43,6 @@ namespace Fredrick.src
 			Bone ToesBack = new Bone("ToesBack", new Vector2(0), 0, new Vector2(2 / 32f, 0.0f), new Vector2(1 / 32f, 0.0f));
 			ToesBack.Drawable = new Drawable("Toes", new Vector2(16), 32, 32, 0.1f);
 			FootBack.AddChild(ToesBack);
-
-			Dictionary<string, RigAnimation> animations = new Dictionary<string, RigAnimation>();
 
 			RigAnimation standing = new RigAnimation("Run", new List<RigFrame>(), true, false);
 
@@ -183,7 +183,69 @@ namespace Fredrick.src
 
 			animations.Add("Running", run);
 
+
+			RigAnimation jumping = new RigAnimation("Jump", new List<RigFrame>(), false, false);
+
+			Dictionary<string, float> jumpPrep = new Dictionary<string, float>();
+			jumpPrep.Add("Torso", 0.0f);
+			jumpPrep.Add("Head", 0.0f);
+			jumpPrep.Add("UpperLegFront", 0.2f);
+			jumpPrep.Add("LowerLegFront", 0.1f);
+			jumpPrep.Add("FootFront", 0.4f);
+			jumpPrep.Add("ToesFront", -0.4f);
+			jumpPrep.Add("UpperLegBack", -0.3f);
+			jumpPrep.Add("LowerLegBack", 0.3f);
+			jumpPrep.Add("FootBack", 0.1f);
+			jumpPrep.Add("ToesBack", -0.1f);
+			jumping.RigFrames.Add(new RigFrame(jumpPrep, new Vector2(0, 11 / 32f), 0.4));
+
+			Dictionary<string, float> legsExtended = new Dictionary<string, float>();
+			legsExtended.Add("Torso", 0.0f);
+			legsExtended.Add("Head", 0.0f);
+			legsExtended.Add("UpperLegFront", 10.25f);
+			legsExtended.Add("LowerLegFront", 0.15f);
+			legsExtended.Add("FootFront", 0.5f);
+			legsExtended.Add("ToesFront", -0.5f);
+			legsExtended.Add("UpperLegBack", -0.35f);
+			legsExtended.Add("LowerLegBack", 0.35f);
+			legsExtended.Add("FootBack", 0.2f);
+			legsExtended.Add("ToesBack", -0.2f);
+			jumping.RigFrames.Add(new RigFrame(legsExtended, new Vector2(0, 12 / 32f), 0.4));
+
+			animations.Add("Jumping", jumping);
+
+			RigAnimation falling = new RigAnimation("Fall", new List<RigFrame>(), false, false);
+
+			Dictionary<string, float> wobble1 = new Dictionary<string, float>();
+			wobble1.Add("Torso", 0.0f);
+			wobble1.Add("Head", 0.0f);
+			wobble1.Add("UpperLegFront", 0.2f);
+			wobble1.Add("LowerLegFront", 0.1f);
+			wobble1.Add("FootFront", 0.4f);
+			wobble1.Add("ToesFront", -0.4f);
+			wobble1.Add("UpperLegBack", -10.3f);
+			wobble1.Add("LowerLegBack", 0.3f);
+			wobble1.Add("FootBack", 0.1f);
+			wobble1.Add("ToesBack", -0.1f);
+			falling.RigFrames.Add(new RigFrame(wobble1, new Vector2(0, 11 / 32f), 0.4));
+
+			Dictionary<string, float> wobble2 = new Dictionary<string, float>();
+			wobble2.Add("Torso", 0.0f);
+			wobble2.Add("Head", 0.0f);
+			wobble2.Add("UpperLegFront", 0.25f);
+			wobble2.Add("LowerLegFront", 0.15f);
+			wobble2.Add("FootFront", 0.5f);
+			wobble2.Add("ToesFront", -0.5f);
+			wobble2.Add("UpperLegBack", -0.35f);
+			wobble2.Add("LowerLegBack", 0.35f);
+			wobble2.Add("FootBack", 0.2f);
+			wobble2.Add("ToesBack", -0.2f);
+			falling.RigFrames.Add(new RigFrame(wobble2, new Vector2(0, 12 / 32f), 0.4));
+
+			animations.Add("Falling", falling);
+
 			CharacterRig characterRig = new CharacterRig(null, "PlayerLegs", torso, animations);
+
 			characterRig.Tags.Add("Legs");
 			characterRig.Tags.Add("MotionFlip");
 			return characterRig;
