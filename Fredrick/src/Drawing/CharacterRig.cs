@@ -345,6 +345,7 @@ namespace Fredrick.src
 				NextFrame = 1;
 				m_frameTime = 0;
 			}
+			CurrentAnimation.Over = false;
 		}
 
 		public void SetOverrideRotation(float rotation, bool loopOverride)
@@ -398,6 +399,7 @@ namespace Fredrick.src
 						PreviousFrame = new RigFrame(Bones, Position - OverridePosition, m_frameTime);
 						CurrentAnimation.Over = true;
 					}
+
 					if (!m_loopOverride)
 					{
 						NextOverrideRotation = 0;

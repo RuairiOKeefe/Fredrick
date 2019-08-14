@@ -15,6 +15,7 @@ namespace Fredrick.src
 	{
 
 		private MovementStateMachine m_movementState;
+		public MovementStateMachine.Action MovementState { get { return m_movementState.CurrentAction; } }//temp for debugging
 
 		public float MoveCommand { get; set; }
 		public bool JumpCommand { get; set; }

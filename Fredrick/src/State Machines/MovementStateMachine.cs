@@ -67,7 +67,7 @@ namespace Fredrick.src
 				CharacterRig rig = Character.Owner.GetComponent<CharacterRig>(null, "Legs");
 				if (rig != null)
 				{
-					rig.SwitchToAnim("Jumping", true);
+					rig.SwitchToAnim("Jumping", false);
 				}
 				CurrentAction = Action.Jumping;
 			}
