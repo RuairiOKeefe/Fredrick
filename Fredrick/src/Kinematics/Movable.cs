@@ -35,6 +35,15 @@ namespace Fredrick.src
 
 		}
 
+		public Movable(Entity owner, Movable original) : base(owner, original.Id)
+		{
+			AttemptedPosition = new Vector2();
+			Velocity = new Vector2(original.Velocity.X, original.Velocity.Y);
+			Acceleration = new Vector2(original.Acceleration.X, original.Acceleration.Y);
+			HorAcc = original.HorAcc;
+			MaxSpeed = original.MaxSpeed;
+		}
+
 		public void StopVelX()
 		{
 			Velocity = new Vector2(0.0f, Velocity.Y);
@@ -101,7 +110,7 @@ namespace Fredrick.src
 
 		public override Component Copy(Entity owner)
 		{
-			return new Movable();
+			return new Movable(owner, this);
 		}
 	}
 }

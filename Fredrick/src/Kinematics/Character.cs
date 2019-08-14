@@ -109,7 +109,7 @@ namespace Fredrick.src
 			JumpDelay = jumpDelay;
 		}
 
-		public Character(Entity owner, Character original) : base(owner, original.Id)
+		public Character(Entity owner, Character original) : base(owner, original)
 		{
 			m_movementState = new MovementStateMachine(this);
 			PrevAcceleration = original.PrevAcceleration;
@@ -123,7 +123,7 @@ namespace Fredrick.src
 
 			JumpTrigger = new AABBTrigger(owner, original.JumpTrigger);
 
-			Grounded = original.Grounded;
+			Grounded = false;
 			PrevGrounded = original.PrevGrounded;
 			FallVelocity = original.FallVelocity;
 			JumpDuration = original.JumpDuration;

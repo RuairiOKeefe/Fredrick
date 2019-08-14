@@ -41,7 +41,7 @@ namespace Fredrick.src
 
 		public AABBCollider(Entity owner, AABBCollider original) : base(owner, original.Id)
 		{
-			Rectangle = original.Rectangle;
+			Rectangle = new RectangleF(original.Rectangle);
 		}
 
 		public bool CheckCollision(RectangleF other)

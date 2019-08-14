@@ -49,6 +49,7 @@ namespace Fredrick.src
 
 		public AABBTrigger(Entity owner, AABBTrigger original) : base(owner, original.Id)
 		{
+			Position = original.Position;
 			_rectangle = new RectangleF(original.Rectangle);
 			_aabbHits = new List<AABBCollider>();
 			_platformHits = new List<Platform>();
