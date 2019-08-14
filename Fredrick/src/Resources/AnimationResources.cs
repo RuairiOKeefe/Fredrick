@@ -240,7 +240,7 @@ namespace Fredrick.src
 			wobble1.Add("LowerLegBack", 0.9f);
 			wobble1.Add("FootBack", 0.4f);
 			wobble1.Add("ToesBack", -0.4f);
-			falling.RigFrames.Add(new RigFrame(wobble1, new Vector2(0, 11 / 32f), 0.4));
+			falling.RigFrames.Add(new RigFrame(wobble1, new Vector2(0, 11 / 32f), 0.2));
 
 			Dictionary<string, float> wobble2 = new Dictionary<string, float>();
 			wobble2.Add("Torso", 0.0f);
@@ -253,7 +253,7 @@ namespace Fredrick.src
 			wobble2.Add("LowerLegBack", 0.95f);
 			wobble2.Add("FootBack", 0.5f);
 			wobble2.Add("ToesBack", -0.5f);
-			falling.RigFrames.Add(new RigFrame(wobble2, new Vector2(0, 12 / 32f), 0.4));
+			falling.RigFrames.Add(new RigFrame(wobble2, new Vector2(0, 12 / 32f), 0.2));
 
 			animations.Add("Falling", falling);
 
