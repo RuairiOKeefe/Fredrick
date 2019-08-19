@@ -24,6 +24,7 @@ namespace Fredrick.src
 		public float SpawnVelocity { get; set; }
 		public float MinVelVar { get; set; }
 		public float MaxVelVar { get; set; }
+		public float WidthRatio { get; set; } = 1.0f;
 		public bool SqrVelVar { get; set; }
 
 		public bool Collide { get; set; }
@@ -83,7 +84,7 @@ namespace Fredrick.src
 			m_rnd = new Random();
 		}
 
-		public Emitter(Entity owner, Emitter original) : base(owner, original.Id, original.Active)
+		public Emitter(Entity owner, Emitter original) : base(owner, original, original.Active)
 		{
 			Position = original.Position;
 			Rotation = original.Rotation;
@@ -98,6 +99,7 @@ namespace Fredrick.src
 			SpawnVelocity = original.SpawnVelocity;
 			MinVelVar = original.MinVelVar;
 			MaxVelVar = original.MaxVelVar;
+			WidthRatio = original.WidthRatio;
 			SqrVelVar = original.SqrVelVar;
 			Collide = original.Collide;
 			ReduceLifeOnCollision = original.ReduceLifeOnCollision;
@@ -111,11 +113,12 @@ namespace Fredrick.src
 			m_rnd = new Random();
 		}
 
-		public void SetVelocity(float spawnVelocity, float minVariance, float maxVariance, bool sqrVelVar = false)
+		public void SetVelocity(float spawnVelocity, float minVariance, float maxVariance, float widthRatio = 1.0f, bool sqrVelVar = false)
 		{
 			SpawnVelocity = spawnVelocity;
 			MinVelVar = minVariance;
 			MaxVelVar = maxVariance;
+			WidthRatio = widthRatio;
 			SqrVelVar = sqrVelVar;
 		}
 
@@ -146,6 +149,7 @@ namespace Fredrick.src
 				{
 					Vector2 spawnPos = new Vector2((float)m_rnd.NextDouble() * SpawnWidth - (SpawnWidth / 2), (float)m_rnd.NextDouble() * SpawnHeight - (SpawnHeight / 2));
 					Vector2 spawnVel = new Vector2((float)m_rnd.NextDouble() * 2 - 1, (float)m_rnd.NextDouble() * 2 - 1);
+					spawnVel.X *= WidthRatio;
 					spawnVel.Normalize();
 
 					float velocityRND = (float)m_rnd.NextDouble();
@@ -161,7 +165,7 @@ namespace Fredrick.src
 					float scaleFactor = (forwardMotion ? (1.0f - velocityRND) : -(1.0f - velocityRND)) * ScaleFactor;
 
 					Particle p = ParticleBuffer.Instance.InactiveParticles.Pop();
-					p.Revive(ParticleDrawable, spawnPos + _owner.Position, spawnVel, Acceleration, lifetime, Collide, ReduceLifeOnCollision, Restitution, FakeDepth, scaleFactor, m_lerpColours);
+					p.Revive(ParticleDrawable, spawnPos + Position + _owner.Position, spawnVel, Acceleration, lifetime, Collide, ReduceLifeOnCollision, Restitution, FakeDepth, scaleFactor, m_lerpColours);
 					ParticleBuffer.Instance.ActiveParticles.Add(p);
 				}
 			}

@@ -121,7 +121,7 @@ namespace Fredrick.src
 			explosionLerp.Add(new Tuple<Color, double>(new Color(61, 59, 58, 255) * 0.0f, 1.0));
 			Emitter explosion = new Emitter(null, "explosion", false, 1000, 600, new Vector2(0, 0), 0, 0, 17.0f, 0.6);
 			explosion.SetLifeTime(0.6, 0, 0);
-			explosion.SetVelocity(0.0f, 1.0f, 17.0f);
+			explosion.SetVelocity(0.0f, 1.0f, 17.0f, 1.0f, false);
 			explosion.SetCollision(true, false);
 			explosion.SetScaling(false, 0.0f);
 			explosion.LerpColours = explosionLerp;
@@ -135,10 +135,10 @@ namespace Fredrick.src
 			emberLerp.Add(new Tuple<Color, double>(new Color(255, 255, 211, 255) * 0.5f, 0.5));
 			emberLerp.Add(new Tuple<Color, double>(new Color(255, 255, 255, 255) * 0.0f, 1.0));
 			Emitter embers = new Emitter(null, "Spark", false, 1000, 50, new Vector2(0, -26.0f), 0, 0, 10.0f, 0.5);//need trails
-			embers.ParticleDrawable = new Drawable("Spark", new Vector2(2,1.5f), 4, 3, 0.1f);
+			embers.ParticleDrawable = new Drawable("Spark", new Vector2(2, 1.5f), 4, 3, 0.1f);
 			embers.Scale = new Vector2(0.5f);
 			embers.SetLifeTime(0.0, 0.5, 1.2);
-			embers.SetVelocity(0.0f, 10.5f, 12.0f, true);
+			embers.SetVelocity(0.0f, 10.5f, 12.0f, 1.0f, true);
 			embers.SetCollision(true, true);
 			embers.SetScaling(true, 0.5f);
 			embers.Restitution = 0.8f;
@@ -155,12 +155,26 @@ namespace Fredrick.src
 			Emitter fire = new Emitter(null, "Fire", true, 1000, 50, new Vector2(0, 15.0f), 0, 0, 10.0f, 0.5);
 			fire.ParticleDrawable = new Drawable("Fire", new Vector2(8), 16, 16, 0.1f);
 			fire.SetLifeTime(0.0, 0.5, 1.2);
-			fire.SetVelocity(0.0f, 0.0f, 1.4f, false);
+			fire.SetVelocity(0.0f, 0.0f, 1.4f, 1.0f, false);
 			fire.SetCollision(false, false);
 			fire.SetScaling(true, 0.5f);
 			fire.LerpColours = fireLerp;
 
 			Emitters.Add("Fire", fire);
+
+			List<Tuple<Color, double>> dustLerp = new List<Tuple<Color, double>>();
+			dustLerp.Add(new Tuple<Color, double>(new Color(200, 200, 200, 255) * 0.1f, 0.0));
+			dustLerp.Add(new Tuple<Color, double>(new Color(200, 200, 200, 255) * 0.0f, 1.0));
+			Emitter dust = new Emitter(null, "explosion", false, 100, 50, new Vector2(0, 0.0f), 0, 0, 10.0f, 0.5);
+			dust.ParticleDrawable = new Drawable("Fire", new Vector2(8), 16, 16, 0.1f);
+			dust.SetLifeTime(0.0, 0.6, 0.9);
+			dust.SetVelocity(0.0f, 0.1f, 2.5f, 20.0f, false);
+			dust.SetCollision(false, false);
+			dust.SetScaling(false, 1.0f);
+			dust.LerpColours = dustLerp;
+			dust.Tags.Add("Landing");
+
+			Emitters.Add("Dust", dust);
 		}
 
 		private void InitProjectiles()
@@ -212,6 +226,8 @@ namespace Fredrick.src
 			player.Components.Add(new Damageable(player, Damageables["PlayerDamageable"]));
 			player.Components.Add(new StatusHandler(player, StatusHandlers["PlayerStatus"]));
 			player.Components.Add(new Weapon(player, Weapons["FragGrenade"]));
+			player.Components.Add(new Emitter(player, Emitters["Dust"]));
+			player.Components[player.Components.Count - 1].Position = new Vector2(0.3f, -1.0f);
 			PlayerEntities.Add("Player", player);
 		}
 

@@ -31,7 +31,7 @@ namespace Fredrick.src
 			_facingRight = true;
 		}
 
-		public Renderable(Entity owner, Renderable original) : base(owner, original.Id, original.Active)
+		public Renderable(Entity owner, Renderable original) : base(owner, original.Id, original.Tags, original.Active)
 		{
 			Position = original.Position;
 			Rotation = original.Rotation;

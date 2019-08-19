@@ -11,7 +11,7 @@ namespace Fredrick.src
 	{
 		private double _timer;
 
-		public PatrolAI(Entity owner, String id, bool active = true) : base(owner, id, active)
+		public PatrolAI(Entity owner, String id, List<string> tags = null, bool active = true) : base(owner, id, tags, active)
 		{
 
 		}

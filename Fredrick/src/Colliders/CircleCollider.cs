@@ -36,7 +36,7 @@ namespace Fredrick.src
 			//_fixture = _body.CreateFixture(_circle);
 		}
 
-		public CircleCollider(Entity owner, CircleCollider original) : base(owner, original.Id, original.Active)
+		public CircleCollider(Entity owner, CircleCollider original) : base(owner, original.Id, original.Tags, original.Active)
 		{
 
 		}

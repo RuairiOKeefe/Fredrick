@@ -22,7 +22,7 @@ namespace Fredrick.src
 
 		}
 
-		public Controller(Entity owner, string id, bool active = true) : base(owner, id, active)
+		public Controller(Entity owner, string id, List<string> tags = null, bool active = true) : base(owner, id, tags, active)
 		{
 
 		}

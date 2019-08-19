@@ -205,6 +205,50 @@ namespace Fredrick.src
 				Velocity = new Vector2(Velocity.X, TerminalVelocity);
 		}
 
+		private void TryLanding()
+		{
+			PrevGrounded = Grounded;
+
+			if (JumpTrigger.Update(Owner.Position) && !JumpWait)
+			{
+				Grounded = true;
+				_jumpsLeft = MaxJumps;
+			}
+			else
+			{
+				Grounded = false;
+			}
+
+			if (!Grounded)
+			{
+				FallVelocity = Velocity.Y;
+			}
+			else
+			{
+				//remove once screenshake manager is added
+				if (PrevGrounded)//Gives a frame to check fall trauma
+					FallVelocity = 0;
+				if(!PrevGrounded)
+				{
+					if (FallVelocity < -0.5f)
+					{
+						//Emit Particles
+						foreach (Component c in _owner.Components)
+						{
+							if (c is Emitter && c.Tags.Contains("Landing"))
+							{
+								Emitter e = c as Emitter;
+								e.Emit();
+							}
+						}
+					}
+					//Cause Screenshake
+					//FallVelocity = 0;
+				}
+			}
+
+		}
+
 		public override void Load(ContentManager content)
 		{
 			JumpTrigger.Load(content);
@@ -239,27 +283,8 @@ namespace Fredrick.src
 			}
 
 			_jumpClock -= deltaTime;
-			PrevGrounded = Grounded;
 
-			if (JumpTrigger.Update(Owner.Position) && !JumpWait)
-			{
-				Grounded = true;
-				_jumpsLeft = MaxJumps;
-			}
-			else
-			{
-				Grounded = false;
-			}
-
-			if (!Grounded)
-			{
-				FallVelocity = Velocity.Y;
-			}
-			else
-			{
-				if (PrevGrounded)//Gives a frame to check fall trauma
-					FallVelocity = 0;
-			}
+			TryLanding();
 
 			Walk(deltaTime);
 			ResolveMotion(deltaTime);

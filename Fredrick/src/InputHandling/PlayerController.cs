@@ -16,7 +16,7 @@ namespace Fredrick.src
 		{
 		}
 
-		public PlayerController(Entity owner, string id, PlayerIndex playerIndex = PlayerIndex.One, bool keyboard = true, bool controller = false, bool active = true) : base(owner, id, active)
+		public PlayerController(Entity owner, string id, PlayerIndex playerIndex = PlayerIndex.One, bool keyboard = true, bool controller = false, List<string> tags = null, bool active = true) : base(owner, id, tags, active)
 		{
 			PlayerInput = new PlayerInput(playerIndex, keyboard, controller);
 		}

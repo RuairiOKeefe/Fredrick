@@ -39,7 +39,7 @@ namespace Fredrick.src
 			Rectangle = new RectangleF(position, width, height);
 		}
 
-		public AABBCollider(Entity owner, AABBCollider original) : base(owner, original.Id)
+		public AABBCollider(Entity owner, AABBCollider original) : base(owner, original)
 		{
 			Rectangle = new RectangleF(original.Rectangle);
 		}

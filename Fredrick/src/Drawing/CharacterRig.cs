@@ -303,7 +303,7 @@ namespace Fredrick.src
 
 		}
 
-		public CharacterRig(Entity owner, CharacterRig original) : base(owner, original.Id, original.Active)
+		public CharacterRig(Entity owner, CharacterRig original) : base(owner, original.Id, original.Tags, original.Active)
 		{
 			Animations = new Dictionary<string, RigAnimation>();
 			foreach (KeyValuePair<string, RigAnimation> anim in original.Animations)

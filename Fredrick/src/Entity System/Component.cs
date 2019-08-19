@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using System.Xml.Serialization;
+using Microsoft.Xna.Framework;
 
 namespace Fredrick.src
 {
@@ -24,12 +25,37 @@ namespace Fredrick.src
 		{
 		}
 
-		public Component(Entity owner, string id = null, bool active = true)
+		public Component(Entity owner, string id = null, List<string> tags = null, bool active = true)
 		{
 			_owner = owner;
 			Id = id;
 			Active = active;
 			Tags = new List<string>();
+			if (tags != null)
+			{
+				foreach (string tag in tags)
+				{
+					Tags.Add(tag);
+				}
+			}
+		}
+
+		public Component(Entity owner, Component original, bool active = true)
+		{
+			_owner = owner;
+			Id = original.Id;
+			Active = active;
+			Tags = new List<string>();
+			if (original.Tags != null)
+			{
+				foreach (string tag in original.Tags)
+				{
+					Tags.Add(tag);
+				}
+			}
+			Position = new Vector2(original.Position.X, original.Position.Y);
+			Rotation = original.Rotation;
+			Scale = new Vector2(original.Scale.X, original.Scale.Y);
 		}
 
 		public Entity Owner

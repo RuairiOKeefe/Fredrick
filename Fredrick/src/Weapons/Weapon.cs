@@ -55,7 +55,7 @@ namespace Fredrick.src
 
 		}
 
-		public Weapon(Entity owner, string id, Vector2 shotSpawn, Vector2 weaponPosition, bool continuous = true, bool active = true) : base(owner, id, active)
+		public Weapon(Entity owner, string id, Vector2 shotSpawn, Vector2 weaponPosition, bool continuous = true, List<string> tags = null, bool active = true) : base(owner, id, tags, active)
 		{
 			_spotSpawn = shotSpawn;
 			_weaponPosition = weaponPosition;
@@ -67,7 +67,7 @@ namespace Fredrick.src
 			m_facingRight = true;
 		}
 
-		public Weapon(Entity owner, Weapon original) : base(owner, original.Id, original.Active)
+		public Weapon(Entity owner, Weapon original) : base(owner, original.Id, original.Tags, original.Active)
 		{
 			Position = original.Position;
 			_spotSpawn = original._spotSpawn;
