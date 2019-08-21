@@ -162,19 +162,33 @@ namespace Fredrick.src
 
 			Emitters.Add("Fire", fire);
 
-			List<Tuple<Color, double>> dustLerp = new List<Tuple<Color, double>>();
-			dustLerp.Add(new Tuple<Color, double>(new Color(200, 200, 200, 255) * 0.1f, 0.0));
-			dustLerp.Add(new Tuple<Color, double>(new Color(200, 200, 200, 255) * 0.0f, 1.0));
-			Emitter dust = new Emitter(null, "explosion", false, 100, 50, new Vector2(0, 0.0f), 0, 0, 10.0f, 0.5);
-			dust.ParticleDrawable = new Drawable("Fire", new Vector2(8), 16, 16, 0.1f);
-			dust.SetLifeTime(0.0, 0.6, 0.9);
-			dust.SetVelocity(0.0f, 0.1f, 2.5f, 20.0f, false);
-			dust.SetCollision(false, false);
-			dust.SetScaling(false, 1.0f);
-			dust.LerpColours = dustLerp;
-			dust.Tags.Add("Landing");
+			List<Tuple<Color, double>> landDustLerp = new List<Tuple<Color, double>>();
+			landDustLerp.Add(new Tuple<Color, double>(new Color(200, 200, 200, 255) * 0.1f, 0.0));
+			landDustLerp.Add(new Tuple<Color, double>(new Color(200, 200, 200, 255) * 0.0f, 1.0));
+			Emitter landDust = new Emitter(null, "explosion", false, 100, 50, new Vector2(0, 0.0f), 0, 0, 10.0f, 0.5);
+			landDust.ParticleDrawable = new Drawable("fire", new Vector2(8), 16, 16, 0.1f);
+			landDust.SetLifeTime(0.0, 0.6, 0.9);
+			landDust.SetVelocity(0.0f, 0.1f, 2.5f, 20.0f, false);
+			landDust.SetCollision(false, false);
+			landDust.SetScaling(false, 1.0f);
+			landDust.LerpColours = landDustLerp;
+			landDust.Tags.Add("Landing");
 
-			Emitters.Add("Dust", dust);
+			Emitters.Add("LandDust", landDust);
+
+			List<Tuple<Color, double>> jumpDustLerp = new List<Tuple<Color, double>>();
+			jumpDustLerp.Add(new Tuple<Color, double>(new Color(200, 200, 200, 255) * 0.1f, 0.0));
+			jumpDustLerp.Add(new Tuple<Color, double>(new Color(200, 200, 200, 255) * 0.0f, 1.0));
+			Emitter jumpDust = new Emitter(null, "explosion", false, 100, 50, new Vector2(0, 0.0f), 0, 0, 10.0f, 0.5);
+			jumpDust.ParticleDrawable = new Drawable("fire", new Vector2(8), 16, 16, 0.1f);
+			jumpDust.SetLifeTime(0.0, 0.6, 0.9);
+			jumpDust.SetVelocity(0.0f, 0.1f, 2.5f, 0.2f, false);
+			jumpDust.SetCollision(false, false);
+			jumpDust.SetScaling(false, 1.0f);
+			jumpDust.LerpColours = landDustLerp;
+			jumpDust.Tags.Add("Jumping");
+
+			Emitters.Add("JumpDust", jumpDust);
 		}
 
 		private void InitProjectiles()
@@ -205,9 +219,9 @@ namespace Fredrick.src
 			fragGrenade.Position = new Vector2(0, 0.5f);
 			fragGrenade.WeaponDrawable = new Drawable("fragNade", new Vector2(4), 8, 8, 0.2f);
 			fragGrenade.Tags.Add("MotionFlip");
-			Attack fragImpactAttack = new Attack(Attack.DamageType.Kinetic, new List<StatusEffect>(), 5.0f);
-			Attack fragAreaAttack = new Attack(Attack.DamageType.Kinetic, new List<StatusEffect>(), 20.0f);
-			fragGrenade.InitialiseAttack(fragImpactAttack, fragAreaAttack, 0.1f, 0.3f, 5.0f, 0.0f, 0.05f, 2.0, false, true);
+			Attack fragImpactAttack = new Attack(Attack.DamageType.Kinetic, new List<StatusEffect>(), 10.0f);
+			Attack fragAreaAttack = new Attack(Attack.DamageType.Kinetic, new List<StatusEffect>(), 40.0f);
+			fragGrenade.InitialiseAttack(fragImpactAttack, fragAreaAttack, 0.5f, 0.3f, 5.0f, 0.0f, 0.05f, 2.0, false, true);
 			//fragWeapon.Tags.Add("Body");
 			Weapons.Add("FragGrenade", fragGrenade);
 		}
@@ -226,7 +240,9 @@ namespace Fredrick.src
 			player.Components.Add(new Damageable(player, Damageables["PlayerDamageable"]));
 			player.Components.Add(new StatusHandler(player, StatusHandlers["PlayerStatus"]));
 			player.Components.Add(new Weapon(player, Weapons["FragGrenade"]));
-			player.Components.Add(new Emitter(player, Emitters["Dust"]));
+			player.Components.Add(new Emitter(player, Emitters["LandDust"]));
+			player.Components[player.Components.Count - 1].Position = new Vector2(0.3f, -1.0f);
+			player.Components.Add(new Emitter(player, Emitters["JumpDust"]));
 			player.Components[player.Components.Count - 1].Position = new Vector2(0.3f, -1.0f);
 			PlayerEntities.Add("Player", player);
 		}

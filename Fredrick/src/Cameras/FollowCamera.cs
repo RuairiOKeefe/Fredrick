@@ -22,9 +22,6 @@ namespace Fredrick.src
 		private float _shakenRotation { get; set; }
 		private float _offsetRotationScale { get; set; }
 
-		public double Trauma { get; set; }
-		private double _traumaDecay;
-
 		/// <summary>
 		/// A counter used for sampling noise
 		/// </summary>
@@ -48,7 +45,6 @@ namespace Fredrick.src
 
 			_offsetPositionScale = 1;
 			_offsetRotationScale = 0.2f;
-			_traumaDecay = 2.0f;
 
 			_sampleCounter = 0;
 
@@ -76,7 +72,6 @@ namespace Fredrick.src
 
 			_offsetPositionScale = offsetPositionScale;
 			_offsetRotationScale = offsetRotationScale;
-			_traumaDecay = 1.0f;
 			CameraSpeed = cameraSpeed;
 
 			_sampleCounter = 0;
@@ -99,12 +94,6 @@ namespace Fredrick.src
 			{
 				if (Subject.GetComponent<Character>() != null)
 				{
-					//Needs to be moved to trauma probe class
-					if (Subject.GetComponent<Character>().Grounded && !Subject.GetComponent<Character>().PrevGrounded)
-					{
-						Trauma += (-Subject.GetComponent<Character>().FallVelocity * 5.0f);
-					}
-
 					GoalOffset = Subject.GetComponent<Character>().Velocity.Length() > 0.1f ? Vector2.Normalize(Subject.GetComponent<Character>().Velocity) : new Vector2(0);
 					GoalOffset *= OffsetAmount;
 					if (float.IsNaN(GoalOffset.X) || float.IsNaN(GoalOffset.Y))
@@ -123,15 +112,7 @@ namespace Fredrick.src
 			if (_sampleCounter > _counterReset)
 				_sampleCounter = 0;
 
-			Trauma -= deltaTime / _traumaDecay;
-
-			if (Trauma > 1)
-				Trauma = 1;
-
-			if (Trauma < 0)
-				Trauma = 0;
-
-			float shake = (float)(Trauma * Trauma * Trauma);
+			float shake = ScreenShakeManager.Instance.GetScreenShake(Position);
 
 			Vector2 shakePositionOffset = new Vector2
 			{

@@ -29,7 +29,7 @@ namespace Fredrick.src
 		public AABBTrigger JumpTrigger { get; set; }
 		public bool Grounded { get; set; }
 		public bool PrevGrounded { get; set; }
-		public double FallVelocity { get; set; }
+		public float FallVelocity { get; set; }
 
 		public double JumpDuration { get; set; }
 		private double _jumpClock;
@@ -72,7 +72,7 @@ namespace Fredrick.src
 			JumpSpeed = 14.0f;
 			FallAcceleration = -40.0f;
 			TerminalVelocity = -30.0f;
-			MaxJumps = 2;
+			MaxJumps = 1;
 			JumpWait = false;
 			JumpDelay = 0.2;//may want to remove variable?
 
@@ -81,7 +81,7 @@ namespace Fredrick.src
 			m_movementState = new MovementStateMachine(this, MovementStateMachine.Action.Standing);
 		}
 
-		public Character(MovementStateMachine movementState, Vector2 prevAcceleration, float horAcc, float maxSpeed, float groundFriction, float airFriction, float movingFriction, float airMove, AABBTrigger jumpTrigger, bool grounded, bool prevGrounded, double fallVelocity, double jumpDuration, float jumpSpeed, float fallAcceleration, float terminalVelocity, int maxJumps, double jumpDelay)
+		public Character(MovementStateMachine movementState, Vector2 prevAcceleration, float horAcc, float maxSpeed, float groundFriction, float airFriction, float movingFriction, float airMove, AABBTrigger jumpTrigger, bool grounded, bool prevGrounded, double jumpDuration, float jumpSpeed, float fallAcceleration, float terminalVelocity, int maxJumps, double jumpDelay)
 		{
 			Velocity = new Vector2(0, 0);
 			Acceleration = new Vector2(0, 0);
@@ -99,7 +99,7 @@ namespace Fredrick.src
 
 			Grounded = grounded;
 			PrevGrounded = prevGrounded;
-			FallVelocity = fallVelocity;
+			FallVelocity = 0f;
 			JumpDuration = jumpDuration;
 			_jumpClock = 0;
 			JumpSpeed = jumpSpeed;
@@ -184,6 +184,14 @@ namespace Fredrick.src
 					JumpWait = true;
 					_jumpClock = JumpDuration;
 					Acceleration = new Vector2(Acceleration.X, 0);
+					foreach (Component c in _owner.Components)
+					{
+						if (c is Emitter && c.Tags.Contains("Jumping"))
+						{
+							Emitter e = c as Emitter;
+							e.Emit();
+						}
+					}
 				}
 				else
 					if (_jumpsLeft > 0)
@@ -193,6 +201,14 @@ namespace Fredrick.src
 					JumpWait = true;
 					_jumpClock = JumpDuration;
 					Acceleration = new Vector2(Acceleration.X, 0);
+					foreach (Component c in _owner.Components)
+					{
+						if (c is Emitter && c.Tags.Contains("Jumping"))
+						{
+							Emitter e = c as Emitter;
+							e.Emit();
+						}
+					}
 				}
 			}
 
@@ -225,10 +241,7 @@ namespace Fredrick.src
 			}
 			else
 			{
-				//remove once screenshake manager is added
-				if (PrevGrounded)//Gives a frame to check fall trauma
-					FallVelocity = 0;
-				if(!PrevGrounded)
+				if (!PrevGrounded)
 				{
 					if (FallVelocity < -0.5f)
 					{
@@ -241,9 +254,13 @@ namespace Fredrick.src
 								e.Emit();
 							}
 						}
+						float trauma = -((FallVelocity + 0.5f) / 40.0f);
+						if (trauma > 0.6f)
+							trauma = 0.6f;
+						ScreenShakeManager.Instance.AddTrauma(trauma);
+						FallVelocity = 0;
 					}
-					//Cause Screenshake
-					//FallVelocity = 0;
+
 				}
 			}
 

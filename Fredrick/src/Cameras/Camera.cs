@@ -35,6 +35,9 @@ namespace Fredrick.src
 			Position = Vector2.Zero;
 		}
 
+		public void ScreenShake()
+		{ }
+
 		public virtual void Update(double deltaTime)
 		{
 

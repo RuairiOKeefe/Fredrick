@@ -103,6 +103,7 @@
     <Compile Include="src\Colliders\Platform.cs" />
     <Compile Include="src\Utilities\LevelEditor.cs" />
     <Compile Include="src\Resources\Resources.cs" />
+    <Compile Include="src\Utilities\ScreenShakeManager.cs" />
     <Compile Include="src\Utilities\Serializer.cs" />
     <Compile Include="src\Utilities\SurrogateSelectors.cs" />
     <Compile Include="src\Utilities\Timer.cs" />

@@ -174,6 +174,7 @@ namespace Fredrick.src
 
 		public void Detonate()
 		{
+			ScreenShakeManager.Instance.AddTrauma(1.0f, Position + Owner.Position);
 			_owner.GetComponent<CircleCollider>().Kill();
 			foreach (Component c in _owner.Components)
 			{

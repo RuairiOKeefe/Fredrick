@@ -189,7 +189,10 @@ namespace Fredrick.src
 			{
 				e.Load(Content);
 			}
-			cam = new FollowCamera(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight, actors[0], 3f, 1.0f, 0.2f, 2.0f);
+
+			Entity cameraPos = new Entity();
+			cameraPos.Position = new Vector2(20, 8);
+			cam = new FollowCamera(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight, cameraPos, 2f, 1.0f, 0.2f, 2.0f);
 			cam.OffsetAmount = new Vector2(4.0f, 1.8f);
 			levelEditor.Load(Content);
 
@@ -197,7 +200,7 @@ namespace Fredrick.src
 			Canvas canvas = new Canvas(UI, "UI");
 			TextElement debugElement1 = new TextElement(Content.Load<SpriteFont>("Debug"), new Vector2(0), Color.White, 0, TextElement.Justification.Left, 1.0f);
 			debugElement1.AddContent("Player Health: ", "", actors[0].GetComponent<Damageable>(), "Health");
-			canvas.TextElements.Add(debugElement1);
+			//canvas.TextElements.Add(debugElement1);
 			UI.Components.Add(canvas);
 		}
 
@@ -217,26 +220,28 @@ namespace Fredrick.src
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Update(GameTime gameTime)
 		{
+			double deltaTime = gameTime.ElapsedGameTime.TotalSeconds;
 			InputHandler.Instance.Update(cam.Get_Transformation(GraphicsDevice));
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
 
 			foreach (var e in actors)
-				e.Update(gameTime.ElapsedGameTime.TotalSeconds);
+				e.Update(deltaTime);
 			foreach (var e in terrain)
-				e.Update(gameTime.ElapsedGameTime.TotalSeconds);
+				e.Update(deltaTime);
 
-			ColliderManager.Instance.Update(gameTime.ElapsedGameTime.TotalSeconds);
+			ColliderManager.Instance.Update(deltaTime);
 
-			ProjectileBuffer.Instance.Update(gameTime.ElapsedGameTime.TotalSeconds);
-			ParticleBuffer.Instance.Update(gameTime.ElapsedGameTime.TotalSeconds);
+			ProjectileBuffer.Instance.Update(deltaTime);
+			ParticleBuffer.Instance.Update(deltaTime);
 
-			levelEditor.Update(gameTime.ElapsedGameTime.TotalSeconds, ref terrain, Content);
-			//cam.Trauma = 1;
-			cam.Update(gameTime.ElapsedGameTime.TotalSeconds);
-			UI.Update(gameTime.ElapsedGameTime.TotalSeconds);
+			levelEditor.Update(deltaTime, ref terrain, Content);
 
-			SpawnManager.Instance.Update(gameTime.ElapsedGameTime.TotalSeconds);
+			ScreenShakeManager.Instance.Update(deltaTime);
+			cam.Update(deltaTime);
+			UI.Update(deltaTime);
+
+			SpawnManager.Instance.Update(deltaTime);
 
 			if (InputHandler.Instance.IsKeyPressed(InputHandler.Action.Debug))
 				DebugManager.Instance.Debug = !DebugManager.Instance.Debug;
