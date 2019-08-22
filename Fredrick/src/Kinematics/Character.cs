@@ -74,7 +74,7 @@ namespace Fredrick.src
 			TerminalVelocity = -30.0f;
 			MaxJumps = 1;
 			JumpWait = false;
-			JumpDelay = 0.2;//may want to remove variable?
+			JumpDelay = 0.1;//may want to remove variable?
 
 			FollowOffset = new Vector2(5, 0);
 
@@ -189,7 +189,7 @@ namespace Fredrick.src
 						if (c is Emitter && c.Tags.Contains("Jumping"))
 						{
 							Emitter e = c as Emitter;
-							e.Emit();
+							e.IsEmitting = true;
 						}
 					}
 				}
@@ -206,7 +206,7 @@ namespace Fredrick.src
 						if (c is Emitter && c.Tags.Contains("Jumping"))
 						{
 							Emitter e = c as Emitter;
-							e.Emit();
+							e.IsEmitting = true;
 						}
 					}
 				}
@@ -296,6 +296,14 @@ namespace Fredrick.src
 				{
 					JumpWait = false;
 					_jumpTimer = 0;
+					foreach (Component c in _owner.Components)
+					{
+						if (c is Emitter && c.Tags.Contains("Jumping"))
+						{
+							Emitter e = c as Emitter;
+							e.IsEmitting = false;
+						}
+					}
 				}
 			}
 

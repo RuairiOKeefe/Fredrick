@@ -119,7 +119,7 @@ namespace Fredrick.src
 			explosionLerp.Add(new Tuple<Color, double>(new Color(112, 103, 97, 255) * 0.4f, 0.2));
 			explosionLerp.Add(new Tuple<Color, double>(new Color(61, 59, 58, 255) * 0.1f, 0.5));
 			explosionLerp.Add(new Tuple<Color, double>(new Color(61, 59, 58, 255) * 0.0f, 1.0));
-			Emitter explosion = new Emitter(null, "explosion", false, 1000, 600, new Vector2(0, 0), 0, 0, 17.0f, 0.6);
+			Emitter explosion = new Emitter(null, "explosion", false, false, 1000, 600, new Vector2(0, 0), 0, 0, 17.0f, 0.6);
 			explosion.SetLifeTime(0.6, 0, 0);
 			explosion.SetVelocity(0.0f, 1.0f, 17.0f, 1.0f, false);
 			explosion.SetCollision(true, false);
@@ -134,7 +134,7 @@ namespace Fredrick.src
 			emberLerp.Add(new Tuple<Color, double>(new Color(250, 243, 67, 255) * 0.8f, 0.4));
 			emberLerp.Add(new Tuple<Color, double>(new Color(255, 255, 211, 255) * 0.5f, 0.5));
 			emberLerp.Add(new Tuple<Color, double>(new Color(255, 255, 255, 255) * 0.0f, 1.0));
-			Emitter embers = new Emitter(null, "Spark", false, 1000, 50, new Vector2(0, -26.0f), 0, 0, 10.0f, 0.5);//need trails
+			Emitter embers = new Emitter(null, "Spark", false, false, 1000, 50, new Vector2(0, -26.0f), 0, 0, 10.0f, 0.5);//need trails
 			embers.ParticleDrawable = new Drawable("Spark", new Vector2(2, 1.5f), 4, 3, 0.1f);
 			embers.Scale = new Vector2(0.5f);
 			embers.SetLifeTime(0.0, 0.5, 1.2);
@@ -152,7 +152,7 @@ namespace Fredrick.src
 			fireLerp.Add(new Tuple<Color, double>(new Color(240, 223, 67, 255) * 0.8f, 0.4));
 			fireLerp.Add(new Tuple<Color, double>(new Color(155, 155, 111, 255) * 0.5f, 0.5));
 			fireLerp.Add(new Tuple<Color, double>(new Color(85, 85, 85, 255) * 0.0f, 1.0));
-			Emitter fire = new Emitter(null, "Fire", true, 1000, 50, new Vector2(0, 15.0f), 0, 0, 10.0f, 0.5);
+			Emitter fire = new Emitter(null, "Fire", true, true, 1000, 50, new Vector2(0, 15.0f), 0, 0, 10.0f, 0.5);
 			fire.ParticleDrawable = new Drawable("Fire", new Vector2(8), 16, 16, 0.1f);
 			fire.SetLifeTime(0.0, 0.5, 1.2);
 			fire.SetVelocity(0.0f, 0.0f, 1.4f, 1.0f, false);
@@ -165,7 +165,7 @@ namespace Fredrick.src
 			List<Tuple<Color, double>> landDustLerp = new List<Tuple<Color, double>>();
 			landDustLerp.Add(new Tuple<Color, double>(new Color(200, 200, 200, 255) * 0.1f, 0.0));
 			landDustLerp.Add(new Tuple<Color, double>(new Color(200, 200, 200, 255) * 0.0f, 1.0));
-			Emitter landDust = new Emitter(null, "explosion", false, 100, 50, new Vector2(0, 0.0f), 0, 0, 10.0f, 0.5);
+			Emitter landDust = new Emitter(null, "explosion", false, false, 100, 50, new Vector2(0, 0.0f), 0, 0, 10.0f, 0.5);
 			landDust.ParticleDrawable = new Drawable("fire", new Vector2(8), 16, 16, 0.1f);
 			landDust.SetLifeTime(0.0, 0.6, 0.9);
 			landDust.SetVelocity(0.0f, 0.1f, 2.5f, 20.0f, false);
@@ -179,10 +179,10 @@ namespace Fredrick.src
 			List<Tuple<Color, double>> jumpDustLerp = new List<Tuple<Color, double>>();
 			jumpDustLerp.Add(new Tuple<Color, double>(new Color(200, 200, 200, 255) * 0.1f, 0.0));
 			jumpDustLerp.Add(new Tuple<Color, double>(new Color(200, 200, 200, 255) * 0.0f, 1.0));
-			Emitter jumpDust = new Emitter(null, "explosion", false, 100, 50, new Vector2(0, 0.0f), 0, 0, 10.0f, 0.5);
+			Emitter jumpDust = new Emitter(null, "explosion", true, false, 50, 10, new Vector2(0, 0.0f), 0, 0, 10.0f, 0.5);
 			jumpDust.ParticleDrawable = new Drawable("fire", new Vector2(8), 16, 16, 0.1f);
-			jumpDust.SetLifeTime(0.0, 0.6, 0.9);
-			jumpDust.SetVelocity(0.0f, 0.1f, 2.5f, 0.2f, false);
+			jumpDust.SetLifeTime(0.0, 0.3, 0.5);
+			jumpDust.SetVelocity(0.0f, 0.1f, 1.2f, 1.0f, false);
 			jumpDust.SetCollision(false, false);
 			jumpDust.SetScaling(false, 1.0f);
 			jumpDust.LerpColours = landDustLerp;
@@ -241,9 +241,9 @@ namespace Fredrick.src
 			player.Components.Add(new StatusHandler(player, StatusHandlers["PlayerStatus"]));
 			player.Components.Add(new Weapon(player, Weapons["FragGrenade"]));
 			player.Components.Add(new Emitter(player, Emitters["LandDust"]));
-			player.Components[player.Components.Count - 1].Position = new Vector2(0.3f, -1.0f);
+			player.Components[player.Components.Count - 1].Position = new Vector2(0.0f, -1.0f);
 			player.Components.Add(new Emitter(player, Emitters["JumpDust"]));
-			player.Components[player.Components.Count - 1].Position = new Vector2(0.3f, -1.0f);
+			player.Components[player.Components.Count - 1].Position = new Vector2(0.0f, -1.0f);
 			PlayerEntities.Add("Player", player);
 		}
 

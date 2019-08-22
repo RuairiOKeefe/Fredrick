@@ -17,7 +17,8 @@ namespace Fredrick.src
 		public float SpawnWidth { get; set; }
 		public float SpawnHeight { get; set; }
 		public int MaxParticles { get; set; }
-		public bool Continuous { get; set; }
+		public bool IsContinuous { get; set; }
+		public bool IsEmitting { get; set; }
 		public float EmissionTime { get; set; }
 		public Vector2 Acceleration { get; set; }
 
@@ -57,7 +58,7 @@ namespace Fredrick.src
 
 		protected Random m_rnd;
 
-		public Emitter(Entity owner, String spriteName, bool continuous, int maxParticles, int emissionCount, Vector2 acceleration, float spawnWidth = 0, float spawnHeight = 0, float spawnVelocity = 3.0f, double lifeTime = 3.0, List<Tuple<Color, double>> lerpColours = null) : base(owner)
+		public Emitter(Entity owner, String spriteName, bool continuous, bool emitting, int maxParticles, int emissionCount, Vector2 acceleration, float spawnWidth = 0, float spawnHeight = 0, float spawnVelocity = 3.0f, double lifeTime = 3.0, List<Tuple<Color, double>> lerpColours = null) : base(owner)
 		{
 			Position = new Vector2(0, 0);
 			Rotation = 0;
@@ -71,7 +72,8 @@ namespace Fredrick.src
 			SpawnHeight = spawnHeight;
 
 			MaxParticles = maxParticles;
-			Continuous = continuous;
+			IsContinuous = continuous;
+			IsEmitting = emitting;
 			EmissionCount = emissionCount;
 
 			SpawnVelocity = spawnVelocity;
@@ -93,7 +95,8 @@ namespace Fredrick.src
 			SpawnWidth = original.SpawnWidth;
 			SpawnHeight = original.SpawnHeight;
 			MaxParticles = original.MaxParticles;
-			Continuous = original.Continuous;
+			IsContinuous = original.IsContinuous;
+			IsEmitting = original.IsEmitting;
 			EmissionTime = original.EmissionTime;
 			Acceleration = original.Acceleration;
 			SpawnVelocity = original.SpawnVelocity;
@@ -183,7 +186,7 @@ namespace Fredrick.src
 
 		public override void Update(double deltaTime)
 		{
-			if (Continuous)
+			if (IsContinuous && IsEmitting)
 			{
 				Emit();
 			}
