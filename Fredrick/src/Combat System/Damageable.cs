@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Fredrick.src
 {
 	[Serializable]
-	public class Damageable : Component
+	public class Damageable : Component, IObservable<string>
 	{
 		[Serializable]
 		public struct Resistances//Multipliers applied to each attack of a given type
@@ -23,6 +23,27 @@ namespace Fredrick.src
 				Kinetic = kinetic;
 				Fire = fire;
 				Electrical = electrical;
+			}
+		}
+		[NonSerialized]
+		//for the love of god never save observers, make the game manager attach them required ONLY
+		private List<IObserver<string>> m_observers = new List<IObserver<string>>();
+
+		private class Unsubscriber : IDisposable
+		{
+			private List<IObserver<string>> m_observers;
+			private IObserver<string> _observer;
+
+			public Unsubscriber(List<IObserver<string>> observers, IObserver<string> observer)
+			{
+				this.m_observers = observers;
+				this._observer = observer;
+			}
+
+			public void Dispose()
+			{
+				if (_observer != null && m_observers.Contains(_observer))
+					m_observers.Remove(_observer);
 			}
 		}
 
@@ -87,6 +108,34 @@ namespace Fredrick.src
 			ShieldRegenDelay = original.ShieldRegenDelay;
 			ShieldRegenTimer = original.ShieldRegenTimer;
 			ShieldResistance = original.ShieldResistance;
+		}
+
+
+		public IDisposable Subscribe(IObserver<string> observer)
+		{
+			if (!m_observers.Contains(observer))
+			{
+				m_observers.Add(observer);
+			}
+			return new Unsubscriber(m_observers, observer);
+		}
+
+		public void NotifyObservers(string metadata)
+		{
+			foreach (var observer in m_observers)
+			{
+				observer.OnNext(metadata);
+			}
+		}
+
+		public void ClearObservers()
+		{
+			foreach (var observer in m_observers)
+			{
+				observer.OnCompleted();
+			}
+
+			m_observers.Clear();
 		}
 
 		private float Resist(Resistances resistances, Attack.DamageType type, float damage)
@@ -178,6 +227,7 @@ namespace Fredrick.src
 			{
 				Owner.GetComponent<StatusHandler>().Statuses.Clear();
 			}
+			NotifyObservers("");
 			Owner.Active = false;
 		}
 

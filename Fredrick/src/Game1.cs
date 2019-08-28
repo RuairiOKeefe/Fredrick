@@ -31,6 +31,8 @@ namespace Fredrick.src
 		Serializer serializer;
 		LevelEditor levelEditor;
 
+		ScoreBoard scoreBoard = new ScoreBoard();
+
 		public Game1()
 		{
 			graphics = new GraphicsDeviceManager(this);
@@ -108,6 +110,21 @@ namespace Fredrick.src
 				player2.GetComponent<PlayerController>().PlayerInput = new PlayerInput(PlayerIndex.One, false, true);
 				player2.Position = new Vector2(16, 8);
 				actors.Add(player2);
+
+				/////////////////// test code fix and add to game manager
+				PointTracker p1DeathTracker = new PointTracker();
+				ScoreTracker p1killTracker = new ScoreTracker();
+				PointTracker p2DeathTracker = new PointTracker();
+				ScoreTracker p2killTracker = new ScoreTracker();
+				p1killTracker.PointTrackers.Add(p2DeathTracker);
+				p2killTracker.PointTrackers.Add(p1DeathTracker);
+				scoreBoard.ScoreTrackers.Add(p1killTracker);
+				scoreBoard.ScoreTrackers.Add(p2killTracker);
+
+
+				player.GetComponent<Damageable>().Subscribe(scoreBoard.ScoreTrackers[1].PointTrackers[0]);
+				player2.GetComponent<Damageable>().Subscribe(scoreBoard.ScoreTrackers[0].PointTrackers[0]);
+				///////////////////
 
 				SpawnManager.Instance.AddSpawnable(ref player, new Timer(3.0), new Vector2(8, 8));
 				SpawnManager.Instance.AddSpawnable(ref player2, new Timer(3.0), new Vector2(16, 8));
@@ -198,9 +215,18 @@ namespace Fredrick.src
 
 
 			Canvas canvas = new Canvas(UI, "UI");
-			TextElement debugElement1 = new TextElement(Content.Load<SpriteFont>("Debug"), new Vector2(0), Color.White, 0, TextElement.Justification.Left, 1.0f);
-			debugElement1.AddContent("Player Health: ", "", actors[0].GetComponent<Damageable>(), "Health");
+			//TextElement debugElement1 = new TextElement(Content.Load<SpriteFont>("Debug"), new Vector2(0), Color.White, 0, TextElement.Justification.Left, 1.0f);
+			//debugElement1.AddContent("Player Health: ", "", actors[0].GetComponent<Damageable>(), "Health");
 			//canvas.TextElements.Add(debugElement1);
+
+			TextElement player1Score = new TextElement(Content.Load<SpriteFont>("Debug"), new Vector2(0), Color.White, 0, TextElement.Justification.Left, 1.0f);
+			player1Score.AddContent("Player 1 Score: ", "", scoreBoard.ScoreTrackers[0], "Score");
+			canvas.TextElements.Add(player1Score);
+
+			TextElement player2Score = new TextElement(Content.Load<SpriteFont>("Debug"), new Vector2(0,30), Color.White, 0, TextElement.Justification.Left, 1.0f);
+			player2Score.AddContent("Player 2 Score: ", "", scoreBoard.ScoreTrackers[1], "Score");
+			canvas.TextElements.Add(player2Score);
+
 			UI.Components.Add(canvas);
 		}
 
@@ -239,6 +265,8 @@ namespace Fredrick.src
 
 			ScreenShakeManager.Instance.Update(deltaTime);
 			cam.Update(deltaTime);
+
+			scoreBoard.Update();
 			UI.Update(deltaTime);
 
 			SpawnManager.Instance.Update(deltaTime);

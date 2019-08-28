@@ -73,6 +73,9 @@
     <Compile Include="src\Drawing\CharacterRig.cs" />
     <Compile Include="src\Drawing\PostProcessing.cs" />
     <Compile Include="src\Entity System\IComponentOwner.cs" />
+    <Compile Include="src\GameManagement\PointTracker.cs" />
+    <Compile Include="src\GameManagement\ScoreBoard.cs" />
+    <Compile Include="src\GameManagement\ScoreTracker.cs" />
     <Compile Include="src\GameManagement\SpawnManager.cs" />
     <Compile Include="src\InputHandling\PatrolAI.cs" />
     <Compile Include="src\InputHandling\PlayerController.cs" />
