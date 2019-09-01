@@ -138,8 +138,9 @@ namespace Fredrick.src
 			MaxLTVar = maxVariance;
 		}
 
-		public void SetScaling(bool fakeDepth, float scaleFactor)
+		public void SetScaling(float scale, bool fakeDepth, float scaleFactor)
 		{
+			Scale = new Vector2(scale);
 			FakeDepth = fakeDepth;
 			ScaleFactor = scaleFactor;
 		}
@@ -168,7 +169,7 @@ namespace Fredrick.src
 					float scaleFactor = (forwardMotion ? (1.0f - velocityRND) : -(1.0f - velocityRND)) * ScaleFactor;
 
 					Particle p = ParticleBuffer.Instance.InactiveParticles.Pop();
-					p.Revive(ParticleDrawable, spawnPos + Position + _owner.Position, spawnVel, Acceleration, lifetime, Collide, ReduceLifeOnCollision, Restitution, FakeDepth, scaleFactor, m_lerpColours);
+					p.Revive(ParticleDrawable, spawnPos + Position + _owner.Position, Scale + Owner.Scale, spawnVel, Acceleration, lifetime, Collide, ReduceLifeOnCollision, Restitution, FakeDepth, scaleFactor, m_lerpColours);
 					ParticleBuffer.Instance.ActiveParticles.Add(p);
 				}
 			}

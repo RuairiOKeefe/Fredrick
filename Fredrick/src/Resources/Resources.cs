@@ -123,9 +123,10 @@ namespace Fredrick.src
 			explosion.SetLifeTime(0.6, 0, 0);
 			explosion.SetVelocity(0.0f, 1.0f, 17.0f, 1.0f, false);
 			explosion.SetCollision(true, false);
-			explosion.SetScaling(false, 0.0f);
+			explosion.SetScaling(1.0f, false, 0.0f);
 			explosion.LerpColours = explosionLerp;
 
+			explosion.Tags.Add("Detonation");
 			Emitters.Add("Explosion", explosion);
 
 			List<Tuple<Color, double>> emberLerp = new List<Tuple<Color, double>>();
@@ -140,10 +141,11 @@ namespace Fredrick.src
 			embers.SetLifeTime(0.0, 0.5, 1.2);
 			embers.SetVelocity(0.0f, 10.5f, 12.0f, 1.0f, true);
 			embers.SetCollision(true, true);
-			embers.SetScaling(true, 0.5f);
+			embers.SetScaling(1.0f, true, 0.5f);
 			embers.Restitution = 0.8f;
 			embers.LerpColours = emberLerp;
 
+			embers.Tags.Add("Detonation");
 			Emitters.Add("Embers", embers);
 
 			List<Tuple<Color, double>> fireLerp = new List<Tuple<Color, double>>();
@@ -157,10 +159,27 @@ namespace Fredrick.src
 			fire.SetLifeTime(0.0, 0.5, 1.2);
 			fire.SetVelocity(0.0f, 0.0f, 1.4f, 1.0f, false);
 			fire.SetCollision(false, false);
-			fire.SetScaling(true, 0.5f);
+			fire.SetScaling(1.0f, true, 0.5f);
 			fire.LerpColours = fireLerp;
 
 			Emitters.Add("Fire", fire);
+
+
+			List<Tuple<Color, double>> AoELerp = new List<Tuple<Color, double>>();
+			AoELerp.Add(new Tuple<Color, double>(new Color(255, 255, 255, 255) * 0.0f, 0.0));
+			AoELerp.Add(new Tuple<Color, double>(new Color(255, 255, 255, 255) * 0.5f, 0.7));
+			AoELerp.Add(new Tuple<Color, double>(new Color(255, 255, 255, 255) * 0.0f, 1.0));
+			Emitter areaIndicator = new Emitter(null, "AoECircle", false, false, 1, 1, new Vector2(0), 0, 0, 10.0f, 0.5);
+			areaIndicator.ParticleDrawable = new Drawable("AoECircle", new Vector2(127.5f), 256, 256, 0.1f);
+			areaIndicator.SetLifeTime(0.5, 0.0, 0.0);
+			areaIndicator.SetVelocity(0.0f, 0.0f, 0.0f, 0.0f, false);
+			areaIndicator.SetCollision(false, false);
+			areaIndicator.SetScaling(1.0f, false, 0.5f);
+			areaIndicator.LerpColours = AoELerp;
+
+			areaIndicator.Tags.Add("Detonation");
+			areaIndicator.Tags.Add("AreaIndicator");
+			Emitters.Add("AreaIndicator", areaIndicator);
 
 			List<Tuple<Color, double>> landDustLerp = new List<Tuple<Color, double>>();
 			landDustLerp.Add(new Tuple<Color, double>(new Color(200, 200, 200, 255) * 0.1f, 0.0));
@@ -170,7 +189,7 @@ namespace Fredrick.src
 			landDust.SetLifeTime(0.0, 0.6, 0.9);
 			landDust.SetVelocity(0.0f, 0.1f, 2.5f, 20.0f, false);
 			landDust.SetCollision(false, false);
-			landDust.SetScaling(false, 1.0f);
+			landDust.SetScaling(1.0f, false, 1.0f);
 			landDust.LerpColours = landDustLerp;
 			landDust.Tags.Add("Landing");
 
@@ -184,7 +203,7 @@ namespace Fredrick.src
 			jumpDust.SetLifeTime(0.0, 0.3, 0.5);
 			jumpDust.SetVelocity(0.0f, 0.1f, 1.2f, 1.0f, false);
 			jumpDust.SetCollision(false, false);
-			jumpDust.SetScaling(false, 1.0f);
+			jumpDust.SetScaling(1.0f, false, 1.0f);
 			jumpDust.LerpColours = landDustLerp;
 			jumpDust.Tags.Add("Jumping");
 
@@ -204,7 +223,6 @@ namespace Fredrick.src
 			fragNade.Drawable.AddAnimation(32, 0, 1, 1, Animation.OnEnd.Loop, 0);
 
 			Renderables.Add("FragNade", fragNade);
-
 		}
 
 		private void InitStatusHandlers()
@@ -255,6 +273,7 @@ namespace Fredrick.src
 			fragNade.Components.Add(new Renderable(fragNade, Renderables["FragNade"]));
 			fragNade.Components.Add(new Emitter(fragNade, Emitters["Explosion"]));
 			fragNade.Components.Add(new Emitter(fragNade, Emitters["Embers"]));
+			fragNade.Components.Add(new Emitter(fragNade, Emitters["AreaIndicator"]));
 
 			ProjectileEntities.Add("FragNade", fragNade);
 		}

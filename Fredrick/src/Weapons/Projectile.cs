@@ -181,6 +181,10 @@ namespace Fredrick.src
 				if (c is Emitter)
 				{
 					Emitter e = c as Emitter;
+					if (e.Tags.Contains("AreaIndicator"))
+					{
+						e.Scale = new Vector2(m_areaOfEffectRadius / 2f);
+					}
 					e.Emit();
 				}
 			}

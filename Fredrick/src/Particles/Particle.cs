@@ -47,11 +47,11 @@ namespace Fredrick.src
 			Velocity = new Vector2();
 		}
 
-		public Particle(Drawable drawable, Vector2 position, Vector2 velocity, Vector2 acceleration, double lifeTime, bool collide = false, bool reduceLifeOnCollision = false, float restitution = 0.5f, bool fakeDepth = false, float scaleFactor = 1.0f, List<Tuple<Color, double>> lerpColours = null)
+		public Particle(Drawable drawable, Vector2 position, Vector2 scale, Vector2 velocity, Vector2 acceleration, double lifeTime, bool collide = false, bool reduceLifeOnCollision = false, float restitution = 0.5f, bool fakeDepth = false, float scaleFactor = 1.0f, List<Tuple<Color, double>> lerpColours = null)
 		{
 			Drawable = drawable;
 			Position = position;
-			Scale = new Vector2(1.0f);
+			Scale = scale;
 			Velocity = velocity;
 			m_acceleration = acceleration;
 			_collide = collide;
@@ -68,11 +68,11 @@ namespace Fredrick.src
 				m_lerpColours = lerpColours;
 		}
 
-		public void Revive(Drawable drawable, Vector2 position, Vector2 velocity, Vector2 acceleration, double lifeTime, bool collide = false, bool reduceLifeOnCollision = false, float restitution = 0.5f, bool fakeDepth = false, float scaleFactor = 1.0f, List<Tuple<Color, double>> lerpColours = null)
+		public void Revive(Drawable drawable, Vector2 position, Vector2 scale, Vector2 velocity, Vector2 acceleration, double lifeTime, bool collide = false, bool reduceLifeOnCollision = false, float restitution = 0.5f, bool fakeDepth = false, float scaleFactor = 1.0f, List<Tuple<Color, double>> lerpColours = null)
 		{
 			Drawable = drawable;
 			Position = position;
-			Scale = new Vector2(1.0f);
+			Scale = scale;
 			Velocity = velocity;
 			m_acceleration = acceleration;
 			_collide = collide;
