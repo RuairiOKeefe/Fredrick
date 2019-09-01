@@ -174,11 +174,11 @@ namespace Fredrick.src
 
 		public void Detonate()
 		{
-			ScreenShakeManager.Instance.AddTrauma(1.0f, Position + Owner.Position);
+			ScreenShakeManager.Instance.AddTrauma(0.6f);
 			_owner.GetComponent<CircleCollider>().Kill();
 			foreach (Component c in _owner.Components)
 			{
-				if (c is Emitter)
+				if (c is Emitter && c.Tags.Contains("Detonation"))
 				{
 					Emitter e = c as Emitter;
 					if (e.Tags.Contains("AreaIndicator"))

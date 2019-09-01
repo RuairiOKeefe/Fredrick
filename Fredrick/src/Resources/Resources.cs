@@ -181,6 +181,20 @@ namespace Fredrick.src
 			areaIndicator.Tags.Add("AreaIndicator");
 			Emitters.Add("AreaIndicator", areaIndicator);
 
+			List<Tuple<Color, double>> fragTrailLerp = new List<Tuple<Color, double>>();
+			fragTrailLerp.Add(new Tuple<Color, double>(new Color(60, 100, 60, 255) * 0.1f, 0.0));
+			fragTrailLerp.Add(new Tuple<Color, double>(new Color(30, 50, 30, 255) * 0.0f, 1.0));
+			Emitter fragTrail = new Emitter(null, "explosion", true, true, 100, 10, new Vector2(0), 0.2f, 0.2f, 10.0f, 0.5);
+			fragTrail.ParticleDrawable = new Drawable("fire", new Vector2(8), 16, 16, 0.1f);
+			fragTrail.SetLifeTime(0.0, 0.6, 0.9);
+			fragTrail.SetVelocity(0.0f, 0.1f, 0.5f, 1.0f, false);
+			fragTrail.SetCollision(false, false);
+			fragTrail.SetScaling(0.5f, false, 1.0f);
+			fragTrail.LerpColours = fragTrailLerp;
+
+			fragTrail.Tags.Add("Trail");
+			Emitters.Add("FragTrail", fragTrail);
+
 			List<Tuple<Color, double>> landDustLerp = new List<Tuple<Color, double>>();
 			landDustLerp.Add(new Tuple<Color, double>(new Color(200, 200, 200, 255) * 0.1f, 0.0));
 			landDustLerp.Add(new Tuple<Color, double>(new Color(200, 200, 200, 255) * 0.0f, 1.0));
@@ -191,8 +205,8 @@ namespace Fredrick.src
 			landDust.SetCollision(false, false);
 			landDust.SetScaling(1.0f, false, 1.0f);
 			landDust.LerpColours = landDustLerp;
-			landDust.Tags.Add("Landing");
 
+			landDust.Tags.Add("Landing");
 			Emitters.Add("LandDust", landDust);
 
 			List<Tuple<Color, double>> jumpDustLerp = new List<Tuple<Color, double>>();
@@ -205,8 +219,8 @@ namespace Fredrick.src
 			jumpDust.SetCollision(false, false);
 			jumpDust.SetScaling(1.0f, false, 1.0f);
 			jumpDust.LerpColours = landDustLerp;
-			jumpDust.Tags.Add("Jumping");
 
+			jumpDust.Tags.Add("Jumping");
 			Emitters.Add("JumpDust", jumpDust);
 		}
 
@@ -274,6 +288,7 @@ namespace Fredrick.src
 			fragNade.Components.Add(new Emitter(fragNade, Emitters["Explosion"]));
 			fragNade.Components.Add(new Emitter(fragNade, Emitters["Embers"]));
 			fragNade.Components.Add(new Emitter(fragNade, Emitters["AreaIndicator"]));
+			fragNade.Components.Add(new Emitter(fragNade, Emitters["FragTrail"]));
 
 			ProjectileEntities.Add("FragNade", fragNade);
 		}
