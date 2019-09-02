@@ -42,9 +42,9 @@ namespace Fredrick.src
 			this.IsMouseVisible = true;
 			Content.RootDirectory = "Content";
 
-			graphics.PreferredBackBufferWidth = 1920;
-			graphics.PreferredBackBufferHeight = 1080;
-			graphics.IsFullScreen = true;
+			//graphics.PreferredBackBufferWidth = 1920;
+			//graphics.PreferredBackBufferHeight = 1080;
+			//graphics.IsFullScreen = true;
 
 			serializer = new Serializer();
 			levelEditor = new LevelEditor();

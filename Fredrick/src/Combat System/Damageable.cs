@@ -216,7 +216,10 @@ namespace Fredrick.src
 
 			if (Health <= 0)
 			{
-				Die();
+				if (!IsDead)
+				{
+					Die();
+				}
 			}
 		}
 
