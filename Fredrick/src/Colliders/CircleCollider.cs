@@ -19,13 +19,17 @@ namespace Fredrick.src
 		public Body Body { get; private set; }
 		CircleShape _circle;
 		Fixture _fixture;
+		public float m_radius;
+		public float m_density;
 
 		public CircleCollider()
 		{
 		}
 
-		public CircleCollider(Entity owner) : base(owner)
+		public CircleCollider(Entity owner, float radius, float density) : base(owner)
 		{
+			m_radius = radius;
+			m_density = density;
 			//_body = new Body(ColliderManager.Instance.World, _owner.GetPosition(), 0, BodyType.Dynamic);
 			//_body.BodyType = BodyType.Dynamic;
 			//_body.Mass = 1;
@@ -38,13 +42,14 @@ namespace Fredrick.src
 
 		public CircleCollider(Entity owner, CircleCollider original) : base(owner, original.Id, original.Tags, original.Active)
 		{
-
+			m_radius = original.m_radius;
+			m_density = original.m_density;
 		}
 
 		public void Revive()
 		{
 			Body = new Body(ColliderManager.Instance.World, _owner.Position, 0, BodyType.Dynamic);
-			_circle = new CircleShape(0.09375f, 0.3f);
+			_circle = new CircleShape(m_radius, m_density);
 			_circle.Position = _position;
 			_fixture = Body.CreateFixture(_circle);
 
@@ -104,7 +109,7 @@ namespace Fredrick.src
 
 		public override Component Copy(Entity owner)
 		{
-			return new CircleCollider();
+			return new CircleCollider(owner, this);
 		}
 	}
 }

@@ -24,6 +24,7 @@ namespace Fredrick.src
 		FollowCamera cam;
 		Effect lighting;
 		Effect bloom;
+		Effect fog;
 
 		RenderTarget2D sceneTarget;
 		RenderTarget2D bloomTarget;
@@ -41,9 +42,9 @@ namespace Fredrick.src
 			this.IsMouseVisible = true;
 			Content.RootDirectory = "Content";
 
-			//graphics.PreferredBackBufferWidth = 1920;
-			//graphics.PreferredBackBufferHeight = 1080;
-			//graphics.IsFullScreen = true;
+			graphics.PreferredBackBufferWidth = 1920;
+			graphics.PreferredBackBufferHeight = 1080;
+			graphics.IsFullScreen = true;
 
 			serializer = new Serializer();
 			levelEditor = new LevelEditor();
@@ -77,25 +78,27 @@ namespace Fredrick.src
 
 			lighting = Content.Load<Effect>("Lighting");
 			bloom = Content.Load<Effect>("Bloom");
+			fog = Content.Load<Effect>("Fog");
 
 			ColliderManager.Instance.Load();
 			ProjectileBuffer.Instance.Load(Content);
 			Resources.Instance.Load(Content);
 			SpawnManager.Instance.Load();
 
+			Vector4 fogColour = new Vector4(0.2f, 0.3f, 0.4f, 1.0f);
 			background = new Background();
-			background.AddLayer(new Drawable("Sky", new Vector2(1024 / 2, 1024 / 2), 1024, 1024, 0), 1.0f, 1.0f);
-			background.AddLayer(new Drawable("Clouds", new Vector2(1024 / 2, 410), 1024, 1024, 0), 0.95f, 0.95f);
-			background.AddLayer(new Drawable("Clouds", new Vector2(1024 / 2, 410), 1024, 1024, 0), 0.93f, 0.93f, 600, 0);
-			background.AddLayer(new Drawable("Clouds", new Vector2(1024 / 2, 410), 1024, 1024, 0), 0.91f, 0.91f, 300, 0);
-			background.AddLayer(new Drawable("Mountains", new Vector2(1024 / 2, 578), 1024, 1024, 0), 0.9f, 0.9f);
-			background.AddLayer(new Drawable("Clouds", new Vector2(1024 / 2, 470), 1024, 1024, 0), 0.87f, 0.87f, 230, 0);
-			background.AddLayer(new Drawable("Clouds", new Vector2(1024 / 2, 470), 1024, 1024, 0), 0.85f, 0.85f, 760, 0);
-			background.AddLayer(new Drawable("Hills", new Vector2(1024 / 2, 720), 1024, 1024, 0), 0.8f, 0.8f);
-			background.AddLayer(new Drawable("Trees", new Vector2(1024 / 2, 610), 1024, 1024, 0), 0.6f, 0.6f);
-			background.AddLayer(new Drawable("Trees", new Vector2((1024 / 2), 610), 1024, 1024, 0), 0.58f, 0.58f, 100, 0);
-			background.AddLayer(new Drawable("Trees", new Vector2((1024 / 2), 610), 1024, 1024, 0), 0.56f, 0.56f, 650, 0);
-			background.AddLayer(new Drawable("Trees", new Vector2((1024 / 2), 610), 1024, 1024, 0), 0.54f, 0.54f, -430, 0);
+			background.AddLayer(new Drawable("Sky", new Vector2(1024 / 2, 1024 / 2), 1024, 1024, 0), 1.0f, 1.0f, fogColour, 0.25f);
+			background.AddLayer(new Drawable("Clouds", new Vector2(1024 / 2, 410), 1024, 1024, 0), 0.95f, 0.95f, fogColour, 0.2f);
+			background.AddLayer(new Drawable("Clouds", new Vector2(1024 / 2, 410), 1024, 1024, 0), 0.93f, 0.93f, fogColour, 0.15f, 600, 0);
+			background.AddLayer(new Drawable("Clouds", new Vector2(1024 / 2, 410), 1024, 1024, 0), 0.91f, 0.91f, fogColour, 0.1f, 300, 0);
+			background.AddLayer(new Drawable("Mountains", new Vector2(1024 / 2, 578), 1024, 1024, 0), 0.9f, 0.9f, fogColour, 0.7f);
+			background.AddLayer(new Drawable("Clouds", new Vector2(1024 / 2, 470), 1024, 1024, 0), 0.87f, 0.87f, fogColour, 0.05f, 230, 0);
+			background.AddLayer(new Drawable("Clouds", new Vector2(1024 / 2, 470), 1024, 1024, 0), 0.85f, 0.85f, fogColour, 0, 760, 0);
+			background.AddLayer(new Drawable("Hills", new Vector2(1024 / 2, 720), 1024, 1024, 0), 0.8f, 0.8f, fogColour, 0.6f);
+			background.AddLayer(new Drawable("Trees", new Vector2(1024 / 2, 610), 1024, 1024, 0), 0.6f, 0.6f, fogColour, 0.44f);
+			background.AddLayer(new Drawable("Trees", new Vector2((1024 / 2), 610), 1024, 1024, 0), 0.58f, 0.58f, fogColour, 0.36f, 100, 0);
+			background.AddLayer(new Drawable("Trees", new Vector2((1024 / 2), 610), 1024, 1024, 0), 0.56f, 0.56f, fogColour, 0.28f, 650, 0);
+			background.AddLayer(new Drawable("Trees", new Vector2((1024 / 2), 610), 1024, 1024, 0), 0.54f, 0.54f, fogColour, 0.2f, -430, 0);
 
 			if (true)
 			{
@@ -223,7 +226,7 @@ namespace Fredrick.src
 			player1Score.AddContent("Player 1 Score: ", "", scoreBoard.ScoreTrackers[0], "Score");
 			canvas.TextElements.Add(player1Score);
 
-			TextElement player2Score = new TextElement(Content.Load<SpriteFont>("Debug"), new Vector2(0,30), Color.White, 0, TextElement.Justification.Left, 1.0f);
+			TextElement player2Score = new TextElement(Content.Load<SpriteFont>("Debug"), new Vector2(0, 30), Color.White, 0, TextElement.Justification.Left, 1.0f);
 			player2Score.AddContent("Player 2 Score: ", "", scoreBoard.ScoreTrackers[1], "Score");
 			canvas.TextElements.Add(player2Score);
 
@@ -288,9 +291,7 @@ namespace Fredrick.src
 
 			GraphicsDevice.Clear(Color.CornflowerBlue);
 
-			spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointWrap, null, null, null, cam.Get_Transformation(GraphicsDevice));
-			background.Draw(spriteBatch, cam.Position);
-			spriteBatch.End();
+			background.Draw(spriteBatch, GraphicsDevice, cam, fog);
 
 			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, lighting, cam.Get_Transformation(GraphicsDevice));
 			foreach (var e in actors)

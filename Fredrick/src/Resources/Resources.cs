@@ -97,7 +97,7 @@ namespace Fredrick.src
 
 		private void InitCircleColliders()
 		{
-			CircleCollider fragNade = new CircleCollider(null);
+			CircleCollider fragNade = new CircleCollider(null, 3/32f, 0.3f);
 			CircleColliders.Add("FragNade", fragNade);
 		}
 
@@ -182,11 +182,12 @@ namespace Fredrick.src
 			Emitters.Add("AreaIndicator", areaIndicator);
 
 			List<Tuple<Color, double>> fragTrailLerp = new List<Tuple<Color, double>>();
-			fragTrailLerp.Add(new Tuple<Color, double>(new Color(60, 100, 60, 255) * 0.1f, 0.0));
-			fragTrailLerp.Add(new Tuple<Color, double>(new Color(30, 50, 30, 255) * 0.0f, 1.0));
+			fragTrailLerp.Add(new Tuple<Color, double>(new Color(30, 48, 30, 255) * 0.2f, 0.0));
+			fragTrailLerp.Add(new Tuple<Color, double>(new Color(50, 80, 50, 255) * 0.4f, 0.4));
+			fragTrailLerp.Add(new Tuple<Color, double>(new Color(10, 10, 10, 255) * 0.0f, 1.0));
 			Emitter fragTrail = new Emitter(null, "explosion", true, true, 100, 10, new Vector2(0), 0.2f, 0.2f, 10.0f, 0.5);
-			fragTrail.ParticleDrawable = new Drawable("fire", new Vector2(8), 16, 16, 0.1f);
-			fragTrail.SetLifeTime(0.0, 0.6, 0.9);
+			fragTrail.ParticleDrawable = new Drawable("fire", new Vector2(8), 16, 16, 0.3f);
+			fragTrail.SetLifeTime(0.3, 0.0, 0.0);
 			fragTrail.SetVelocity(0.0f, 0.1f, 0.5f, 1.0f, false);
 			fragTrail.SetCollision(false, false);
 			fragTrail.SetScaling(0.5f, false, 1.0f);
@@ -232,7 +233,7 @@ namespace Fredrick.src
 
 		private void InitRenderables()
 		{
-			Renderable fragNade = new Renderable(null, "Projectile", "FragNade", new Vector2(4), new Vector2(0), new Vector2(1), 8, 8, 0.1f);
+			Renderable fragNade = new Renderable(null, "Projectile", "FragNade", new Vector2(7.5f), new Vector2(0), new Vector2(1), 16, 16, 0.1f);
 			fragNade.Drawable.AddAnimation(0, 0, 1, 1, Animation.OnEnd.Loop, 0);
 			fragNade.Drawable.AddAnimation(32, 0, 1, 1, Animation.OnEnd.Loop, 0);
 
@@ -284,11 +285,11 @@ namespace Fredrick.src
 			Entity fragNade = new Entity();
 			fragNade.Components.Add(new Projectile(fragNade, Projectiles["FragNade"]));
 			fragNade.Components.Add(new CircleCollider(fragNade, CircleColliders["FragNade"]));
-			fragNade.Components.Add(new Renderable(fragNade, Renderables["FragNade"]));
 			fragNade.Components.Add(new Emitter(fragNade, Emitters["Explosion"]));
 			fragNade.Components.Add(new Emitter(fragNade, Emitters["Embers"]));
 			fragNade.Components.Add(new Emitter(fragNade, Emitters["AreaIndicator"]));
 			fragNade.Components.Add(new Emitter(fragNade, Emitters["FragTrail"]));
+			fragNade.Components.Add(new Renderable(fragNade, Renderables["FragNade"]));
 
 			ProjectileEntities.Add("FragNade", fragNade);
 		}
