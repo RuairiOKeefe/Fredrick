@@ -222,12 +222,12 @@ namespace Fredrick.src
 			//debugElement1.AddContent("Player Health: ", "", actors[0].GetComponent<Damageable>(), "Health");
 			//canvas.TextElements.Add(debugElement1);
 
-			TextElement player1Score = new TextElement(Content.Load<SpriteFont>("Debug"), new Vector2(0), Color.White, 0, TextElement.Justification.Left, 1.0f);
-			player1Score.AddContent("Player 1 Score: ", "", scoreBoard.ScoreTrackers[0], "Score");
+			TextElement player1Score = new TextElement(Content.Load<SpriteFont>("Debug"), new Vector2(graphics.PreferredBackBufferWidth / 2 - 10, 0), Color.Red, 0, TextElement.Justification.Right, 1.0f);
+			player1Score.AddContent("", "", scoreBoard.ScoreTrackers[0], "Score");
 			canvas.TextElements.Add(player1Score);
 
-			TextElement player2Score = new TextElement(Content.Load<SpriteFont>("Debug"), new Vector2(0, 30), Color.White, 0, TextElement.Justification.Left, 1.0f);
-			player2Score.AddContent("Player 2 Score: ", "", scoreBoard.ScoreTrackers[1], "Score");
+			TextElement player2Score = new TextElement(Content.Load<SpriteFont>("Debug"), new Vector2(graphics.PreferredBackBufferWidth / 2 + 10, 0), Color.Blue, 0, TextElement.Justification.Left, 1.0f);
+			player2Score.AddContent("", "", scoreBoard.ScoreTrackers[1], "Score");
 			canvas.TextElements.Add(player2Score);
 
 			UI.Components.Add(canvas);
@@ -253,7 +253,7 @@ namespace Fredrick.src
 			InputHandler.Instance.Update(cam.Get_Transformation(GraphicsDevice));
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
-
+			if(!levelEditor.editing)
 			foreach (var e in actors)
 				e.Update(deltaTime);
 			foreach (var e in terrain)
