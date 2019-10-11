@@ -27,6 +27,7 @@ namespace Fredrick.src
 		Effect fog;
 
 		RenderTarget2D sceneTarget;
+		RenderTarget2D staticTerrainTarget;
 		RenderTarget2D bloomTarget;
 
 		Serializer serializer;
@@ -71,6 +72,7 @@ namespace Fredrick.src
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 
 			sceneTarget = new RenderTarget2D(GraphicsDevice, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+			staticTerrainTarget = new RenderTarget2D(GraphicsDevice, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
 			bloomTarget = new RenderTarget2D(GraphicsDevice, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
 			// create 1x1 texture for line drawing
 			DebugManager.Instance.LineTex = new Texture2D(GraphicsDevice, 1, 1);
@@ -253,9 +255,9 @@ namespace Fredrick.src
 			InputHandler.Instance.Update(cam.Get_Transformation(GraphicsDevice));
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
-			if(!levelEditor.editing)
-			foreach (var e in actors)
-				e.Update(deltaTime);
+			if (!levelEditor.editing)
+				foreach (var e in actors)
+					e.Update(deltaTime);
 			foreach (var e in terrain)
 				e.Update(deltaTime);
 
@@ -282,26 +284,42 @@ namespace Fredrick.src
 
 		protected override void Draw(GameTime gameTime)
 		{
+			GraphicsDevice.Clear(Color.Transparent);
+
 			//aaaaaaaaaaaaa
 			PostProcessing p = new PostProcessing();
 			p.Draw(spriteBatch, GraphicsDevice, actors);
 			//aaaaaaaaaaaaaaaaaa
 
-			GraphicsDevice.SetRenderTarget(sceneTarget);
 
-			GraphicsDevice.Clear(Color.CornflowerBlue);
+			GraphicsDevice.SetRenderTarget(staticTerrainTarget);
+			GraphicsDevice.Clear(Color.Transparent);
+			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, cam.Get_Transformation(GraphicsDevice));
+			foreach (var e in terrain)
+				e.Draw(spriteBatch);
+			spriteBatch.End();
+
+			GraphicsDevice.SetRenderTarget(sceneTarget);
+			GraphicsDevice.Clear(Color.Transparent);
 
 			background.Draw(spriteBatch, GraphicsDevice, cam, fog);
 
-			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, lighting, cam.Get_Transformation(GraphicsDevice));
+
+			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, lighting, null);
+			spriteBatch.Draw(staticTerrainTarget, Vector2.Zero, Color.White);
+			spriteBatch.End();
+
+			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, cam.Get_Transformation(GraphicsDevice));
 			foreach (var e in actors)
 				e.Draw(spriteBatch);
-			foreach (var e in terrain)
-				e.Draw(spriteBatch);
+
 			ProjectileBuffer.Instance.Draw(spriteBatch);
 			ParticleBuffer.Instance.Draw(spriteBatch);
 			levelEditor.Draw(spriteBatch);
 			spriteBatch.End();
+
+
+
 
 			GraphicsDevice.SetRenderTarget(null);
 
