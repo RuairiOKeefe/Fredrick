@@ -291,7 +291,6 @@ namespace Fredrick.src
 			p.Draw(spriteBatch, GraphicsDevice, actors);
 			//aaaaaaaaaaaaaaaaaa
 
-
 			GraphicsDevice.SetRenderTarget(staticTerrainTarget);
 			GraphicsDevice.Clear(Color.Transparent);
 			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, cam.Get_Transformation(GraphicsDevice));
@@ -304,8 +303,38 @@ namespace Fredrick.src
 
 			background.Draw(spriteBatch, GraphicsDevice, cam, fog);
 
+			lighting.Parameters["emissive"].SetValue(new Color(255, 255, 255, 255).ToVector4());
+			lighting.Parameters["diffuse_reflection"].SetValue(new Color(255, 255, 255, 255).ToVector4());
+			lighting.Parameters["specular_reflection"].SetValue(new Color(255, 255, 255, 255).ToVector4());
+			lighting.Parameters["shininess"].SetValue(0.0f);
 
-			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, lighting, null);
+			Vector3[] positions = new Vector3[16];
+			Vector4[] colours = new Vector4[16];
+			float[] constantK = new float[16];
+			float[] linearK = new float[16];
+			float[] quadraticK = new float[16];
+
+			for (int i = 0; i < 16; i++)
+			{
+				positions[i] = new Vector3(1, 1, 1);
+				colours[i] = new Vector4(0, 0, 0, 255);
+				constantK[i] = 1;
+				linearK[i] = 1;
+				quadraticK[i] = 1;
+			}
+			positions[0] = new Vector3(1, 1, 1);
+			colours[0] = new Vector4(160, 0, 0, 255);
+			constantK[0] = 0;
+			linearK[0] = gameTime.TotalGameTime.Seconds;
+			quadraticK[0] =5;
+
+			lighting.Parameters["position"].SetValue(positions);
+			lighting.Parameters["colour"].SetValue(colours);
+			lighting.Parameters["constantK"].SetValue(constantK);
+			lighting.Parameters["linearK"].SetValue(constantK);
+			lighting.Parameters["quadraticK"].SetValue(constantK);
+
+			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, lighting, null);
 			spriteBatch.Draw(staticTerrainTarget, Vector2.Zero, Color.White);
 			spriteBatch.End();
 

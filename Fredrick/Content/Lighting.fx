@@ -15,7 +15,6 @@ float4 specular_reflection;
 float shininess;
 
 float3 position[16];
-float3 direction[16];
 float4 colour[16];
 float constantK[16];
 float linearK[16];
@@ -28,35 +27,18 @@ sampler2D SpriteTextureSampler = sampler_state
 	Texture = <SpriteTexture>;
 };
 
-struct VertexShaderInput
-{
-	float4 Position : POSITION0;
-	float4 Color : COLOR0;
-	float3 Normal : NORMAL0;
-	float2 TextureCoordinates : TEXCOORD0;
-};
-
 struct VertexShaderOutput
 {
-	float3 Position : TEXCOORD3;
 	float4 Color : COLOR0;
 	float2 TextureCoordinates : TEXCOORD0;
 };
-
-float4 MainVs(in VertexShaderInput input, out VertexShaderOutput output) : POSITION
-{
-	output.Position = input.Position.xyz;
-	output.Color = input.Color;
-	output.TextureCoordinates = input.TextureCoordinates;
-	return input.Position;
-}
 
 float4 MainPS(in VertexShaderOutput input) : COLOR
 {
 	float4 texColour = tex2D(SpriteTextureSampler, input.TextureCoordinates) * input.Color;
 
-	float4 diffuse;
-	float4 specular;
+	float4 diffuse = { 0,0,0,1 };
+	float4 specular = { 0,0,0,1 };
 
 	float3 normal = { 0, 0, -1 };
 
@@ -65,12 +47,12 @@ float4 MainPS(in VertexShaderOutput input) : COLOR
 		// ********************************
 		// Calculate direction to the light
 		// ********************************
-		float3 lightDir = normalize(position[i] - input.Position);
+		float3 lightDir = normalize(position[i] - float3(input.TextureCoordinates, 0));
 
 		// ***************************
 		// Calculate distance to light
 		// ***************************
-		float d = distance(position[i], input.Position);
+		float d = distance(position[i], float3(input.TextureCoordinates, 0));
 
 		// ***************************
 		// Calculate attenuation value
@@ -104,7 +86,6 @@ technique SpriteDrawing
 {
 	pass P0
 	{
-		VertexShader = compile VS_SHADERMODEL MainVs();
 		PixelShader = compile PS_SHADERMODEL MainPS();
 	}
 };
