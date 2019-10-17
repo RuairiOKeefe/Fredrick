@@ -9,16 +9,11 @@
 
 const static int MAX_LIGHTS = 16;
 
-float4 emissive;
-float4 diffuse_reflection;
-float4 specular_reflection;
-float shininess;
+float4x4 world;
+float4x4 wvp;
 
 float3 position[16];
 float4 colour[16];
-float constantK[16];
-float linearK[16];
-float quadraticK[16];
 
 Texture2D SpriteTexture;
 
@@ -29,54 +24,61 @@ sampler2D SpriteTextureSampler = sampler_state
 
 struct VertexShaderOutput
 {
-	float4 Color : COLOR0;
-	float2 TextureCoordinates : TEXCOORD0;
+	float4 Position : POSITION;
+	float4 Colour : COLOR0;
+	float4 TexCoord : TEXCOORD0;
+	float3 PosW : TEXCOORD3;
 };
+
+VertexShaderOutput MainVS(float4 Position : POSITION0, float4 Colour : COLOR0, float4 TexCoord : TEXCOORD0)
+{
+	VertexShaderOutput Out;
+	Out.Position = mul(Position, wvp);
+	Out.Colour = Colour;
+	Out.TexCoord = TexCoord;
+	Out.PosW = mul(world, Position).xyz;
+	return Out;
+}
 
 float4 MainPS(in VertexShaderOutput input) : COLOR
 {
-	float4 texColour = tex2D(SpriteTextureSampler, input.TextureCoordinates) * input.Color;
+	float4 texColour = tex2D(SpriteTextureSampler, input.TexCoord.xy) * input.Colour;
 
-	float4 diffuse = { 0,0,0,1 };
-	float4 specular = { 0,0,0,1 };
+	float4 diffuse = { 0,0,0,0 };
 
-	float3 normal = { 0, 0, -1 };
+	float3 pixelPos = input.PosW;
 
 	for (int i = 0; i < MAX_LIGHTS; i++)
 	{
+		float3 tempPos = { position[i].x,-position[i].y,position[i].z };
 		// ********************************
 		// Calculate direction to the light
 		// ********************************
-		float3 lightDir = normalize(position[i] - float3(input.TextureCoordinates, 0));
+		float3 lightDir = normalize(tempPos - pixelPos);
 
 		// ***************************
 		// Calculate distance to light
 		// ***************************
-		float d = distance(position[i], float3(input.TextureCoordinates, 0));
+		float d = distance(tempPos, pixelPos);
 
 		// ***************************
 		// Calculate attenuation value
 		// ***************************
-		float attenuation = constantK[i] + linearK[i] * d + quadraticK[i] * d * d;
+		//float attenuation =  d;
 
 		// **********************
 		// Calculate light colour
 		// **********************
-		float4 lightColour = (1 / attenuation) * colour[i];
+		float4 lightColour = colour[i] / d;
 
 		// ******************************************************************************
 		// Now use standard phong shading but using calculated light colour and direction
 		// - note no ambient
 		// ******************************************************************************
-		diffuse += (diffuse_reflection * lightColour) * max(dot(normal, lightDir), 0.0);
-
-
-		float3 viewDir = { 0, 0, -1 };
-		float3 halfVector = normalize(lightDir + viewDir);//JUST THIS view dir
-		specular += (specular_reflection * lightColour) * pow(max(dot(normal, halfVector), 0.0), shininess);
+		diffuse += lightColour;// *max(dot(normal, lightDir), 0.0);
 	}
 
-	float4 colour = ((emissive + diffuse) * texColour) + specular;
+	float4 colour = diffuse*texColour;
 	colour.a = texColour.a;
 
 	return colour;
@@ -86,6 +88,7 @@ technique SpriteDrawing
 {
 	pass P0
 	{
+		VertexShader = compile VS_SHADERMODEL MainVS();
 		PixelShader = compile PS_SHADERMODEL MainPS();
 	}
 };
