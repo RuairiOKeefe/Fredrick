@@ -286,23 +286,6 @@ namespace Fredrick.src
 		{
 			GraphicsDevice.Clear(Color.Transparent);
 
-			//aaaaaaaaaaaaa
-			PostProcessing p = new PostProcessing();
-			p.Draw(spriteBatch, GraphicsDevice, actors);
-			//aaaaaaaaaaaaaaaaaa
-
-			GraphicsDevice.SetRenderTarget(staticTerrainTarget);
-			GraphicsDevice.Clear(Color.Transparent);
-			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, cam.Get_Transformation(GraphicsDevice));
-			foreach (var e in terrain)
-				e.Draw(spriteBatch);
-			spriteBatch.End();
-
-			GraphicsDevice.SetRenderTarget(sceneTarget);
-			GraphicsDevice.Clear(Color.Transparent);
-
-			background.Draw(spriteBatch, GraphicsDevice, cam, fog);
-
 			//lighting.Parameters["emissive"].SetValue(new Color(255, 255, 255, 255).ToVector4());
 			//lighting.Parameters["diffuse_reflection"].SetValue(new Color(255, 255, 255, 255).ToVector4());
 			//lighting.Parameters["specular_reflection"].SetValue(new Color(255, 255, 255, 255).ToVector4());
@@ -324,32 +307,43 @@ namespace Fredrick.src
 				quadraticK[i] = 1;
 			}
 			positions[0] = new Vector3(actors[0].Position, 0);
-			//positions[0] = Vector3.Transform(positions[0], Matrix.Invert(cam.Get_Transformation(GraphicsDevice)));
 
-			colours[0] = new Vector4(160, 0, 0, 255);
+			colours[0] = new Vector4(160, 100, 120, 255);
 			constantK[0] = 1.0f;
 			linearK[0] = 1;
-			quadraticK[0] =1;
+			quadraticK[0] = 1;
 			Matrix world = Matrix.Identity;
-			Matrix view = Matrix.Invert(cam.Get_Transformation(GraphicsDevice));
-
+			Matrix view = (cam.Get_Transformation(GraphicsDevice));
 			Matrix projection = Matrix.CreateOrthographicOffCenter(0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight, 0, -1, 1);
-			//Matrix halfPixelOffset = Matrix.CreateTranslation(-0.5f, 0.5f, 0);
-			//projection = halfPixelOffset * projection;
-			world.Scale = new Vector3(2, 2, 1);
+
 			Matrix wvp = world * view * projection;
-			//wvp = Matrix.Transpose(wvp);
 			lighting.Parameters["world"].SetValue(world);
 			lighting.Parameters["wvp"].SetValue(wvp);
 			lighting.Parameters["position"].SetValue(positions);
 			lighting.Parameters["colour"].SetValue(colours);
-			//cam.Zoom= 0.5f;
 
-			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, lighting, null);
+			//aaaaaaaaaaaaa
+			PostProcessing p = new PostProcessing();
+			p.Draw(spriteBatch, GraphicsDevice, actors);
+			//aaaaaaaaaaaaaaaaaa
+
+			GraphicsDevice.SetRenderTarget(staticTerrainTarget);
+			GraphicsDevice.Clear(Color.Transparent);
+			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, lighting, cam.Get_Transformation(GraphicsDevice));
+			foreach (var e in terrain)
+				e.Draw(spriteBatch);
+			spriteBatch.End();
+
+			GraphicsDevice.SetRenderTarget(sceneTarget);
+			GraphicsDevice.Clear(Color.Transparent);
+
+			background.Draw(spriteBatch, GraphicsDevice, cam, fog);
+
+			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, null);
 			spriteBatch.Draw(staticTerrainTarget, Vector2.Zero, Color.White);
 			spriteBatch.End();
 
-			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, cam.Get_Transformation(GraphicsDevice));
+			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, lighting, cam.Get_Transformation(GraphicsDevice));
 			foreach (var e in actors)
 				e.Draw(spriteBatch);
 

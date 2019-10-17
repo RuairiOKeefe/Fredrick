@@ -27,7 +27,7 @@ struct VertexShaderOutput
 	float4 Position : POSITION;
 	float4 Colour : COLOR0;
 	float4 TexCoord : TEXCOORD0;
-	float3 PosW : TEXCOORD3;
+	float4 PosW : TEXCOORD3;
 };
 
 VertexShaderOutput MainVS(float4 Position : POSITION0, float4 Colour : COLOR0, float4 TexCoord : TEXCOORD0)
@@ -36,7 +36,7 @@ VertexShaderOutput MainVS(float4 Position : POSITION0, float4 Colour : COLOR0, f
 	Out.Position = mul(Position, wvp);
 	Out.Colour = Colour;
 	Out.TexCoord = TexCoord;
-	Out.PosW = mul(world, Position).xyz;
+	Out.PosW = mul(Position, world);
 	return Out;
 }
 
@@ -46,11 +46,11 @@ float4 MainPS(in VertexShaderOutput input) : COLOR
 
 	float4 diffuse = { 0,0,0,0 };
 
-	float3 pixelPos = input.PosW;
+	float3 pixelPos = input.PosW.xyz;
 
 	for (int i = 0; i < MAX_LIGHTS; i++)
 	{
-		float3 tempPos = { position[i].x,-position[i].y,position[i].z };
+		float3 tempPos = { position[i].x * 32,-position[i].y * 32, position[i].z };
 		// ********************************
 		// Calculate direction to the light
 		// ********************************
