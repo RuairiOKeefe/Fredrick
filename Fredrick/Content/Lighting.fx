@@ -8,9 +8,13 @@
 #endif
 
 const static int MAX_LIGHTS = 16;
+const static int UNIT_SCALE = 32; //The size of a world unit
 
 float4x4 world;
 float4x4 wvp;
+
+float4 emissive;
+float4 diffuseReflection;
 
 float3 position[16];
 float4 colour[16];
@@ -50,7 +54,8 @@ float4 MainPS(in VertexShaderOutput input) : COLOR
 
 	for (int i = 0; i < MAX_LIGHTS; i++)
 	{
-		float3 tempPos = { position[i].x * 32,-position[i].y * 32, position[i].z };
+		float3 tempPos = { position[i].x, -position[i].y, position[i].z  };
+		tempPos *= UNIT_SCALE;
 		// ********************************
 		// Calculate direction to the light
 		// ********************************
@@ -71,14 +76,15 @@ float4 MainPS(in VertexShaderOutput input) : COLOR
 		// **********************
 		float4 lightColour = colour[i] / d;
 
+		float3 normal = { 0,0,-1 };
 		// ******************************************************************************
 		// Now use standard phong shading but using calculated light colour and direction
 		// - note no ambient
 		// ******************************************************************************
-		diffuse += lightColour;// *max(dot(normal, lightDir), 0.0);
+		diffuse += (lightColour*diffuseReflection) *max(dot(normal, lightDir), 0.0);
 	}
 
-	float4 colour = diffuse*texColour;
+	float4 colour = (emissive + diffuse) * texColour;
 	colour.a = texColour.a;
 
 	return colour;

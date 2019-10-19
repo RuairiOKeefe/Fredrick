@@ -286,11 +286,6 @@ namespace Fredrick.src
 		{
 			GraphicsDevice.Clear(Color.Transparent);
 
-			//lighting.Parameters["emissive"].SetValue(new Color(255, 255, 255, 255).ToVector4());
-			//lighting.Parameters["diffuse_reflection"].SetValue(new Color(255, 255, 255, 255).ToVector4());
-			//lighting.Parameters["specular_reflection"].SetValue(new Color(255, 255, 255, 255).ToVector4());
-			//lighting.Parameters["shininess"].SetValue(0.0f);
-
 			Vector3[] positions = new Vector3[16];
 			Vector4[] colours = new Vector4[16];
 			float[] constantK = new float[16];
@@ -306,7 +301,7 @@ namespace Fredrick.src
 				linearK[i] = 1;
 				quadraticK[i] = 1;
 			}
-			positions[0] = new Vector3(actors[0].Position, 0);
+			positions[0] = new Vector3(actors[0].Position, -1);
 
 			colours[0] = new Vector4(160, 100, 120, 255);
 			constantK[0] = 1.0f;
@@ -315,10 +310,14 @@ namespace Fredrick.src
 			Matrix world = Matrix.Identity;
 			Matrix view = (cam.Get_Transformation(GraphicsDevice));
 			Matrix projection = Matrix.CreateOrthographicOffCenter(0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight, 0, -1, 1);
-
 			Matrix wvp = world * view * projection;
+
 			lighting.Parameters["world"].SetValue(world);
 			lighting.Parameters["wvp"].SetValue(wvp);
+			lighting.Parameters["emissive"].SetValue(new Color(30, 0, 20, 255).ToVector4());
+			lighting.Parameters["diffuseReflection"].SetValue(new Color(255, 255, 255, 255).ToVector4());
+			//lighting.Parameters["specular_reflection"].SetValue(new Color(255, 255, 255, 255).ToVector4());
+			//lighting.Parameters["shininess"].SetValue(0.0f);
 			lighting.Parameters["position"].SetValue(positions);
 			lighting.Parameters["colour"].SetValue(colours);
 
