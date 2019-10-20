@@ -20,10 +20,16 @@ float3 position[16];
 float4 colour[16];
 
 Texture2D SpriteTexture;
+Texture2D NormalMap;
 
 sampler2D SpriteTextureSampler = sampler_state
 {
 	Texture = <SpriteTexture>;
+};
+
+sampler2D NormalMapSampler = sampler_state
+{
+	Texture = <NormalMap>;
 };
 
 struct VertexShaderOutput
@@ -47,7 +53,8 @@ VertexShaderOutput MainVS(float4 Position : POSITION0, float4 Colour : COLOR0, f
 float4 MainPS(in VertexShaderOutput input) : COLOR
 {
 	float4 texColour = tex2D(SpriteTextureSampler, input.TexCoord.xy) * input.Colour;
-
+	float4 normalColour = tex2D(NormalMapSampler, input.TexCoord.xy);
+	normalColour = (normalColour * 2) - 1;
 	float4 diffuse = { 0,0,0,0 };
 
 	float3 pixelPos = input.PosW.xyz;
@@ -69,14 +76,14 @@ float4 MainPS(in VertexShaderOutput input) : COLOR
 		// ***************************
 		// Calculate attenuation value
 		// ***************************
-		//float attenuation =  d;
+		float attenuation =  d;
 
 		// **********************
 		// Calculate light colour
 		// **********************
 		float4 lightColour = colour[i] / d;
 
-		float3 normal = { 0,0,-1 };
+		float3 normal = { normalColour.x, -normalColour.y, -normalColour.z };
 		// ******************************************************************************
 		// Now use standard phong shading but using calculated light colour and direction
 		// - note no ambient

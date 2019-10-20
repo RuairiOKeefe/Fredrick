@@ -233,6 +233,8 @@ namespace Fredrick.src
 			canvas.TextElements.Add(player2Score);
 
 			UI.Components.Add(canvas);
+
+			ResourceManager.Instance.AddTexture(Content, "dirtNormal");
 		}
 
 		/// <summary>
@@ -311,6 +313,7 @@ namespace Fredrick.src
 			Matrix view = (cam.Get_Transformation(GraphicsDevice));
 			Matrix projection = Matrix.CreateOrthographicOffCenter(0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight, 0, -1, 1);
 			Matrix wvp = world * view * projection;
+			Texture normalMap = ResourceManager.Instance.Textures["dirtNormal"];
 
 			lighting.Parameters["world"].SetValue(world);
 			lighting.Parameters["wvp"].SetValue(wvp);
@@ -320,6 +323,7 @@ namespace Fredrick.src
 			//lighting.Parameters["shininess"].SetValue(0.0f);
 			lighting.Parameters["position"].SetValue(positions);
 			lighting.Parameters["colour"].SetValue(colours);
+			lighting.Parameters["NormalMap"].SetValue(normalMap);
 
 			//aaaaaaaaaaaaa
 			PostProcessing p = new PostProcessing();
