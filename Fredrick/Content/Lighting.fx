@@ -84,6 +84,7 @@ float4 MainPS(in VertexShaderOutput input) : COLOR
 		float4 lightColour = colour[i] / d;
 
 		float3 normal = { normalColour.x, -normalColour.y, -normalColour.z };
+		normal = normalize(normal);
 		// ******************************************************************************
 		// Now use standard phong shading but using calculated light colour and direction
 		// - note no ambient
