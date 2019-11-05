@@ -334,7 +334,7 @@ namespace Fredrick.src
 			GraphicsDevice.Clear(Color.Transparent);
 			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, lighting, cam.Get_Transformation(GraphicsDevice));
 			foreach (var e in terrain)
-				e.Draw(spriteBatch);
+				e.DrawBatch(spriteBatch);
 			spriteBatch.End();
 
 			GraphicsDevice.SetRenderTarget(sceneTarget);
@@ -348,7 +348,7 @@ namespace Fredrick.src
 
 			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, lighting, cam.Get_Transformation(GraphicsDevice));
 			foreach (var e in actors)
-				e.Draw(spriteBatch);
+				e.DrawBatch(spriteBatch);
 
 			ProjectileBuffer.Instance.Draw(spriteBatch);
 			ParticleBuffer.Instance.Draw(spriteBatch);
@@ -376,7 +376,7 @@ namespace Fredrick.src
 			}
 
 			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, null);
-			UI.Draw(spriteBatch);
+			UI.DrawBatch(spriteBatch);
 			spriteBatch.End();
 
 			base.Draw(gameTime);

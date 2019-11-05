@@ -50,7 +50,7 @@ namespace Fredrick.src
 			SetFire();
 		}
 
-		public override void Draw(SpriteBatch spriteBatch)
+		public override void DrawBatch(SpriteBatch spriteBatch)
 		{
 
 		}

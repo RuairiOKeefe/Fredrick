@@ -71,7 +71,7 @@ namespace Fredrick.src
 			Drawable.Animate(deltaTime);
 		}
 
-		public override void Draw(SpriteBatch spriteBatch)
+		public override void DrawBatch(SpriteBatch spriteBatch)
 		{
 			Vector2 inv = new Vector2(1, -1);
 			spriteBatch.Draw(ResourceManager.Instance.Textures[Drawable._spriteName], (Position + _owner.Position) * inv * Drawable._spriteSize, Drawable._sourceRectangle, Drawable._colour, _owner.Rotation + Rotation, Drawable._origin, Scale, Drawable._spriteEffects, Drawable._layer);

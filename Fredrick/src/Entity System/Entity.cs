@@ -102,14 +102,14 @@ namespace Fredrick.src
 			}
 		}
 
-		public void Draw(SpriteBatch spriteBatch)
+		public void DrawBatch(SpriteBatch spriteBatch)
 		{
 			if (Active)
 			{
 				foreach (var c in Components)
 				{
 					if (c.Active)
-						c.Draw(spriteBatch);
+						c.DrawBatch(spriteBatch);
 				}
 			}
 		}

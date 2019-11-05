@@ -76,7 +76,7 @@ namespace Fredrick.src
 		{
 			foreach (Entity e in ActiveProjectiles)
 			{
-				e.Draw(spriteBatch);
+				e.DrawBatch(spriteBatch);
 			}
 		}
 	}

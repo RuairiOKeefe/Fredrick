@@ -200,7 +200,7 @@ namespace Fredrick.src
 			}
 		}
 
-		public override void Draw(SpriteBatch spriteBatch)
+		public override void DrawBatch(SpriteBatch spriteBatch)
 		{
 			Vector2 inv = new Vector2(1, -1);
 			//spriteBatch.Draw(ResourceManager.Instance.Textures[WeaponDrawable._spriteName], (_transformedWeaponPosition + Position + _owner.Position) * inv * WeaponDrawable._spriteSize, WeaponDrawable._sourceRectangle, WeaponDrawable._colour, _owner.Rotation + Rotation, WeaponDrawable._origin, Scale, WeaponDrawable._spriteEffects, WeaponDrawable._layer);

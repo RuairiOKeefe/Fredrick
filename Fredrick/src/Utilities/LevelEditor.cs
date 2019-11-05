@@ -276,7 +276,7 @@ namespace Fredrick.src
 		{
 			if (editing)
 			{
-				indicator.Draw(spriteBatch);
+				indicator.DrawBatch(spriteBatch);
 			}
 		}
 

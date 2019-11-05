@@ -40,7 +40,7 @@ namespace Fredrick.src
 			}
 		}
 
-		public override void Draw(SpriteBatch spriteBatch)
+		public override void DrawBatch(SpriteBatch spriteBatch)
 		{
 			foreach (var t in TextElements)
 			{
