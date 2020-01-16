@@ -97,7 +97,7 @@ namespace Fredrick.src
 
 		private void InitCircleColliders()
 		{
-			CircleCollider fragNade = new CircleCollider(null, 3/32f, 0.3f);
+			CircleCollider fragNade = new CircleCollider(null, 3 / 32f, 0.3f);
 			CircleColliders.Add("FragNade", fragNade);
 		}
 
@@ -233,11 +233,20 @@ namespace Fredrick.src
 
 		private void InitRenderables()
 		{
-			Renderable fragNade = new Renderable(null, "Projectile", "FragNade", new Vector2(7.5f), new Vector2(0), new Vector2(1), 16, 16, 0.1f);
-			fragNade.Drawable.AddAnimation(0, 0, 1, 1, Animation.OnEnd.Loop, 0);
-			fragNade.Drawable.AddAnimation(32, 0, 1, 1, Animation.OnEnd.Loop, 0);
+			{
+				ShaderInfo.Material fragMaterial;
+				fragMaterial.Emissive = new Color(0, 0, 0, 255);
+				fragMaterial.Diffuse = new Color(100, 150, 100, 255);
+				fragMaterial.Specular = new Color(255, 255, 255, 255);
+				fragMaterial.Shininess = 0.8f;
+				LightingInfo fragLighting = new LightingInfo("FragNade", fragMaterial);
+				Renderable fragNade = new Renderable(null, "Projectile", "FragNade", new Vector2(7.5f), new Vector2(0), new Vector2(1), 16, 16, 0.1f);
+				fragNade.Drawable.AddAnimation(0, 0, 1, 1, Animation.OnEnd.Loop, 0);
+				fragNade.Drawable.AddAnimation(32, 0, 1, 1, Animation.OnEnd.Loop, 0);
+				fragNade.Drawable.ShaderInfo = fragLighting;
 
-			Renderables.Add("FragNade", fragNade);
+				Renderables.Add("FragNade", fragNade);
+			}
 		}
 
 		private void InitStatusHandlers()

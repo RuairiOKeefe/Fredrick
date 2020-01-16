@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Fredrick.src
 {
+	[Serializable]
 	public abstract class ShaderInfo
 	{
 		public struct Material
@@ -18,7 +20,11 @@ namespace Fredrick.src
 			public float Shininess;
 		}
 
+		public virtual string ShaderId { get { return ""; } }
+
 		public abstract void SetUniforms(Effect shader);
+
+		public abstract void Load(ContentManager content);
 
 		public abstract ShaderInfo Copy();
 	}

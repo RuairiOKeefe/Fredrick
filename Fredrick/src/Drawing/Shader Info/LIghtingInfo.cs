@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,26 +8,33 @@ using System.Threading.Tasks;
 
 namespace Fredrick.src
 {
+	[Serializable]
 	public class LightingInfo : ShaderInfo
 	{
-		public Texture2D NormalMap;
+		public override string ShaderId { get { return "Lighting"; } }
+		public string NormalMapName;
 		public Material Material;
 
-		public LightingInfo(Texture2D normalMap, Material material)
+		public LightingInfo(string normalMapName, Material material)
 		{
-			NormalMap = normalMap;
+			NormalMapName = normalMapName;
 			Material = material;
 		}
 
 		public override void SetUniforms(Effect shader)
 		{
-			shader.Parameters["NormalMap"].SetValue(NormalMap);
+			shader.Parameters["NormalMap"].SetValue(ResourceManager.Instance.Textures[NormalMapName]);
 			//shader.Parameters["Material"].SetValue(Material);
+		}
+
+		public override void Load(ContentManager content)
+		{
+			ResourceManager.Instance.AddTexture(content, NormalMapName);
 		}
 
 		public override ShaderInfo Copy()
 		{
-			return new LightingInfo(this.NormalMap, this.Material);
+			return new LightingInfo(this.NormalMapName, this.Material);
 		}
 	}
 }

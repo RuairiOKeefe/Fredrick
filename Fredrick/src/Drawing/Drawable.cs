@@ -24,6 +24,8 @@ namespace Fredrick.src
 		public int _spriteWidth;
 		public int _spriteHeight;
 
+		public ShaderInfo ShaderInfo;
+
 		public List<Animation> _animations;//Stores an int key
 		public int _currentAnim;//which animation is currently being used
 

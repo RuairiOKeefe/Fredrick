@@ -12,6 +12,8 @@ namespace Fredrick.src
 	[Serializable]
 	public class Renderable : Component
 	{
+		public override bool IsDrawn { get { return true; } }
+
 		protected bool _facingRight;
 
 		public Drawable Drawable { get; set; }
@@ -59,6 +61,10 @@ namespace Fredrick.src
 		public override void Load(ContentManager content)
 		{
 			Drawable.Load(content);
+			if (Drawable.ShaderInfo != null)
+			{
+				ShaderId = Drawable.ShaderInfo.ShaderId;
+			}
 		}
 
 		public override void Unload()
@@ -69,6 +75,17 @@ namespace Fredrick.src
 		public override void Update(double deltaTime)
 		{
 			Drawable.Animate(deltaTime);
+		}
+
+		public override void Draw(SpriteBatch spriteBatch, Effect shader, Matrix transformationMatrix)
+		{
+			if (Drawable.ShaderInfo != null)
+				Drawable.ShaderInfo.SetUniforms(shader);
+
+			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, shader, transformationMatrix);
+			Vector2 inv = new Vector2(1, -1);
+			spriteBatch.Draw(ResourceManager.Instance.Textures[Drawable._spriteName], (Position + _owner.Position) * inv * Drawable._spriteSize, Drawable._sourceRectangle, Drawable._colour, _owner.Rotation + Rotation, Drawable._origin, Scale, Drawable._spriteEffects, Drawable._layer);
+			spriteBatch.End();
 		}
 
 		public override void DrawBatch(SpriteBatch spriteBatch)

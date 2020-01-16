@@ -20,16 +20,22 @@ namespace Fredrick.src
 		public string Id { get; set; }
 		public bool Active { get; set; }
 		public List<string> Tags { get; set; }
+		public String ShaderId { get; protected set; }//Should be set in Load()
+		public bool DrawBatched { get; set; }//Batched components are grouped based on the Id of the component
+
+		public virtual bool IsDrawn { get { return false; } }
 
 		public Component()
 		{
 		}
 
-		public Component(Entity owner, string id = null, List<string> tags = null, bool active = true)
+		public Component(Entity owner, string id = null, List<string> tags = null, bool active = true, bool drawBatched = false)
 		{
 			_owner = owner;
 			Id = id;
 			Active = active;
+			ShaderId = "";
+			DrawBatched = drawBatched;
 			Tags = new List<string>();
 			if (tags != null)
 			{
@@ -45,6 +51,8 @@ namespace Fredrick.src
 			_owner = owner;
 			Id = original.Id;
 			Active = active;
+			ShaderId = "";
+			DrawBatched = original.DrawBatched;
 			Tags = new List<string>();
 			if (original.Tags != null)
 			{
@@ -67,6 +75,7 @@ namespace Fredrick.src
 		public abstract void Load(ContentManager content);
 		public abstract void Unload();
 		public abstract void Update(double deltaTime);
+		public virtual void Draw(SpriteBatch spriteBatch, Effect shader, Matrix transformationMatrix) { }//MAKE ABSTRACT AFTER TESTING
 		public abstract void DrawBatch(SpriteBatch spriteBatch);
 		public abstract void DebugDraw(SpriteBatch spriteBatch);
 		public abstract Component Copy(Entity owner);

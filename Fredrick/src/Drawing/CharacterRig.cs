@@ -290,7 +290,7 @@ namespace Fredrick.src
 			Scale = new Vector2(1.0f);
 		}
 
-		public CharacterRig(Entity owner, string id, Bone root, Dictionary<string, RigAnimation> animations) : base(owner, id)
+		public CharacterRig(Entity owner, string id, List<string> tags, Bone root, Dictionary<string, RigAnimation> animations) : base(owner, id, tags, true, false)
 		{
 			CurrentAnimation = new RigAnimation();
 			Animations = new Dictionary<string, RigAnimation>();
@@ -436,6 +436,11 @@ namespace Fredrick.src
 			}
 
 			Root.Update();
+		}
+
+		public override void Draw(SpriteBatch spriteBatch, Effect shader, Matrix transformationMatrix)
+		{
+			Root.Draw(spriteBatch, this, MotionFlip);
 		}
 
 		public override void DrawBatch(SpriteBatch spriteBatch)

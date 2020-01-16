@@ -90,6 +90,11 @@
     <Compile Include="src\Drawing\ResourceManager.cs" />
     <Compile Include="src\InputHandling\Controller.cs" />
     <Compile Include="src\Resources\AnimationResources.cs" />
+    <Compile Include="src\Scenes\Level.cs" />
+    <Compile Include="src\Scenes\LevelManager.cs" />
+    <Compile Include="src\Scenes\Lighting\Light.cs" />
+    <Compile Include="src\Scenes\Lighting\Lighting.cs" />
+    <Compile Include="src\Scenes\Lighting\LightingUtils.cs" />
     <Compile Include="src\State Machines\MovementStateMachine.cs" />
     <Compile Include="src\UI\Canvas.cs" />
     <Compile Include="src\UI\TextElement.cs" />

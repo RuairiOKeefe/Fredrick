@@ -103,74 +103,146 @@ namespace Fredrick.src
 			switch (i)
 			{
 				case (0):
-					e = new Entity(true, "Block");
-					e.Tags.Add("Terrain");
-					Renderable r = new Renderable(e, "Block", "Dirt", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
-					r.Drawable.AddAnimation(0, 0, 1, 30, Animation.OnEnd.Loop, 0);
-					AABBCollider c = new AABBCollider(e, new Vector2(0), 1, 1);
-					e.Components.Add(r);
-					e.Components.Add(c);
+					{
+						e = new Entity(true, "Block");
+						e.Tags.Add("Terrain");
+						ShaderInfo.Material material;
+						material.Emissive = new Color(0, 0, 0, 255);
+						material.Diffuse = new Color(100, 150, 100, 255);
+						material.Specular = new Color(255, 255, 255, 255);
+						material.Shininess = 0.8f;
+						LightingInfo lighting = new LightingInfo("DirtNormal", material);
+						Renderable r = new Renderable(e, "Block", "Dirt", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+						r.Drawable.AddAnimation(0, 0, 1, 30, Animation.OnEnd.Loop, 0);
+						r.Drawable.ShaderInfo = lighting;
+						AABBCollider c = new AABBCollider(e, new Vector2(0), 1, 1);
+						e.Components.Add(r);
+						e.Components.Add(c);
+					}
 					break;
 				case (1):
-					e = new Entity(true, "Grass");
-					e.Tags.Add("Terrain");
-					r = new Renderable(e, "Block", "grass", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
-					r.Drawable.AddAnimation(0, 0, 1, 30, Animation.OnEnd.Loop, 0);
-					c = new AABBCollider(e, new Vector2(0), 1, 1);
-					e.Components.Add(r);
-					e.Components.Add(c);
+					{
+						e = new Entity(true, "Grass");
+						e.Tags.Add("Terrain");
+						ShaderInfo.Material material;
+						material.Emissive = new Color(0, 0, 0, 255);
+						material.Diffuse = new Color(100, 150, 100, 255);
+						material.Specular = new Color(255, 255, 255, 255);
+						material.Shininess = 0.8f;
+						LightingInfo lighting = new LightingInfo("DirtNormal", material);
+						Renderable r = new Renderable(e, "Block", "grass", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+						r.Drawable.AddAnimation(0, 0, 1, 30, Animation.OnEnd.Loop, 0);
+						r.Drawable.ShaderInfo = lighting;
+						AABBCollider c = new AABBCollider(e, new Vector2(0), 1, 1);
+						e.Components.Add(r);
+						e.Components.Add(c);
+					}
 					break;
 				case (2):
-					e = new Entity(true, "Slope");
-					e.Tags.Add("Terrain");
-					r = new Renderable(e, "Slope", "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
-					r.Drawable.AddAnimation(0, 0, 1, 30, Animation.OnEnd.Loop, 0);
-					Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, -0.5f, 0.5f, -0.3f);
-					e.Components.Add(r);
-					e.Components.Add(p);
+					{
+						e = new Entity(true, "Slope");
+						e.Tags.Add("Terrain");
+						ShaderInfo.Material material;
+						material.Emissive = new Color(0, 0, 0, 255);
+						material.Diffuse = new Color(100, 150, 100, 255);
+						material.Specular = new Color(255, 255, 255, 255);
+						material.Shininess = 0.8f;
+						LightingInfo lighting = new LightingInfo("DirtNormal", material);
+						Renderable r = new Renderable(e, "Slope", "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+						r.Drawable.AddAnimation(0, 0, 1, 30, Animation.OnEnd.Loop, 0);
+						r.Drawable.ShaderInfo = lighting;
+						Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, -0.5f, 0.5f, -0.3f);
+						e.Components.Add(r);
+						e.Components.Add(p);
+					}
 					break;
 				case (3):
-					e = new Entity(true, "Slope");
-					e.Tags.Add("Terrain");
-					r = new Renderable(e, "Slope", "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
-					r.Drawable.AddAnimation(32, 0, 1, 30, Animation.OnEnd.Loop, 0);
-					p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, -0.5f, -0.5f);
-					e.Components.Add(r);
-					e.Components.Add(p);
+					{
+						e = new Entity(true, "Slope");
+						e.Tags.Add("Terrain");
+						ShaderInfo.Material material;
+						material.Emissive = new Color(0, 0, 0, 255);
+						material.Diffuse = new Color(100, 150, 100, 255);
+						material.Specular = new Color(255, 255, 255, 255);
+						material.Shininess = 0.8f;
+						LightingInfo lighting = new LightingInfo("DirtNormal", material);
+						Renderable r = new Renderable(e, "Slope", "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+						r.Drawable.AddAnimation(32, 0, 1, 30, Animation.OnEnd.Loop, 0);
+						r.Drawable.ShaderInfo = lighting;
+						Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, -0.5f, -0.5f);
+						e.Components.Add(r);
+						e.Components.Add(p);
+					}
 					break;
 				case (4):
-					e = new Entity(true, "Slope");
-					e.Tags.Add("Terrain");
-					r = new Renderable(e, "Slope", "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
-					r.Drawable.AddAnimation(64, 0, 1, 30, Animation.OnEnd.Loop, 0);
-					p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, -0.5f, 0.5f);
-					e.Components.Add(r);
-					e.Components.Add(p);
+					{
+						e = new Entity(true, "Slope");
+						e.Tags.Add("Terrain");
+						ShaderInfo.Material material;
+						material.Emissive = new Color(0, 0, 0, 255);
+						material.Diffuse = new Color(100, 150, 100, 255);
+						material.Specular = new Color(255, 255, 255, 255);
+						material.Shininess = 0.8f;
+						LightingInfo lighting = new LightingInfo("DirtNormal", material);
+						Renderable r = new Renderable(e, "Slope", "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+						r.Drawable.AddAnimation(64, 0, 1, 30, Animation.OnEnd.Loop, 0);
+						r.Drawable.ShaderInfo = lighting;
+						Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, -0.5f, 0.5f);
+						e.Components.Add(r);
+						e.Components.Add(p);
+					}
 					break;
 				case (5):
-					e = new Entity(true, "Slope");
-					e.Tags.Add("Terrain");
-					r = new Renderable(e, "Slope", "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
-					r.Drawable.AddAnimation(96, 0, 1, 30, Animation.OnEnd.Loop, 0);
-					p = new Platform(e, new Vector2(0), 1, 1, 0, 0, -0.5f, 0.5f, 0.5f);
-					e.Components.Add(r);
-					e.Components.Add(p);
+					{
+						e = new Entity(true, "Slope");
+						e.Tags.Add("Terrain");
+						ShaderInfo.Material material;
+						material.Emissive = new Color(0, 0, 0, 255);
+						material.Diffuse = new Color(100, 150, 100, 255);
+						material.Specular = new Color(255, 255, 255, 255);
+						material.Shininess = 0.8f;
+						LightingInfo lighting = new LightingInfo("DirtNormal", material);
+						Renderable r = new Renderable(e, "Slope", "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+						r.Drawable.AddAnimation(96, 0, 1, 30, Animation.OnEnd.Loop, 0);
+						r.Drawable.ShaderInfo = lighting;
+						Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, -0.5f, 0.5f, 0.5f);
+						e.Components.Add(r);
+						e.Components.Add(p);
+					}
 					break;
 				case (6):
-					e = new Entity(true, "Platform");
-					e.Tags.Add("Terrain");
-					r = new Renderable(e, "Block", "grass", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
-					r.Drawable.AddAnimation(0, 0, 1, 30, Animation.OnEnd.Loop, 0);
-					p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, 0.5f, -0.3f);
-					e.Components.Add(r);
-					e.Components.Add(p);
+					{
+						e = new Entity(true, "Platform");
+						e.Tags.Add("Terrain");
+						ShaderInfo.Material material;
+						material.Emissive = new Color(0, 0, 0, 255);
+						material.Diffuse = new Color(100, 150, 100, 255);
+						material.Specular = new Color(255, 255, 255, 255);
+						material.Shininess = 0.8f;
+						LightingInfo lighting = new LightingInfo("DirtNormal", material);
+						Renderable r = new Renderable(e, "Block", "grass", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+						r.Drawable.AddAnimation(0, 0, 1, 30, Animation.OnEnd.Loop, 0);
+						r.Drawable.ShaderInfo = lighting;
+						Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, 0.5f, -0.3f);
+						e.Components.Add(r);
+						e.Components.Add(p);
+					}
 					break;
 				case (7):
-					e = new Entity(true, "Emptyblock");
-					e.Tags.Add("Terrain");
-					r = new Renderable(e, "Block", "Dirt", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
-					r.Drawable.AddAnimation(0, 0, 1, 30, Animation.OnEnd.Loop, 0);
-					e.Components.Add(r);
+					{
+						e = new Entity(true, "Emptyblock");
+						e.Tags.Add("Terrain");
+						ShaderInfo.Material material;
+						material.Emissive = new Color(0, 0, 0, 255);
+						material.Diffuse = new Color(100, 150, 100, 255);
+						material.Specular = new Color(255, 255, 255, 255);
+						material.Shininess = 0.8f;
+						LightingInfo lighting = new LightingInfo("DirtNormal", material);
+						Renderable r = new Renderable(e, "Block", "Dirt", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+						r.Drawable.AddAnimation(0, 0, 1, 30, Animation.OnEnd.Loop, 0);
+						r.Drawable.ShaderInfo = lighting;
+						e.Components.Add(r);
+					}
 					break;
 			}
 

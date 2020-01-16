@@ -28,24 +28,18 @@ namespace Fredrick.src
 			}
 		}
 
-		private Dictionary<String, Texture2D> _textures;
-		
-		public Dictionary<String, Texture2D> Textures
-		{
-			get { return _textures; }
-			set { _textures = value; }
-		}
+		public Dictionary<String, Texture2D> Textures { get; set; }
 
 		public ResourceManager()
 		{
-			_textures = new Dictionary<string, Texture2D>();
+			Textures = new Dictionary<string, Texture2D>();
 		}
 
 		public void AddTexture(ContentManager content, string spriteName)
 		{
-			if (!_textures.ContainsKey(spriteName))
+			if (!Textures.ContainsKey(spriteName))
 			{
-				_textures.Add(spriteName, content.Load<Texture2D>(spriteName));
+				Textures.Add(spriteName, content.Load<Texture2D>(spriteName));
 			}
 		}
 	}

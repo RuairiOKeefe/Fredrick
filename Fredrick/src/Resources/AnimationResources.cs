@@ -14,34 +14,35 @@ namespace Fredrick.src
 			Dictionary<string, RigAnimation> animations = new Dictionary<string, RigAnimation>();
 
 			Bone torso = new Bone("Torso", new Vector2(0), 0, new Vector2(0), new Vector2(0));
-			torso.Drawable = new Drawable("Torso", new Vector2(16), 32, 32, 0.15f);
+			torso.Drawable = new Drawable("Character", new Vector2(80, 48), 32, 32, 0.15f);
 			Bone Head = new Bone("Head", new Vector2(0), 0, new Vector2(2 / 32f, 25 / 32f), new Vector2(0, -5 / 32f));
-			Head.Drawable = new Drawable("Head", new Vector2(32), 64, 64, 0.14f);
+			Head.Drawable = new Drawable("Character", new Vector2(48, 16), 32, 32, 0.14f);
 			torso.AddChild(Head);
+
 			Bone UpperLegFront = new Bone("UpperLegFront", new Vector2(0), 0, new Vector2(0 / 32f, -14 / 32f), new Vector2(0.0f, -4 / 32f));
-			UpperLegFront.Drawable = new Drawable("UpperLeg", new Vector2(16), 32, 32, 0.1f);
+			UpperLegFront.Drawable = new Drawable("Character", new Vector2(48, 80), 32, 32, 0.1f);
 			torso.AddChild(UpperLegFront);
 			Bone LowerLegFront = new Bone("LowerLegFront", new Vector2(0), 0, new Vector2(0.0f, -6 / 32f), new Vector2(0.0f, -9 / 32f));
-			LowerLegFront.Drawable = new Drawable("LowerLeg", new Vector2(16), 32, 32, 0.15f);
+			LowerLegFront.Drawable = new Drawable("Character", new Vector2(48, 48), 32, 32, 0.15f);
 			UpperLegFront.AddChild(LowerLegFront);
 			Bone FootFront = new Bone("FootFront", new Vector2(0), 0, new Vector2(0.0f, -10 / 32f), new Vector2(0.0f, 0.0f));
-			FootFront.Drawable = new Drawable("Foot", new Vector2(16), 32, 32, 0.1f);
+			FootFront.Drawable = new Drawable("Character", new Vector2(16, 16), 32, 32, 0.1f);
 			LowerLegFront.AddChild(FootFront);
 			Bone ToesFront = new Bone("ToesFront", new Vector2(0), 0, new Vector2(2 / 32f, 0.0f), new Vector2(1 / 32f, 0.0f));
-			ToesFront.Drawable = new Drawable("Toes", new Vector2(16), 32, 32, 0.1f);
+			ToesFront.Drawable = new Drawable("Character", new Vector2(80, 16), 32, 32, 0.1f);
 			FootFront.AddChild(ToesFront);
 
 			Bone UpperLegBack = new Bone("UpperLegBack", new Vector2(0), 0, new Vector2(-0 / 32f, -14 / 32f), new Vector2(0.0f, -4 / 32f));
-			UpperLegBack.Drawable = new Drawable("UpperLeg", new Vector2(16), 32, 32, 0.1f);
+			UpperLegBack.Drawable = new Drawable("Character", new Vector2(48, 80), 32, 32, 0.1f);
 			torso.AddChild(UpperLegBack);
 			Bone LowerLegBack = new Bone("LowerLegBack", new Vector2(0), 0, new Vector2(0.0f, -6 / 32f), new Vector2(0.0f, -9 / 32f));
-			LowerLegBack.Drawable = new Drawable("LowerLeg", new Vector2(16), 32, 32, 0.15f);
+			LowerLegBack.Drawable = new Drawable("Character", new Vector2(48, 48), 32, 32, 0.15f);
 			UpperLegBack.AddChild(LowerLegBack);
 			Bone FootBack = new Bone("FootBack", new Vector2(0), 0, new Vector2(0.0f, -10 / 32f), new Vector2(0.0f, 0.0f));
-			FootBack.Drawable = new Drawable("Foot", new Vector2(16), 32, 32, 0.1f);
+			FootBack.Drawable = new Drawable("Character", new Vector2(16, 16), 32, 32, 0.1f);
 			LowerLegBack.AddChild(FootBack);
 			Bone ToesBack = new Bone("ToesBack", new Vector2(0), 0, new Vector2(2 / 32f, 0.0f), new Vector2(1 / 32f, 0.0f));
-			ToesBack.Drawable = new Drawable("Toes", new Vector2(16), 32, 32, 0.1f);
+			ToesBack.Drawable = new Drawable("Character", new Vector2(80, 16), 32, 32, 0.1f);
 			FootBack.AddChild(ToesBack);
 
 			RigAnimation standing = new RigAnimation("Stand", new List<RigFrame>(), true, false);
@@ -257,10 +258,13 @@ namespace Fredrick.src
 
 			animations.Add("Falling", falling);
 
-			CharacterRig characterRig = new CharacterRig(null, "PlayerLegs", torso, animations);
+			//Improve formatting
+			CharacterRig characterRig = new CharacterRig(null, "PlayerLegs", new List<string>(), torso, animations);
 
 			characterRig.Tags.Add("Legs");
 			characterRig.Tags.Add("MotionFlip");
+			characterRig.DrawBatched = false;
+
 			return characterRig;
 		}
 
@@ -312,7 +316,7 @@ namespace Fredrick.src
 
 			animations.Add("Throwing", throwing);
 
-			CharacterRig characterRig = new CharacterRig(null, "PlayerArms", shoulder, animations);
+			CharacterRig characterRig = new CharacterRig(null, "PlayerArms", new List<string>(), shoulder, animations);
 			characterRig.Tags.Add("MotionFlip");
 			characterRig.Tags.Add("Arms");
 			characterRig.MountId = "PlayerLegs";

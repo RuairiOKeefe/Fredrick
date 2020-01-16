@@ -35,6 +35,8 @@ namespace Fredrick.src
 
 		ScoreBoard scoreBoard = new ScoreBoard();
 
+		DrawManager drawManager;
+
 		public Game1()
 		{
 			graphics = new GraphicsDeviceManager(this);
@@ -49,6 +51,8 @@ namespace Fredrick.src
 
 			serializer = new Serializer();
 			levelEditor = new LevelEditor();
+
+			drawManager = new DrawManager();
 		}
 
 		/// <summary>
@@ -204,11 +208,13 @@ namespace Fredrick.src
 
 			foreach (Entity e in terrain)
 			{
+				drawManager.AddComponents(e);
 				e.Load(Content);
 			}
 
 			foreach (Entity e in actors)
 			{
+				drawManager.AddComponents(e);
 				e.Load(Content);
 			}
 
@@ -235,6 +241,8 @@ namespace Fredrick.src
 			UI.Components.Add(canvas);
 
 			ResourceManager.Instance.AddTexture(Content, "dirtNormal");
+
+			drawManager.Load(Content);
 		}
 
 		/// <summary>
@@ -286,7 +294,12 @@ namespace Fredrick.src
 
 		protected override void Draw(GameTime gameTime)
 		{
+			GraphicsDevice.SetRenderTarget(sceneTarget);
 			GraphicsDevice.Clear(Color.Transparent);
+
+			background.Draw(spriteBatch, GraphicsDevice, cam, fog);
+
+			drawManager.Draw(spriteBatch, cam.Get_Transformation(GraphicsDevice));
 
 			Vector3[] positions = new Vector3[16];
 			Vector4[] colours = new Vector4[16];
@@ -337,18 +350,15 @@ namespace Fredrick.src
 				e.DrawBatch(spriteBatch);
 			spriteBatch.End();
 
-			GraphicsDevice.SetRenderTarget(sceneTarget);
-			GraphicsDevice.Clear(Color.Transparent);
 
-			background.Draw(spriteBatch, GraphicsDevice, cam, fog);
 
 			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, null);
 			spriteBatch.Draw(staticTerrainTarget, Vector2.Zero, Color.White);
 			spriteBatch.End();
 
 			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, lighting, cam.Get_Transformation(GraphicsDevice));
-			foreach (var e in actors)
-				e.DrawBatch(spriteBatch);
+			//foreach (var e in actors)
+			//	e.DrawBatch(spriteBatch);
 
 			ProjectileBuffer.Instance.Draw(spriteBatch);
 			ParticleBuffer.Instance.Draw(spriteBatch);
