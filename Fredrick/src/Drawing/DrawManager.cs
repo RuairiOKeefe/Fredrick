@@ -33,14 +33,16 @@ namespace Fredrick.src
 			m_shaders.Add("", null);
 		}
 
-		public void SetLights(Effect shader)
+		public void SetLights(Effect shader, Lighting lighting)
 		{
-			Lighting lighting = LevelManager.Instance.CurrentLevel.Lighting;
 			Light[] fixedLights = new Light[16];
 			lighting.GetFixedLights(out fixedLights);
 
-			shader.Parameters["positions"].SetValue(LightingUtils.GetPositions(fixedLights));
-			shader.Parameters["colours"].SetValue(LightingUtils.GetColours(fixedLights));
+			if (shader != null)
+			{
+				shader.Parameters["positions"].SetValue(LightingUtils.GetPositions(fixedLights));
+				shader.Parameters["colours"].SetValue(LightingUtils.GetColours(fixedLights));
+			}
 		}
 
 		public void Load(ContentManager content)
@@ -106,7 +108,7 @@ namespace Fredrick.src
 
 		}
 
-		public void DrawComponents(SpriteBatch spriteBatch, Matrix transformationMatrix)
+		public void DrawComponents(SpriteBatch spriteBatch, Matrix transformationMatrix, Lighting lighting)
 		{
 			foreach (KeyValuePair<string, List<Component>> shaderComponentPair in m_drawComponents)
 			{
@@ -115,20 +117,21 @@ namespace Fredrick.src
 				// shader should be replaced with a class that can hold global uniforms ect
 				foreach (Component component in components)
 				{
+					SetLights(shader, lighting);
 					component.Draw(spriteBatch, shader, transformationMatrix);
 				}
 			}
 		}
 
-		public void DrawBatch(SpriteBatch spriteBatch, Matrix transformationMatrix)
+		public void DrawBatch(SpriteBatch spriteBatch, Matrix transformationMatrix, Lighting lighting)
 		{
 
 		}
 
-		public void Draw(SpriteBatch spriteBatch, Matrix transformationMatrix)
+		public void Draw(SpriteBatch spriteBatch, Matrix transformationMatrix, Lighting lighting)
 		{
-			DrawComponents(spriteBatch, transformationMatrix);
-			DrawBatch(spriteBatch, transformationMatrix);
+			DrawComponents(spriteBatch, transformationMatrix, lighting);
+			DrawBatch(spriteBatch, transformationMatrix, lighting);
 		}
 	}
 }

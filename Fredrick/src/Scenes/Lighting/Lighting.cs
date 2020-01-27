@@ -11,6 +11,10 @@ namespace Fredrick.src
 	{
 		public List<Light> FixedLights { get; private set; }
 
+		public Lighting()
+		{
+			FixedLights = new List<Light>();
+		}
 
 		public void GetFixedLights(out Light[] lights)
 		{
@@ -19,7 +23,14 @@ namespace Fredrick.src
 			//Get first 16 for now
 			for (int i = 0; i < 16; i++)
 			{
-				lights[i] = FixedLights[i];
+				if (i < FixedLights.Count)
+				{
+					lights[i] = FixedLights[i];
+				}
+				else
+				{
+					lights[i] = new Light();
+				}
 			}
 		}
 	}

@@ -25,6 +25,7 @@ namespace Fredrick.src
 		Effect lighting;
 		Effect bloom;
 		Effect fog;
+		Lighting mainLighting = new Lighting();
 
 		RenderTarget2D sceneTarget;
 		RenderTarget2D staticTerrainTarget;
@@ -90,6 +91,7 @@ namespace Fredrick.src
 			ProjectileBuffer.Instance.Load(Content);
 			Resources.Instance.Load(Content);
 			SpawnManager.Instance.Load();
+			LightingResources.Instance.Load();
 
 			Vector4 fogColour = new Vector4(0.2f, 0.3f, 0.4f, 1.0f);
 			background = new Background();
@@ -224,6 +226,9 @@ namespace Fredrick.src
 			cam.OffsetAmount = new Vector2(4.0f, 1.8f);
 			levelEditor.Load(Content);
 
+			mainLighting.FixedLights.Add(LightingResources.Instance.PointLights["BasicLight"].Copy());
+
+
 
 			Canvas canvas = new Canvas(UI, "UI");
 			//TextElement debugElement1 = new TextElement(Content.Load<SpriteFont>("Debug"), new Vector2(0), Color.White, 0, TextElement.Justification.Left, 1.0f);
@@ -299,7 +304,7 @@ namespace Fredrick.src
 
 			background.Draw(spriteBatch, GraphicsDevice, cam, fog);
 
-			drawManager.Draw(spriteBatch, cam.Get_Transformation(GraphicsDevice));
+			drawManager.Draw(spriteBatch, cam.Get_Transformation(GraphicsDevice), mainLighting);
 
 			Vector3[] positions = new Vector3[16];
 			Vector4[] colours = new Vector4[16];

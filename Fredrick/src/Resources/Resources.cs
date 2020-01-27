@@ -30,6 +30,8 @@ namespace Fredrick.src
 
 		//Separate resource classes should be created for components with complex construction 
 		private AnimationResources AnimationResources;
+		//Lighting should have it's singleton status revoked once levels have been refactored to use resources
+		//private LightingResources LightingResources;
 
 		public Dictionary<string, AABBCollider> AABBColliders { get; private set; } = new Dictionary<string, AABBCollider>();
 		public Dictionary<string, CharacterRig> CharacterRigs { get; private set; } = new Dictionary<string, CharacterRig>();
