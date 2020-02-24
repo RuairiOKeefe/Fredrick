@@ -28,7 +28,6 @@ namespace Fredrick.src
 		Lighting mainLighting = new Lighting();
 
 		RenderTarget2D sceneTarget;
-		RenderTarget2D staticTerrainTarget;
 		RenderTarget2D bloomTarget;
 
 		Serializer serializer;
@@ -77,7 +76,6 @@ namespace Fredrick.src
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 
 			sceneTarget = new RenderTarget2D(GraphicsDevice, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
-			staticTerrainTarget = new RenderTarget2D(GraphicsDevice, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
 			bloomTarget = new RenderTarget2D(GraphicsDevice, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
 			// create 1x1 texture for line drawing
 			DebugManager.Instance.LineTex = new Texture2D(GraphicsDevice, 1, 1);
@@ -306,79 +304,26 @@ namespace Fredrick.src
 
 			drawManager.Draw(spriteBatch, cam.Get_Transformation(GraphicsDevice), mainLighting);
 
-			Vector3[] positions = new Vector3[16];
-			Vector4[] colours = new Vector4[16];
-			float[] constantK = new float[16];
-			float[] linearK = new float[16];
-			float[] quadraticK = new float[16];
-
-			for (int i = 0; i < 16; i++)
-			{
-				positions[i] = new Vector3(1, 1, 1);
-				Vector3.Transform(positions[i], Matrix.Invert(cam.Get_Transformation(GraphicsDevice)));
-				colours[i] = new Vector4(0, 0, 0, 255);
-				constantK[i] = 1;
-				linearK[i] = 1;
-				quadraticK[i] = 1;
-			}
-			positions[0] = new Vector3(actors[0].Position, -1);
-
-			colours[0] = new Vector4(160, 100, 120, 255);
-			constantK[0] = 1.0f;
-			linearK[0] = 1;
-			quadraticK[0] = 1;
-			Matrix world = Matrix.Identity;
-			Matrix view = (cam.Get_Transformation(GraphicsDevice));
-			Matrix projection = Matrix.CreateOrthographicOffCenter(0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight, 0, -1, 1);
-			Matrix wvp = world * view * projection;
-			Texture normalMap = ResourceManager.Instance.Textures["dirtNormal"];
-
-			lighting.Parameters["world"].SetValue(world);
-			lighting.Parameters["wvp"].SetValue(wvp);
-			lighting.Parameters["emissive"].SetValue(new Color(30, 0, 20, 255).ToVector4());
-			lighting.Parameters["diffuseReflection"].SetValue(new Color(255, 255, 255, 255).ToVector4());
-			//lighting.Parameters["specular_reflection"].SetValue(new Color(255, 255, 255, 255).ToVector4());
-			//lighting.Parameters["shininess"].SetValue(0.0f);
-			lighting.Parameters["position"].SetValue(positions);
-			lighting.Parameters["colour"].SetValue(colours);
-			lighting.Parameters["NormalMap"].SetValue(normalMap);
-
-			//aaaaaaaaaaaaa
-			PostProcessing p = new PostProcessing();
-			p.Draw(spriteBatch, GraphicsDevice, actors);
-			//aaaaaaaaaaaaaaaaaa
-
-			GraphicsDevice.SetRenderTarget(staticTerrainTarget);
-			GraphicsDevice.Clear(Color.Transparent);
-			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, lighting, cam.Get_Transformation(GraphicsDevice));
-			foreach (var e in terrain)
-				e.DrawBatch(spriteBatch);
-			spriteBatch.End();
-
-
-
-			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, null);
-			spriteBatch.Draw(staticTerrainTarget, Vector2.Zero, Color.White);
-			spriteBatch.End();
-
+			//Draw particles, projectiles and editor stuff (which should be moved)
 			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, lighting, cam.Get_Transformation(GraphicsDevice));
-			//foreach (var e in actors)
-			//	e.DrawBatch(spriteBatch);
 
 			ProjectileBuffer.Instance.Draw(spriteBatch);
 			ParticleBuffer.Instance.Draw(spriteBatch);
 			levelEditor.Draw(spriteBatch);
 			spriteBatch.End();
 
+			//aaaaaaaaaaaaa
+			//PostProcessing p = new PostProcessing();
+			//p.Draw(spriteBatch, GraphicsDevice, actors);
+			//aaaaaaaaaaaaaaaaaa
 
-
-
+			//Combine layers
 			GraphicsDevice.SetRenderTarget(null);
-
 			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, null);
 			spriteBatch.Draw(sceneTarget, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
 			spriteBatch.End();
 
+			//Draw debug stuff
 			if (DebugManager.Instance.Debug)
 			{
 				spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, cam.Get_Transformation(GraphicsDevice));
@@ -390,6 +335,7 @@ namespace Fredrick.src
 				spriteBatch.End();
 			}
 
+			//Draw Ui
 			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, null);
 			UI.DrawBatch(spriteBatch);
 			spriteBatch.End();

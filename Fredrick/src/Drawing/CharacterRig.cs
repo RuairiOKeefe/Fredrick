@@ -266,6 +266,8 @@ namespace Fredrick.src
 	[Serializable]
 	public class CharacterRig : Component
 	{
+		public override bool IsDrawn { get { return true; } }
+
 		public Bone Root;
 		public List<Bone> Bones;//Bones are set during load, created from root
 		public RigFrame PreviousFrame;
@@ -440,12 +442,16 @@ namespace Fredrick.src
 
 		public override void Draw(SpriteBatch spriteBatch, Effect shader, Matrix transformationMatrix)
 		{
+			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, shader, transformationMatrix);
 			Root.Draw(spriteBatch, this, MotionFlip);
+			spriteBatch.End();
 		}
 
 		public override void DrawBatch(SpriteBatch spriteBatch)
 		{
+			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, null);
 			Root.Draw(spriteBatch, this, MotionFlip);
+			spriteBatch.End();
 		}
 
 		public override void DebugDraw(SpriteBatch spriteBatch)
