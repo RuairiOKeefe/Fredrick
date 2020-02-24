@@ -138,7 +138,7 @@ namespace Fredrick.src
 			emberLerp.Add(new Tuple<Color, double>(new Color(255, 255, 211, 255) * 0.5f, 0.5));
 			emberLerp.Add(new Tuple<Color, double>(new Color(255, 255, 255, 255) * 0.0f, 1.0));
 			Emitter embers = new Emitter(null, "Spark", false, false, 1000, 50, new Vector2(0, -26.0f), 0, 0, 10.0f, 0.5);//need trails
-			embers.ParticleDrawable = new Drawable("Spark", new Vector2(2, 1.5f), 4, 3, 0.1f);
+			embers.ParticleDrawable = new Drawable("Spark", new Vector2(2, 1.5f), 4, 3, 0, 0, 0.1f);
 			embers.Scale = new Vector2(0.5f);
 			embers.SetLifeTime(0.0, 0.5, 1.2);
 			embers.SetVelocity(0.0f, 10.5f, 12.0f, 1.0f, true);
@@ -157,7 +157,7 @@ namespace Fredrick.src
 			fireLerp.Add(new Tuple<Color, double>(new Color(155, 155, 111, 255) * 0.5f, 0.5));
 			fireLerp.Add(new Tuple<Color, double>(new Color(85, 85, 85, 255) * 0.0f, 1.0));
 			Emitter fire = new Emitter(null, "Fire", true, true, 1000, 50, new Vector2(0, 15.0f), 0, 0, 10.0f, 0.5);
-			fire.ParticleDrawable = new Drawable("Fire", new Vector2(8), 16, 16, 0.1f);
+			fire.ParticleDrawable = new Drawable("Fire", new Vector2(8), 16, 16, 0, 0, 0.1f);
 			fire.SetLifeTime(0.0, 0.5, 1.2);
 			fire.SetVelocity(0.0f, 0.0f, 1.4f, 1.0f, false);
 			fire.SetCollision(false, false);
@@ -172,7 +172,7 @@ namespace Fredrick.src
 			AoELerp.Add(new Tuple<Color, double>(new Color(255, 255, 255, 255) * 0.5f, 0.7));
 			AoELerp.Add(new Tuple<Color, double>(new Color(255, 255, 255, 255) * 0.0f, 1.0));
 			Emitter areaIndicator = new Emitter(null, "AoECircle", false, false, 1, 1, new Vector2(0), 0, 0, 10.0f, 0.5);
-			areaIndicator.ParticleDrawable = new Drawable("AoECircle", new Vector2(127.5f), 256, 256, 0.1f);
+			areaIndicator.ParticleDrawable = new Drawable("AoECircle", new Vector2(127.5f), 256, 256, 0, 0, 0.1f);
 			areaIndicator.SetLifeTime(0.5, 0.0, 0.0);
 			areaIndicator.SetVelocity(0.0f, 0.0f, 0.0f, 0.0f, false);
 			areaIndicator.SetCollision(false, false);
@@ -188,7 +188,7 @@ namespace Fredrick.src
 			fragTrailLerp.Add(new Tuple<Color, double>(new Color(50, 80, 50, 255) * 0.4f, 0.4));
 			fragTrailLerp.Add(new Tuple<Color, double>(new Color(10, 10, 10, 255) * 0.0f, 1.0));
 			Emitter fragTrail = new Emitter(null, "explosion", true, true, 100, 10, new Vector2(0), 0.2f, 0.2f, 10.0f, 0.5);
-			fragTrail.ParticleDrawable = new Drawable("fire", new Vector2(8), 16, 16, 0.3f);
+			fragTrail.ParticleDrawable = new Drawable("fire", new Vector2(8), 16, 16, 0, 0, 0.3f);
 			fragTrail.SetLifeTime(0.3, 0.0, 0.0);
 			fragTrail.SetVelocity(0.0f, 0.1f, 0.5f, 1.0f, false);
 			fragTrail.SetCollision(false, false);
@@ -202,7 +202,7 @@ namespace Fredrick.src
 			landDustLerp.Add(new Tuple<Color, double>(new Color(200, 200, 200, 255) * 0.1f, 0.0));
 			landDustLerp.Add(new Tuple<Color, double>(new Color(200, 200, 200, 255) * 0.0f, 1.0));
 			Emitter landDust = new Emitter(null, "explosion", false, false, 100, 50, new Vector2(0, 0.0f), 0, 0, 10.0f, 0.5);
-			landDust.ParticleDrawable = new Drawable("fire", new Vector2(8), 16, 16, 0.1f);
+			landDust.ParticleDrawable = new Drawable("fire", new Vector2(8), 16, 16, 0, 0, 0.1f);
 			landDust.SetLifeTime(0.0, 0.6, 0.9);
 			landDust.SetVelocity(0.0f, 0.1f, 2.5f, 20.0f, false);
 			landDust.SetCollision(false, false);
@@ -216,7 +216,7 @@ namespace Fredrick.src
 			jumpDustLerp.Add(new Tuple<Color, double>(new Color(200, 200, 200, 255) * 0.1f, 0.0));
 			jumpDustLerp.Add(new Tuple<Color, double>(new Color(200, 200, 200, 255) * 0.0f, 1.0));
 			Emitter jumpDust = new Emitter(null, "explosion", true, false, 50, 10, new Vector2(0, 0.0f), 0, 0, 10.0f, 0.5);
-			jumpDust.ParticleDrawable = new Drawable("fire", new Vector2(8), 16, 16, 0.1f);
+			jumpDust.ParticleDrawable = new Drawable("fire", new Vector2(8), 16, 16, 0, 0, 0.1f);
 			jumpDust.SetLifeTime(0.0, 0.3, 0.5);
 			jumpDust.SetVelocity(0.0f, 0.1f, 1.2f, 1.0f, false);
 			jumpDust.SetCollision(false, false);
@@ -242,7 +242,7 @@ namespace Fredrick.src
 				fragMaterial.Specular = new Color(255, 255, 255, 255);
 				fragMaterial.Shininess = 0.8f;
 				LightingInfo fragLighting = new LightingInfo("FragNade", fragMaterial);
-				Renderable fragNade = new Renderable(null, "Projectile", "FragNade", new Vector2(7.5f), new Vector2(0), new Vector2(1), 16, 16, 0.1f);
+				Renderable fragNade = new Renderable(null, "Projectile", "FragNade", new Vector2(7.5f), new Vector2(0), new Vector2(1), 16, 16, 0, 0, 0.1f);
 				fragNade.Drawable.AddAnimation(0, 0, 1, 1, Animation.OnEnd.Loop, 0);
 				fragNade.Drawable.AddAnimation(32, 0, 1, 1, Animation.OnEnd.Loop, 0);
 				fragNade.Drawable.ShaderInfo = fragLighting;
@@ -261,7 +261,7 @@ namespace Fredrick.src
 		{
 			Weapon fragGrenade = new Weapon(null, "FragGrenade", new Vector2(0.5f, 0), new Vector2(0.5f, 0), true);
 			fragGrenade.Position = new Vector2(0, 0.5f);
-			fragGrenade.WeaponDrawable = new Drawable("fragNade", new Vector2(4), 8, 8, 0.2f);
+			fragGrenade.WeaponDrawable = new Drawable("fragNade", new Vector2(4), 8, 8, 0, 0, 0.2f);
 			fragGrenade.Tags.Add("MotionFlip");
 			Attack fragImpactAttack = new Attack(Attack.DamageType.Kinetic, new List<StatusEffect>(), 10.0f);
 			Attack fragAreaAttack = new Attack(Attack.DamageType.Kinetic, new List<StatusEffect>(), 40.0f);

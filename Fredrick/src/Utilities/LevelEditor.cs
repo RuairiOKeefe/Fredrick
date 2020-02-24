@@ -28,7 +28,7 @@ namespace Fredrick.src
 
 			Entity e = new Entity(true, "Block");
 			e.Tags.Add("Terrain");
-			Renderable r = new Renderable(e, "Block", "testSheet", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+			Renderable r = new Renderable(e, "Block", "testSheet", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0, 0, 0.1f);
 			r.Drawable.AddAnimation(0, 0, 1, 30, Animation.OnEnd.Loop, 0);
 			AABBCollider c = new AABBCollider(e, new Vector2(0), 1, 1);
 			e.Components.Add(r);
@@ -37,7 +37,7 @@ namespace Fredrick.src
 
 			e = new Entity(true, "Block");
 			e.Tags.Add("Terrain");
-			r = new Renderable(e, "Block", "grass", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+			r = new Renderable(e, "Block", "grass", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0, 0, 0.1f);
 			r.Drawable.AddAnimation(0, 0, 1, 30, Animation.OnEnd.Loop, 0);
 			c = new AABBCollider(e, new Vector2(0), 1, 1);
 			e.Components.Add(r);
@@ -46,7 +46,7 @@ namespace Fredrick.src
 
 			e = new Entity(true, "Slope");
 			e.Tags.Add("Terrain");
-			r = new Renderable(e, "Slock", "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+			r = new Renderable(e, "Slock", "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0, 0, 0.1f);
 			r.Drawable.AddAnimation(0, 0, 1, 30, Animation.OnEnd.Loop, 0);
 			Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, -0.5f, 0.5f, -0.3f);
 			e.Components.Add(r);
@@ -55,7 +55,7 @@ namespace Fredrick.src
 
 			e = new Entity(true, "Slope");
 			e.Tags.Add("Terrain");
-			r = new Renderable(e, "Slope", "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+			r = new Renderable(e, "Slope", "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0, 0, 0.1f);
 			r.Drawable.AddAnimation(32, 0, 1, 30, Animation.OnEnd.Loop, 0);
 			p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, -0.5f, -0.3f);
 			e.Components.Add(r);
@@ -64,7 +64,7 @@ namespace Fredrick.src
 
 			e = new Entity(true, "Slope");
 			e.Tags.Add("Terrain");
-			r = new Renderable(e, "Slope", "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+			r = new Renderable(e, "Slope", "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0, 0, 0.1f);
 			r.Drawable.AddAnimation(64, 0, 1, 30, Animation.OnEnd.Loop, 0);
 			p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, -0.5f, 0.3f);
 			e.Components.Add(r);
@@ -73,7 +73,7 @@ namespace Fredrick.src
 
 			e = new Entity(true, "Slope");
 			e.Tags.Add("Terrain");
-			r = new Renderable(e, "Slope", "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+			r = new Renderable(e, "Slope", "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0, 0, 0.1f);
 			r.Drawable.AddAnimation(96, 0, 1, 30, Animation.OnEnd.Loop, 0);
 			p = new Platform(e, new Vector2(0), 1, 1, 0, 0, -0.5f, 0.5f, 0.3f);
 			e.Components.Add(r);
@@ -82,7 +82,7 @@ namespace Fredrick.src
 
 			e = new Entity(true, "Platform");
 			e.Tags.Add("Terrain");
-			r = new Renderable(e, "Block", "grass", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+			r = new Renderable(e, "Block", "grass", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0, 0, 0.1f);
 			r.Drawable.AddAnimation(0, 0, 1, 30, Animation.OnEnd.Loop, 0);
 			p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, 0.5f, -0.3f);
 			e.Components.Add(r);
@@ -91,7 +91,7 @@ namespace Fredrick.src
 
 			e = new Entity(true, "Emptyblock");
 			e.Tags.Add("Terrain");
-			r = new Renderable(e, "Block", "testSheet", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+			r = new Renderable(e, "Block", "testSheet", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0, 0, 0.1f);
 			r.Drawable.AddAnimation(0, 0, 1, 30, Animation.OnEnd.Loop, 0);
 			e.Components.Add(r);
 			entities.Add(e);
@@ -112,7 +112,7 @@ namespace Fredrick.src
 						material.Specular = new Color(255, 255, 255, 255);
 						material.Shininess = 0.8f;
 						LightingInfo lighting = new LightingInfo("DirtNormal", material);
-						Renderable r = new Renderable(e, "Block", "Dirt", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+						Renderable r = new Renderable(e, "Block", "Dirt", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0, 0, 0.1f);
 						r.Drawable.AddAnimation(0, 0, 1, 30, Animation.OnEnd.Loop, 0);
 						r.Drawable.ShaderInfo = lighting;
 						AABBCollider c = new AABBCollider(e, new Vector2(0), 1, 1);
@@ -130,7 +130,7 @@ namespace Fredrick.src
 						material.Specular = new Color(255, 255, 255, 255);
 						material.Shininess = 0.8f;
 						LightingInfo lighting = new LightingInfo("DirtNormal", material);
-						Renderable r = new Renderable(e, "Block", "grass", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+						Renderable r = new Renderable(e, "Block", "grass", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0, 0, 0.1f);
 						r.Drawable.AddAnimation(0, 0, 1, 30, Animation.OnEnd.Loop, 0);
 						r.Drawable.ShaderInfo = lighting;
 						AABBCollider c = new AABBCollider(e, new Vector2(0), 1, 1);
@@ -148,7 +148,7 @@ namespace Fredrick.src
 						material.Specular = new Color(255, 255, 255, 255);
 						material.Shininess = 0.8f;
 						LightingInfo lighting = new LightingInfo("DirtNormal", material);
-						Renderable r = new Renderable(e, "Slope", "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+						Renderable r = new Renderable(e, "Slope", "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0, 0, 0.1f);
 						r.Drawable.AddAnimation(0, 0, 1, 30, Animation.OnEnd.Loop, 0);
 						r.Drawable.ShaderInfo = lighting;
 						Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, -0.5f, 0.5f, -0.3f);
@@ -166,7 +166,7 @@ namespace Fredrick.src
 						material.Specular = new Color(255, 255, 255, 255);
 						material.Shininess = 0.8f;
 						LightingInfo lighting = new LightingInfo("DirtNormal", material);
-						Renderable r = new Renderable(e, "Slope", "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+						Renderable r = new Renderable(e, "Slope", "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0, 0, 0.1f);
 						r.Drawable.AddAnimation(32, 0, 1, 30, Animation.OnEnd.Loop, 0);
 						r.Drawable.ShaderInfo = lighting;
 						Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, -0.5f, -0.5f);
@@ -184,7 +184,7 @@ namespace Fredrick.src
 						material.Specular = new Color(255, 255, 255, 255);
 						material.Shininess = 0.8f;
 						LightingInfo lighting = new LightingInfo("DirtNormal", material);
-						Renderable r = new Renderable(e, "Slope", "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+						Renderable r = new Renderable(e, "Slope", "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0, 0, 0.1f);
 						r.Drawable.AddAnimation(64, 0, 1, 30, Animation.OnEnd.Loop, 0);
 						r.Drawable.ShaderInfo = lighting;
 						Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, -0.5f, 0.5f);
@@ -202,7 +202,7 @@ namespace Fredrick.src
 						material.Specular = new Color(255, 255, 255, 255);
 						material.Shininess = 0.8f;
 						LightingInfo lighting = new LightingInfo("DirtNormal", material);
-						Renderable r = new Renderable(e, "Slope", "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+						Renderable r = new Renderable(e, "Slope", "tempSlope", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0, 0, 0.1f);
 						r.Drawable.AddAnimation(96, 0, 1, 30, Animation.OnEnd.Loop, 0);
 						r.Drawable.ShaderInfo = lighting;
 						Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, -0.5f, 0.5f, 0.5f);
@@ -220,7 +220,7 @@ namespace Fredrick.src
 						material.Specular = new Color(255, 255, 255, 255);
 						material.Shininess = 0.8f;
 						LightingInfo lighting = new LightingInfo("DirtNormal", material);
-						Renderable r = new Renderable(e, "Block", "grass", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+						Renderable r = new Renderable(e, "Block", "grass", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0, 0, 0.1f);
 						r.Drawable.AddAnimation(0, 0, 1, 30, Animation.OnEnd.Loop, 0);
 						r.Drawable.ShaderInfo = lighting;
 						Platform p = new Platform(e, new Vector2(0), 1, 1, 0, 0, 0.5f, 0.5f, -0.3f);
@@ -238,7 +238,7 @@ namespace Fredrick.src
 						material.Specular = new Color(255, 255, 255, 255);
 						material.Shininess = 0.8f;
 						LightingInfo lighting = new LightingInfo("DirtNormal", material);
-						Renderable r = new Renderable(e, "Block", "Dirt", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0.1f);
+						Renderable r = new Renderable(e, "Block", "Dirt", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0, 0, 0.1f);
 						r.Drawable.AddAnimation(0, 0, 1, 30, Animation.OnEnd.Loop, 0);
 						r.Drawable.ShaderInfo = lighting;
 						e.Components.Add(r);

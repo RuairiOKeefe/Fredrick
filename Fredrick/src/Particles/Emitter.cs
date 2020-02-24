@@ -64,7 +64,7 @@ namespace Fredrick.src
 			Rotation = 0;
 			Scale = new Vector2(1.0f);
 
-			ParticleDrawable = new Drawable(spriteName, new Vector2(16, 16), 32, 32, 0.1f);
+			ParticleDrawable = new Drawable(spriteName, new Vector2(16, 16), 32, 32, 0, 0, 0.1f);
 
 			Acceleration = acceleration;
 

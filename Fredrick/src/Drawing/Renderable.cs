@@ -25,9 +25,9 @@ namespace Fredrick.src
 			Scale = new Vector2(1);
 		}
 
-		public Renderable(Entity owner, string id, string spriteName, Vector2 origin, Vector2 position, Vector2 scale, int width = 32, int height = 32, float layer = 0.1f) : base(owner, id)
+		public Renderable(Entity owner, string id, string spriteName, Vector2 origin, Vector2 position, Vector2 scale, int width = 32, int height = 32, int startX = 0, int startY = 0, float layer = 0.1f) : base(owner, id)
 		{
-			Drawable = new Drawable(spriteName, origin, width, height, layer);
+			Drawable = new Drawable(spriteName, origin, width, height, startX, startY, layer);
 			Position = position;
 			Scale = scale;
 			_facingRight = true;

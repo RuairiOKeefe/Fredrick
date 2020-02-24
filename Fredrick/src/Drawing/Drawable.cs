@@ -21,6 +21,8 @@ namespace Fredrick.src
 		public Color _colour;
 		public int _width;
 		public int _height;
+		public int m_startX;//Inital X location of source rectangle
+		public int m_startY;//Inital Y location of source rectangle
 		public int _spriteWidth;
 		public int _spriteHeight;
 
@@ -33,17 +35,19 @@ namespace Fredrick.src
 		{
 		}
 
-		public Drawable(string spriteName, Vector2 origin, int width = 32, int height = 32, float layer = 0.1f)
+		public Drawable(string spriteName, Vector2 origin, int width = 32, int height = 32, int startX = 0, int startY = 0, float layer = 0.1f)
 		{
 			_spriteName = spriteName;
 			_spriteSize = 32;
 			_origin = origin;
 			_width = width;
 			_height = height;
+			m_startX = startX;
+			m_startY = startY;
 			_layer = layer;
 			_colour = new Color(255, 255, 255, 255);
 
-			_sourceRectangle = new Rectangle(0, 0, _width, _height);
+			_sourceRectangle = new Rectangle(m_startX, m_startY, _width, _height);
 			_animations = new List<Animation>();
 			_currentAnim = 0;
 		}
@@ -55,6 +59,8 @@ namespace Fredrick.src
 			_origin = original._origin;
 			_width = original._width;
 			_height = original._height;
+			m_startX = original.m_startX;
+			m_startY = original.m_startY;
 			_layer = original._layer;
 			_colour = original._colour;
 
