@@ -362,6 +362,13 @@ namespace Fredrick.src
 			Root.PopulateRig(ref Bones);
 			m_frameTime = 0.0;
 			NextFrame = 1;
+			if (Root.Drawable != null)
+			{
+				if (Root.Drawable.ShaderInfo != null)
+				{
+					ShaderId = Root.Drawable.ShaderInfo.ShaderId;
+				}
+			}
 		}
 
 		public override void Unload()

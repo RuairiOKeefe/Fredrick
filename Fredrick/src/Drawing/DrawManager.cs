@@ -40,8 +40,8 @@ namespace Fredrick.src
 
 			if (shader != null)
 			{
-				shader.Parameters["positions"].SetValue(LightingUtils.GetPositions(fixedLights));
-				shader.Parameters["colours"].SetValue(LightingUtils.GetColours(fixedLights));
+				shader.Parameters["position"].SetValue(LightingUtils.GetPositions(fixedLights));
+				shader.Parameters["colour"].SetValue(LightingUtils.GetColours(fixedLights));
 			}
 		}
 

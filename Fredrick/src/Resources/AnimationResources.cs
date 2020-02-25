@@ -13,36 +13,55 @@ namespace Fredrick.src
 		{
 			Dictionary<string, RigAnimation> animations = new Dictionary<string, RigAnimation>();
 
+			ShaderInfo.Material characterMaterial;
+			characterMaterial.Emissive = new Color(0, 0, 0, 255);
+			characterMaterial.Diffuse = new Color(100, 150, 100, 255);
+			characterMaterial.Specular = new Color(255, 255, 255, 255);
+			characterMaterial.Shininess = 0.8f;
+			LightingInfo characterLighting = new LightingInfo("CharacterNormal", characterMaterial);
+
 			Bone torso = new Bone("Torso", new Vector2(0), 0, new Vector2(0), new Vector2(0));
 			torso.Drawable = new Drawable("Character", new Vector2(16), 32, 32, 64, 32, 0.15f);
+			torso.Drawable.ShaderInfo = characterLighting;
+
 			Bone Head = new Bone("Head", new Vector2(0), 0, new Vector2(2 / 32f, 25 / 32f), new Vector2(0, -5 / 32f));
 			Head.Drawable = new Drawable("Character", new Vector2(16), 32, 32, 32, 0, 0.14f);
+			Head.Drawable.ShaderInfo = characterLighting;
 			torso.AddChild(Head);
+
 
 			Bone UpperLegFront = new Bone("UpperLegFront", new Vector2(0), 0, new Vector2(0 / 32f, -14 / 32f), new Vector2(0.0f, -4 / 32f));
 			UpperLegFront.Drawable = new Drawable("Character", new Vector2(16), 32, 32, 32, 64, 0.1f);
+			UpperLegFront.Drawable.ShaderInfo = characterLighting;
 			torso.AddChild(UpperLegFront);
 			Bone LowerLegFront = new Bone("LowerLegFront", new Vector2(0), 0, new Vector2(0.0f, -6 / 32f), new Vector2(0.0f, -9 / 32f));
 			LowerLegFront.Drawable = new Drawable("Character", new Vector2(16), 32, 32, 32, 32, 0.15f);
+			LowerLegFront.Drawable.ShaderInfo = characterLighting;
 			UpperLegFront.AddChild(LowerLegFront);
 			Bone FootFront = new Bone("FootFront", new Vector2(0), 0, new Vector2(0.0f, -10 / 32f), new Vector2(0.0f, 0.0f));
 			FootFront.Drawable = new Drawable("Character", new Vector2(16), 32, 32, 0, 0, 0.1f);
+			FootFront.Drawable.ShaderInfo = characterLighting;
 			LowerLegFront.AddChild(FootFront);
 			Bone ToesFront = new Bone("ToesFront", new Vector2(0), 0, new Vector2(2 / 32f, 0.0f), new Vector2(1 / 32f, 0.0f));
 			ToesFront.Drawable = new Drawable("Character", new Vector2(16), 32, 32, 64, 0, 0.1f);
+			ToesFront.Drawable.ShaderInfo = characterLighting;
 			FootFront.AddChild(ToesFront);
 
 			Bone UpperLegBack = new Bone("UpperLegBack", new Vector2(0), 0, new Vector2(-0 / 32f, -14 / 32f), new Vector2(0.0f, -4 / 32f));
 			UpperLegBack.Drawable = new Drawable("Character", new Vector2(16), 32, 32, 32, 64, 0.1f);
+			UpperLegBack.Drawable.ShaderInfo = characterLighting;
 			torso.AddChild(UpperLegBack);
 			Bone LowerLegBack = new Bone("LowerLegBack", new Vector2(0), 0, new Vector2(0.0f, -6 / 32f), new Vector2(0.0f, -9 / 32f));
 			LowerLegBack.Drawable = new Drawable("Character", new Vector2(16), 32, 32, 32, 32, 0.15f);
+			LowerLegBack.Drawable.ShaderInfo = characterLighting;
 			UpperLegBack.AddChild(LowerLegBack);
 			Bone FootBack = new Bone("FootBack", new Vector2(0), 0, new Vector2(0.0f, -10 / 32f), new Vector2(0.0f, 0.0f));
 			FootBack.Drawable = new Drawable("Character", new Vector2(16), 32, 32, 0, 0, 0.1f);
+			FootBack.Drawable.ShaderInfo = characterLighting;
 			LowerLegBack.AddChild(FootBack);
 			Bone ToesBack = new Bone("ToesBack", new Vector2(0), 0, new Vector2(2 / 32f, 0.0f), new Vector2(1 / 32f, 0.0f));
 			ToesBack.Drawable = new Drawable("Character", new Vector2(16), 32, 32, 64, 0, 0.1f);
+			ToesBack.Drawable.ShaderInfo = characterLighting;
 			FootBack.AddChild(ToesBack);
 
 			RigAnimation standing = new RigAnimation("Stand", new List<RigFrame>(), true, false);

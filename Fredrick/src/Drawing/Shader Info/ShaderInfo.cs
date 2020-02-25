@@ -12,6 +12,7 @@ namespace Fredrick.src
 	[Serializable]
 	public abstract class ShaderInfo
 	{
+		[Serializable]
 		public struct Material
 		{
 			public Color Emissive;

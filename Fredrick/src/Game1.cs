@@ -208,14 +208,14 @@ namespace Fredrick.src
 
 			foreach (Entity e in terrain)
 			{
-				drawManager.AddComponents(e);
 				e.Load(Content);
+				drawManager.AddComponents(e);
 			}
 
 			foreach (Entity e in actors)
 			{
-				drawManager.AddComponents(e);
 				e.Load(Content);
+				drawManager.AddComponents(e);
 			}
 
 			Entity cameraPos = new Entity();

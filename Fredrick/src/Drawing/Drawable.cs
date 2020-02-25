@@ -65,6 +65,16 @@ namespace Fredrick.src
 			_colour = original._colour;
 
 			_sourceRectangle = original._sourceRectangle;
+
+			if (original.ShaderInfo != null)
+			{
+				ShaderInfo = original.ShaderInfo.Copy();
+			}
+			else
+			{
+				ShaderInfo = null;
+			}
+
 			_animations = new List<Animation>();
 			_animations = original._animations;
 			_currentAnim = 0;
