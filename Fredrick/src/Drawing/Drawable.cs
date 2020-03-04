@@ -90,6 +90,10 @@ namespace Fredrick.src
 				a.SpriteWidth = _spriteWidth;
 				a.SpriteHeight = _spriteHeight;
 			}
+			if (ShaderInfo != null)
+			{
+				ShaderInfo.Load(content);
+			}
 		}
 
 		public void AddAnimation(int startX, int startY, int frames, float frameRate, Animation.OnEnd onEnd, int nextAnim)

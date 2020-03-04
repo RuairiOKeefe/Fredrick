@@ -449,6 +449,10 @@ namespace Fredrick.src
 
 		public override void Draw(SpriteBatch spriteBatch, Effect shader, Matrix transformationMatrix)
 		{
+			if (Root.Drawable != null)
+				if (Root.Drawable.ShaderInfo != null)
+					Root.Drawable.ShaderInfo.SetUniforms(shader);
+
 			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, shader, transformationMatrix);
 			Root.Draw(spriteBatch, this, MotionFlip);
 			spriteBatch.End();

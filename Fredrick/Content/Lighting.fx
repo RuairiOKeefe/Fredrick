@@ -13,8 +13,8 @@ const static int UNIT_SCALE = 32; //The size of a world unit
 float4x4 world;
 float4x4 wvp;
 
-float4 emissive;
-float4 diffuseReflection;
+//float4 emissive;
+//float4 diffuseReflection;
 
 float3 position[16];
 float4 colour[16];
@@ -89,10 +89,10 @@ float4 MainPS(in VertexShaderOutput input) : COLOR
 		// Now use standard phong shading but using calculated light colour and direction
 		// - note no ambient
 		// ******************************************************************************
-		diffuse += (lightColour*diffuseReflection) *max(dot(normal, lightDir), 0.0);
+		diffuse += (lightColour) *max(dot(normal, lightDir), 0.0);
 	}
 
-	float4 colour = (emissive + diffuse) * texColour;
+	float4 colour = ( diffuse) * texColour;
 	colour.a = texColour.a;
 
 	return colour;

@@ -45,6 +45,16 @@ namespace Fredrick.src
 			}
 		}
 
+		public void SetWorldUniforms(Effect shader, Matrix wvp)
+		{
+			if (shader != null)
+			{
+				//This can be identity because this is a 2d space
+				shader.Parameters["world"].SetValue(Matrix.Identity);
+				shader.Parameters["wvp"].SetValue(wvp);
+			}
+		}
+
 		public void Load(ContentManager content)
 		{
 			foreach (KeyValuePair<string, List<Component>> shaderComponentPair in m_drawComponents)
@@ -108,7 +118,7 @@ namespace Fredrick.src
 
 		}
 
-		public void DrawComponents(SpriteBatch spriteBatch, Matrix transformationMatrix, Lighting lighting)
+		public void DrawComponents(SpriteBatch spriteBatch, Matrix transformationMatrix, Matrix wvp, Lighting lighting)
 		{
 			foreach (KeyValuePair<string, List<Component>> shaderComponentPair in m_drawComponents)
 			{
@@ -117,6 +127,7 @@ namespace Fredrick.src
 				// shader should be replaced with a class that can hold global uniforms ect
 				foreach (Component component in components)
 				{
+					SetWorldUniforms(shader, wvp);
 					SetLights(shader, lighting);
 					component.Draw(spriteBatch, shader, transformationMatrix);
 				}
@@ -128,9 +139,9 @@ namespace Fredrick.src
 
 		}
 
-		public void Draw(SpriteBatch spriteBatch, Matrix transformationMatrix, Lighting lighting)
+		public void Draw(SpriteBatch spriteBatch, Matrix transformationMatrix, Matrix wvp, Lighting lighting)
 		{
-			DrawComponents(spriteBatch, transformationMatrix, lighting);
+			DrawComponents(spriteBatch, transformationMatrix, wvp, lighting);
 			DrawBatch(spriteBatch, transformationMatrix, lighting);
 		}
 	}

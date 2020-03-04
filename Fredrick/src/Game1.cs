@@ -224,8 +224,10 @@ namespace Fredrick.src
 			cam.OffsetAmount = new Vector2(4.0f, 1.8f);
 			levelEditor.Load(Content);
 
-			mainLighting.FixedLights.Add(LightingResources.Instance.PointLights["BasicLight"].Copy());
-
+			for (int i = 0; i < 16; i++)
+			{
+				mainLighting.FixedLights.Add(LightingResources.Instance.PointLights["BasicLight"].Copy());
+			}
 
 
 			Canvas canvas = new Canvas(UI, "UI");
@@ -297,12 +299,17 @@ namespace Fredrick.src
 
 		protected override void Draw(GameTime gameTime)
 		{
+			Matrix world = Matrix.Identity;
+			Matrix view = (cam.Get_Transformation(GraphicsDevice));
+			Matrix projection = Matrix.CreateOrthographicOffCenter(0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight, 0, -1, 1);
+			Matrix wvp = world * view * projection;
+
 			GraphicsDevice.SetRenderTarget(sceneTarget);
 			GraphicsDevice.Clear(Color.Transparent);
 
 			background.Draw(spriteBatch, GraphicsDevice, cam, fog);
 
-			drawManager.Draw(spriteBatch, cam.Get_Transformation(GraphicsDevice), mainLighting);
+			drawManager.Draw(spriteBatch, cam.Get_Transformation(GraphicsDevice), wvp, mainLighting);
 
 			//Draw particles, projectiles and editor stuff (which should be moved)
 			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, lighting, cam.Get_Transformation(GraphicsDevice));
@@ -319,6 +326,7 @@ namespace Fredrick.src
 
 			//Combine layers
 			GraphicsDevice.SetRenderTarget(null);
+			GraphicsDevice.Clear(Color.Transparent);
 			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, null);
 			spriteBatch.Draw(sceneTarget, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
 			spriteBatch.End();
