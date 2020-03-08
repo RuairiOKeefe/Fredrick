@@ -224,7 +224,7 @@ namespace Fredrick.src
 			cam.OffsetAmount = new Vector2(4.0f, 1.8f);
 			levelEditor.Load(Content);
 
-			for (int i = 0; i < 16; i++)
+			for (int i = 0; i < 1; i++)
 			{
 				mainLighting.FixedLights.Add(LightingResources.Instance.PointLights["BasicLight"].Copy());
 			}

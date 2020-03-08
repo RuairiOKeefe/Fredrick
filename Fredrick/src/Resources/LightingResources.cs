@@ -43,7 +43,7 @@ namespace Fredrick.src
 		{
 			{
 				Vector4 colour = new Vector4(160, 100, 120, 255);
-				Vector3 position = new Vector3(0);
+				Vector3 position = new Vector3(10,10,-1);
 				float constK = 1.0f;
 				float linearK = 1.0f;
 				float quadraticK = 1.0f;
