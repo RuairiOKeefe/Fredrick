@@ -7,6 +7,8 @@ using FarseerPhysics.Dynamics;
 using FarseerPhysics.Collision;
 using System;
 
+using Resources = Fredrick.src.ResourceManagement.Resources;
+
 namespace Fredrick.src
 {
 	/// <summary>

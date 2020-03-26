@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Fredrick.src
+namespace Fredrick.src.ResourceManagement
 {
 	public sealed class Resources
 	{

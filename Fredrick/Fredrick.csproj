@@ -89,8 +89,10 @@
     <Compile Include="src\Drawing\Drawable.cs" />
     <Compile Include="src\Drawing\ResourceManager.cs" />
     <Compile Include="src\InputHandling\Controller.cs" />
-    <Compile Include="src\Resources\AnimationResources.cs" />
-    <Compile Include="src\Resources\LightingResources.cs" />
+    <Compile Include="src\ResourceManagement\AnimationResources.cs" />
+    <Compile Include="src\ResourceManagement\BlockResources.cs" />
+    <Compile Include="src\ResourceManagement\LightingResources.cs" />
+    <Compile Include="src\Entity System\Block.cs" />
     <Compile Include="src\Scenes\Level.cs" />
     <Compile Include="src\Scenes\LevelManager.cs" />
     <Compile Include="src\Scenes\Lighting\Light.cs" />
@@ -114,7 +116,7 @@
     <Compile Include="src\Drawing\Renderable.cs" />
     <Compile Include="src\Colliders\Platform.cs" />
     <Compile Include="src\Utilities\LevelEditor.cs" />
-    <Compile Include="src\Resources\Resources.cs" />
+    <Compile Include="src\ResourceManagement\Resources.cs" />
     <Compile Include="src\Utilities\ScreenShakeManager.cs" />
     <Compile Include="src\Utilities\Serializer.cs" />
     <Compile Include="src\Utilities\SurrogateSelectors.cs" />

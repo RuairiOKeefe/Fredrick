@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
 
+using Resources = Fredrick.src.ResourceManagement.Resources;
+
 namespace Fredrick.src
 {
 	public class Burn : StatusEffect

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Fredrick.src
+namespace Fredrick.src.Scenes
 {
 	/// <summary>
 	/// This class may not be necessary later, however for now this is required to access lights

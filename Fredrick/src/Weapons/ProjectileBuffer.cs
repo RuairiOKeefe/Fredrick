@@ -7,6 +7,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 
+using Resources = Fredrick.src.ResourceManagement.Resources;
+
 namespace Fredrick.src
 {
 	public sealed class ProjectileBuffer
