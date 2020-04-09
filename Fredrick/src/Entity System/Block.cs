@@ -21,6 +21,26 @@ namespace Fredrick.src.Entity_System
 		DownRightRamp
 	}
 
+	public enum Facing
+	{
+		None,
+		All,
+		Left,
+		Right,
+		Up,
+		Down,
+		UpLeft,
+		DownLeft,
+		DownRight,
+		UpRight,
+		LeftRight,
+		UpDown,
+		UpLeftDown,
+		LeftDownRight,
+		DownRightUp,
+		RightUpLeft,
+	}
+
 	public class Block
 	{
 		public Material Material;

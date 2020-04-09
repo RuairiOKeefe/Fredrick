@@ -29,5 +29,9 @@ namespace Fredrick.src.Scenes
 
 		public Level CurrentLevel;
 
+		public LevelManager()
+		{
+			CurrentLevel = new Level(50, 50);
+		}
 	}
 }

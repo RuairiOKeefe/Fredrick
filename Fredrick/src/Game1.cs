@@ -8,6 +8,7 @@ using FarseerPhysics.Collision;
 using System;
 
 using Resources = Fredrick.src.ResourceManagement.Resources;
+using Fredrick.src.Scenes;
 
 namespace Fredrick.src
 {
@@ -110,6 +111,8 @@ namespace Fredrick.src
 
 			if (true)
 			{
+				terrain = LevelManager.Instance.CurrentLevel.GetBlocks();
+
 				Entity player = new Entity(Resources.Instance.PlayerEntities["Player"]);
 				player.Active = false;
 				player.GetComponent<PlayerController>().PlayerInput = new PlayerInput(PlayerIndex.One, true, false);
@@ -142,60 +145,6 @@ namespace Fredrick.src
 
 				SpawnManager.Instance.Spawn(player);
 				SpawnManager.Instance.Spawn(player2);
-
-				for (int i = 0; i < 101; i++)
-				{
-					for (int j = 0; j < 101; j++)
-					{
-						if (i < 2 || i > 98 || j < 2 || j > 98)
-						{
-							Entity e = new Entity(true, "Block");
-							e.Position = new Vector2(i, j);
-							terrain.Add(e);
-							Renderable r = new Renderable(e, "Block", "Dirt", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0, 0, 0.1f);
-							AABBCollider c = new AABBCollider(e, new Vector2(0));
-							r.Drawable.AddAnimation(0, 0, 1, 30, Animation.OnEnd.Loop, 0);
-							e.Components.Add(r);
-							e.Components.Add(c);
-						}
-					}
-				}
-
-				for (int i = 10; i < 68; i++)
-				{
-					for (int j = 5; j < 6; j++)
-					{
-						if (i % 8 == 0 || i % 8 == 1 || i % 8 == 2 || i % 8 == 3)
-						{
-							Entity e = new Entity(true, "Block");
-							e.Position = new Vector2(i, j);
-							terrain.Add(e);
-							Renderable r = new Renderable(e, "Block", "Dirt", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0, 0, 0.1f);
-							AABBCollider c = new AABBCollider(e, new Vector2(0));
-							r.Drawable.AddAnimation(0, 0, 1, 30, Animation.OnEnd.Loop, 0);
-							e.Components.Add(r);
-							e.Components.Add(c);
-						}
-					}
-				}
-
-				for (int i = 0; i < 4; i++)
-				{
-					for (int j = 0; j < 4; j++)
-					{
-						if (i == j)
-						{
-							Entity e = new Entity(true, "Block");
-							e.Position = new Vector2(i + 3, j + 2);
-							terrain.Add(e);
-							Renderable r = new Renderable(e, "Block", "Dirt", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0, 0, 0.1f);
-							AABBCollider c = new AABBCollider(e, new Vector2(0));
-							r.Drawable.AddAnimation(0, 0, 1, 30, Animation.OnEnd.Loop, 0);
-							e.Components.Add(r);
-							e.Components.Add(c);
-						}
-					}
-				}
 
 				serializer.Save("terrainData", terrain);
 				serializer.Save("actorsData", actors);
@@ -317,7 +266,7 @@ namespace Fredrick.src
 			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, lighting, cam.Get_Transformation(GraphicsDevice));
 
 			ProjectileBuffer.Instance.Draw(spriteBatch);
-			ParticleBuffer.Instance.Draw(spriteBatch);
+			//ParticleBuffer.Instance.Draw(spriteBatch);
 			levelEditor.Draw(spriteBatch);
 			spriteBatch.End();
 

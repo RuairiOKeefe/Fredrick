@@ -20,16 +20,22 @@ float3 position[16];
 float4 colour[16];
 
 Texture2D SpriteTexture;
-Texture2D NormalMap;
+Texture2D TileNormalMap;
+Texture2D DetailNormalMap;
 
 sampler2D SpriteTextureSampler = sampler_state
 {
 	Texture = <SpriteTexture>;
 };
 
-sampler2D NormalMapSampler = sampler_state
+sampler2D TileNormalMapSampler = sampler_state
 {
-	Texture = <NormalMap>;
+	Texture = <TileNormalMap>;
+};
+
+sampler2D DetailNormalMapSampler = sampler_state
+{
+	Texture = <DetailNormalMap>;
 };
 
 struct VertexShaderOutput
@@ -53,7 +59,9 @@ VertexShaderOutput MainVS(float4 Position : POSITION0, float4 Colour : COLOR0, f
 float4 MainPS(in VertexShaderOutput input) : COLOR
 {
 	float4 texColour = tex2D(SpriteTextureSampler, input.TexCoord.xy) * input.Colour;
-	float4 normalColour = tex2D(NormalMapSampler, input.TexCoord.xy);
+	float4 n1 = tex2D(TileNormalMapSampler, input.TexCoord.xy);
+	float4 n2 = tex2D(DetailNormalMapSampler, input.PosW.xy/128);
+	float3 normalColour = normalize(float3(n1.xy + n2.xy, n1.z));
 	normalColour = (normalColour * 2) - 1;
 	float4 diffuse = { 0,0,0,0 };
 
@@ -81,7 +89,7 @@ float4 MainPS(in VertexShaderOutput input) : COLOR
 		// **********************
 		// Calculate light colour
 		// **********************
-		float4 lightColour = colour[i] / d*2;
+		float4 lightColour = colour[i] / d;
 
 		float3 normal = { normalColour.x, -normalColour.y, -normalColour.z };
 		normal = normalize(normal);

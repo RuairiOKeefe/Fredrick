@@ -75,6 +75,7 @@
     <Compile Include="src\Drawing\PostProcessing.cs" />
     <Compile Include="src\Drawing\Shader Info\LightingInfo.cs" />
     <Compile Include="src\Drawing\Shader Info\ShaderInfo.cs" />
+    <Compile Include="src\Drawing\Shader Info\TileLightingInfo.cs" />
     <Compile Include="src\Entity System\IComponentOwner.cs" />
     <Compile Include="src\GameManagement\PointTracker.cs" />
     <Compile Include="src\GameManagement\ScoreBoard.cs" />

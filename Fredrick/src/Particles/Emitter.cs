@@ -170,7 +170,7 @@ namespace Fredrick.src
 
 					Particle p = ParticleBuffer.Instance.InactiveParticles.Pop();
 					p.Revive(ParticleDrawable, spawnPos + Position + _owner.Position, Scale + Owner.Scale, spawnVel, Acceleration, lifetime, Collide, ReduceLifeOnCollision, Restitution, FakeDepth, scaleFactor, m_lerpColours);
-					ParticleBuffer.Instance.ActiveParticles.Add(p);
+					ParticleBuffer.Instance.Add(p);
 				}
 			}
 		}

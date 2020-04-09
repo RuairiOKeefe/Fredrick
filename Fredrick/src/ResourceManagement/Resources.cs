@@ -113,6 +113,12 @@ namespace Fredrick.src.ResourceManagement
 
 		private void InitEmitters()
 		{
+			ShaderInfo.Material particleMaterial;
+			particleMaterial.Emissive = new Color(0, 0, 0, 255);
+			particleMaterial.Diffuse = new Color(255, 255, 255, 255);
+			particleMaterial.Specular = new Color(255, 255, 255, 255);
+			particleMaterial.Shininess = 0.8f;
+
 			Emitters = new Dictionary<string, Emitter>();
 
 			List<Tuple<Color, double>> explosionLerp = new List<Tuple<Color, double>>();
@@ -122,6 +128,7 @@ namespace Fredrick.src.ResourceManagement
 			explosionLerp.Add(new Tuple<Color, double>(new Color(61, 59, 58, 255) * 0.1f, 0.5));
 			explosionLerp.Add(new Tuple<Color, double>(new Color(61, 59, 58, 255) * 0.0f, 1.0));
 			Emitter explosion = new Emitter(null, "explosion", false, false, 1000, 600, new Vector2(0, 0), 0, 0, 17.0f, 0.6);
+			explosion.ParticleDrawable.ShaderInfo = new LightingInfo("explosionNormal", particleMaterial);
 			explosion.SetLifeTime(0.6, 0, 0);
 			explosion.SetVelocity(0.0f, 1.0f, 17.0f, 1.0f, false);
 			explosion.SetCollision(true, false);
@@ -189,6 +196,7 @@ namespace Fredrick.src.ResourceManagement
 			fragTrailLerp.Add(new Tuple<Color, double>(new Color(10, 10, 10, 255) * 0.0f, 1.0));
 			Emitter fragTrail = new Emitter(null, "explosion", true, true, 100, 10, new Vector2(0), 0.2f, 0.2f, 10.0f, 0.5);
 			fragTrail.ParticleDrawable = new Drawable("fire", new Vector2(8), 16, 16, 0, 0, 0.3f);
+			fragTrail.ParticleDrawable.ShaderInfo = new LightingInfo("explosionNormal", particleMaterial);
 			fragTrail.SetLifeTime(0.3, 0.0, 0.0);
 			fragTrail.SetVelocity(0.0f, 0.1f, 0.5f, 1.0f, false);
 			fragTrail.SetCollision(false, false);
@@ -203,6 +211,7 @@ namespace Fredrick.src.ResourceManagement
 			landDustLerp.Add(new Tuple<Color, double>(new Color(200, 200, 200, 255) * 0.0f, 1.0));
 			Emitter landDust = new Emitter(null, "explosion", false, false, 100, 50, new Vector2(0, 0.0f), 0, 0, 10.0f, 0.5);
 			landDust.ParticleDrawable = new Drawable("fire", new Vector2(8), 16, 16, 0, 0, 0.1f);
+			landDust.ParticleDrawable.ShaderInfo = new LightingInfo("explosionNormal", particleMaterial);
 			landDust.SetLifeTime(0.0, 0.6, 0.9);
 			landDust.SetVelocity(0.0f, 0.1f, 2.5f, 20.0f, false);
 			landDust.SetCollision(false, false);
@@ -217,6 +226,7 @@ namespace Fredrick.src.ResourceManagement
 			jumpDustLerp.Add(new Tuple<Color, double>(new Color(200, 200, 200, 255) * 0.0f, 1.0));
 			Emitter jumpDust = new Emitter(null, "explosion", true, false, 50, 10, new Vector2(0, 0.0f), 0, 0, 10.0f, 0.5);
 			jumpDust.ParticleDrawable = new Drawable("fire", new Vector2(8), 16, 16, 0, 0, 0.1f);
+			jumpDust.ParticleDrawable.ShaderInfo = new LightingInfo("explosionNormal", particleMaterial);
 			jumpDust.SetLifeTime(0.0, 0.3, 0.5);
 			jumpDust.SetVelocity(0.0f, 0.1f, 1.2f, 1.0f, false);
 			jumpDust.SetCollision(false, false);
@@ -241,7 +251,7 @@ namespace Fredrick.src.ResourceManagement
 				fragMaterial.Diffuse = new Color(100, 150, 100, 255);
 				fragMaterial.Specular = new Color(255, 255, 255, 255);
 				fragMaterial.Shininess = 0.8f;
-				LightingInfo fragLighting = new LightingInfo("FragNade", fragMaterial);
+				LightingInfo fragLighting = new LightingInfo("FragNadeNormal", fragMaterial);
 				Renderable fragNade = new Renderable(null, "Projectile", "FragNade", new Vector2(7.5f), new Vector2(0), new Vector2(1), 16, 16, 0, 0, 0.1f);
 				fragNade.Drawable.AddAnimation(0, 0, 1, 1, Animation.OnEnd.Loop, 0);
 				fragNade.Drawable.AddAnimation(32, 0, 1, 1, Animation.OnEnd.Loop, 0);

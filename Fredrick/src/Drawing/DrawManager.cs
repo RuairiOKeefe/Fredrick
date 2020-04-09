@@ -139,10 +139,24 @@ namespace Fredrick.src
 
 		}
 
+		public void DrawParticles(SpriteBatch spriteBatch, Matrix transformationMatrix, Matrix wvp, Lighting lighting)
+		{
+			foreach (Effect shader in m_shaders.Values)
+			{
+				SetWorldUniforms(shader, wvp);
+				SetLights(shader, lighting);
+				spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, shader, transformationMatrix);
+				ParticleBuffer.Instance.Draw(spriteBatch, shader);
+				spriteBatch.End();
+			}
+		}
+
+
 		public void Draw(SpriteBatch spriteBatch, Matrix transformationMatrix, Matrix wvp, Lighting lighting)
 		{
 			DrawComponents(spriteBatch, transformationMatrix, wvp, lighting);
 			DrawBatch(spriteBatch, transformationMatrix, lighting);
+			DrawParticles(spriteBatch, transformationMatrix, wvp, lighting);
 		}
 	}
 }
