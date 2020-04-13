@@ -18,6 +18,8 @@ namespace Fredrick.src
 
 		public List<StatusEffect> AreaEffects { get; set; }
 
+		public string Projectile { get; set; }
+
 		protected Vector2 _spotSpawn;
 		protected Vector2 _weaponPosition;//The arm has uses the base transform
 		protected Vector2 _transformedWeaponPosition;
@@ -55,8 +57,9 @@ namespace Fredrick.src
 
 		}
 
-		public Weapon(Entity owner, string id, Vector2 shotSpawn, Vector2 weaponPosition, bool continuous = true, List<string> tags = null, bool active = true) : base(owner, id, tags, active)
+		public Weapon(Entity owner, string id, string projectile, Vector2 shotSpawn, Vector2 weaponPosition, bool continuous = true, List<string> tags = null, bool active = true) : base(owner, id, tags, active)
 		{
+			Projectile = projectile;
 			_spotSpawn = shotSpawn;
 			_weaponPosition = weaponPosition;
 
@@ -70,6 +73,7 @@ namespace Fredrick.src
 		public Weapon(Entity owner, Weapon original) : base(owner, original.Id, original.Tags, original.Active)
 		{
 			Position = original.Position;
+			Projectile = original.Projectile;
 			_spotSpawn = original._spotSpawn;
 			_weaponPosition = original._weaponPosition;
 
@@ -118,7 +122,7 @@ namespace Fredrick.src
 
 		public void Fire(Vector2 direction, float sin, float cos, CharacterRig armsRig)
 		{
-			Entity e = ProjectileBuffer.Instance.InactiveProjectiles.Pop();
+			Entity e = ProjectileBuffer.Instance.Pop(Projectile);
 
 			float tssx = _spotSpawn.X;
 			float tssy = _spotSpawn.Y;
@@ -131,7 +135,7 @@ namespace Fredrick.src
 			e.GetComponent<Projectile>().InitialiseAttack(m_impactAttack, m_areaAttack, m_projectileSpeed, m_areaOfEffectRadius, m_impactKnockback, m_areaKnockback, m_fuseTimer, m_objectImpactTrigger, m_actorImpactTrigger);
 			e.GetComponent<Projectile>().Revive(shotVelocity, m_fuseTimer);
 
-			ProjectileBuffer.Instance.ActiveProjectiles.Add(e);
+			ProjectileBuffer.Instance.Add(Projectile, e);
 
 			m_nextfire = m_fireRate;
 

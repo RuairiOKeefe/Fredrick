@@ -13,6 +13,8 @@ const static int UNIT_SCALE = 32; //The size of a world unit
 float4x4 world;
 float4x4 wvp;
 
+float Rotation;
+
 //float4 emissive;
 //float4 diffuseReflection;
 
@@ -50,6 +52,18 @@ VertexShaderOutput MainVS(float4 Position : POSITION0, float4 Colour : COLOR0, f
 	return Out;
 }
 
+float3 RotateNormal(float3 original, float angle)
+{
+	float x1 = original.x;
+	float y1 = -original.y;
+
+	float x2 = (cos(angle)*x1)-(sin(angle)*y1);
+	float y2 = (sin(angle)*x1)+(cos(angle)*y1);
+
+	float3 rotated = { x2, y2, -original.z };
+	return rotated;
+}
+
 float4 MainPS(in VertexShaderOutput input) : COLOR
 {
 	float4 texColour = tex2D(SpriteTextureSampler, input.TexCoord.xy) * input.Colour;
@@ -76,23 +90,23 @@ float4 MainPS(in VertexShaderOutput input) : COLOR
 		// ***************************
 		// Calculate attenuation value
 		// ***************************
-		float attenuation =  d;
+		float attenuation = d;
 
 		// **********************
 		// Calculate light colour
 		// **********************
-		float4 lightColour = colour[i] / d*2;
+		float4 lightColour = colour[i] / d;
 
-		float3 normal = { normalColour.x, -normalColour.y, -normalColour.z };
+		float3 normal = RotateNormal(normalColour, Rotation);
 		normal = normalize(normal);
 		// ******************************************************************************
 		// Now use standard phong shading but using calculated light colour and direction
 		// - note no ambient
 		// ******************************************************************************
-		diffuse += (lightColour) *max(dot(normal, lightDir), 0.0);
+		diffuse += (lightColour)*max(dot(normal, lightDir), 0.0);
 	}
 
-	float4 colour = (diffuse) * texColour;
+	float4 colour = (diffuse)* texColour;
 	colour.a = texColour.a;
 
 	return colour;

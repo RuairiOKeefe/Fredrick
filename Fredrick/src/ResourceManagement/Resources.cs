@@ -128,7 +128,6 @@ namespace Fredrick.src.ResourceManagement
 			explosionLerp.Add(new Tuple<Color, double>(new Color(61, 59, 58, 255) * 0.1f, 0.5));
 			explosionLerp.Add(new Tuple<Color, double>(new Color(61, 59, 58, 255) * 0.0f, 1.0));
 			Emitter explosion = new Emitter(null, "explosion", false, false, 1000, 600, new Vector2(0, 0), 0, 0, 17.0f, 0.6);
-			explosion.ParticleDrawable.ShaderInfo = new LightingInfo("explosionNormal", particleMaterial);
 			explosion.SetLifeTime(0.6, 0, 0);
 			explosion.SetVelocity(0.0f, 1.0f, 17.0f, 1.0f, false);
 			explosion.SetCollision(true, false);
@@ -196,7 +195,6 @@ namespace Fredrick.src.ResourceManagement
 			fragTrailLerp.Add(new Tuple<Color, double>(new Color(10, 10, 10, 255) * 0.0f, 1.0));
 			Emitter fragTrail = new Emitter(null, "explosion", true, true, 100, 10, new Vector2(0), 0.2f, 0.2f, 10.0f, 0.5);
 			fragTrail.ParticleDrawable = new Drawable("fire", new Vector2(8), 16, 16, 0, 0, 0.3f);
-			fragTrail.ParticleDrawable.ShaderInfo = new LightingInfo("explosionNormal", particleMaterial);
 			fragTrail.SetLifeTime(0.3, 0.0, 0.0);
 			fragTrail.SetVelocity(0.0f, 0.1f, 0.5f, 1.0f, false);
 			fragTrail.SetCollision(false, false);
@@ -269,7 +267,7 @@ namespace Fredrick.src.ResourceManagement
 
 		private void InitWeapons()
 		{
-			Weapon fragGrenade = new Weapon(null, "FragGrenade", new Vector2(0.5f, 0), new Vector2(0.5f, 0), true);
+			Weapon fragGrenade = new Weapon(null, "FragGrenade", "FragNade" ,new Vector2(0.5f, 0), new Vector2(0.5f, 0), true);
 			fragGrenade.Position = new Vector2(0, 0.5f);
 			fragGrenade.WeaponDrawable = new Drawable("fragNade", new Vector2(4), 8, 8, 0, 0, 0.2f);
 			fragGrenade.Tags.Add("MotionFlip");
@@ -303,7 +301,7 @@ namespace Fredrick.src.ResourceManagement
 
 		private void InitProjectileEntities()
 		{
-			Entity fragNade = new Entity();
+			Entity fragNade = new Entity(true, "FragNade");
 			fragNade.Components.Add(new Projectile(fragNade, Projectiles["FragNade"]));
 			fragNade.Components.Add(new CircleCollider(fragNade, CircleColliders["FragNade"]));
 			fragNade.Components.Add(new Emitter(fragNade, Emitters["Explosion"]));

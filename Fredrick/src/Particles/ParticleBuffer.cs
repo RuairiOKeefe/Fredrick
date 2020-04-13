@@ -52,7 +52,7 @@ namespace Fredrick.src
 				}
 				if (!ActiveParticles[shader].ContainsKey(sprite))
 				{
-					ActiveParticles[shader].Add(e.ParticleDrawable._spriteName, new List<Particle>(NUM_PARTICLES));
+					ActiveParticles[shader].Add(sprite, new List<Particle>(NUM_PARTICLES));
 				}
 			}
 			for (int i = 0; i < NUM_PARTICLES; i++)

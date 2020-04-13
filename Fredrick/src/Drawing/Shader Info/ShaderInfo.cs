@@ -23,7 +23,7 @@ namespace Fredrick.src
 
 		public virtual string ShaderId { get { return ""; } }
 
-		public abstract void SetUniforms(Effect shader);
+		public abstract void SetUniforms(Effect shader, float rotation = 0);
 
 		public abstract void Load(ContentManager content);
 

@@ -80,7 +80,7 @@ namespace Fredrick.src
 		public override void Draw(SpriteBatch spriteBatch, Effect shader, Matrix transformationMatrix)
 		{
 			if (Drawable.ShaderInfo != null)
-				Drawable.ShaderInfo.SetUniforms(shader);
+				Drawable.ShaderInfo.SetUniforms(shader, _owner.Rotation + Rotation);
 
 			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, shader, transformationMatrix);
 			Vector2 inv = new Vector2(1, -1);

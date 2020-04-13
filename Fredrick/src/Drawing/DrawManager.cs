@@ -125,10 +125,11 @@ namespace Fredrick.src
 				List<Component> components = shaderComponentPair.Value;
 				Effect shader = m_shaders[shaderComponentPair.Key];
 				// shader should be replaced with a class that can hold global uniforms ect
+
+				SetWorldUniforms(shader, wvp);
+				SetLights(shader, lighting);
 				foreach (Component component in components)
 				{
-					SetWorldUniforms(shader, wvp);
-					SetLights(shader, lighting);
 					component.Draw(spriteBatch, shader, transformationMatrix);
 				}
 			}
@@ -151,12 +152,23 @@ namespace Fredrick.src
 			}
 		}
 
+		public void DrawProjectiles(SpriteBatch spriteBatch, Matrix transformationMatrix, Matrix wvp, Lighting lighting)
+		{
+			foreach (Effect shader in m_shaders.Values)
+			{
+				SetWorldUniforms(shader, wvp);
+				SetLights(shader, lighting);
+				ProjectileBuffer.Instance.Draw(spriteBatch, shader, transformationMatrix);
+			}
+		}
+
 
 		public void Draw(SpriteBatch spriteBatch, Matrix transformationMatrix, Matrix wvp, Lighting lighting)
 		{
 			DrawComponents(spriteBatch, transformationMatrix, wvp, lighting);
 			DrawBatch(spriteBatch, transformationMatrix, lighting);
 			DrawParticles(spriteBatch, transformationMatrix, wvp, lighting);
+			DrawProjectiles(spriteBatch, transformationMatrix, wvp, lighting);
 		}
 	}
 }

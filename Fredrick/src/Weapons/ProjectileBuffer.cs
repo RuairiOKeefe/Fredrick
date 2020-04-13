@@ -31,54 +31,148 @@ namespace Fredrick.src
 
 		public const int NUM_PROJECTILES = 10000;
 
-		public Stack<Entity> InactiveProjectiles;
-		public List<Entity> ActiveProjectiles;
+		public Dictionary<string, Dictionary<string, Stack<Entity>>> InactiveProjectiles;
+		public Dictionary<string, Dictionary<string, List<Entity>>> ActiveProjectiles;//There is an assumption that projectiles only contain 1 renderable
 
 		public ProjectileBuffer()
 		{
-			InactiveProjectiles = new Stack<Entity>(NUM_PROJECTILES);
-			ActiveProjectiles = new List<Entity>(NUM_PROJECTILES);
+			InactiveProjectiles = new Dictionary<string, Dictionary<string, Stack<Entity>>>();
+			ActiveProjectiles = new Dictionary<string, Dictionary<string, List<Entity>>>();
+
+			foreach (Entity e in Resources.Instance.ProjectileEntities.Values)
+			{
+				string shader = "";
+				Renderable r = e.GetComponent<Renderable>();
+				if (r != null)
+				{
+					if (r.Drawable.ShaderInfo != null)
+					{
+						shader = r.Drawable.ShaderInfo.ShaderId;
+					}
+					string projectile = e.Id;
+					if (!InactiveProjectiles.ContainsKey(shader))
+					{
+						InactiveProjectiles.Add(shader, new Dictionary<string, Stack<Entity>>());
+					}
+					if (!InactiveProjectiles[shader].ContainsKey(projectile))
+					{
+						InactiveProjectiles[shader].Add(projectile, new Stack<Entity>(NUM_PROJECTILES));
+					}
+					if (!ActiveProjectiles.ContainsKey(shader))
+					{
+						ActiveProjectiles.Add(shader, new Dictionary<string, List<Entity>>());
+					}
+					if (!ActiveProjectiles[shader].ContainsKey(projectile))
+					{
+						ActiveProjectiles[shader].Add(projectile, new List<Entity>(NUM_PROJECTILES));
+					}
+				}
+			}
+		}
+
+		public Entity Pop(string projectile)
+		{
+			foreach (var v in InactiveProjectiles)
+			{
+				if (v.Value.ContainsKey(projectile))
+				{
+					return v.Value[projectile].Pop();
+				}
+			}
+			return null;//Should throw
+		}
+
+		public void Add(string projectile, Entity e)
+		{
+			foreach (var v in ActiveProjectiles)
+			{
+				if (v.Value.ContainsKey(projectile))
+				{
+					v.Value[projectile].Add(e);
+				}
+			}
 		}
 
 		public void Load(ContentManager content)
 		{
-			for (int i = 0; i < NUM_PROJECTILES; i++)
+			foreach (Entity e in Resources.Instance.ProjectileEntities.Values)
 			{
-				Entity e = new Entity(Resources.Instance.ProjectileEntities["FragNade"]);
-				InactiveProjectiles.Push(e);
-
-				e.Load(content);
+				string shader = "";
+				Renderable r = e.GetComponent<Renderable>();
+				if (r != null)
+				{
+					if (r.Drawable.ShaderInfo != null)
+					{
+						shader = r.Drawable.ShaderInfo.ShaderId;
+					}
+					string projectile = e.Id;
+					for (int i = 0; i < NUM_PROJECTILES; i++)
+					{
+						Entity projectileEntity = new Entity(e);
+						InactiveProjectiles[shader][projectile].Push(projectileEntity);
+						projectileEntity.Load(content);
+					}
+				}
 			}
 		}
 
 		public void Update(double deltaTime)
 		{
-			foreach (Entity e in ActiveProjectiles)
+			foreach (string shader in ActiveProjectiles.Keys)
 			{
-				if (e.GetComponent<CircleCollider>() != null)
+				foreach (string projectile in ActiveProjectiles[shader].Keys)
 				{
-					e.GetComponent<CircleCollider>().UpdatePosition();
-				}
-			}
+					for (int i = (ActiveProjectiles[shader][projectile].Count - 1); i >= 0; i--)
+					{
+						Entity e = ActiveProjectiles[shader][projectile][i];
 
-			for (int i = (ActiveProjectiles.Count - 1); i >= 0; i--)
-			{
-				Entity e = ActiveProjectiles[i];
+						e.Update(deltaTime);
 
-				e.Update(deltaTime);
-				if (e.GetComponent<Projectile>().Dead)
-				{
-					InactiveProjectiles.Push(e);
-					ActiveProjectiles.RemoveAt(i);
+						if (e.GetComponent<CircleCollider>() != null)
+						{
+							e.GetComponent<CircleCollider>().UpdatePosition();
+						}
+
+						if (e.GetComponent<Projectile>().Dead)
+						{
+							InactiveProjectiles[shader][projectile].Push(e);
+							ActiveProjectiles[shader][projectile].RemoveAt(i);
+						}
+					}
 				}
 			}
 		}
 
-		public void Draw(SpriteBatch spriteBatch)
+		public void Draw(SpriteBatch spriteBatch, Effect shader, Matrix transformMatrix)
 		{
-			foreach (Entity e in ActiveProjectiles)
+			string shaderName = "";
+			if (shader != null)
 			{
-				e.DrawBatch(spriteBatch);
+				shaderName = shader.Name;
+			}
+			if (ActiveProjectiles.ContainsKey(shaderName))
+			{
+				foreach (string projectile in ActiveProjectiles[shaderName].Keys)
+				{
+					if (ActiveProjectiles[shaderName][projectile].Count > 0)
+					{
+						if (ActiveProjectiles[shaderName][projectile][0].GetComponent<Renderable>().DrawBatched)
+						{
+							if (ActiveProjectiles[shaderName][projectile][0].GetComponent<Renderable>().Drawable.ShaderInfo != null)
+							{
+								ActiveProjectiles[shaderName][projectile][0].GetComponent<Renderable>().Drawable.ShaderInfo.SetUniforms(shader);
+							}
+						}
+						else
+						{
+							foreach (Entity e in ActiveProjectiles[shaderName][projectile])
+							{
+								Renderable r = e.GetComponent<Renderable>();
+								r.Draw(spriteBatch, shader, transformMatrix);
+							}
+						}
+					}
+				}
 			}
 		}
 	}

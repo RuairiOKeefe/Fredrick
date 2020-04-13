@@ -259,21 +259,12 @@ namespace Fredrick.src
 			GraphicsDevice.Clear(Color.Transparent);
 
 			background.Draw(spriteBatch, GraphicsDevice, cam, fog);
-
 			drawManager.Draw(spriteBatch, cam.Get_Transformation(GraphicsDevice), wvp, mainLighting);
 
-			//Draw particles, projectiles and editor stuff (which should be moved)
+			//Draw editor stuff (which should be moved)
 			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, lighting, cam.Get_Transformation(GraphicsDevice));
-
-			ProjectileBuffer.Instance.Draw(spriteBatch);
-			//ParticleBuffer.Instance.Draw(spriteBatch);
 			levelEditor.Draw(spriteBatch);
 			spriteBatch.End();
-
-			//aaaaaaaaaaaaa
-			//PostProcessing p = new PostProcessing();
-			//p.Draw(spriteBatch, GraphicsDevice, actors);
-			//aaaaaaaaaaaaaaaaaa
 
 			//Combine layers
 			GraphicsDevice.SetRenderTarget(null);
