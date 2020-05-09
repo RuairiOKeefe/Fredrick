@@ -270,6 +270,22 @@ namespace Fredrick.src.ResourceManagement
 
 				Emitters.Add("PistolFlash", pistolFlash);
 			}
+			{
+				List<Tuple<Color, double>> smallRoundLerp = new List<Tuple<Color, double>>();
+				smallRoundLerp.Add(new Tuple<Color, double>(new Color(216, 176, 25, 255) * 1.0f, 0.0));
+				smallRoundLerp.Add(new Tuple<Color, double>(new Color(216, 176, 25, 255) * 0.5f, 0.8));
+				smallRoundLerp.Add(new Tuple<Color, double>(new Color(216, 176, 25, 255) * 0.0f, 1.0));
+				Emitter smallRoundTrail = new Emitter(null, "SmallTrail", true, true, 1000, 20, new Vector2(0, 0), 0.0f, 0.0f, 0.0f, 0.1);
+				smallRoundTrail.ParticleDrawable = new Drawable("SmallTrail", new Vector2(3.5f), 8, 8);
+				smallRoundTrail.SetLifeTime(0.08, 0.0, 0.0);
+				smallRoundTrail.SetVelocity(0.0f, 0.0f, 0.0f, 1.0f, false);
+				smallRoundTrail.SetCollision(false, false);
+				smallRoundTrail.SetScaling(0.4f, true, -0.5f);
+				smallRoundTrail.LerpColours = smallRoundLerp;
+				smallRoundTrail.Trail = true;
+
+				Emitters.Add("SmallTrail", smallRoundTrail);
+			}
 		}
 
 		private void InitOOBBTriggers()
@@ -313,7 +329,7 @@ namespace Fredrick.src.ResourceManagement
 				smallRoundMaterial.Specular = new Color(255, 255, 255, 255);
 				smallRoundMaterial.Shininess = 0.9f;
 				LightingInfo smallRoundLighting = new LightingInfo("SmallRoundNormal", smallRoundMaterial);
-				Renderable smallRound = new Renderable(null, "SmallRound", "SmallRound", new Vector2(7.5f), new Vector2(0), new Vector2(1), 16, 16, 0, 0, 0.1f);
+				Renderable smallRound = new Renderable(null, "SmallRound", "SmallRound", new Vector2(8f), new Vector2(0), new Vector2(1), 16, 16, 0, 0, 0.1f);
 				smallRound.Drawable.AddAnimation(0, 0, 1, 1, Animation.OnEnd.Loop, 0);
 				smallRound.Drawable.AddAnimation(32, 0, 1, 1, Animation.OnEnd.Loop, 0);
 				smallRound.Drawable.ShaderInfo = smallRoundLighting;
@@ -378,7 +394,7 @@ namespace Fredrick.src.ResourceManagement
 				pistol.Tags.Add("MotionFlip");
 				Attack pistolImpactAttack = new Attack(Attack.DamageType.Kinetic, new List<StatusEffect>(), 10.0f);
 				Attack pistolAreaAttack = new Attack(Attack.DamageType.Kinetic, new List<StatusEffect>(), 40.0f);
-				pistol.InitialiseAttack(pistolImpactAttack, pistolAreaAttack, 0.2f, 10.0f, 5.0f, 0.0f, 0.05f, 0.0f, 2.0, true, true);
+				pistol.InitialiseAttack(pistolImpactAttack, pistolAreaAttack, 0.2f, 20.0f, 5.0f, 0.0f, 0.05f, 0.0f, 2.0, true, true);
 				Weapons.Add("Pistol", pistol);
 
 
@@ -427,6 +443,7 @@ namespace Fredrick.src.ResourceManagement
 				smallRound.Components.Add(new Projectile(smallRound));
 				smallRound.Components.Add(new Renderable(smallRound, Renderables["SmallRound"]));
 				smallRound.Components.Add(new OOBBTrigger(smallRound, OOBBTriggers["SmallRound"]));
+				smallRound.Components.Add(new Emitter(smallRound, Emitters["SmallTrail"]));
 
 				ProjectileEntities.Add("SmallRound", smallRound);
 			}

@@ -42,6 +42,10 @@ namespace Fredrick.src
 		public bool Cone { get; set; }
 		public float Angle { get; set; }
 
+		public bool Trail { get; set; }
+
+		private Vector2 m_lastPosition;
+
 		/// <summary>
 		/// How many particles are emitted per emission if not continuous
 		/// </summary>
@@ -119,6 +123,7 @@ namespace Fredrick.src
 			m_rnd = new Random();
 			Angle = original.Angle;
 			Cone = original.Cone;
+			Trail = original.Trail;
 		}
 
 		public void SetVelocity(float spawnVelocity, float minVariance, float maxVariance, float widthRatio = 1.0f, bool sqrVelVar = false)
@@ -150,6 +155,11 @@ namespace Fredrick.src
 			ScaleFactor = scaleFactor;
 		}
 
+		public void Revive()
+		{
+			m_lastPosition = _owner.Position + Position;
+		}
+
 		public void Emit()
 		{
 			for (int i = 0; i < EmissionCount; i++)
@@ -157,6 +167,13 @@ namespace Fredrick.src
 				if (ParticleBuffer.Instance.InactiveParticles.Count > 0)
 				{
 					Vector2 spawnPos = new Vector2((float)m_rnd.NextDouble() * SpawnWidth - (SpawnWidth / 2), (float)m_rnd.NextDouble() * SpawnHeight - (SpawnHeight / 2));
+					if (Trail)
+					{
+						Vector2 trailPosition = m_lastPosition - (_owner.Position + Position);
+						float emissionLerp = (float)i / EmissionCount;
+						trailPosition *= emissionLerp;
+						spawnPos += trailPosition;
+					}
 					Vector2 spawnVel = new Vector2(1);
 					if (!Cone)
 					{
@@ -168,7 +185,7 @@ namespace Fredrick.src
 					{
 						float angle = (((float)m_rnd.NextDouble() * 2 - 1) * Angle) + (_owner.Rotation + Rotation);
 						spawnVel.X = (float)Math.Cos(angle);
-						spawnVel.Y = -(float)Math.Sin(angle);
+						spawnVel.Y = (float)Math.Sin(angle);
 					}
 
 					float velocityRND = (float)m_rnd.NextDouble();
@@ -206,6 +223,7 @@ namespace Fredrick.src
 			{
 				Emit();
 			}
+			m_lastPosition = _owner.Position + Position;
 		}
 
 		public override void DrawBatch(SpriteBatch spriteBatch)

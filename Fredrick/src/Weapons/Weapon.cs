@@ -177,6 +177,13 @@ namespace Fredrick.src
 				e.GetComponent<Projectile>().InitialiseAttack(m_impactAttack, m_areaAttack, m_projectileSpeed, m_areaOfEffectRadius, m_impactKnockback, m_areaKnockback, m_screenshake, m_fuseTimer, m_objectImpactTrigger, m_actorImpactTrigger);
 				e.GetComponent<Projectile>().Revive(shotVelocity, m_fuseTimer);
 
+				foreach (Component component in e.Components)
+				{
+					if (component is Emitter)
+						(component as Emitter).Revive();
+				}
+
+
 				ProjectileBuffer.Instance.Add(Projectile, e);
 			}
 			foreach (Emitter emitter in FireEmitters)
