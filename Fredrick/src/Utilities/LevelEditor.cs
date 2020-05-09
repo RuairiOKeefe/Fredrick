@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Fredrick.src.Colliders;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -30,7 +31,7 @@ namespace Fredrick.src
 			e.Tags.Add("Terrain");
 			Renderable r = new Renderable(e, "Block", "testSheet", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0, 0, 0.1f);
 			r.Drawable.AddAnimation(0, 0, 1, 30, Animation.OnEnd.Loop, 0);
-			AABBCollider c = new AABBCollider(e, new Vector2(0), 1, 1);
+			AABBCollider c = new AABBCollider(e, "", new Vector2(0), 1, 1, ColliderCategory.Terrain, ColliderCategory.Terrain);
 			e.Components.Add(r);
 			e.Components.Add(c);
 			entities.Add(e);
@@ -39,7 +40,7 @@ namespace Fredrick.src
 			e.Tags.Add("Terrain");
 			r = new Renderable(e, "Block", "grass", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0, 0, 0.1f);
 			r.Drawable.AddAnimation(0, 0, 1, 30, Animation.OnEnd.Loop, 0);
-			c = new AABBCollider(e, new Vector2(0), 1, 1);
+			c = new AABBCollider(e, "", new Vector2(0), 1, 1, ColliderCategory.Terrain, ColliderCategory.Terrain);
 			e.Components.Add(r);
 			e.Components.Add(c);
 			entities.Add(e);
@@ -115,7 +116,7 @@ namespace Fredrick.src
 						Renderable r = new Renderable(e, "Block", "Dirt", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0, 0, 0.1f);
 						r.Drawable.AddAnimation(0, 0, 1, 30, Animation.OnEnd.Loop, 0);
 						r.Drawable.ShaderInfo = lighting;
-						AABBCollider c = new AABBCollider(e, new Vector2(0), 1, 1);
+						AABBCollider c = new AABBCollider(e, "", new Vector2(0), 1, 1, ColliderCategory.Terrain, ColliderCategory.Terrain);
 						e.Components.Add(r);
 						e.Components.Add(c);
 					}
@@ -133,7 +134,7 @@ namespace Fredrick.src
 						Renderable r = new Renderable(e, "Block", "grass", new Vector2(16), new Vector2(0), new Vector2(1), 32, 32, 0, 0, 0.1f);
 						r.Drawable.AddAnimation(0, 0, 1, 30, Animation.OnEnd.Loop, 0);
 						r.Drawable.ShaderInfo = lighting;
-						AABBCollider c = new AABBCollider(e, new Vector2(0), 1, 1);
+						AABBCollider c = new AABBCollider(e, "", new Vector2(0), 1, 1, ColliderCategory.Terrain, ColliderCategory.Terrain);
 						e.Components.Add(r);
 						e.Components.Add(c);
 					}

@@ -59,7 +59,7 @@ namespace Fredrick.src.Scenes
 			/// . 0 .
 			/// 1 x 2 x= CurrentBlock
 			/// . 3 .
-			/// adjacentBlocks ins a string that should always consist of 4 digits, all 0 or 1.
+			/// adjacentBlocks is a string that should always consist of 4 digits, all 0 or 1.
 			/// This is a representation of whether or not there is a block on each side of the block.
 			/// (A string was used to make this as readable as possible, given the unavoidable ugliness of this solution)
 			/// (Yes I'm well aware this entire game is full of ugliness, but I'm one Ru and I want to finish this)
@@ -123,7 +123,6 @@ namespace Fredrick.src.Scenes
 					return Facing.RightUpLeft;
 				default:
 					return Facing.None;
-
 			}
 		}
 

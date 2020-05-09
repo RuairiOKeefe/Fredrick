@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
+using Fredrick.src.Colliders;
 
 namespace Fredrick.src
 {

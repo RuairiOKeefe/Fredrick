@@ -61,6 +61,8 @@
     <Compile Include="src\Cameras\FollowCamera.cs" />
     <Compile Include="src\Colliders\AABBTrigger.cs" />
     <Compile Include="src\Colliders\CircleCollider.cs" />
+    <Compile Include="src\Colliders\Collider.cs" />
+    <Compile Include="src\Colliders\OOBBTrigger.cs" />
     <Compile Include="src\Combat System\Attack.cs" />
     <Compile Include="src\Combat System\Status Effects\Burn.cs" />
     <Compile Include="src\Combat System\Damageable.cs" />
@@ -70,7 +72,8 @@
     <Compile Include="src\Colliders\AABBCollider.cs" />
     <Compile Include="src\Cameras\Camera.cs" />
     <Compile Include="src\Drawing\Background.cs" />
-    <Compile Include="src\Drawing\CharacterRig.cs" />
+    <Compile Include="src\Rigging\Bone.cs" />
+    <Compile Include="src\Rigging\CharacterRig.cs" />
     <Compile Include="src\Drawing\DrawManager.cs" />
     <Compile Include="src\Drawing\PostProcessing.cs" />
     <Compile Include="src\Drawing\Shader Info\LightingInfo.cs" />
@@ -94,6 +97,7 @@
     <Compile Include="src\ResourceManagement\BlockResources.cs" />
     <Compile Include="src\ResourceManagement\LightingResources.cs" />
     <Compile Include="src\Entity System\Block.cs" />
+    <Compile Include="src\Rigging\IKSolver.cs" />
     <Compile Include="src\Scenes\Level.cs" />
     <Compile Include="src\Scenes\LevelManager.cs" />
     <Compile Include="src\Scenes\Lighting\Light.cs" />

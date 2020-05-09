@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using FarseerPhysics.Common;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Collision;
+using Fredrick.src.Colliders;
 
 namespace Fredrick.src
 {

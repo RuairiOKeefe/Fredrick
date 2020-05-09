@@ -9,10 +9,10 @@ using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework.Content;
 
-namespace Fredrick.src
+namespace Fredrick.src.Colliders
 {
 	[Serializable]
-	public class CircleCollider : Component
+	public class CircleCollider : Collider
 	{
 		Vector2 _position;
 
@@ -22,28 +22,20 @@ namespace Fredrick.src
 		public float m_radius;
 		public float m_density;
 
-		public CircleCollider()
-		{
-		}
-
-		public CircleCollider(Entity owner, float radius, float density) : base(owner)
+		public CircleCollider(Entity owner, string id, float radius, float density, ColliderCategory colliderCategory, ColliderCategory collidesWith) : base(owner, id)
 		{
 			m_radius = radius;
 			m_density = density;
-			//_body = new Body(ColliderManager.Instance.World, _owner.GetPosition(), 0, BodyType.Dynamic);
-			//_body.BodyType = BodyType.Dynamic;
-			//_body.Mass = 1;
-			//_body.UserData = _owner;
-			//_body.Awake = true;
-			//_circle = new CircleShape(0.5f, 1.0f);
-			//_circle.Position = _position;
-			//_fixture = _body.CreateFixture(_circle);
+			m_colliderCategory = colliderCategory;
+			m_collidesWith = collidesWith;
 		}
 
-		public CircleCollider(Entity owner, CircleCollider original) : base(owner, original.Id, original.Tags, original.Active)
+		public CircleCollider(Entity owner, CircleCollider original) : base(owner, original)
 		{
 			m_radius = original.m_radius;
 			m_density = original.m_density;
+			m_colliderCategory = original.m_colliderCategory;
+			m_collidesWith = original.m_collidesWith;
 		}
 
 		public void Revive()
@@ -57,7 +49,8 @@ namespace Fredrick.src
 			Body.UserData = _owner;
 			Body.Awake = true;
 			Body.Position = _owner.Position;
-
+			Body.CollisionCategories = (Category)m_colliderCategory;
+			Body.CollidesWith = (Category)m_collidesWith;
 
 			Body.Restitution = 0.7f;
 		}

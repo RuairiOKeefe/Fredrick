@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 
 using Resources = Fredrick.src.ResourceManagement.Resources;
+using Fredrick.src.Colliders;
 
 namespace Fredrick.src
 {

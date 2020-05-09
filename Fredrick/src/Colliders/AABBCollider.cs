@@ -11,10 +11,10 @@ using FarseerPhysics.Dynamics;
 using FarseerPhysics.Common;
 using Microsoft.Xna.Framework.Content;
 
-namespace Fredrick.src
+namespace Fredrick.src.Colliders
 {
 	[Serializable]
-	public class AABBCollider : Component
+	public class AABBCollider : Collider
 	{
 		private int _index;//index in ColliderManager
 
@@ -28,20 +28,24 @@ namespace Fredrick.src
 
 		private bool _platformCollided;
 
-		public AABBCollider()
+		public AABBCollider() : base(null, "")
 		{
 			_owner = null;
 			Rectangle = new RectangleF();
 		}
 
-		public AABBCollider(Entity owner, Vector2 position, float width = 1.0f, float height = 1.0f) : base(owner)
+		public AABBCollider(Entity owner, string id, Vector2 position, float width, float height, ColliderCategory colliderCategory, ColliderCategory collidesWith) : base(owner, id)
 		{
 			Rectangle = new RectangleF(position, width, height);
+			m_colliderCategory = colliderCategory;
+			m_collidesWith = collidesWith;
 		}
 
 		public AABBCollider(Entity owner, AABBCollider original) : base(owner, original)
 		{
 			Rectangle = new RectangleF(original.Rectangle);
+			m_colliderCategory = original.m_colliderCategory;
+			m_collidesWith = original.m_collidesWith;
 		}
 
 		public bool CheckCollision(RectangleF other)
@@ -188,6 +192,9 @@ namespace Fredrick.src
 			verts.Add(Rectangle.Corners[3]);
 			box = new PolygonShape(verts, 1.0f);
 			fixture = body.CreateFixture(box);
+			body.CollisionCategories = (Category)m_colliderCategory;
+			body.CollidesWith = (Category)m_collidesWith;
+
 
 			cells = new List<int[]>();
 			SetCells(true);

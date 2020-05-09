@@ -39,6 +39,9 @@ namespace Fredrick.src
 		public bool FakeDepth { get; set; }
 		public float ScaleFactor { get; set; }
 
+		public bool Cone { get; set; }
+		public float Angle { get; set; }
+
 		/// <summary>
 		/// How many particles are emitted per emission if not continuous
 		/// </summary>
@@ -114,6 +117,8 @@ namespace Fredrick.src
 			EmissionCount = original.EmissionCount;
 			m_lerpColours = original.LerpColours;
 			m_rnd = new Random();
+			Angle = original.Angle;
+			Cone = original.Cone;
 		}
 
 		public void SetVelocity(float spawnVelocity, float minVariance, float maxVariance, float widthRatio = 1.0f, bool sqrVelVar = false)
@@ -152,9 +157,19 @@ namespace Fredrick.src
 				if (ParticleBuffer.Instance.InactiveParticles.Count > 0)
 				{
 					Vector2 spawnPos = new Vector2((float)m_rnd.NextDouble() * SpawnWidth - (SpawnWidth / 2), (float)m_rnd.NextDouble() * SpawnHeight - (SpawnHeight / 2));
-					Vector2 spawnVel = new Vector2((float)m_rnd.NextDouble() * 2 - 1, (float)m_rnd.NextDouble() * 2 - 1);
-					spawnVel.X *= WidthRatio;
-					spawnVel.Normalize();
+					Vector2 spawnVel = new Vector2(1);
+					if (!Cone)
+					{
+						spawnVel = new Vector2((float)m_rnd.NextDouble() * 2 - 1, (float)m_rnd.NextDouble() * 2 - 1);
+						spawnVel.X *= WidthRatio;
+						spawnVel.Normalize();
+					}
+					else
+					{
+						float angle = (((float)m_rnd.NextDouble() * 2 - 1) * Angle) + (_owner.Rotation + Rotation);
+						spawnVel.X = (float)Math.Cos(angle);
+						spawnVel.Y = -(float)Math.Sin(angle);
+					}
 
 					float velocityRND = (float)m_rnd.NextDouble();
 					if (SqrVelVar)

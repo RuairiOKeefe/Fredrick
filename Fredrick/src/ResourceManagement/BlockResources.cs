@@ -1,4 +1,5 @@
-﻿using Fredrick.src.Drawing.Shader_Info;
+﻿using Fredrick.src.Colliders;
+using Fredrick.src.Drawing.Shader_Info;
 using Fredrick.src.Entity_System;
 using Microsoft.Xna.Framework;
 using System;
@@ -114,7 +115,9 @@ namespace Fredrick.src.ResourceManagement
 					Renderable r = new Renderable(null, "DirtBlockNone", "DirtTiles", new Vector2(7.5f), new Vector2(0), new Vector2(1), 16, 16, startX, startY, 0.1f);
 					r.Drawable.ShaderInfo = dirtLighting;
 					r.DrawBatched = true;
-					AABBCollider c = new AABBCollider(null, new Vector2(0), 0.5f, 0.5f);
+					ColliderCategory colliderCategory = ColliderCategory.Terrain;
+					ColliderCategory collidesWith = ColliderCategory.All & ~ColliderCategory.Trigger;
+					AABBCollider c = new AABBCollider(null, "DirtBlock" + i, new Vector2(0), 0.5f, 0.5f, colliderCategory, collidesWith);
 					Entity e = new Entity();
 					e.Components.Add(r);
 					e.Components.Add(c);

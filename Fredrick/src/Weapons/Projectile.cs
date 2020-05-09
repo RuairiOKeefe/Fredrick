@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Dynamics.Contacts;
+using Fredrick.src.Colliders;
 
 namespace Fredrick.src
 {
@@ -36,6 +37,8 @@ namespace Fredrick.src
 
 		protected float m_areaKnockback;
 
+		protected float m_screenshake;
+
 		protected double m_fuseTimer;
 
 		/// <summary>
@@ -61,7 +64,7 @@ namespace Fredrick.src
 			m_fuseTimer = original.m_fuseTimer;
 		}
 
-		public void InitialiseAttack(Attack impactAttack, Attack areaAttack, float projectileSpeed, float areaOfEffectRadius, float impactKnockback, float areaKnockback, double fuseTimer, bool objectImpactTrigger, bool actorImpactTrigger)
+		public void InitialiseAttack(Attack impactAttack, Attack areaAttack, float projectileSpeed, float areaOfEffectRadius, float impactKnockback, float areaKnockback, float screenshake, double fuseTimer, bool objectImpactTrigger, bool actorImpactTrigger)
 		{
 			m_impactAttack = impactAttack;
 
@@ -74,6 +77,8 @@ namespace Fredrick.src
 			m_impactKnockback = impactKnockback;
 
 			m_areaKnockback = areaKnockback;
+
+			m_screenshake = screenshake;
 
 			m_fuseTimer = fuseTimer;
 
@@ -116,6 +121,19 @@ namespace Fredrick.src
 			{
 				_owner.GetComponent<Renderable>().Drawable.TransitionAnim(0);
 			}
+
+			if(_owner.GetComponent<OOBBTrigger>() != null)
+			{
+				_owner.GetComponent<OOBBTrigger>().Revive();
+				_owner.GetComponent<OOBBTrigger>().Body.OnCollision += Body_OnCollision;
+			}
+
+		}
+
+		private bool Body_OnCollision(Fixture fixtureA, Fixture fixtureB, Contact contact)
+		{
+			Detonate();
+			return true;
 		}
 
 		public void MoveProjectile(double deltaTime)
@@ -174,8 +192,14 @@ namespace Fredrick.src
 
 		public void Detonate()
 		{
-			ScreenShakeManager.Instance.AddTrauma(0.6f);
-			_owner.GetComponent<CircleCollider>().Kill();
+			if (m_screenshake > 0.0f)
+			{
+				ScreenShakeManager.Instance.AddTrauma(m_screenshake);
+			}
+			if (_owner.GetComponent<CircleCollider>() != null)
+			{
+				_owner.GetComponent<CircleCollider>().Kill();
+			}
 			foreach (Component c in _owner.Components)
 			{
 				if (c is Emitter && c.Tags.Contains("Detonation"))
@@ -194,6 +218,10 @@ namespace Fredrick.src
 			}
 
 			AreaAttack();
+			if(_owner.GetComponent<OOBBTrigger>() != null)
+			{
+				_owner.GetComponent<OOBBTrigger>().Body.OnCollision -= Body_OnCollision;
+			}
 
 			Dead = true;
 		}
@@ -210,6 +238,35 @@ namespace Fredrick.src
 			{
 				CircleCollider collider = _owner.GetComponent<CircleCollider>();
 				ContactEdge c = collider.Body.ContactList;
+
+				while (c != null && c.Next != null)
+				{
+					if (c.Contact.IsTouching)
+					{
+						Entity e = (Entity)c.Other.UserData;
+						if (e != Owner)
+						{
+							if (e.Tags.Contains("Actor") && m_actorImpactTrigger)
+							{
+								detonate = true;
+							}
+							if (!e.Tags.Contains("Actor") && m_objectImpactTrigger)
+							{
+								detonate = true;
+							}
+
+							ImpactAttack(e);
+						}
+					}
+					c = c.Next;
+
+				}
+			}
+
+			if (_owner.GetComponent<OOBBTrigger>() != null)
+			{
+				OOBBTrigger trigger = _owner.GetComponent<OOBBTrigger>();
+				ContactEdge c = trigger.Body.ContactList;
 
 				while (c != null && c.Next != null)
 				{
