@@ -144,25 +144,36 @@ namespace Fredrick.src.Rigging
 			}
 		}
 
-		public void Draw(SpriteBatch spriteBatch, Component rig, bool motionFlip)
+		public void Draw(SpriteBatch spriteBatch, Component rig, bool spriteFlip, bool rotationFlip, Effect shader, Matrix transformationMatrix)
 		{
 			if (Drawable != null)
 			{
+				if (Drawable.ShaderInfo != null && shader != null)
+				{
+					int flip = spriteFlip ? -1 : 1;
+					Drawable.ShaderInfo.SetUniforms(shader, -(rig.Rotation + TransformedRotation), flip);
+				}
+
+				spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, shader, transformationMatrix);
+
 				Vector2 inv = new Vector2(1, -1);
-				if (motionFlip)
+				SpriteEffects flipEffect = spriteFlip ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+
+				if (rotationFlip)
 				{
 					Vector2 xFlip = new Vector2(-1, 1);
-					spriteBatch.Draw(ResourceManager.Instance.Textures[Drawable._spriteName], (rig.Owner.Position + (rig.Position + Position) * xFlip) * inv * Drawable._spriteSize, Drawable._sourceRectangle, Drawable._colour, (rig.Rotation + TransformedRotation), Drawable._origin, rig.Scale, SpriteEffects.FlipHorizontally, Drawable._layer);
+					spriteBatch.Draw(ResourceManager.Instance.Textures[Drawable._spriteName], (rig.Owner.Position + (rig.Position + Position) * xFlip) * inv * Drawable._spriteSize, Drawable._sourceRectangle, Drawable._colour, (rig.Rotation + TransformedRotation), Drawable._origin, rig.Scale, flipEffect, Drawable._layer);
 				}
 				else
 				{
-					spriteBatch.Draw(ResourceManager.Instance.Textures[Drawable._spriteName], (rig.Owner.Position + rig.Position + Position) * inv * Drawable._spriteSize, Drawable._sourceRectangle, Drawable._colour, -(rig.Rotation + TransformedRotation), Drawable._origin, rig.Scale, Drawable._spriteEffects, Drawable._layer);
+					spriteBatch.Draw(ResourceManager.Instance.Textures[Drawable._spriteName], (rig.Owner.Position + rig.Position + Position) * inv * Drawable._spriteSize, Drawable._sourceRectangle, Drawable._colour, -(rig.Rotation + TransformedRotation), Drawable._origin, rig.Scale, flipEffect, Drawable._layer);
 				}
+				spriteBatch.End();
 
 			}
 			foreach (Bone b in Children)
 			{
-				b.Draw(spriteBatch, rig, motionFlip);
+				b.Draw(spriteBatch, rig, spriteFlip, rotationFlip, shader, transformationMatrix);
 			}
 		}
 

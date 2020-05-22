@@ -40,6 +40,7 @@ namespace Fredrick.src.Rigging
 			if (target != null)
 			{
 				m_target = target - (Root.ChildConnector + Position + _owner.Position);
+				MotionFlip = m_target.X < 0 ? true : false;
 			}
 		}
 
@@ -96,8 +97,8 @@ namespace Fredrick.src.Rigging
 				angle2 = Math.Acos(cosAngle2);
 
 				// adjust for the desired bend direction
-				//if (!solvePosAngle2)
-				//angle2 = -angle2;
+				if (MotionFlip)
+					angle2 = -angle2;
 
 				// compute the sine of our angle
 				sinAngle2 = Math.Sin(angle2);
@@ -170,19 +171,13 @@ namespace Fredrick.src.Rigging
 
 		public override void Draw(SpriteBatch spriteBatch, Effect shader, Matrix transformationMatrix)
 		{
-			if (Root.Children[0].Drawable != null)
-				if (Root.Children[0].Drawable.ShaderInfo != null)
-					Root.Children[0].Drawable.ShaderInfo.SetUniforms(shader);
-
-			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, shader, transformationMatrix);
-			Root.Children[0].Draw(spriteBatch, this, MotionFlip);
-			spriteBatch.End();
+			Root.Children[0].Draw(spriteBatch, this, MotionFlip, false, shader, transformationMatrix);
 		}
 
 		public override void DrawBatch(SpriteBatch spriteBatch)
 		{
 			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, null);
-			Root.Draw(spriteBatch, this, MotionFlip);
+			Root.Draw(spriteBatch, this, MotionFlip, false, null, Matrix.Identity);
 			spriteBatch.End();
 		}
 

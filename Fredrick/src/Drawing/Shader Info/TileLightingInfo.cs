@@ -23,7 +23,7 @@ namespace Fredrick.src.Drawing.Shader_Info
 			Material = material;
 		}
 
-		public override void SetUniforms(Effect shader, float rotation = 0)
+		public override void SetUniforms(Effect shader, float rotation = 0, int flip = 1)
 		{
 			shader.Parameters["TileNormalMap"].SetValue(ResourceManager.Instance.Textures[TileNormalMapName]);
 			shader.Parameters["DetailNormalMap"].SetValue(ResourceManager.Instance.Textures[DetailNormalMapName]);

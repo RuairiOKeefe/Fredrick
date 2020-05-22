@@ -21,10 +21,11 @@ namespace Fredrick.src
 			Material = material;
 		}
 
-		public override void SetUniforms(Effect shader, float rotation = 0)
+		public override void SetUniforms(Effect shader, float rotation = 0, int flip = 1)
 		{
 			shader.Parameters["NormalMap"].SetValue(ResourceManager.Instance.Textures[NormalMapName]);
 			shader.Parameters["Rotation"].SetValue(rotation);
+			shader.Parameters["Flip"].SetValue(flip);
 			//shader.Parameters["Material"].SetValue(Material);
 		}
 

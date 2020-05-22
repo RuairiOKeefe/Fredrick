@@ -74,6 +74,8 @@ namespace Fredrick.src
 
 		private float m_currentRecoil;
 
+		private bool m_flip = false;
+
 		public Weapon()
 		{
 
@@ -230,12 +232,11 @@ namespace Fredrick.src
 			m_currentRecoil = m_currentRecoil > 0 ? m_currentRecoil : 0;
 
 			CharacterRig armsRig = Owner.GetComponent<CharacterRig>(null, "Arms");
-			Vector2 origin = armsRig != null ? armsRig.Position : new Vector2(0);
 
 			Vector2 direction;
 			if (_owner.GetDerivedComponent<Controller>() != null)
 			{
-				direction = _owner.GetDerivedComponent<Controller>().GetAim(origin);
+				direction = _owner.GetDerivedComponent<Controller>().GetAim(Position);
 				if (m_continuous)
 					fireCommand = _owner.GetDerivedComponent<Controller>().FireHeld;
 				else
@@ -248,6 +249,15 @@ namespace Fredrick.src
 			}
 
 			direction.Normalize();
+
+			if (direction.X < 0)
+			{
+				m_flip = true;
+			}
+			else
+			{
+				m_flip = false;
+			}
 
 			float gunRecoil = (float)(m_nextfire / m_fireRate) * m_maxRecoil;
 
@@ -263,6 +273,9 @@ namespace Fredrick.src
 
 			float hpx = _handPosition.X - gunRecoil;
 			float hpy = _handPosition.Y + gunRecoil;
+
+			if (m_flip)
+				hpy = -hpy;
 
 			Vector2 transformedHandPosition = new Vector2((cos * hpx) - (sin * hpy), (sin * hpx) + (cos * hpy));
 
@@ -290,8 +303,16 @@ namespace Fredrick.src
 				WeaponDrawable.ShaderInfo.SetUniforms(shader, _owner.Rotation + Rotation);
 
 			spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, shader, transformationMatrix);
+
 			Vector2 inv = new Vector2(1, -1);
-			spriteBatch.Draw(ResourceManager.Instance.Textures[WeaponDrawable._spriteName], (_transformedWeaponPosition + Position + _owner.Position) * inv * WeaponDrawable._spriteSize, WeaponDrawable._sourceRectangle, WeaponDrawable._colour, -(_owner.Rotation + Rotation), WeaponDrawable._origin, Scale, WeaponDrawable._spriteEffects, WeaponDrawable._layer);
+			if (!m_flip)
+			{
+				spriteBatch.Draw(ResourceManager.Instance.Textures[WeaponDrawable._spriteName], (_transformedWeaponPosition + Position + _owner.Position) * inv * WeaponDrawable._spriteSize, WeaponDrawable._sourceRectangle, WeaponDrawable._colour, -(_owner.Rotation + Rotation), WeaponDrawable._origin, Scale, SpriteEffects.None, WeaponDrawable._layer);
+			}
+			else
+			{
+				spriteBatch.Draw(ResourceManager.Instance.Textures[WeaponDrawable._spriteName], (_transformedWeaponPosition + Position + _owner.Position) * inv * WeaponDrawable._spriteSize, WeaponDrawable._sourceRectangle, WeaponDrawable._colour, -(_owner.Rotation + Rotation), WeaponDrawable._origin, Scale, SpriteEffects.FlipVertically, WeaponDrawable._layer);
+			}
 			spriteBatch.End();
 		}
 
@@ -303,7 +324,13 @@ namespace Fredrick.src
 
 		public override void DebugDraw(SpriteBatch spriteBatch)
 		{
+			if (_owner.GetDerivedComponent<Controller>() != null)
+			{
 
+				Vector2 target = Position + _owner.Position + _owner.GetDerivedComponent<Controller>().GetAim(Position);
+				DebugManager.Instance.DrawLine(spriteBatch, target + new Vector2(-0.2f, 0), target + new Vector2(0.2f, 0));
+				DebugManager.Instance.DrawLine(spriteBatch, target + new Vector2(0, -0.2f), target + new Vector2(0, 0.2f));
+			}
 		}
 
 		public override Component Copy(Entity owner)

@@ -231,7 +231,7 @@ namespace Fredrick.src
 			_moveX = move;
 		}
 
-		public void Update(Matrix viewMatrix)
+		public void Update(Matrix viewMatrix, GraphicsDeviceManager graphics)
 		{
 			_previousKeyState = _currentKeyState;
 			_currentKeyState = Keyboard.GetState();

@@ -386,8 +386,8 @@ namespace Fredrick.src.ResourceManagement
 				pistolMaterial.Shininess = 0.9f;
 
 				LightingInfo lightingInfo = new LightingInfo("PistolNormal", pistolMaterial);
-				Weapon pistol = new Weapon(null, "Pistol", "SmallRound", new Vector2(36 / 32f, 1.5f / 32f), new Vector2(0.8f, 0f), new Vector2(-9.5f / 32f, -4.5f / 32f), true);
-				pistol.Position = new Vector2(0f, 0.5f);
+				Weapon pistol = new Weapon(null, "Pistol", "SmallRound", new Vector2(36 / 32f, 1.5f / 32f), new Vector2(1.0f, 0f), new Vector2(-10.5f / 32f, -6.5f / 32f), true);
+				pistol.Position = new Vector2(0f, 0.8f);
 				pistol.WeaponDrawable = new Drawable("Pistol", new Vector2(16, 16), 32, 32, 0, 0, 0.1f);
 				pistol.WeaponDrawable.ShaderInfo = lightingInfo;
 				pistol.FireEmitters.Add(new Emitter(null, Emitters["PistolFlash"]));

@@ -218,7 +218,7 @@ namespace Fredrick.src
 		protected override void Update(GameTime gameTime)
 		{
 			double deltaTime = gameTime.ElapsedGameTime.TotalSeconds;
-			InputHandler.Instance.Update(cam.Get_Transformation(GraphicsDevice));
+			InputHandler.Instance.Update(cam.Get_Transformation(GraphicsDevice), graphics);
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
 			if (!levelEditor.editing)

@@ -14,6 +14,7 @@ float4x4 world;
 float4x4 wvp;
 
 float Rotation;
+int Flip;
 
 //float4 emissive;
 //float4 diffuseReflection;
@@ -69,6 +70,7 @@ float4 MainPS(in VertexShaderOutput input) : COLOR
 	float4 texColour = tex2D(SpriteTextureSampler, input.TexCoord.xy) * input.Colour;
 	float4 normalColour = tex2D(NormalMapSampler, input.TexCoord.xy);
 	normalColour = (normalColour * 2) - 1;
+	normalColour.x *= Flip;
 	float4 diffuse = { 0,0,0,0 };
 
 	float3 pixelPos = input.PosW.xyz;

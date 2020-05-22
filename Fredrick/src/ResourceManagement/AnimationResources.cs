@@ -19,52 +19,52 @@ namespace Fredrick.src
 			characterMaterial.Diffuse = new Color(100, 150, 100, 255);
 			characterMaterial.Specular = new Color(255, 255, 255, 255);
 			characterMaterial.Shininess = 0.8f;
-			LightingInfo characterLighting = new LightingInfo("CharacterNormal", characterMaterial);
+			LightingInfo characterLighting = new LightingInfo("PlayerNormal", characterMaterial);
 
-			Bone torso = new Bone("Torso", new Vector2(0), 0, new Vector2(0, 14.5f / 32f), new Vector2(-1.5f / 32f, -11.5f / 32f));
-			torso.Drawable = new Drawable("Character", new Vector2(16), 32, 32, 64, 32, 0.15f);
+			Bone torso = new Bone("Torso", new Vector2(0), 0, new Vector2(0, 12.5f / 32f), new Vector2(-1.5f / 32f, -12.5f / 32f));
+			torso.Drawable = new Drawable("Player", new Vector2(16), 32, 32, 0, 0, 0.15f);
 			torso.Drawable.ShaderInfo = characterLighting;
 
-			Bone spine = new Bone("Spine", new Vector2(0), 0, new Vector2(-1.5f / 32f, -13.5f / 32f), new Vector2(0, 14.5f / 32f));
+			Bone spine = new Bone("Spine", new Vector2(0), 0, new Vector2(-1.5f / 32f, -11.5f / 32f), new Vector2(0, 16.5f / 32f));
 			torso.AddChild(spine);
 
-			Bone Head = new Bone("Head", new Vector2(0), 0, new Vector2(0 / 32f, -3.5f / 32f), new Vector2(0 / 32f, 3.5f / 32f));
-			Head.Drawable = new Drawable("Character", new Vector2(16), 32, 32, 32, 0, 0.14f);
+			Bone Head = new Bone("Head", new Vector2(0), 0, new Vector2(0 / 32f, -5.5f / 32f), new Vector2(0 / 32f, 3.5f / 32f));
+			Head.Drawable = new Drawable("Player", new Vector2(16), 32, 32, 32, 0, 0.14f);
 			Head.Drawable.ShaderInfo = characterLighting;
 			spine.AddChild(Head);
 
 
 			Bone UpperLegFront = new Bone("UpperLegFront", new Vector2(0), 0, new Vector2(0 / 32f, 6.5f / 32f), new Vector2(0.0f, -7.5f / 32f));
-			UpperLegFront.Drawable = new Drawable("Character", new Vector2(16), 32, 32, 32, 64, 0.1f);
+			UpperLegFront.Drawable = new Drawable("Player", new Vector2(16), 32, 32, 64, 32, 0.1f);
 			UpperLegFront.Drawable.ShaderInfo = characterLighting;
 			torso.AddChild(UpperLegFront);
 			Bone LowerLegFront = new Bone("LowerLegFront", new Vector2(0), 0, new Vector2(0.0f, 10.5f / 32f), new Vector2(0.0f, -8.5f / 32f));
-			LowerLegFront.Drawable = new Drawable("Character", new Vector2(16), 32, 32, 32, 32, 0.15f);
+			LowerLegFront.Drawable = new Drawable("Player", new Vector2(16), 32, 32, 0, 64, 0.15f);
 			LowerLegFront.Drawable.ShaderInfo = characterLighting;
 			UpperLegFront.AddChild(LowerLegFront);
-			Bone FootFront = new Bone("FootFront", new Vector2(0), 0, new Vector2(-1.5f / 32f, 2.5f / 32f), new Vector2(1.5f / 32f, -0.5f / 32f));
-			FootFront.Drawable = new Drawable("Character", new Vector2(16), 32, 32, 0, 0, 0.1f);
+			Bone FootFront = new Bone("FootFront", new Vector2(0), 0, new Vector2(-0.5f / 32f, 2.5f / 32f), new Vector2(4.5f / 32f, -0.5f / 32f));
+			FootFront.Drawable = new Drawable("Player", new Vector2(16), 32, 32, 32, 64, 0.1f);
 			FootFront.Drawable.ShaderInfo = characterLighting;
 			LowerLegFront.AddChild(FootFront);
 			Bone ToesFront = new Bone("ToesFront", new Vector2(0), 0, new Vector2(-0.5f / 32f, 0.0f), new Vector2(0.5f / 32f, 0.0f));
-			ToesFront.Drawable = new Drawable("Character", new Vector2(16), 32, 32, 64, 0, 0.1f);
+			ToesFront.Drawable = new Drawable("Player", new Vector2(16), 32, 32, 64, 64, 0.1f);
 			ToesFront.Drawable.ShaderInfo = characterLighting;
 			FootFront.AddChild(ToesFront);
 
 			Bone UpperLegBack = new Bone("UpperLegBack", new Vector2(0), 0, new Vector2(-0 / 32f, 6.5f / 32f), new Vector2(0.0f, -7.5f / 32f));
-			UpperLegBack.Drawable = new Drawable("Character", new Vector2(16), 32, 32, 32, 64, 0.1f);
+			UpperLegBack.Drawable = new Drawable("Player", new Vector2(16), 32, 32, 64, 32, 0.1f);
 			UpperLegBack.Drawable.ShaderInfo = characterLighting;
 			torso.AddChild(UpperLegBack);
 			Bone LowerLegBack = new Bone("LowerLegBack", new Vector2(0), 0, new Vector2(0.0f, 10.5f / 32f), new Vector2(0.0f, -8.5f / 32f));
-			LowerLegBack.Drawable = new Drawable("Character", new Vector2(16), 32, 32, 32, 32, 0.15f);
+			LowerLegBack.Drawable = new Drawable("Player", new Vector2(16), 32, 32, 0, 64, 0.15f);
 			LowerLegBack.Drawable.ShaderInfo = characterLighting;
 			UpperLegBack.AddChild(LowerLegBack);
-			Bone FootBack = new Bone("FootBack", new Vector2(0), 0, new Vector2(-1.5f / 32f, 2.5f / 32f), new Vector2(1.5f / 32f, -0.5f / 32f));
-			FootBack.Drawable = new Drawable("Character", new Vector2(16), 32, 32, 0, 0, 0.1f);
+			Bone FootBack = new Bone("FootBack", new Vector2(0), 0, new Vector2(-0.5f / 32f, 2.5f / 32f), new Vector2(4.5f / 32f, -0.5f / 32f));
+			FootBack.Drawable = new Drawable("Player", new Vector2(16), 32, 32, 32, 64, 0.1f);
 			FootBack.Drawable.ShaderInfo = characterLighting;
 			LowerLegBack.AddChild(FootBack);
 			Bone ToesBack = new Bone("ToesBack", new Vector2(0), 0, new Vector2(-0.5f / 32f, 0.0f), new Vector2(0.5f / 32f, 0.0f));
-			ToesBack.Drawable = new Drawable("Character", new Vector2(16), 32, 32, 64, 0, 0.1f);
+			ToesBack.Drawable = new Drawable("Player", new Vector2(16), 32, 32, 64, 64, 0.1f);
 			ToesBack.Drawable.ShaderInfo = characterLighting;
 			FootBack.AddChild(ToesBack);
 
@@ -74,15 +74,15 @@ namespace Fredrick.src
 			feetAppart.Add("Torso", 0.0f);
 			feetAppart.Add("Spine", 0.0f);
 			feetAppart.Add("Head", 0.0f);
-			feetAppart.Add("UpperLegFront", -0.2f);
+			feetAppart.Add("UpperLegFront", -0.3f);
 			feetAppart.Add("LowerLegFront", -0.1f);
 			feetAppart.Add("FootFront", -0.4f);
-			feetAppart.Add("ToesFront", 0.4f);
+			feetAppart.Add("ToesFront", 0.8f);
 			feetAppart.Add("UpperLegBack", 0.3f);
 			feetAppart.Add("LowerLegBack", -0.3f);
 			feetAppart.Add("FootBack", -0.1f);
 			feetAppart.Add("ToesBack", 0.1f);
-			standing.RigFrames.Add(new RigFrame(feetAppart, new Vector2(0, 11 / 32f), 0.4));
+			standing.RigFrames.Add(new RigFrame(feetAppart, new Vector2(0, 17 / 32f), 0.5));
 
 			Dictionary<string, float> feetAppart2 = new Dictionary<string, float>();
 			feetAppart2.Add("Torso", 0.0f);
@@ -91,12 +91,12 @@ namespace Fredrick.src
 			feetAppart2.Add("UpperLegFront", -0.25f);
 			feetAppart2.Add("LowerLegFront", -0.15f);
 			feetAppart2.Add("FootFront", -0.5f);
-			feetAppart2.Add("ToesFront", 0.5f);
+			feetAppart2.Add("ToesFront", 0.2f);
 			feetAppart2.Add("UpperLegBack", 0.35f);
 			feetAppart2.Add("LowerLegBack", -0.35f);
 			feetAppart2.Add("FootBack", -0.2f);
-			feetAppart2.Add("ToesBack", 0.2f);
-			standing.RigFrames.Add(new RigFrame(feetAppart2, new Vector2(0, 12 / 32f), 0.4));
+			feetAppart2.Add("ToesBack", 0.4f);
+			standing.RigFrames.Add(new RigFrame(feetAppart2, new Vector2(0, 18 / 32f), 0.3));
 
 			animations.Add("Standing", standing);
 
@@ -115,7 +115,7 @@ namespace Fredrick.src
 			playerContactFront.Add("LowerLegBack", -1.6f);
 			playerContactFront.Add("FootBack", -0.2f);
 			playerContactFront.Add("ToesBack", 0.6f);
-			run.RigFrames.Add(new RigFrame(playerContactFront, new Vector2(0, 11 / 32f), 0.12));
+			run.RigFrames.Add(new RigFrame(playerContactFront, new Vector2(0, 15 / 32f), 0.12));
 
 			Dictionary<string, float> playerDownFront = new Dictionary<string, float>();
 			playerDownFront.Add("Torso", 0.0f);
@@ -129,7 +129,7 @@ namespace Fredrick.src
 			playerDownFront.Add("LowerLegBack", -2.2f);
 			playerDownFront.Add("FootBack", -0.4f);
 			playerDownFront.Add("ToesBack", 0.2f);
-			run.RigFrames.Add(new RigFrame(playerDownFront, new Vector2(0, 8 / 32f), 0.12));
+			run.RigFrames.Add(new RigFrame(playerDownFront, new Vector2(0, 12 / 32f), 0.12));
 
 			Dictionary<string, float> playerContFirstFront = new Dictionary<string, float>();
 			playerContFirstFront.Add("Torso", 0.0f);
@@ -143,7 +143,7 @@ namespace Fredrick.src
 			playerContFirstFront.Add("LowerLegBack", -1.9f);
 			playerContFirstFront.Add("FootBack", -0.5f);
 			playerContFirstFront.Add("ToesBack", 0.0f);
-			run.RigFrames.Add(new RigFrame(playerContFirstFront, new Vector2(0, 11 / 32f), 0.12));
+			run.RigFrames.Add(new RigFrame(playerContFirstFront, new Vector2(0, 15 / 32f), 0.12));
 
 			Dictionary<string, float> playerContSecondFront = new Dictionary<string, float>();
 			playerContSecondFront.Add("Torso", 0.0f);
@@ -157,7 +157,7 @@ namespace Fredrick.src
 			playerContSecondFront.Add("LowerLegBack", -0.7f);
 			playerContSecondFront.Add("FootBack", 0.4f);
 			playerContSecondFront.Add("ToesBack", 0.3f);
-			run.RigFrames.Add(new RigFrame(playerContSecondFront, new Vector2(0, 14 / 32f), 0.12));
+			run.RigFrames.Add(new RigFrame(playerContSecondFront, new Vector2(0, 18 / 32f), 0.12));
 
 			Dictionary<string, float> playerContactBack = new Dictionary<string, float>();
 			playerContactBack.Add("Torso", 0.0f);
@@ -171,7 +171,7 @@ namespace Fredrick.src
 			playerContactBack.Add("LowerLegBack", -0.2f);
 			playerContactBack.Add("FootBack", -0.4f);
 			playerContactBack.Add("ToesBack", 0.3f);
-			run.RigFrames.Add(new RigFrame(playerContactBack, new Vector2(0, 11 / 32f), 0.12));
+			run.RigFrames.Add(new RigFrame(playerContactBack, new Vector2(0, 15 / 32f), 0.12));
 
 			Dictionary<string, float> playerDownBack = new Dictionary<string, float>();
 			playerDownBack.Add("Torso", 0.0f);
@@ -185,7 +185,7 @@ namespace Fredrick.src
 			playerDownBack.Add("LowerLegBack", -1.4f);
 			playerDownBack.Add("FootBack", 0.4f);
 			playerDownBack.Add("ToesBack", 0.1f);
-			run.RigFrames.Add(new RigFrame(playerDownBack, new Vector2(0, 8 / 32f), 0.12));
+			run.RigFrames.Add(new RigFrame(playerDownBack, new Vector2(0, 12 / 32f), 0.12));
 
 			Dictionary<string, float> playerContFirstBack = new Dictionary<string, float>();
 			playerContFirstBack.Add("Torso", 0.0f);
@@ -199,7 +199,7 @@ namespace Fredrick.src
 			playerContFirstBack.Add("LowerLegBack", -0.3f);
 			playerContFirstBack.Add("FootBack", -0.6f);
 			playerContFirstBack.Add("ToesBack", 0.3f);
-			run.RigFrames.Add(new RigFrame(playerContFirstBack, new Vector2(0, 11 / 32f), 0.12));
+			run.RigFrames.Add(new RigFrame(playerContFirstBack, new Vector2(0, 15 / 32f), 0.12));
 
 			Dictionary<string, float> playerContSecondBack = new Dictionary<string, float>();
 			playerContSecondBack.Add("Torso", 0.0f);
@@ -213,7 +213,7 @@ namespace Fredrick.src
 			playerContSecondBack.Add("LowerLegBack", -1.6f);
 			playerContSecondBack.Add("FootBack", -0.8f);
 			playerContSecondBack.Add("ToesBack", -0.2f);
-			run.RigFrames.Add(new RigFrame(playerContSecondBack, new Vector2(0, 0.5f), 0.12));
+			run.RigFrames.Add(new RigFrame(playerContSecondBack, new Vector2(0, 15 / 32f), 0.12));
 
 			animations.Add("Running", run);
 
@@ -232,7 +232,7 @@ namespace Fredrick.src
 			jumpStart.Add("LowerLegBack", -0.3f);
 			jumpStart.Add("FootBack", -0.1f);
 			jumpStart.Add("ToesBack", 0.1f);
-			jumping.RigFrames.Add(new RigFrame(jumpStart, new Vector2(0, 11 / 32f), 0.05));
+			jumping.RigFrames.Add(new RigFrame(jumpStart, new Vector2(0, 17 / 32f), 0.05));
 
 			Dictionary<string, float> jumpPrep = new Dictionary<string, float>();
 			jumpPrep.Add("Torso", 0.0f);
@@ -246,7 +246,7 @@ namespace Fredrick.src
 			jumpPrep.Add("LowerLegBack", -2.1f);
 			jumpPrep.Add("FootBack", -0.1f);
 			jumpPrep.Add("ToesBack", 0.1f);
-			jumping.RigFrames.Add(new RigFrame(jumpPrep, new Vector2(0, 4 / 32f), 0.05));
+			jumping.RigFrames.Add(new RigFrame(jumpPrep, new Vector2(0, 10 / 32f), 0.05));
 
 			Dictionary<string, float> legsExtended = new Dictionary<string, float>();
 			legsExtended.Add("Torso", 0.0f);
@@ -260,7 +260,7 @@ namespace Fredrick.src
 			legsExtended.Add("LowerLegBack", -1.4f);
 			legsExtended.Add("FootBack", -0.2f);
 			legsExtended.Add("ToesBack", 0.2f);
-			jumping.RigFrames.Add(new RigFrame(legsExtended, new Vector2(0, 12 / 32f), 0.2));
+			jumping.RigFrames.Add(new RigFrame(legsExtended, new Vector2(0, 18 / 32f), 0.2));
 
 			animations.Add("Jumping", jumping);
 
@@ -278,7 +278,7 @@ namespace Fredrick.src
 			wobble1.Add("LowerLegBack", -0.9f);
 			wobble1.Add("FootBack", -0.4f);
 			wobble1.Add("ToesBack", 0.4f);
-			falling.RigFrames.Add(new RigFrame(wobble1, new Vector2(0, 11 / 32f), 0.2));
+			falling.RigFrames.Add(new RigFrame(wobble1, new Vector2(0, 17 / 32f), 0.2));
 
 			Dictionary<string, float> wobble2 = new Dictionary<string, float>();
 			wobble2.Add("Torso", 0.0f);
@@ -292,7 +292,7 @@ namespace Fredrick.src
 			wobble2.Add("LowerLegBack", -0.95f);
 			wobble2.Add("FootBack", -0.5f);
 			wobble2.Add("ToesBack", 0.5f);
-			falling.RigFrames.Add(new RigFrame(wobble2, new Vector2(0, 12 / 32f), 0.2));
+			falling.RigFrames.Add(new RigFrame(wobble2, new Vector2(0, 18 / 32f), 0.2));
 
 			animations.Add("Falling", falling);
 
@@ -369,16 +369,16 @@ namespace Fredrick.src
 			characterMaterial.Diffuse = new Color(100, 150, 100, 255);
 			characterMaterial.Specular = new Color(255, 255, 255, 255);
 			characterMaterial.Shininess = 0.8f;
-			LightingInfo characterLighting = new LightingInfo("CharacterNormal", characterMaterial);
+			LightingInfo characterLighting = new LightingInfo("PlayerNormal", characterMaterial);
 
-			Bone shoulder = new Bone("Shoulder", new Vector2(0), 0, new Vector2(0), new Vector2(0, 10.5f / 32f));//Child connector is placed at location of shoulder
+			Bone shoulder = new Bone("Shoulder", new Vector2(0), 0, new Vector2(0), new Vector2(-0.5f/32f, 10.5f / 32f));//Child connector is placed at location of shoulder
 
-			Bone UpperArmFront = new Bone("UpperArmFront", new Vector2(0), 0, new Vector2(0.5f / 32f, 4.5f / 32f), new Vector2(1.5f / 32f, -4.5f / 32f));
-			UpperArmFront.Drawable = new Drawable("UpperArm", new Vector2(16), 32, 32, 0, 0, 0.11f);
+			Bone UpperArmFront = new Bone("UpperArmFront", new Vector2(0), 0, new Vector2(-1.5f / 32f, 5.5f / 32f), new Vector2(1.5f / 32f, -7.5f / 32f));
+			UpperArmFront.Drawable = new Drawable("Player", new Vector2(16), 32, 32, 64, 0, 0.11f);
 			UpperArmFront.Drawable.ShaderInfo = characterLighting;
 			shoulder.AddChild(UpperArmFront);
-			Bone LowerArmFront = new Bone("LowerArmFront", new Vector2(0), 0, new Vector2(1.5f / 32f, 4.5f / 32f), new Vector2(2.5f / 32f, -9.5f / 32f));
-			LowerArmFront.Drawable = new Drawable("LowerArm", new Vector2(16), 32, 32, 0, 0, 0.12f);
+			Bone LowerArmFront = new Bone("LowerArmFront", new Vector2(0), 0, new Vector2(-0.5f / 32f, 7.5f / 32f), new Vector2(2.5f / 32f, -9.5f / 32f));
+			LowerArmFront.Drawable = new Drawable("Player", new Vector2(16), 32, 32, 0, 32, 0.12f);
 			LowerArmFront.Drawable.ShaderInfo = characterLighting;
 			UpperArmFront.AddChild(LowerArmFront);
 
