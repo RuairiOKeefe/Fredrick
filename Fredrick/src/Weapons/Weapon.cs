@@ -281,7 +281,7 @@ namespace Fredrick.src
 
 			if (_owner.GetComponent<IKSolver>() != null)
 			{
-				_owner.GetComponent<IKSolver>().SetTarget(_transformedWeaponPosition + transformedHandPosition + Position + _owner.Position);
+				_owner.GetComponent<IKSolver>().SetTarget(_transformedWeaponPosition + transformedHandPosition + Position + _owner.Position, Rotation);
 			}
 
 			if (m_nextfire <= 0)

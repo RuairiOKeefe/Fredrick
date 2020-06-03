@@ -20,6 +20,7 @@ namespace Fredrick.src.Rigging
 		public string MountId;
 
 		private Vector2 m_target = new Vector2(0);
+		private float m_handRotation;
 
 		public IKSolver()
 		{
@@ -35,13 +36,25 @@ namespace Fredrick.src.Rigging
 			MountId = original.MountId;
 		}
 
-		public void SetTarget(Vector2 target)
+		public void SetTarget(Vector2 target, float rotation)
 		{
 			if (target != null)
 			{
 				m_target = target - (Root.ChildConnector + Position + _owner.Position);
 				MotionFlip = m_target.X < 0 ? true : false;
+
+				float sin = (float)Math.Sin(Rotation);
+				float cos = (float)Math.Cos(Rotation);
+
+				if (Bones.Count > 3)
+				{
+					float tpx = Bones[3].Connector.X;
+					float tpy = Bones[3].Connector.Y;
+
+					m_target -= new Vector2((cos * tpx) - (sin * tpy), (sin * tpx) + (cos * tpy));
+				}
 			}
+			m_handRotation = rotation;
 		}
 
 		private bool Solve2BoneIK()
@@ -136,6 +149,7 @@ namespace Fredrick.src.Rigging
 
 			Root.Children[0].Rotation = (float)(angle1 + Math.PI / 2);//This is being rotated 90 degrees (counter-clockwise) because the sprites for limbs are facing downwards, (ie are rotated 90 degrees clockwise)
 			Root.Children[0].Children[0].Rotation = (float)(angle2);
+			Root.Children[0].Children[0].Children[0].Rotation = m_handRotation - (float)(angle2 + angle1);
 
 			return foundValidSolution;
 		}
@@ -166,7 +180,7 @@ namespace Fredrick.src.Rigging
 				Position = component.Position;
 			}
 			Solve2BoneIK();
-			Root.Update();
+			Root.Update(MotionFlip);
 		}
 
 		public override void Draw(SpriteBatch spriteBatch, Effect shader, Matrix transformationMatrix)

@@ -373,14 +373,18 @@ namespace Fredrick.src
 
 			Bone shoulder = new Bone("Shoulder", new Vector2(0), 0, new Vector2(0), new Vector2(-0.5f/32f, 10.5f / 32f));//Child connector is placed at location of shoulder
 
-			Bone UpperArmFront = new Bone("UpperArmFront", new Vector2(0), 0, new Vector2(-1.5f / 32f, 5.5f / 32f), new Vector2(1.5f / 32f, -7.5f / 32f));
+			Bone UpperArmFront = new Bone("UpperArm", new Vector2(0), 0, new Vector2(-0f / 32f, 5.5f / 32f), new Vector2(1.5f / 32f, -7.5f / 32f));
 			UpperArmFront.Drawable = new Drawable("Player", new Vector2(16), 32, 32, 64, 0, 0.11f);
 			UpperArmFront.Drawable.ShaderInfo = characterLighting;
 			shoulder.AddChild(UpperArmFront);
-			Bone LowerArmFront = new Bone("LowerArmFront", new Vector2(0), 0, new Vector2(-0.5f / 32f, 7.5f / 32f), new Vector2(2.5f / 32f, -9.5f / 32f));
-			LowerArmFront.Drawable = new Drawable("Player", new Vector2(16), 32, 32, 0, 32, 0.12f);
-			LowerArmFront.Drawable.ShaderInfo = characterLighting;
-			UpperArmFront.AddChild(LowerArmFront);
+			Bone LowerArm = new Bone("LowerArm", new Vector2(0), 0, new Vector2(-0.5f / 32f, 7.5f / 32f), new Vector2(2.5f / 32f, -9.5f / 32f));
+			LowerArm.Drawable = new Drawable("Player", new Vector2(16), 32, 32, 0, 32, 0.12f);
+			LowerArm.Drawable.ShaderInfo = characterLighting;
+			UpperArmFront.AddChild(LowerArm);
+			Bone Hand = new Bone("Hand", new Vector2(0), 0, new Vector2(0.5f / 32f, 2.5f / 32f), new Vector2(0.5f / 32f, -2.5f / 32f));
+			Hand.Drawable = new Drawable("Player", new Vector2(16), 32, 32, 32, 32, 0.12f);
+			Hand.Drawable.ShaderInfo = characterLighting;
+			LowerArm.AddChild(Hand);
 
 			IKSolver armSolver = new IKSolver();
 			armSolver.MountId = "PlayerLegs";

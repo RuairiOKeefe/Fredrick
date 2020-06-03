@@ -386,7 +386,7 @@ namespace Fredrick.src.ResourceManagement
 				pistolMaterial.Shininess = 0.9f;
 
 				LightingInfo lightingInfo = new LightingInfo("PistolNormal", pistolMaterial);
-				Weapon pistol = new Weapon(null, "Pistol", "SmallRound", new Vector2(36 / 32f, 1.5f / 32f), new Vector2(1.0f, 0f), new Vector2(-10.5f / 32f, -6.5f / 32f), true);
+				Weapon pistol = new Weapon(null, "Pistol", "SmallRound", new Vector2(36 / 32f, 1.5f / 32f), new Vector2(1.0f, 0f), new Vector2(-9.5f / 32f, -4.5f / 32f), true);
 				pistol.Position = new Vector2(0f, 0.8f);
 				pistol.WeaponDrawable = new Drawable("Pistol", new Vector2(16, 16), 32, 32, 0, 0, 0.1f);
 				pistol.WeaponDrawable.ShaderInfo = lightingInfo;
@@ -409,13 +409,13 @@ namespace Fredrick.src.ResourceManagement
 			player.Components.Add(new PlayerController(player, "Controller"));
 			player.Components.Add(new Character(player, Characters["Player"]));
 			player.Components.Add(new AABBCollider(player, AABBColliders["PlayerCollider"]));
-
+			player.Components.Add(new Weapon(player, Weapons["Pistol"]));
 			player.Components.Add(new CharacterRig(player, CharacterRigs["PlayerLegs"]));
 			//player.Components.Add(new CharacterRig(player, CharacterRigs["PlayerArms"]));
 			player.Components.Add(new IKSolver(player, AnimationResources.GetIKArm()));
 			player.Components.Add(new Damageable(player, Damageables["PlayerDamageable"]));
 			player.Components.Add(new StatusHandler(player, StatusHandlers["PlayerStatus"]));
-			player.Components.Add(new Weapon(player, Weapons["Pistol"]));
+
 			player.Components.Add(new Emitter(player, Emitters["LandDust"]));
 			player.Components[player.Components.Count - 1].Position = new Vector2(0.0f, -1.0f);
 			player.Components.Add(new Emitter(player, Emitters["JumpDust"]));

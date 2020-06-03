@@ -118,7 +118,7 @@ namespace Fredrick.src.Rigging
 			}
 		}
 
-		public void Update()
+		public void Update(bool spriteFlipped = false)
 		{
 			if (Parent != null)
 			{
@@ -127,8 +127,18 @@ namespace Fredrick.src.Rigging
 				float parentCos = (float)Math.Cos(Parent.TransformedRotation);
 				float sin = (float)Math.Sin(TransformedRotation);
 				float cos = (float)Math.Cos(TransformedRotation);
-				Vector2 transformedParentConnector = new Vector2((parentCos * Parent.ChildConnector.X) - (parentSin * Parent.ChildConnector.Y), (parentSin * Parent.ChildConnector.X) + (parentCos * Parent.ChildConnector.Y));
-				Vector2 transformedConnector = new Vector2((cos * Connector.X) - (sin * Connector.Y), (sin * Connector.X) + (cos * Connector.Y));
+
+				Vector2 parentConnector = Parent.ChildConnector;
+				Vector2 connector = Connector;
+
+				if (spriteFlipped)
+				{
+					parentConnector.X *= -1;
+					connector.X *= -1;
+				}
+
+				Vector2 transformedParentConnector = new Vector2((parentCos * parentConnector.X) - (parentSin * parentConnector.Y), (parentSin * parentConnector.X) + (parentCos * parentConnector.Y));
+				Vector2 transformedConnector = new Vector2((cos * connector.X) - (sin * connector.Y), (sin * connector.X) + (cos * connector.Y));
 				Position = (Parent.Position + transformedParentConnector) - transformedConnector;
 			}
 			else
@@ -140,7 +150,7 @@ namespace Fredrick.src.Rigging
 
 			foreach (Bone b in Children)
 			{
-				b.Update();
+				b.Update(spriteFlipped);
 			}
 		}
 
