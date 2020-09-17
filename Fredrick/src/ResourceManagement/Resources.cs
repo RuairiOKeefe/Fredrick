@@ -1,5 +1,7 @@
 ﻿using Fredrick.src.Colliders;
+using Fredrick.src.InputHandling;
 using Fredrick.src.Rigging;
+using Fredrick.src.State_Machines.Character;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using System;
@@ -36,6 +38,7 @@ namespace Fredrick.src.ResourceManagement
 		//private LightingResources LightingResources;
 
 		public Dictionary<string, AABBCollider> AABBColliders { get; private set; } = new Dictionary<string, AABBCollider>();
+		public Dictionary<string, AiController> AiControllers { get; private set; } = new Dictionary<string, AiController>();
 		public Dictionary<string, CharacterRig> CharacterRigs { get; private set; } = new Dictionary<string, CharacterRig>();
 		public Dictionary<string, Character> Characters { get; private set; } = new Dictionary<string, Character>();
 		public Dictionary<string, CircleCollider> CircleColliders { get; private set; } = new Dictionary<string, CircleCollider>();
@@ -47,6 +50,7 @@ namespace Fredrick.src.ResourceManagement
 		public Dictionary<string, StatusHandler> StatusHandlers { get; private set; } = new Dictionary<string, StatusHandler>();
 		public Dictionary<string, Weapon> Weapons { get; private set; } = new Dictionary<string, Weapon>();
 
+		public Dictionary<string, Entity> EnemyEntities { get; private set; } = new Dictionary<string, Entity>();
 		public Dictionary<string, Entity> ProjectileEntities { get; private set; } = new Dictionary<string, Entity>();
 		public Dictionary<string, Entity> PlayerEntities { get; private set; } = new Dictionary<string, Entity>();
 
@@ -60,6 +64,7 @@ namespace Fredrick.src.ResourceManagement
 		public void InitComponents()
 		{
 			InitAABBColliders();
+			InitAiControllers();
 			InitCharacterRigs();
 			InitCharacters();
 			InitCircleColliders();
@@ -74,6 +79,7 @@ namespace Fredrick.src.ResourceManagement
 
 		public void InitEntities()
 		{
+			InitEnemyEntities();
 			InitPlayerEntities();
 			InitProjectileEntities();
 		}
@@ -81,9 +87,18 @@ namespace Fredrick.src.ResourceManagement
 		private void InitAABBColliders()
 		{
 			ColliderCategory colliderCategory = ColliderCategory.Actor;
-			ColliderCategory collidesWith = ColliderCategory.Terrain | ColliderCategory.Actor | ColliderCategory.Bullet;
+			ColliderCategory collidesWith = ColliderCategory.Terrain | ColliderCategory.Actor | ColliderCategory.Bullet | ColliderCategory.Trigger;
 			AABBCollider playerCollider = new AABBCollider(null, "PlayerCollider", new Vector2(0), 0.6f, 2.0f, colliderCategory, collidesWith);
 			AABBColliders.Add("PlayerCollider", playerCollider);
+		}
+
+		private void InitAiControllers()
+		{
+			{
+				TurretAi ai = new TurretAi(null);
+				AiController turretAi = new AiController(ai);
+				AiControllers.Add("TurretAi", turretAi);
+			}
 		}
 
 		private void InitCharacterRigs()
@@ -337,6 +352,20 @@ namespace Fredrick.src.ResourceManagement
 				Renderables.Add("SmallRound", smallRound);
 			}
 			{
+				ShaderInfo.Material turretMaterial;
+				turretMaterial.Emissive = new Color(0, 0, 0, 255);
+				turretMaterial.Diffuse = new Color(150, 150, 100, 255);
+				turretMaterial.Specular = new Color(255, 255, 255, 255);
+				turretMaterial.Shininess = 0.9f;
+				LightingInfo turretLighting = new LightingInfo("TurretNormal", turretMaterial);
+				Renderable turretBase = new Renderable(null, "TurretBase", "Turret", new Vector2(16f), new Vector2(0), new Vector2(1), 32, 32, 0, 0, 0.9f);
+				turretBase.Drawable.AddAnimation(0, 0, 1, 1, Animation.OnEnd.Loop, 0);
+				turretBase.Drawable.AddAnimation(32, 0, 1, 1, Animation.OnEnd.Loop, 0);
+				turretBase.Drawable.ShaderInfo = turretLighting;
+
+				Renderables.Add("TurretBase", turretBase);
+			}
+			{
 				ShaderInfo.Material tempMaterial;
 				tempMaterial.Emissive = new Color(0, 0, 0, 255);
 				tempMaterial.Diffuse = new Color(150, 150, 100, 255);
@@ -396,11 +425,40 @@ namespace Fredrick.src.ResourceManagement
 				Attack pistolAreaAttack = new Attack(Attack.DamageType.Kinetic, new List<StatusEffect>(), 40.0f);
 				pistol.InitialiseAttack(pistolImpactAttack, pistolAreaAttack, 0.2f, 20.0f, 5.0f, 0.0f, 0.05f, 0.0f, 2.0, true, true);
 				Weapons.Add("Pistol", pistol);
+			}
+			{
+				ShaderInfo.Material turretMaterial;
+				turretMaterial.Emissive = new Color(0, 0, 0, 255);
+				turretMaterial.Diffuse = new Color(74, 74, 74, 255);
+				turretMaterial.Specular = new Color(255, 255, 255, 255);
+				turretMaterial.Shininess = 0.9f;
 
-
+				LightingInfo lightingInfo = new LightingInfo("TurretNormal", turretMaterial);
+				Weapon turretBase = new Weapon(null, "TurretBase", "SmallRound", new Vector2(36 / 32f, 1.5f / 32f), new Vector2(0.0f, 0f), new Vector2(-9.5f / 32f, -4.5f / 32f), true);
+				turretBase.Position = new Vector2(0f, 0.0f);
+				turretBase.WeaponDrawable = new Drawable("Turret", new Vector2(16, 16), 32, 32, 0, 32, 0.1f);
+				turretBase.WeaponDrawable.ShaderInfo = lightingInfo;
+				turretBase.FireEmitters.Add(new Emitter(null, Emitters["PistolFlash"]));
+				turretBase.Tags.Add("MotionFlip");
+				Attack pistolImpactAttack = new Attack(Attack.DamageType.Kinetic, new List<StatusEffect>(), 10.0f);
+				Attack pistolAreaAttack = new Attack(Attack.DamageType.Kinetic, new List<StatusEffect>(), 40.0f);
+				turretBase.InitialiseAttack(pistolImpactAttack, pistolAreaAttack, 0.5f, 20.0f, 5.0f, 0.0f, 0.05f, 0.0f, 2.0, true, true);
+				Weapons.Add("TurretBase", turretBase);
 			}
 		}
 
+
+		void InitEnemyEntities()
+		{
+			{
+				Entity lightTurret = new Entity(true, "LightTurret");
+				lightTurret.Tags.Add("Actor");
+				lightTurret.Components.Add(new Renderable(lightTurret, Renderables["TurretBase"]));
+				lightTurret.Components.Add(new Weapon(lightTurret, Weapons["TurretBase"]));
+				lightTurret.Components.Add(new AiController(lightTurret, AiControllers["TurretAi"]));
+				EnemyEntities.Add("LightTurret", lightTurret);
+			}
+		}
 
 		void InitPlayerEntities()
 		{
@@ -421,6 +479,8 @@ namespace Fredrick.src.ResourceManagement
 			player.Components.Add(new Emitter(player, Emitters["JumpDust"]));
 			player.Components[player.Components.Count - 1].Position = new Vector2(0.0f, -1.0f);
 			player.Components.Add(new Renderable(player, Renderables["Temp"]));
+			//player.Components.Add(new Renderable(player, Renderables["TurretBase"]));
+			//player.Components.Add(new Weapon(player, Weapons["TurretBase"]));
 			PlayerEntities.Add("Player", player);
 		}
 

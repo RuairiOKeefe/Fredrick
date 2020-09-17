@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Fredrick.src
 {
@@ -36,32 +38,49 @@ namespace Fredrick.src
 			return (InputHandler.Instance.WorldMousePosition - (Owner.Position + origin));
 		}
 
-		protected override void SetMovement()
+		protected void SetMovement()
 		{
 			Movement = PlayerInput.GetMovement();
 		}
 
-		protected override void SetJump()
+		protected void SetJump()
 		{
 			Jump = PlayerInput.GetJump();
 		}
 
-		protected override void SetFire()
+		protected void SetFire()
 		{
 			FirePressed = PlayerInput.GetFirePressed();
 			FireHeld = PlayerInput.GetFireHeld();
 		}
 
-
-		public override Component Copy(Entity owner)
+		public override void Load(ContentManager content)
 		{
-			return new PlayerController(owner, this);
+		}
+
+		public override void Unload()
+		{
 		}
 
 		public override void Update(double deltaTime)
 		{
 			PlayerInput.Update();
-			base.Update(deltaTime);
+			SetMovement();
+			SetJump();
+			SetFire();
+		}
+
+		public override void DrawBatch(SpriteBatch spriteBatch)
+		{
+		}
+
+		public override void DebugDraw(SpriteBatch spriteBatch)
+		{
+		}
+
+		public override Component Copy(Entity owner)
+		{
+			return new PlayerController(owner, this);
 		}
 	}
 }

@@ -125,6 +125,12 @@ namespace Fredrick.src
 				player2.Position = new Vector2(16, 8);
 				actors.Add(player2);
 
+				Entity turret = new Entity(Resources.Instance.EnemyEntities["LightTurret"]);
+				turret.Position = new Vector2(20, 8);
+				actors.Add(turret);
+
+
+
 				/////////////////// test code fix and add to game manager
 				PointTracker p1DeathTracker = new PointTracker();
 				ScoreTracker p1killTracker = new ScoreTracker();

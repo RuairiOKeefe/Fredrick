@@ -71,6 +71,8 @@ namespace Fredrick.src.Colliders
 			ColliderManager.Instance.World.RemoveBody(Body);
 		}
 
+
+
 		public override void Load(ContentManager content)
 		{
 

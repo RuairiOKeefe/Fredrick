@@ -52,6 +52,14 @@ namespace Fredrick.src.Colliders
 	[Serializable]
 	public abstract class Collider : Component
 	{
+
+		public float m_density;
+
+		[NonSerialized]
+		protected Body m_body;
+		[NonSerialized]
+		protected Fixture m_fixture;
+
 		protected ColliderCategory m_colliderCategory;
 		protected ColliderCategory m_collidesWith;
 
@@ -63,6 +71,11 @@ namespace Fredrick.src.Colliders
 		public Collider(Entity owner, Component original) : base(owner, original)
 		{
 
+		}
+
+		public Body GetBody()
+		{
+			return m_body;
 		}
 	}
 }

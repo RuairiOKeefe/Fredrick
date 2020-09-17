@@ -237,7 +237,7 @@ namespace Fredrick.src
 			if (_owner.GetComponent<CircleCollider>() != null)
 			{
 				CircleCollider collider = _owner.GetComponent<CircleCollider>();
-				ContactEdge c = collider.Body.ContactList;
+				ContactEdge c = collider.GetBody().ContactList;
 
 				while (c != null && c.Next != null)
 				{

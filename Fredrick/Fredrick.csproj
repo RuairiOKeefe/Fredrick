@@ -58,9 +58,22 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="src\InputHandling\AiController.cs" />
+    <Compile Include="src\InputHandling\AiInput.cs" />
+    <Compile Include="src\State Machines\Character\Ai.cs" />
+    <Compile Include="src\State Machines\Character\CharacterStateMachine.cs" />
+    <Compile Include="src\Ai Utilities\TargetAcquisition.cs" />
+    <Compile Include="src\State Machines\StateMachine.cs" />
+    <Compile Include="src\State Machines\Character\TurretAi.cs" />
+    <Compile Include="src\State Machines\ActionSuperStates\Assault.cs" />
+    <Compile Include="src\State Machines\ActionSuperStates\Hunt.cs" />
+    <Compile Include="src\State Machines\ActionSuperStates\Idle.cs" />
+    <Compile Include="src\State Machines\IState.cs" />
+    <Compile Include="src\State Machines\ActionSuperStates\Patrol.cs" />
     <Compile Include="src\Cameras\FollowCamera.cs" />
     <Compile Include="src\Colliders\AABBTrigger.cs" />
     <Compile Include="src\Colliders\CircleCollider.cs" />
+    <Compile Include="src\Colliders\CircleTrigger.cs" />
     <Compile Include="src\Colliders\Collider.cs" />
     <Compile Include="src\Colliders\OOBBTrigger.cs" />
     <Compile Include="src\Combat System\Attack.cs" />
@@ -84,7 +97,6 @@
     <Compile Include="src\GameManagement\ScoreBoard.cs" />
     <Compile Include="src\GameManagement\ScoreTracker.cs" />
     <Compile Include="src\GameManagement\SpawnManager.cs" />
-    <Compile Include="src\InputHandling\PatrolAI.cs" />
     <Compile Include="src\InputHandling\PlayerController.cs" />
     <Compile Include="src\InputHandling\PlayerInput.cs" />
     <Compile Include="src\Kinematics\Character.cs" />
@@ -103,7 +115,7 @@
     <Compile Include="src\Scenes\Lighting\Light.cs" />
     <Compile Include="src\Scenes\Lighting\Lighting.cs" />
     <Compile Include="src\Scenes\Lighting\LightingUtils.cs" />
-    <Compile Include="src\State Machines\MovementStateMachine.cs" />
+    <Compile Include="src\State Machines\Motion\MovementStateMachine.cs" />
     <Compile Include="src\UI\Canvas.cs" />
     <Compile Include="src\UI\TextElement.cs" />
     <Compile Include="src\Utilities\DebugManager.cs" />
