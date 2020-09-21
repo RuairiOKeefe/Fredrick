@@ -119,14 +119,14 @@ namespace Fredrick.src
 				player.Position = new Vector2(8, 8);
 				actors.Add(player);
 
-				Entity player2 = new Entity(Resources.Instance.PlayerEntities["Player"]);
-				player2.Active = false;
-				player2.GetComponent<PlayerController>().PlayerInput = new PlayerInput(PlayerIndex.One, false, true);
-				player2.Position = new Vector2(16, 8);
-				actors.Add(player2);
+				//Entity player2 = new Entity(Resources.Instance.PlayerEntities["Player"]);
+				//player2.Active = false;
+				//player2.GetComponent<PlayerController>().PlayerInput = new PlayerInput(PlayerIndex.One, false, true);
+				//player2.Position = new Vector2(16, 8);
+				//actors.Add(player2);
 
 				Entity turret = new Entity(Resources.Instance.EnemyEntities["LightTurret"]);
-				turret.Position = new Vector2(20, 8);
+				turret.Position = new Vector2(17, 5.7f);
 				actors.Add(turret);
 
 
@@ -143,14 +143,14 @@ namespace Fredrick.src
 
 
 				player.GetComponent<Damageable>().Subscribe(scoreBoard.ScoreTrackers[1].PointTrackers[0]);
-				player2.GetComponent<Damageable>().Subscribe(scoreBoard.ScoreTrackers[0].PointTrackers[0]);
+				//player2.GetComponent<Damageable>().Subscribe(scoreBoard.ScoreTrackers[0].PointTrackers[0]);
 				///////////////////
 
 				SpawnManager.Instance.AddSpawnable(ref player, new Timer(3.0), new Vector2(8, 8));
-				SpawnManager.Instance.AddSpawnable(ref player2, new Timer(3.0), new Vector2(16, 8));
+				//SpawnManager.Instance.AddSpawnable(ref player2, new Timer(3.0), new Vector2(16, 8));
 
 				SpawnManager.Instance.Spawn(player);
-				SpawnManager.Instance.Spawn(player2);
+				//SpawnManager.Instance.Spawn(player2);
 
 				serializer.Save("terrainData", terrain);
 				serializer.Save("actorsData", actors);

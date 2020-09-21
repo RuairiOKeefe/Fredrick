@@ -21,7 +21,7 @@ namespace Fredrick.src.State_Machines.Character
 		public TurretAi(Entity owner)
 		{
 			m_owner = owner;
-			m_targetAcquisition = new TargetAcquisition(m_owner, 1, 3, 20, 5.0);
+			m_targetAcquisition = new TargetAcquisition(m_owner, 5, 8, 20, 5.0);
 		}
 
 		public TurretAi(Entity owner, TurretAi original)
@@ -84,6 +84,7 @@ namespace Fredrick.src.State_Machines.Character
 
 		public override AiInput Update(double deltaTime)
 		{
+			m_aiInput.Clear();
 			AcquireTargets(deltaTime);
 			if (m_isTargetting)
 			{

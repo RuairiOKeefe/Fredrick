@@ -434,8 +434,8 @@ namespace Fredrick.src.ResourceManagement
 				turretMaterial.Shininess = 0.9f;
 
 				LightingInfo lightingInfo = new LightingInfo("TurretNormal", turretMaterial);
-				Weapon turretBase = new Weapon(null, "TurretBase", "SmallRound", new Vector2(36 / 32f, 1.5f / 32f), new Vector2(0.0f, 0f), new Vector2(-9.5f / 32f, -4.5f / 32f), true);
-				turretBase.Position = new Vector2(0f, 0.0f);
+				Weapon turretBase = new Weapon(null, "TurretBase", "SmallRound", new Vector2(12 / 32f, 0.5f / 32f), new Vector2(6.5f / 32f, 0 / 32f), new Vector2(0f / 32f, -8.5f / 32f), true);
+				turretBase.Position = new Vector2(0f / 32f, 8.5f / 32f);
 				turretBase.WeaponDrawable = new Drawable("Turret", new Vector2(16, 16), 32, 32, 0, 32, 0.1f);
 				turretBase.WeaponDrawable.ShaderInfo = lightingInfo;
 				turretBase.FireEmitters.Add(new Emitter(null, Emitters["PistolFlash"]));

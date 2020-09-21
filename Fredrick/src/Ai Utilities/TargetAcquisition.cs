@@ -63,7 +63,7 @@ namespace Fredrick.src.Ai_Utilities
 			Entity other;
 			try
 			{
-				other = fixtureB.UserData as Entity;
+				other = fixtureB.Body.UserData as Entity;
 			}
 			catch (Exception e)
 			{
