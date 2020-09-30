@@ -54,7 +54,19 @@ namespace Fredrick.src.Ai_Utilities
 
 		public bool Spot_OnCollision(Fixture fixtureA, Fixture fixtureB, Contact contact)
 		{
-			SpottedEntities.Add(fixtureB.Body.UserData as Entity); //Check this makes sense
+			Entity other;
+			try
+			{
+				other = fixtureB.Body.UserData as Entity;
+			}
+			catch (Exception e)
+			{
+				throw new Exception("Other fixture is not associated with an Entity", e);
+			}
+			if (m_owner != other) 
+			{
+				SpottedEntities.Add(other); //Check this makes sense
+			}
 			return true;
 		}
 

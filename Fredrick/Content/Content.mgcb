@@ -625,3 +625,9 @@
 /processorParam:TextureFormat=Color
 /build:TurretNormal.png
 
+#begin Shpace.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Shpace.wav
+

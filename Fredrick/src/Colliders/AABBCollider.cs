@@ -230,14 +230,22 @@ namespace Fredrick.src.Colliders
 						foreach (Entity e in ColliderManager.Instance.Terrain[c[0], c[1]])
 						{
 							if (e.GetComponent<AABBCollider>() != null)
-								if (CheckCollision(e.GetComponent<AABBCollider>().Rectangle))
-								{
-								}
+							{
+								if ((m_collidesWith & e.GetComponent<AABBCollider>().m_colliderCategory) != 0 &&
+						   (m_colliderCategory & e.GetComponent<AABBCollider>().m_collidesWith) != 0)
+									if (CheckCollision(e.GetComponent<AABBCollider>().Rectangle))
+									{
+									}
+							}
 							if (e.GetComponent<Platform>() != null)
-								if (CheckCollision(e.GetComponent<Platform>()))
+							{
+								//if ((m_collidesWith & e.GetComponent<Platform>().m_colliderCategory) != 0 &&
+						  // (m_colliderCategory & e.GetComponent<Platform>().m_collidesWith) != 0)
+									if (CheckCollision(e.GetComponent<Platform>()))
 								{
 									newPlatformCollided = true;
 								}
+							}
 						}
 					}
 				}

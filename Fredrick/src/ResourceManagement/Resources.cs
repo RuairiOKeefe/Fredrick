@@ -1,4 +1,5 @@
-﻿using Fredrick.src.Colliders;
+﻿using Fredrick.src.Audio;
+using Fredrick.src.Colliders;
 using Fredrick.src.InputHandling;
 using Fredrick.src.Rigging;
 using Fredrick.src.State_Machines.Character;
@@ -86,10 +87,18 @@ namespace Fredrick.src.ResourceManagement
 
 		private void InitAABBColliders()
 		{
-			ColliderCategory colliderCategory = ColliderCategory.Actor;
-			ColliderCategory collidesWith = ColliderCategory.Terrain | ColliderCategory.Actor | ColliderCategory.Bullet | ColliderCategory.Trigger;
-			AABBCollider playerCollider = new AABBCollider(null, "PlayerCollider", new Vector2(0), 0.6f, 2.0f, colliderCategory, collidesWith);
-			AABBColliders.Add("PlayerCollider", playerCollider);
+			{
+				ColliderCategory colliderCategory = ColliderCategory.Actor | ColliderCategory.Player;
+				ColliderCategory collidesWith = ColliderCategory.Terrain | ColliderCategory.Bullet | ColliderCategory.Trigger;
+				AABBCollider playerCollider = new AABBCollider(null, "PlayerCollider", new Vector2(0), 0.6f, 2.0f, colliderCategory, collidesWith);
+				AABBColliders.Add("PlayerCollider", playerCollider);
+			}
+			{
+				ColliderCategory colliderCategory = ColliderCategory.Actor | ColliderCategory.Creature;
+				ColliderCategory collidesWith = ColliderCategory.Terrain | ColliderCategory.Bullet | ColliderCategory.Trigger;
+				AABBCollider playerCollider = new AABBCollider(null, "TurretCollider", new Vector2(0), 0.75f, 0.8f, colliderCategory, collidesWith);
+				AABBColliders.Add("TurretCollider", playerCollider);
+			}
 		}
 
 		private void InitAiControllers()
@@ -408,6 +417,9 @@ namespace Fredrick.src.ResourceManagement
 				Weapons.Add("FragGrenade", fragGrenade);
 			}
 			{
+				Sound firingSound = new Sound();
+				firingSound.AddSoundEffect("Shpace");
+
 				ShaderInfo.Material pistolMaterial;
 				pistolMaterial.Emissive = new Color(0, 0, 0, 255);
 				pistolMaterial.Diffuse = new Color(74, 74, 74, 255);
@@ -424,6 +436,7 @@ namespace Fredrick.src.ResourceManagement
 				Attack pistolImpactAttack = new Attack(Attack.DamageType.Kinetic, new List<StatusEffect>(), 10.0f);
 				Attack pistolAreaAttack = new Attack(Attack.DamageType.Kinetic, new List<StatusEffect>(), 40.0f);
 				pistol.InitialiseAttack(pistolImpactAttack, pistolAreaAttack, 0.2f, 20.0f, 5.0f, 0.0f, 0.05f, 0.0f, 2.0, true, true);
+				pistol.AddSound(firingSound);
 				Weapons.Add("Pistol", pistol);
 			}
 			{
@@ -456,6 +469,7 @@ namespace Fredrick.src.ResourceManagement
 				lightTurret.Components.Add(new Renderable(lightTurret, Renderables["TurretBase"]));
 				lightTurret.Components.Add(new Weapon(lightTurret, Weapons["TurretBase"]));
 				lightTurret.Components.Add(new AiController(lightTurret, AiControllers["TurretAi"]));
+				lightTurret.Components.Add(new AABBCollider(lightTurret, AABBColliders["TurretCollider"]));
 				EnemyEntities.Add("LightTurret", lightTurret);
 			}
 		}

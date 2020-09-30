@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using Fredrick.src.Rigging;
+using Fredrick.src.Audio;
 
 namespace Fredrick.src
 {
@@ -76,6 +77,8 @@ namespace Fredrick.src
 
 		private bool m_flip = false;
 
+		private Sound m_firingSound;
+
 		public Weapon()
 		{
 
@@ -126,6 +129,9 @@ namespace Fredrick.src
 			{
 				FireEmitters.Add(new Emitter(owner, e));
 			}
+
+			if (original.m_firingSound != null)
+				m_firingSound = original.m_firingSound.Copy();
 		}
 
 		public void InitialiseAttack(Attack impactAttack, Attack areaAttack, float fireRate, float projectileSpeed, float areaOfEffectRadius, float impactKnockback, float areaKnockback, float screenshake, double fuseTimer, bool objectImpactTrigger, bool actorImpactTrigger)
@@ -151,6 +157,11 @@ namespace Fredrick.src
 			m_objectImpactTrigger = objectImpactTrigger;
 
 			m_actorImpactTrigger = actorImpactTrigger;
+		}
+
+		public void AddSound(Sound firingSound)
+		{
+			m_firingSound = firingSound.Copy();
 		}
 
 		public void Fire(Vector2 direction, float sin, float cos, CharacterRig armsRig)
@@ -200,6 +211,7 @@ namespace Fredrick.src
 
 			m_nextfire = m_fireRate;
 
+			m_firingSound.Play();
 
 			if (armsRig != null)
 			{
@@ -217,6 +229,8 @@ namespace Fredrick.src
 				e.Owner = this._owner;
 				e.Load(content);
 			}
+			if (m_firingSound!=null)
+			m_firingSound.Load(content);
 		}
 
 		public override void Unload()
