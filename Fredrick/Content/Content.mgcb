@@ -631,3 +631,33 @@
 /processorParam:Quality=Best
 /build:Shpace.wav
 
+#begin PistolShot.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:PistolShot.wav
+
+#begin PistolShot2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:PistolShot2.wav
+
+#begin PistolShot3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:PistolShot3.wav
+
+#begin PistolShot4.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:PistolShot4.wav
+
+#begin PistolShot5.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:PistolShot5.wav
+

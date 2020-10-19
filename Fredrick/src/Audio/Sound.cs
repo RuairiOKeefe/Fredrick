@@ -16,7 +16,8 @@ namespace Fredrick.src.Audio
 		[NonSerialized]
 		private List<SoundEffect> m_soundEffects = new List<SoundEffect>();
 		private float m_volume = 1f;
-		private float m_pitchRange;
+		private float m_pitchRange = 0.02f;
+		private Random m_rng = new Random();
 
 		public Sound()
 		{ }
@@ -36,8 +37,15 @@ namespace Fredrick.src.Audio
 
 		public void Play()
 		{
-			SoundEffect.MasterVolume = 1;
-			m_soundEffects[0].Play();
+			if (m_soundEffects.Count() > 0)
+				{
+				SoundEffect.MasterVolume = 1;
+				float pitch = (2 * (float)m_rng.NextDouble()) - 1;
+				pitch *= m_pitchRange;
+
+				int i = m_rng.Next(0, m_soundEffects.Count() - 1);
+				m_soundEffects[i].Play(m_volume, pitch, 0);
+			}
 		}
 
 		public void Load(ContentManager content)

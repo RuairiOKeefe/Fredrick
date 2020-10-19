@@ -418,7 +418,11 @@ namespace Fredrick.src.ResourceManagement
 			}
 			{
 				Sound firingSound = new Sound();
-				firingSound.AddSoundEffect("Shpace");
+				firingSound.AddSoundEffect("PistolShot");
+				//firingSound.AddSoundEffect("PistolShot2");
+				//firingSound.AddSoundEffect("PistolShot3");
+				//firingSound.AddSoundEffect("PistolShot4");
+				//firingSound.AddSoundEffect("PistolShot5");
 
 				ShaderInfo.Material pistolMaterial;
 				pistolMaterial.Emissive = new Color(0, 0, 0, 255);
@@ -440,6 +444,13 @@ namespace Fredrick.src.ResourceManagement
 				Weapons.Add("Pistol", pistol);
 			}
 			{
+				Sound firingSound = new Sound();
+				firingSound.AddSoundEffect("PistolShot");
+				firingSound.AddSoundEffect("PistolShot2");
+				firingSound.AddSoundEffect("PistolShot3");
+				firingSound.AddSoundEffect("PistolShot4");
+				firingSound.AddSoundEffect("PistolShot5");
+
 				ShaderInfo.Material turretMaterial;
 				turretMaterial.Emissive = new Color(0, 0, 0, 255);
 				turretMaterial.Diffuse = new Color(74, 74, 74, 255);
@@ -456,6 +467,7 @@ namespace Fredrick.src.ResourceManagement
 				Attack pistolImpactAttack = new Attack(Attack.DamageType.Kinetic, new List<StatusEffect>(), 10.0f);
 				Attack pistolAreaAttack = new Attack(Attack.DamageType.Kinetic, new List<StatusEffect>(), 40.0f);
 				turretBase.InitialiseAttack(pistolImpactAttack, pistolAreaAttack, 0.5f, 20.0f, 5.0f, 0.0f, 0.05f, 0.0f, 2.0, true, true);
+				turretBase.AddSound(firingSound);
 				Weapons.Add("TurretBase", turretBase);
 			}
 		}
